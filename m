@@ -1,80 +1,66 @@
-Return-Path: <SRS0=5yQk=TY=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=2kPe=T3=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 265DDC282E1
-	for <linux-csky@archiver.kernel.org>; Fri, 24 May 2019 20:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB24FC07542
+	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED21B21871
-	for <linux-csky@archiver.kernel.org>; Fri, 24 May 2019 20:40:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1558730436;
-	bh=SguSDlRZ1JbrNZHQMHbnMOlSxtv8O9hZv4bFB0MZ/JI=;
-	h=Date:From:To:Subject:List-ID:From;
-	b=nJ3pFLnXryUXSlcXXFPVZluL2jIKA5/dCtrz++gFDOdgkBPo3tLS+FxRZP0L5NFuw
-	 EpUX5FSGTkkOwHGryeV06lStZUQKJMgkVxMPCutUrterCcRcWh5AP/8aHwN/oy/00E
-	 1K7LkryUu8PfCZTQCieeWcNQhbyIaBIBPvn94rP4=
+	by mail.kernel.org (Postfix) with ESMTP id B557F21721
+	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404194AbfEXUkf (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 24 May 2019 16:40:35 -0400
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:36060 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403762AbfEXUkf (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 24 May 2019 16:40:35 -0400
-Received: by mail-ua1-f49.google.com with SMTP id 94so4161316uam.3
-        for <linux-csky@vger.kernel.org>; Fri, 24 May 2019 13:40:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=sylI6KCKC7JdbrRTrFiI8FPycSz5MfTSM9IpeWCz2OQ=;
-        b=RY6nZPx4q+f5KX++Zk3WVPEWnvwmHtlBBa/n1YNwQ2kWx5bruIQu0bQV+agZpojQEJ
-         vThFV7E0kAUa2QpIcmHHyrPuJctp31r0/Ap5qX98zg5iFX4nFIMgxTCGmBddZjkJkd/U
-         k7WsDDlt0a+hhNhYOepdi3dmpn3zLoNtdFrr4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=sylI6KCKC7JdbrRTrFiI8FPycSz5MfTSM9IpeWCz2OQ=;
-        b=Uj3OeIFYbeAV2yK09lTXhQJO9e18HQOi9X8GTQCPr18KN5vV3uLw/zeCWtZ44+capL
-         0mwLTz3TKJCbveMqBJxeladNcS1NYkdF0OWALVqrkB19e8SwhgFf+DpwubFW+ehCbNWT
-         yasSQ5gWeo08D9nKz+X5NfabCbQlueutqmPnNXp0MT8bkJVFzceO9rPQ4XHpJzpb7AQh
-         nzSCo4IOJC7i1IR4zOzK/qfAtaxUlDBtWdV8M6l3Udc/H4D5O/yLFgpXw2Gg3ePYrlDs
-         4vdbC+LOFR/4WP6UNCehIJABWmfnpdJF4NAAvxVY32d4ru7JxYu6EIM6p9b2A6Zd2U/3
-         qIKA==
-X-Gm-Message-State: APjAAAUBafk7StHSBBllcSEt9ye4nzZ2lIaADCvoryOGa4/nLH7hzCDS
-        JGrd4MRmsURg2zDDLEM6JuVSu1Wlf2cXYw==
-X-Google-Smtp-Source: APXvYqyU0DilUiLUtmmZTyLI1mdfGokaVUlGnKjYIBYQL6gCjxJK2LBTXXxxvZuuqaPDrAqRJMxNbw==
-X-Received: by 2002:ab0:2c15:: with SMTP id l21mr15298799uar.139.1558730434184;
-        Fri, 24 May 2019 13:40:34 -0700 (PDT)
-Received: from chatter.i7.local (192-0-228-88.cpe.teksavvy.com. [192.0.228.88])
-        by smtp.gmail.com with ESMTPSA id d79sm2297122vkd.23.2019.05.24.13.40.33
-        for <linux-csky@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 24 May 2019 13:40:33 -0700 (PDT)
-Date:   Fri, 24 May 2019 16:40:32 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     linux-csky@vger.kernel.org
-Subject: Test lore.kernel.org archive setup
-Message-ID: <20190524204032.GA13558@chatter.i7.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-User-Agent: Mutt/1.11.4 (2019-03-13)
+        id S1726154AbfE0G62 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 27 May 2019 02:58:28 -0400
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:57374 "EHLO
+        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725943AbfE0G62 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 27 May 2019 02:58:28 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08441354|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0549198-0.00885414-0.936226;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03303;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.Edg2x71_1558940305;
+Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.Edg2x71_1558940305)
+          by smtp.aliyun-inc.com(10.147.41.231);
+          Mon, 27 May 2019 14:58:25 +0800
+From:   Mao Han <han_mao@c-sky.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mao Han <han_mao@c-sky.com>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org
+Subject: [PATCH V2 0/5] csky: Add pmu hardware sampling support
+Date:   Mon, 27 May 2019 14:57:16 +0800
+Message-Id: <cover.1558939831.git.han_mao@c-sky.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello:
+This patch set add hardware sampling support for csky-pmu, and
+also add some properties to pmu node definition. perf can record
+on hardware event with this patch applied.
 
-This is a test of lore.kernel.org/linux-csky. It is a required step when 
-no prior archives are available.
+Changes since v1:
+  - do not enable/disable irq at start/stop(may lose irq)
+  - do not update hpcr when event type is invalid
 
-Best regards,
--K
+CC: Guo Ren <guoren@kernel.org>
+CC: linux-csky@vger.kernel.org
+
+Guo Ren (1):
+  csky: Fixup some error count in 810 & 860.
+
+Mao Han (4):
+  csky: Init pmu as a device
+  csky: Add reg-io-width property for csky pmu
+  csky: Add pmu interrupt support
+  dt-bindings: csky: Add csky PMU bindings
+
+ Documentation/devicetree/bindings/csky/pmu.txt |  38 +++
+ arch/csky/kernel/perf_event.c                  | 407 +++++++++++++++++++++++--
+ 2 files changed, 424 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/csky/pmu.txt
+
+-- 
+2.7.4
+

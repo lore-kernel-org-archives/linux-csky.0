@@ -2,35 +2,35 @@ Return-Path: <SRS0=2kPe=T3=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,UPPERCASE_50_75,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E1DCC07542
-	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D82EBC07542
+	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 311582075B
-	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA79121721
+	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbfE0G63 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 27 May 2019 02:58:29 -0400
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:42578 "EHLO
+        id S1725943AbfE0G6i (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 27 May 2019 02:58:38 -0400
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:32872 "EHLO
         smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726063AbfE0G63 (ORCPT
+        by vger.kernel.org with ESMTP id S1726334AbfE0G6c (ORCPT
         <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 27 May 2019 02:58:29 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07450785|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.709893-0.0127304-0.277376;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03310;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.Edg1ot5_1558940306;
-Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.Edg1ot5_1558940306)
-          by smtp.aliyun-inc.com(10.147.40.7);
-          Mon, 27 May 2019 14:58:26 +0800
+        Mon, 27 May 2019 02:58:32 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07612007|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.136347-0.00582676-0.857826;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16378;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.Edg12hD_1558940309;
+Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.Edg12hD_1558940309)
+          by smtp.aliyun-inc.com(10.147.41.120);
+          Mon, 27 May 2019 14:58:29 +0800
 From:   Mao Han <han_mao@c-sky.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Mao Han <han_mao@c-sky.com>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org
-Subject: [PATCH V2 1/5] csky: Init pmu as a device
-Date:   Mon, 27 May 2019 14:57:17 +0800
-Message-Id: <e7c93b4509506f4e6071dfb8036d3bd0624f8469.1558939831.git.han_mao@c-sky.com>
+Cc:     Guo Ren <ren_guo@c-sky.com>, Mao Han <han_mao@c-sky.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Subject: [PATCH V2 5/5] csky: Fixup some error count in 810 & 860.
+Date:   Mon, 27 May 2019 14:57:21 +0800
+Message-Id: <2dfbabdcc60d4b5fa6a1595a1ca64102cfe06f05.1558939831.git.han_mao@c-sky.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1558939831.git.han_mao@c-sky.com>
 References: <cover.1558939831.git.han_mao@c-sky.com>
@@ -41,90 +41,132 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This patch change the csky pmu initialization from arch init to
-device init. The pmu can be configued with information from
-device tree(pmu device name, irq number and etc.).
+From: Guo Ren <ren_guo@c-sky.com>
 
+ck810 pmu only support event with index 0-8 and 0xd; ck860 only
+support event 1~4, 0xa~0x1b. So do not register unsupport event
+to hardware cache event, which may leader to unknown behavior.
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 Signed-off-by: Mao Han <han_mao@c-sky.com>
 CC: Guo Ren <guoren@kernel.org>
 CC: linux-csky@vger.kernel.org
 ---
- arch/csky/kernel/perf_event.c | 58 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+ arch/csky/kernel/perf_event.c | 60 ++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 54 insertions(+), 6 deletions(-)
 
 diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index 376c972..c022acc 100644
+index a6a1582..bb5033f 100644
 --- a/arch/csky/kernel/perf_event.c
 +++ b/arch/csky/kernel/perf_event.c
-@@ -21,6 +21,8 @@ struct csky_pmu_t {
- 	uint32_t	hpcr;
- } csky_pmu;
- 
-+typedef int (*csky_pmu_init)(struct csky_pmu_t *);
-+
- #define cprgr(reg)				\
- ({						\
- 	unsigned int tmp;			\
-@@ -1028,4 +1030,58 @@ int __init init_hw_perf_events(void)
- 
- 	return perf_pmu_register(&csky_pmu.pmu, "cpu", PERF_TYPE_RAW);
- }
--arch_initcall(init_hw_perf_events);
-+
-+int csky_pmu_device_probe(struct platform_device *pdev,
-+			  const struct of_device_id *of_table)
-+{
-+	const struct of_device_id *of_id;
-+	csky_pmu_init init_fn;
-+	struct device_node *node = pdev->dev.of_node;
-+	int ret = -ENODEV;
-+
-+	of_id = of_match_node(of_table, pdev->dev.of_node);
-+	if (node && of_id) {
-+		init_fn = of_id->data;
-+		ret = init_fn(&csky_pmu);
-+	}
-+
-+	if (ret) {
-+		pr_notice("[perf] failed to probe PMU!\n");
-+		return ret;
-+	}
-+
-+	return ret;
-+}
-+
-+const static struct of_device_id csky_pmu_of_device_ids[] = {
-+	{.compatible = "csky,csky-pmu", .data = init_hw_perf_events},
-+	{},
-+};
-+
-+static int csky_pmu_dev_probe(struct platform_device *pdev)
-+{
-+	return csky_pmu_device_probe(pdev, csky_pmu_of_device_ids);
-+}
-+
-+static struct platform_driver csky_pmu_driver = {
-+	.driver = {
-+		   .name = "csky-pmu",
-+		   .of_match_table = csky_pmu_of_device_ids,
-+		   },
-+	.probe = csky_pmu_dev_probe,
-+};
-+
-+static int __init csky_pmu_probe(void)
-+{
-+	int ret;
-+
-+	ret = platform_driver_register(&csky_pmu_driver);
-+	if (ret)
-+		pr_notice("[perf] PMU initialization failed\n");
-+	else
-+		pr_notice("[perf] PMU initialization done\n");
-+
-+	return ret;
-+}
-+
-+device_initcall(csky_pmu_probe);
+@@ -735,6 +735,20 @@ static const int csky_pmu_hw_map[PERF_COUNT_HW_MAX] = {
+ #define CACHE_OP_UNSUPPORTED	0xffff
+ static const int csky_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
+ 	[C(L1D)] = {
++#ifdef CONFIG_CPU_CK810
++		[C(OP_READ)] = {
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
++		},
++		[C(OP_WRITE)] = {
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
++		},
++		[C(OP_PREFETCH)] = {
++			[C(RESULT_ACCESS)]	= 0x5,
++			[C(RESULT_MISS)]	= 0x6,
++		},
++#else
+ 		[C(OP_READ)] = {
+ 			[C(RESULT_ACCESS)]	= 0x14,
+ 			[C(RESULT_MISS)]	= 0x15,
+@@ -744,9 +758,10 @@ static const int csky_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
+ 			[C(RESULT_MISS)]	= 0x17,
+ 		},
+ 		[C(OP_PREFETCH)] = {
+-			[C(RESULT_ACCESS)]	= 0x5,
+-			[C(RESULT_MISS)]	= 0x6,
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
+ 		},
++#endif
+ 	},
+ 	[C(L1I)] = {
+ 		[C(OP_READ)] = {
+@@ -763,6 +778,20 @@ static const int csky_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
+ 		},
+ 	},
+ 	[C(LL)] = {
++#ifdef CONFIG_CPU_CK810
++		[C(OP_READ)] = {
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
++		},
++		[C(OP_WRITE)] = {
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
++		},
++		[C(OP_PREFETCH)] = {
++			[C(RESULT_ACCESS)]	= 0x7,
++			[C(RESULT_MISS)]	= 0x8,
++		},
++#else
+ 		[C(OP_READ)] = {
+ 			[C(RESULT_ACCESS)]	= 0x18,
+ 			[C(RESULT_MISS)]	= 0x19,
+@@ -772,29 +801,48 @@ static const int csky_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
+ 			[C(RESULT_MISS)]	= 0x1b,
+ 		},
+ 		[C(OP_PREFETCH)] = {
+-			[C(RESULT_ACCESS)]	= 0x7,
+-			[C(RESULT_MISS)]	= 0x8,
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
+ 		},
++#endif
+ 	},
+ 	[C(DTLB)] = {
++#ifdef CONFIG_CPU_CK810
+ 		[C(OP_READ)] = {
+-			[C(RESULT_ACCESS)]	= 0x5,
+-			[C(RESULT_MISS)]	= 0xb,
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
+ 		},
+ 		[C(OP_WRITE)] = {
+ 			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
+ 			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
+ 		},
++#else
++		[C(OP_READ)] = {
++			[C(RESULT_ACCESS)]	= 0x14,
++			[C(RESULT_MISS)]	= 0xb,
++		},
++		[C(OP_WRITE)] = {
++			[C(RESULT_ACCESS)]	= 0x16,
++			[C(RESULT_MISS)]	= 0xb,
++		},
++#endif
+ 		[C(OP_PREFETCH)] = {
+ 			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
+ 			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
+ 		},
+ 	},
+ 	[C(ITLB)] = {
++#ifdef CONFIG_CPU_CK810
++		[C(OP_READ)] = {
++			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
++			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
++		},
++#else
+ 		[C(OP_READ)] = {
+ 			[C(RESULT_ACCESS)]	= 0x3,
+ 			[C(RESULT_MISS)]	= 0xa,
+ 		},
++#endif
+ 		[C(OP_WRITE)] = {
+ 			[C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
+ 			[C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
 -- 
 2.7.4
 

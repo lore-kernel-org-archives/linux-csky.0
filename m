@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6FC7C07542
-	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 07:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3967DC04AB3
+	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 07:19:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 90D50216FD
-	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 07:19:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13E4E217D4
+	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 07:19:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559114364;
-	bh=75jQLMPLRveo2p3NLsyJQR4gRtMd643joXMZQEtZlkI=;
+	s=default; t=1559114367;
+	bh=r6rVZKQ0h8BidCKP4jubLx7SvUdyZh36sv+Qyu5rZLw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zxSHM+zCMzSZITtxNcoOCRMy20emmPz5QyUDnZ7kxY1HS99F9Xpm4xIC9op0kB5q/
-	 vzH+n0B3deRmGG3LVHmEeywTQQSu6zh47cO9PNkLlCm9eC2jFJi83uGQNewkOjg3O/
-	 apHfDSLdzTjxZ9BSUnMzYCGm5ld8m5Dld+DT2JsE=
+	b=j1pPld5xWd4JnyLCUFhDwty+E8K5fVCLDKmb2qcr8Rr2A30DQ3ly18atgNzKXJXBV
+	 4r7ip6JS53AhBVhafbRF5KDItVazQLxOgXldRXNLV+oScXUg09NhCAmNNGgDe26NEZ
+	 7YjibIjznKCMCIwMGTH5wxiDLOFwN13FV+k5QlU0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbfE2HTY (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 29 May 2019 03:19:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49358 "EHLO mail.kernel.org"
+        id S1726689AbfE2HT1 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 29 May 2019 03:19:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726683AbfE2HTY (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 29 May 2019 03:19:24 -0400
+        id S1726683AbfE2HT0 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 29 May 2019 03:19:26 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 85A02217D4;
-        Wed, 29 May 2019 07:19:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 674162075C;
+        Wed, 29 May 2019 07:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559114363;
-        bh=75jQLMPLRveo2p3NLsyJQR4gRtMd643joXMZQEtZlkI=;
+        s=default; t=1559114366;
+        bh=r6rVZKQ0h8BidCKP4jubLx7SvUdyZh36sv+Qyu5rZLw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nnCLyc3OcDoulcN+c22esQjEhII/g4KuZFqSM85DgDpmPOxqGmf2m2orwtwJltWfe
-         xhnkYE/koxPToKuLxTcmb7TUHHa5qL61bhaLYJqetmvwvCiGr+lYVzcZWSciszsfiA
-         XMOxJyVWfUoHf5bc8PzY9ftY5Wo2XMoxm28F9i/k=
+        b=jB7G6XpohMsu7ly8yH8OqmJRpBTy06+xutuFKfQbstMkvrhpnyqEXnMfSSCCRuyWF
+         UgqsQmzqFFJEX++hq1ABwabriuWFHCJoLDDAOCOgAMPf9yjRmaaVYsFUxe02//c7NO
+         cbUl5fymGhrTBxbBGslprmPWx5N16T//ZyXtOpP0=
 From:   guoren@kernel.org
 To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
         arnout@mind.be
 Cc:     linux-csky@vger.kernel.org, buildroot@buildroot.org,
         Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH V3 07/10] package/gdb: Add C-SKY support
-Date:   Wed, 29 May 2019 15:18:45 +0800
-Message-Id: <1559114328-23357-8-git-send-email-guoren@kernel.org>
+Subject: [PATCH V3 08/10] package/glibc: Add C-SKY support
+Date:   Wed, 29 May 2019 15:18:46 +0800
+Message-Id: <1559114328-23357-9-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1559114328-23357-1-git-send-email-guoren@kernel.org>
 References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
@@ -57,65 +57,51 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-Add gdb build for C-SKY Architecture:
-
- - Support host-gdb
- - Support gdbserver for target
+Add glibc build for C-SKY Architecture.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- package/gdb/Config.in.host | 2 ++
- package/gdb/gdb.hash       | 2 ++
- package/gdb/gdb.mk         | 6 ++++++
- 3 files changed, 10 insertions(+)
+ package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash | 2 ++
+ package/glibc/glibc.mk                                            | 3 +++
+ toolchain/toolchain-buildroot/Config.in                           | 2 +-
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100644 package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 969168f..76a0eca 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -48,6 +48,7 @@ choice
- 	prompt "GDB debugger Version"
- 	default BR2_GDB_VERSION_8_1
- 	depends on !BR2_arc
-+	depends on !BR2_csky
- 	help
- 	  Select the version of gdb you wish to use.
- 
-@@ -95,6 +96,7 @@ config BR2_PACKAGE_GDB_NEEDS_CXX11
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2018.09-release-gdb" if BR2_arc
-+	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
- 	default "8.0.1"    if BR2_GDB_VERSION_8_0
- 	default "8.1.1"    if BR2_GDB_VERSION_8_1 || !BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 1104da5..90a60b0 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -6,3 +6,5 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
- 
- # Locally calculated (fetched from Github)
- sha512  8303e399e396f5c15dc976e48503fc7d45a720dd1a470443f755c5f2458d092b4392e7ae582abc251bc4b43a778ad784f764286a2a05abfc1649cbeeeb6e7d15 	gdb-arc-2018.09-release-gdb.tar.gz
-+# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
-+sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index a926961..46d745a 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -14,6 +14,12 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- GDB_FROM_GIT = y
- endif
- 
-+ifeq ($(BR2_csky),y)
-+GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
-+GDB_FROM_GIT = y
-+endif
-+
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- 
+diff --git a/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash b/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
+new file mode 100644
+index 0000000..a61bd65
+--- /dev/null
++++ b/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
+@@ -0,0 +1,2 @@
++# Locally calculated (fetched from https://github.com/c-sky/glibc)
++sha512 9deb2deceefe347d72de13510a5baa3de00f94c684f3b25e136ca3660f61e65a69f2115abb488c2ab0fa93cda8535853ce1e13e186efcc8434ecc4049efd82b5  glibc-7630ed2fa60caea98f500e4a7a51b88f9bf1e176.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0345f1f..c4ddf8b 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,6 +10,9 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else ifeq ($(BR2_RISCV_32),y)
+ GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+ GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
++else ifeq ($(BR2_csky),y)
++GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
++GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index beb17a2..d9f16e2 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+ 		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+ 		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+-		   (BR2_arcle && BR2_ARC_ATOMIC_EXT)
++		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 -- 
 2.7.4
 

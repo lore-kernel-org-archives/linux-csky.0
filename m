@@ -1,107 +1,124 @@
-Return-Path: <SRS0=2kPe=T3=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=K7zh=T5=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C7D3C282CE
-	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17E68C04AB3
+	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 07:19:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0302721721
-	for <linux-csky@archiver.kernel.org>; Mon, 27 May 2019 06:58:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5A56216FD
+	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 07:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559114344;
+	bh=HV+VMscjkm+MGrbWIGBWkxk1q7FL8JErjQNsyyY6GnM=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=cHWSUEcQQMFyFCdTq7sJ8IrBuHZeTXk2gvK5Vc4Onc99ETZpDqc3MYDrJQ5o4fD/M
+	 xKSyhsU52xT7AuF0EvmF5Gvb1NOs7kCv9TDYbgq3RRBvJSlqv792d3LaWKiksulRGu
+	 Hj+FzfXHnlVpUHJT5tPUEiwZtiSzugTOwjI4ogzU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbfE0G6a (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 27 May 2019 02:58:30 -0400
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:36797 "EHLO
-        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726150AbfE0G6a (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 27 May 2019 02:58:30 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07472639|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.482592-0.0157801-0.501628;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03275;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.Edg0gGb_1558940307;
-Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.Edg0gGb_1558940307)
-          by smtp.aliyun-inc.com(10.147.40.233);
-          Mon, 27 May 2019 14:58:27 +0800
-From:   Mao Han <han_mao@c-sky.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mao Han <han_mao@c-sky.com>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org
-Subject: [PATCH V2 2/5] csky: Add reg-io-width property for csky pmu
-Date:   Mon, 27 May 2019 14:57:18 +0800
-Message-Id: <f7bfa540fb7492883c54b4e4a8c226fec69bc7fa.1558939831.git.han_mao@c-sky.com>
+        id S1726673AbfE2HTD (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 29 May 2019 03:19:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48922 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726543AbfE2HTC (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 29 May 2019 03:19:02 -0400
+Received: from localhost.localdomain (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E072F21019;
+        Wed, 29 May 2019 07:18:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559114341;
+        bh=HV+VMscjkm+MGrbWIGBWkxk1q7FL8JErjQNsyyY6GnM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gnE2EFYg9EosHqtiQB/SiTbpNModmFAjwITewhIInSFhZjUGXVgLsk7eNaWqPEyOK
+         FwzuQWIPqU/rvzXLbXjDdYE9TDQxXbnhN3825iGpUNxVwgSwsnV+GG3TNJOzJZUx0a
+         kT7JNBfyFR3M0CDH6IirxEs1Gv/tFaMrIkDWBbXE=
+From:   guoren@kernel.org
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+        arnout@mind.be
+Cc:     linux-csky@vger.kernel.org, buildroot@buildroot.org,
+        Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH V3 00/10] Update arch/csky for buildroot
+Date:   Wed, 29 May 2019 15:18:38 +0800
+Message-Id: <1559114328-23357-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1558939831.git.han_mao@c-sky.com>
-References: <cover.1558939831.git.han_mao@c-sky.com>
-In-Reply-To: <cover.1558939831.git.han_mao@c-sky.com>
-References: <cover.1558939831.git.han_mao@c-sky.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-csky pmu counter may have different io width. When the counter is smaller
-then 64 bits and counter value is smaller than the old value, it will
-result to a extremely large delta value. So the sampled value should be
-extend to 64 bits to avoid this, the extension bits base on the
-reg-io-width property from dts.
+From: Guo Ren <ren_guo@c-sky.com>
 
-Signed-off-by: Mao Han <han_mao@c-sky.com>
-CC: Guo Ren <guoren@kernel.org>
-CC: linux-csky@vger.kernel.org
----
- arch/csky/kernel/perf_event.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+This is the 3th patchset for arch/csky update for buildroot, it includes:
 
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index c022acc..f1b3cdf 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -18,6 +18,7 @@ static void (*hw_raw_write_mapping[CSKY_PMU_MAX_EVENTS])(uint64_t val);
- 
- struct csky_pmu_t {
- 	struct pmu	pmu;
-+	uint32_t	sign_extend;
- 	uint32_t	hpcr;
- } csky_pmu;
- 
-@@ -806,7 +807,13 @@ static void csky_perf_event_update(struct perf_event *event,
- 				   struct hw_perf_event *hwc)
- {
- 	uint64_t prev_raw_count = local64_read(&hwc->prev_count);
--	uint64_t new_raw_count = hw_raw_read_mapping[hwc->idx]();
-+	/*
-+	 * Extend count value to 64bit, otherwise delta calculation would
-+	 * be incorrect when overflow occurs.
-+	 */
-+	uint64_t new_raw_count = ((int64_t)hw_raw_read_mapping[hwc->idx]()
-+				   << csky_pmu.sign_extend)
-+				   >> csky_pmu.sign_extend;
- 	int64_t delta = new_raw_count - prev_raw_count;
- 
- 	/*
-@@ -1037,6 +1044,7 @@ int csky_pmu_device_probe(struct platform_device *pdev,
- 	const struct of_device_id *of_id;
- 	csky_pmu_init init_fn;
- 	struct device_node *node = pdev->dev.of_node;
-+	int cnt_width;
- 	int ret = -ENODEV;
- 
- 	of_id = of_match_node(of_table, pdev->dev.of_node);
-@@ -1045,6 +1053,12 @@ int csky_pmu_device_probe(struct platform_device *pdev,
- 		ret = init_fn(&csky_pmu);
- 	}
- 
-+	if (!of_property_read_u32(node, "reg-io-width", &cnt_width)) {
-+		csky_pmu.sign_extend = 64 - cnt_width;
-+	} else {
-+		csky_pmu.sign_extend = 16;
-+	}
-+
- 	if (ret) {
- 		pr_notice("[perf] failed to probe PMU!\n");
- 		return ret;
+ - Support VDSP
+ - Support new CPU ck860
+ - Support toolchain build in buildroot
+ - Add qemu defconfigs
+
+Changes in V3:
+ - Fixup the sequence logic of patches
+ - Fixup binutils version select
+ - Fixup gdb.mk
+ - Fixup glibc.hash to seperate dir 
+
+Changes in V2:
+ - Seperate gcc gdb glibc gdb from one patch
+
+Guo Ren (10):
+  arch/csky: Use VDSP instead of DSP
+  arch/csky: Add ck860 supported
+  arch/csky: Add FLOAT_ABI compiler options
+  arch/csky: Add ABI variable for toolchain build
+  package/binutils: Add C-SKY support
+  package/gcc: Add C-SKY support
+  package/gdb: Add C-SKY support
+  package/glibc: Add C-SKY support
+  configs/qemu_cskyXXX_virt: new defconfig
+  arch/csky: Enable csky toolchain build
+
+ .gitlab-ci.yml                                     |   4 +
+ arch/Config.in                                     |   1 -
+ arch/Config.in.csky                                |  26 +-
+ arch/arch.mk.csky                                  |  26 +
+ board/qemu/csky/610_defconfig                      | 526 ++++++++++++++++++++
+ board/qemu/csky/807_defconfig                      | 531 ++++++++++++++++++++
+ board/qemu/csky/810_defconfig                      | 531 ++++++++++++++++++++
+ board/qemu/csky/860_defconfig                      | 533 +++++++++++++++++++++
+ configs/qemu_csky610_virt_defconfig                |  29 ++
+ configs/qemu_csky807_virt_defconfig                |  30 ++
+ configs/qemu_csky810_virt_defconfig                |  30 ++
+ configs/qemu_csky860_virt_defconfig                |  30 ++
+ package/Makefile.in                                |   9 +
+ package/binutils/Config.in.host                    |  11 +-
+ package/binutils/binutils.hash                     |   2 +
+ package/binutils/binutils.mk                       |   7 +
+ package/gcc/Config.in.host                         |  13 +
+ package/gcc/gcc.hash                               |   2 +
+ package/gcc/gcc.mk                                 |   3 +
+ package/gdb/Config.in.host                         |   2 +
+ package/gdb/gdb.hash                               |   2 +
+ package/gdb/gdb.mk                                 |   6 +
+ .../glibc.hash                                     |   2 +
+ package/glibc/glibc.mk                             |   3 +
+ toolchain/toolchain-buildroot/Config.in            |   2 +-
+ 25 files changed, 2343 insertions(+), 18 deletions(-)
+ create mode 100644 arch/arch.mk.csky
+ create mode 100644 board/qemu/csky/610_defconfig
+ create mode 100644 board/qemu/csky/807_defconfig
+ create mode 100644 board/qemu/csky/810_defconfig
+ create mode 100644 board/qemu/csky/860_defconfig
+ create mode 100644 configs/qemu_csky610_virt_defconfig
+ create mode 100644 configs/qemu_csky807_virt_defconfig
+ create mode 100644 configs/qemu_csky810_virt_defconfig
+ create mode 100644 configs/qemu_csky860_virt_defconfig
+ create mode 100644 package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
+
 -- 
 2.7.4
 

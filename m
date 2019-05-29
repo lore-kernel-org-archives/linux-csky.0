@@ -6,55 +6,55 @@ X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D222C28CC0
-	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 09:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DB9CC28CC0
+	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 09:06:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3221C21019
-	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 09:02:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AA4C21670
+	for <linux-csky@archiver.kernel.org>; Wed, 29 May 2019 09:06:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559120564;
-	bh=RZmvcj5YOFAWtnzNoPVkvskrM60xi4ggPsr5+hWUqXc=;
+	s=default; t=1559120814;
+	bh=N+oSGVakQth8/Gc6Id7rHrNV+QlgTN//U6ARbK7z+gw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=jYMR/tsFCmerY7pL0tfLcU0DqZM/Vt5N4rlcF+HduhS08rv0zgQRT39qFiZgzA86Q
-	 A5jjoOS7VcwhGcazPeudIukpVGwaXtb5l3Li6/NajXQaTtH/VhapH8KMuXejwDf5Tw
-	 REIhAmnoX8CcNvWnrExaArcQ0MJoGarztnmqyZgc=
+	b=KyrKKunWt9RiBG4AbUcYsLJ1jFuQJmWbyDgVilBf8QDqvNXU8YvgX5oVCm38tNTnH
+	 2ho5fyh1l4Y0SsiiErIFNEy4EZobGfg+80vR/+BuYTpVX9bEAgip94Tchd1ezzTAIm
+	 ULcTOzx+A4sAxWjVKqIjPz4pSoxkJIrdY6MB2Pnk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbfE2JCo (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 29 May 2019 05:02:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37368 "EHLO mail.kernel.org"
+        id S1725861AbfE2JGy (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 29 May 2019 05:06:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbfE2JCn (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 29 May 2019 05:02:43 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        id S1725956AbfE2JGy (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 29 May 2019 05:06:54 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D9413216FD
-        for <linux-csky@vger.kernel.org>; Wed, 29 May 2019 09:02:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0AE92216FD
+        for <linux-csky@vger.kernel.org>; Wed, 29 May 2019 09:06:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559120563;
-        bh=RZmvcj5YOFAWtnzNoPVkvskrM60xi4ggPsr5+hWUqXc=;
+        s=default; t=1559120813;
+        bh=N+oSGVakQth8/Gc6Id7rHrNV+QlgTN//U6ARbK7z+gw=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gnjv7SeE0vKzhW3IoVomNOQ4aBEKLNibYaSgW1CM2C5FfuFshlSQtN2rkyjDOiRit
-         GbWlr2G6IhhrHTMeBaDRYf9/EZ9RjfqIN4WesdQcp1oH7SlYEz02ZNY+A2G8j5gE/+
-         ds/KP2vnL2tvrkpkHqoHv7nrQmksNhJF+kyKR/90=
-Received: by mail-wm1-f41.google.com with SMTP id f10so1058548wmb.1
-        for <linux-csky@vger.kernel.org>; Wed, 29 May 2019 02:02:42 -0700 (PDT)
-X-Gm-Message-State: APjAAAUba7xuoSG2DoBtkK3ofJinZhKmjVMQE9Tpa/+BuR4XRXcX5Gba
-        nMhRkyR8jcRrv9npaH1PjzpC6y066WeMQRmgoiw=
-X-Google-Smtp-Source: APXvYqzh82p1erMt8To7dp5mJhSi3O1DTG8NeEOl3Xj7YNWW2c6h6VTayYn0hNEubT6YPOgBKfhWKhYK8/bgXCAQP90=
-X-Received: by 2002:a1c:6545:: with SMTP id z66mr6002066wmb.77.1559120561385;
- Wed, 29 May 2019 02:02:41 -0700 (PDT)
+        b=tcf7f43tmLSHKZLZdtOJQ9CGqD5GM3zGqK/l8DjR/mK2rMufGbF5PHttFfAjNFji0
+         YdE2QuJHThqmqmKccTkboB35ZAmmBDo/mxc8P0ET106uyHqNPPvAFCSzmWocPvxZ6Q
+         L7z11xtSzm2eWUuV8fisAXv0E7UhTyDRCYBJxu8U=
+Received: by mail-wm1-f50.google.com with SMTP id i3so1057814wml.4
+        for <linux-csky@vger.kernel.org>; Wed, 29 May 2019 02:06:52 -0700 (PDT)
+X-Gm-Message-State: APjAAAW6fbgDNeU6kHpX3Ue1OWY9m0OwLWQ71EUT2UX1yB61Wkk89dqT
+        f63JuWIo7tFc9g9rohb7KwCpmHnezebTalsNG2I=
+X-Google-Smtp-Source: APXvYqzG0yyfiKkc9IZoCwmLKoUtfIXh6MnBbumnl5TGg94QjOeR2V9Qxs9hQYxC6xF3CCSWdfteE9tWZe16X3Q2pPc=
+X-Received: by 2002:a1c:6545:: with SMTP id z66mr6016042wmb.77.1559120811592;
+ Wed, 29 May 2019 02:06:51 -0700 (PDT)
 MIME-Version: 1.0
 References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
  <1559114328-23357-2-git-send-email-guoren@kernel.org> <20190529092128.36183371@windsurf.home>
  <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
  <20190529095629.2b28cbb7@windsurf.home> <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
- <20190529103824.58560e4e@windsurf.home>
-In-Reply-To: <20190529103824.58560e4e@windsurf.home>
+ <20190529103824.58560e4e@windsurf.home> <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
+In-Reply-To: <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 29 May 2019 17:02:29 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
-Message-ID: <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
+Date:   Wed, 29 May 2019 17:06:39 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ3Q+b2+CPc+QP2Zpey53+=8Lf12=TJWjrr6Sig27npBw@mail.gmail.com>
+Message-ID: <CAJF2gTQ3Q+b2+CPc+QP2Zpey53+=8Lf12=TJWjrr6Sig27npBw@mail.gmail.com>
 Subject: Re: [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
 To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc:     Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
@@ -66,51 +66,51 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, May 29, 2019 at 4:38 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Wed, May 29, 2019 at 5:02 PM Guo Ren <guoren@kernel.org> wrote:
 >
-> Hello,
->
-> On Wed, 29 May 2019 16:12:25 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > > Not just two patches: also a better commit log for the DSP -> VDSP
-> > > change.
+> On Wed, May 29, 2019 at 4:38 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
 > >
-> > I want these two patches:
+> > Hello,
 > >
-> > 1. Remove DSP, because it's no use in current buildroot.
-> > 2. Add VDSP support
->
-> OK, but then please split in yet another patch the fact of using
-> arch.mk.csky to build the GCC_TARGET_CPU variable.
-
-I changemind and I'll follow the above patches which you prior mentioned
-
-- One switching to using arch.mk.sky, without changing DSP -> VDSP
-- A follow-up one changing DSP -> VDSP, with a commit log that
-   explains why you make this chang
-
->
-> > Here is my commit log for Introduce VDSP feature:
+> > On Wed, 29 May 2019 16:12:25 +0800
+> > Guo Ren <guoren@kernel.org> wrote:
 > >
-> > VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
-> > operation. It could be support by abiv2 (ck807, ck810, ck860).
+> > > > Not just two patches: also a better commit log for the DSP -> VDSP
+> > > > change.
+> > >
+> > > I want these two patches:
+> > >
+> > > 1. Remove DSP, because it's no use in current buildroot.
+> > > 2. Add VDSP support
 > >
-> > Is that OK?
+> > OK, but then please split in yet another patch the fact of using
+> > arch.mk.csky to build the GCC_TARGET_CPU variable.
 >
-> Yes. But please add a proper commit log in the patch removing the DSP
-> option.
-DSP -> VDSP, with a commit log, like this:
-
-Subject: Change DSP to VDSP for -mcpu
-
-DSP is no use in current buildroot and gcc default enable the DSP
-feature for C-SKY.
-So DSP is part of our standard ISA, we needn't put it in -mcpu=xxx.
-
-VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
-operation. It could be support by abiv2 (ck807, ck810, ck860).
-
-Best Regards
- Guo Ren
+> I changemind and I'll follow the above patches which you prior mentioned
+>
+> - One switching to using arch.mk.sky, without changing DSP -> VDSP
+> - A follow-up one changing DSP -> VDSP, with a commit log that
+>    explains why you make this chang
+>
+> >
+> > > Here is my commit log for Introduce VDSP feature:
+> > >
+> > > VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
+> > > operation. It could be support by abiv2 (ck807, ck810, ck860).
+> > >
+> > > Is that OK?
+> >
+> > Yes. But please add a proper commit log in the patch removing the DSP
+> > option.
+> DSP -> VDSP, with a commit log, like this:
+>
+> Subject: Change DSP to VDSP for -mcpu
+>
+> DSP is no use in current buildroot and gcc default enable the DSP
+> feature for C-SKY.
+> So DSP is part of our standard ISA, we needn't put it in -mcpu=xxx.
+>
+> VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
+> operation. It could be support by abiv2 (ck807, ck810, ck860).
+Correct: It is supported by abiv2.

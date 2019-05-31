@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 365B8C28CC3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61E05C28CC2
 	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0F92F264A0
+	by mail.kernel.org (Postfix) with ESMTP id 3B231264A7
 	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1559284829;
-	bh=75jQLMPLRveo2p3NLsyJQR4gRtMd643joXMZQEtZlkI=;
+	bh=swASeo4oRV5zh0d9WQzFqXtOx4uX1r+GwpwM3YgzJiU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1XEILPbmGmhHmxexoHs4pMQctUH15xResp/BO2jrS/+SUrffFKh/oc1J1IVPOe8jw
-	 FcVMEgEyX8IeTq2zctobIgH+gXyj4gibjIL60Zasn0nQcwmh23vEns9np58WVKQZH0
-	 SxYsssav6ujjAHfIjO+gEmCGiicfSrglvCb6ixXw=
+	b=nl/0+5Hae5vSsHdUqmutKsoa035ASOgO6ssNzZxhDD4CVIoL1ZhXrWrbuK2ExXY/W
+	 ZXSUEkWhVJF2Ezl/4t1rJtI7y5AKaeKcGyk+ZXZGrxz36JB3RPZ0PN4uNEHULk778i
+	 5dReHineMB/BrtMGYUtQVA9llk4K2mBW17kU37ZY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbfEaGk2 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 31 May 2019 02:40:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48308 "EHLO mail.kernel.org"
+        id S1726970AbfEaGkX (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 31 May 2019 02:40:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbfEaGk1 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 31 May 2019 02:40:27 -0400
+        id S1726701AbfEaGkW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 31 May 2019 02:40:22 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 385ED2647B;
-        Fri, 31 May 2019 06:40:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A36726474;
+        Fri, 31 May 2019 06:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559284827;
-        bh=75jQLMPLRveo2p3NLsyJQR4gRtMd643joXMZQEtZlkI=;
+        s=default; t=1559284822;
+        bh=swASeo4oRV5zh0d9WQzFqXtOx4uX1r+GwpwM3YgzJiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ugrJ9KQeahVCmZB6V39MDxlmEB2vL0ZhBqU16U8Wj32Pycvy11KdHAwyA8XVn4lyq
-         +qcxii7cDYVfhwJa4lP0N0jKnSdM/UbmjSCCCYysHtNXQ77Qv34KBt3/6zoNtQHFC/
-         2tv94cH4GM+gNxXvtIF00EGaXNek1KaBMxfNf3Dg=
+        b=KJ6kKIRMKbzrYyQ7sf2C3nGSQKzYu9a5uVPZH4RcjgUkiTPfQhAkGWyD8Xy1CLsOX
+         CLjbbWkpfKERdTw96xQWKjV4bdve+licvrtSN3OcWyYPjnfUL+ZiNF9WADsWg+xnNq
+         XtpfHxXcUr2+ZJS0t75f/8meaADpyHzbhaOG6ng4=
 From:   guoren@kernel.org
 To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
         arnout@mind.be
 Cc:     linux-csky@vger.kernel.org, buildroot@buildroot.org,
         Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH V4 08/11] package/gdb: Add C-SKY support
-Date:   Fri, 31 May 2019 14:39:05 +0800
-Message-Id: <1559284748-32011-9-git-send-email-guoren@kernel.org>
+Subject: [PATCH V4 07/11] package/gcc: Add C-SKY support
+Date:   Fri, 31 May 2019 14:39:04 +0800
+Message-Id: <1559284748-32011-8-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1559284748-32011-1-git-send-email-guoren@kernel.org>
 References: <1559284748-32011-1-git-send-email-guoren@kernel.org>
@@ -57,65 +57,111 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-Add gdb build for C-SKY Architecture:
-
- - Support host-gdb
- - Support gdbserver for target
+Add gcc build for C-SKY Architecture.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- package/gdb/Config.in.host | 2 ++
- package/gdb/gdb.hash       | 2 ++
- package/gdb/gdb.mk         | 6 ++++++
- 3 files changed, 10 insertions(+)
+ package/gcc/Config.in.host | 13 +++++++++++++
+ package/gcc/gcc.hash       |  2 ++
+ package/gcc/gcc.mk         |  3 +++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 969168f..76a0eca 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -48,6 +48,7 @@ choice
- 	prompt "GDB debugger Version"
- 	default BR2_GDB_VERSION_8_1
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 8e22a4c..c3aceff 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -3,6 +3,7 @@ comment "GCC Options"
+ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
++	default BR2_GCC_VERSION_CSKY if BR2_csky
+ 	default BR2_GCC_VERSION_OR1K if BR2_or1k
+ 	default BR2_GCC_VERSION_7_X
+ 	help
+@@ -14,6 +15,12 @@ config BR2_GCC_VERSION_ARC
+ 	depends on BR2_arc
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
++config BR2_GCC_VERSION_CSKY
++	bool "gcc csky"
++	# Only supported architecture
++	depends on BR2_csky
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++
+ config BR2_GCC_VERSION_OR1K
+ 	bool "gcc or1k (5.x)"
+ 	# Only supported architecture
+@@ -25,6 +32,7 @@ config BR2_GCC_VERSION_4_9_X
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	# Broken or unsupported architectures
  	depends on !BR2_arc
 +	depends on !BR2_csky
- 	help
- 	  Select the version of gdb you wish to use.
+ 	depends on !BR2_or1k
+ 	# musl on microblaze, ppc64 and mips64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_microblazeel || BR2_microblazebe))
+@@ -39,6 +47,7 @@ config BR2_GCC_VERSION_5_X
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
++	depends on !BR2_csky
+ 	depends on !BR2_or1k
+ 	# musl on ppc64 and mips64 unsupported
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+@@ -52,6 +61,7 @@ config BR2_GCC_VERSION_6_X
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
++	depends on !BR2_csky
+ 	depends on !BR2_or1k
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
  
-@@ -95,6 +96,7 @@ config BR2_PACKAGE_GDB_NEEDS_CXX11
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2018.09-release-gdb" if BR2_arc
-+	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
- 	default "8.0.1"    if BR2_GDB_VERSION_8_0
- 	default "8.1.1"    if BR2_GDB_VERSION_8_1 || !BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 1104da5..90a60b0 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -6,3 +6,5 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
+@@ -59,12 +69,14 @@ config BR2_GCC_VERSION_7_X
+ 	bool "gcc 7.x"
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	# Broken or unsupported architectures
++	depends on !BR2_csky
+ 	depends on !BR2_or1k
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
  
+ config BR2_GCC_VERSION_8_X
+ 	bool "gcc 8.x"
+ 	# Broken or unsupported architectures
++	depends on !BR2_csky
+ 	depends on !BR2_or1k
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+@@ -85,6 +97,7 @@ config BR2_GCC_VERSION
+ 	default "8.3.0"     if BR2_GCC_VERSION_8_X
+ 	default "arc-2018.09-release" if BR2_GCC_VERSION_ARC
+ 	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
++	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+ 	string "Additional gcc options"
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 4f1e7f9..780484d 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -13,3 +13,5 @@ sha512  1811337ae3add9680cec64968a2509d085b6dc5b6783fc1e8c295e3e47416196fd1a3ad8
+ sha512  4d12c3ac27b9de9c533be3b8964cf23d21bf6933b5073183e1affe714b0ff33f9d6169e3b55a5c505d7dae33c9bb4f8b0d110461e3a124182d8c8d51b66b8e45  gcc-arc-2018.09-release.tar.gz
  # Locally calculated (fetched from Github)
- sha512  8303e399e396f5c15dc976e48503fc7d45a720dd1a470443f755c5f2458d092b4392e7ae582abc251bc4b43a778ad784f764286a2a05abfc1649cbeeeb6e7d15 	gdb-arc-2018.09-release-gdb.tar.gz
-+# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
-+sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index a926961..46d745a 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -14,6 +14,12 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- GDB_FROM_GIT = y
- endif
- 
-+ifeq ($(BR2_csky),y)
-+GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
-+GDB_FROM_GIT = y
-+endif
-+
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- 
+ sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
++# Locally calculated (fetched from https://github.com/c-sky/gcc)
++sha512  1c3564fd6573dce13451a73015e7d88fecbb214dc1df96607976255b1d8b9e60318405333f4f218eea8d07e3675a802b66eff6df3921d505c4036481512792c2  gcc-48152afb96c59733d5bc79e3399bb7b3d4b44266.tar.gz
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5901624..abc29c7 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -16,6 +16,9 @@ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+ else ifeq ($(BR2_or1k),y)
+ GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
++else ifeq ($(BR2_csky),y)
++GCC_SITE = $(call github,c-sky,gcc,$(GCC_VERSION))
++GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+ else
+ GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+ # From version 5.5.0, 6.4.0, 7.2.0 and 8.1.0 a bz2 release tarball is not
 -- 
 2.7.4
 

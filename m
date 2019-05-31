@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C79C04AB6
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 365B8C28CC3
+	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 55D8526499
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F92F264A0
+	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559284818;
-	bh=G2IpkGnp9i0b+EpA2hQCUf9YlJRFcuXejLFULeqEZds=;
+	s=default; t=1559284829;
+	bh=75jQLMPLRveo2p3NLsyJQR4gRtMd643joXMZQEtZlkI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=RCVWklDcdc7Ry6lnS32qwOotNZB9irq8Waba/c/jD52+OZCpg5uDU2Mve379CBuxG
-	 /57gUdDn3d0SuFMU11aMze3tWIK7VbaOkrWpz6E7OfZKrgh0HG1LXG8JVSLk8HKhSi
-	 bFmLN02fFvN6QUjoR+XofvL8fdpSrAIjzM8+JpzA=
+	b=1XEILPbmGmhHmxexoHs4pMQctUH15xResp/BO2jrS/+SUrffFKh/oc1J1IVPOe8jw
+	 FcVMEgEyX8IeTq2zctobIgH+gXyj4gibjIL60Zasn0nQcwmh23vEns9np58WVKQZH0
+	 SxYsssav6ujjAHfIjO+gEmCGiicfSrglvCb6ixXw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbfEaGkS (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 31 May 2019 02:40:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48072 "EHLO mail.kernel.org"
+        id S1726501AbfEaGk2 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 31 May 2019 02:40:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726386AbfEaGkS (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 31 May 2019 02:40:18 -0400
+        id S1726483AbfEaGk1 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 31 May 2019 02:40:27 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D11C2647B;
-        Fri, 31 May 2019 06:40:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 385ED2647B;
+        Fri, 31 May 2019 06:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559284817;
-        bh=G2IpkGnp9i0b+EpA2hQCUf9YlJRFcuXejLFULeqEZds=;
+        s=default; t=1559284827;
+        bh=75jQLMPLRveo2p3NLsyJQR4gRtMd643joXMZQEtZlkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PIyeZtAjQU+vSwwW7TkrB4kigWGkBnyy364Hdz8CZ41ClFMU2lRlgHQzhcGfDMGry
-         W/sluiP2tipQjNbgkYFhdN2Ai3ELn/64tQB9fPITcSu8dWOZJUuLpN+u8uCeoN3K5e
-         gB/EsoeJAtaZrP91VpQ8wAvMvJ+j32imKPUnRWvg=
+        b=ugrJ9KQeahVCmZB6V39MDxlmEB2vL0ZhBqU16U8Wj32Pycvy11KdHAwyA8XVn4lyq
+         +qcxii7cDYVfhwJa4lP0N0jKnSdM/UbmjSCCCYysHtNXQ77Qv34KBt3/6zoNtQHFC/
+         2tv94cH4GM+gNxXvtIF00EGaXNek1KaBMxfNf3Dg=
 From:   guoren@kernel.org
 To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
         arnout@mind.be
 Cc:     linux-csky@vger.kernel.org, buildroot@buildroot.org,
         Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH V4 06/11] package/binutils: Add C-SKY support
-Date:   Fri, 31 May 2019 14:39:03 +0800
-Message-Id: <1559284748-32011-7-git-send-email-guoren@kernel.org>
+Subject: [PATCH V4 08/11] package/gdb: Add C-SKY support
+Date:   Fri, 31 May 2019 14:39:05 +0800
+Message-Id: <1559284748-32011-9-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1559284748-32011-1-git-send-email-guoren@kernel.org>
 References: <1559284748-32011-1-git-send-email-guoren@kernel.org>
@@ -57,86 +57,65 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-Add binutils build for C-SKY Architecture.
+Add gdb build for C-SKY Architecture:
+
+ - Support host-gdb
+ - Support gdbserver for target
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- package/binutils/Config.in.host | 11 ++++++++++-
- package/binutils/binutils.hash  |  2 ++
- package/binutils/binutils.mk    |  7 +++++++
- 3 files changed, 19 insertions(+), 1 deletion(-)
+ package/gdb/Config.in.host | 2 ++
+ package/gdb/gdb.hash       | 2 ++
+ package/gdb/gdb.mk         | 6 ++++++
+ 3 files changed, 10 insertions(+)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index c3c3beb..d2ca8af 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -7,28 +7,37 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
- 
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
-+	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc && !BR2_csky
- 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
-+	default BR2_BINUTILS_VERSION_CSKY if BR2_csky
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 969168f..76a0eca 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -48,6 +48,7 @@ choice
+ 	prompt "GDB debugger Version"
+ 	default BR2_GDB_VERSION_8_1
+ 	depends on !BR2_arc
++	depends on !BR2_csky
  	help
- 	  Select the version of binutils you wish to use.
+ 	  Select the version of gdb you wish to use.
  
- config BR2_BINUTILS_VERSION_2_30_X
- 	bool "binutils 2.30"
-+	depends on !BR2_csky
- 
- config BR2_BINUTILS_VERSION_2_31_X
- 	bool "binutils 2.31.1"
-+	depends on !BR2_csky
- 
- config BR2_BINUTILS_VERSION_2_32_X
- 	bool "binutils 2.32"
-+	depends on !BR2_csky
- 
- config BR2_BINUTILS_VERSION_ARC
- 	bool "binutils arc (2.31)"
- 	depends on BR2_arc
-+
-+config BR2_BINUTILS_VERSION_CSKY
-+	bool "binutils csky"
-+	depends on BR2_csky
- endchoice
- 
- config BR2_BINUTILS_VERSION
+@@ -95,6 +96,7 @@ config BR2_PACKAGE_GDB_NEEDS_CXX11
+ config BR2_GDB_VERSION
  	string
- 	default "arc-2018.09-release"	if BR2_BINUTILS_VERSION_ARC
-+	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
- 	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
- 	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
- 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 039e368..9f8b419 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -5,3 +5,5 @@ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724a
+ 	default "arc-2018.09-release-gdb" if BR2_arc
++	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+ 	default "7.12.1"   if BR2_GDB_VERSION_7_12
+ 	default "8.0.1"    if BR2_GDB_VERSION_8_0
+ 	default "8.1.1"    if BR2_GDB_VERSION_8_1 || !BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 1104da5..90a60b0 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -6,3 +6,5 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
  
  # Locally calculated (fetched from Github)
- sha512  a96dfcea6064fcd1aac1333ac0d631491bed8b0be9bdcf62f1447909c8f30d2cb8d9323ffeb7c9ad6b326ecddb72e3d28281684e73343189d0a4a37a11aef62f  binutils-gdb-arc-2018.09-release.tar.gz
+ sha512  8303e399e396f5c15dc976e48503fc7d45a720dd1a470443f755c5f2458d092b4392e7ae582abc251bc4b43a778ad784f764286a2a05abfc1649cbeeeb6e7d15 	gdb-arc-2018.09-release-gdb.tar.gz
 +# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
-+sha512  979552d4b3a4f31e9f3b9a7027321bd4eb3ac6c2d8deac1720e94e54f81d736db09c53c5d87c301010e307b64127e14400a036c7a35e5d63a954a4edd9cc8e2c  binutils-c66d8bbcebfddf713b2b436e1b135e6b125a55a5.tar.gz
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index c70ba13..6d2b710 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -20,6 +20,13 @@ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,
- BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
- BINUTILS_FROM_GIT = y
++sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index a926961..46d745a 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -14,6 +14,12 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ GDB_FROM_GIT = y
  endif
-+
+ 
 +ifeq ($(BR2_csky),y)
-+BINUTILS_SITE = $(call github,c-sky,binutils-gdb,$(BINUTILS_VERSION))
-+BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
-+BINUTILS_FROM_GIT = y
++GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
++GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
++GDB_FROM_GIT = y
 +endif
 +
- BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+ GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ 
 -- 
 2.7.4
 

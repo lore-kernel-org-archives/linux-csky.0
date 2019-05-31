@@ -2,51 +2,51 @@ Return-Path: <SRS0=wqK1=T7=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22830C04AB6
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C79C04AB6
+	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAFBB2647B
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55D8526499
+	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 06:40:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559284813;
-	bh=qLPIsNugCDXHRbL4518fpyTBEbuzLr9juiED2ZCPJN4=;
+	s=default; t=1559284818;
+	bh=G2IpkGnp9i0b+EpA2hQCUf9YlJRFcuXejLFULeqEZds=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dikvyjZXU2W7w4p2JnzqI74+Z2ereqrTQh8/0nN6rkPbmkdPBFrBdHUyFNuolGRFq
-	 ziaIaGy1Sg4zjGgxvt+6442cyz2VWUZnqL+ytbeHzvUPkx7JfdnH23fkVtY8brvTTF
-	 e4MsUHoOs7DHSPbBZrFd7MwX+1aPxqjlsMOCldnM=
+	b=RCVWklDcdc7Ry6lnS32qwOotNZB9irq8Waba/c/jD52+OZCpg5uDU2Mve379CBuxG
+	 /57gUdDn3d0SuFMU11aMze3tWIK7VbaOkrWpz6E7OfZKrgh0HG1LXG8JVSLk8HKhSi
+	 bFmLN02fFvN6QUjoR+XofvL8fdpSrAIjzM8+JpzA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbfEaGkM (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 31 May 2019 02:40:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48020 "EHLO mail.kernel.org"
+        id S1726515AbfEaGkS (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 31 May 2019 02:40:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726386AbfEaGkM (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 31 May 2019 02:40:12 -0400
+        id S1726386AbfEaGkS (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 31 May 2019 02:40:18 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 41AE226474;
-        Fri, 31 May 2019 06:40:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2D11C2647B;
+        Fri, 31 May 2019 06:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559284812;
-        bh=qLPIsNugCDXHRbL4518fpyTBEbuzLr9juiED2ZCPJN4=;
+        s=default; t=1559284817;
+        bh=G2IpkGnp9i0b+EpA2hQCUf9YlJRFcuXejLFULeqEZds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rAo/HhpBf4Jofnww3dhBo+wZM4AN+qM7HBFSRCGRxINwuTntyYACqc/V93IRcn+ht
-         cFA2VNQANl/h0Shjs302c+XDKpIRsH4OQjtg+iuETeI/HvSPpVBHibyaLp4Bt/6S2J
-         N6TIGNAXWeLF7l2K8D/C/juX+1yN+254IiwM5+PI=
+        b=PIyeZtAjQU+vSwwW7TkrB4kigWGkBnyy364Hdz8CZ41ClFMU2lRlgHQzhcGfDMGry
+         W/sluiP2tipQjNbgkYFhdN2Ai3ELn/64tQB9fPITcSu8dWOZJUuLpN+u8uCeoN3K5e
+         gB/EsoeJAtaZrP91VpQ8wAvMvJ+j32imKPUnRWvg=
 From:   guoren@kernel.org
 To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
         arnout@mind.be
 Cc:     linux-csky@vger.kernel.org, buildroot@buildroot.org,
         Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH V4 05/11] arch/csky: Add ABI variable for toolchain build
-Date:   Fri, 31 May 2019 14:39:02 +0800
-Message-Id: <1559284748-32011-6-git-send-email-guoren@kernel.org>
+Subject: [PATCH V4 06/11] package/binutils: Add C-SKY support
+Date:   Fri, 31 May 2019 14:39:03 +0800
+Message-Id: <1559284748-32011-7-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1559284748-32011-1-git-send-email-guoren@kernel.org>
 References: <1559284748-32011-1-git-send-email-guoren@kernel.org>
@@ -57,33 +57,86 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-C-SKY toolchain build need it to seperate abiv1 & abiv2.
+Add binutils build for C-SKY Architecture.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- package/Makefile.in | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/binutils/Config.in.host | 11 ++++++++++-
+ package/binutils/binutils.hash  |  2 ++
+ package/binutils/binutils.mk    |  7 +++++++
+ 3 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dc818a2..f05b9cc 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -70,6 +70,15 @@ ABI := $(ABI)hf
- endif
- endif
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index c3c3beb..d2ca8af 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,28 +7,37 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
  
-+# For C-SKY abiv1 & abiv2
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
++	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc && !BR2_csky
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
++	default BR2_BINUTILS_VERSION_CSKY if BR2_csky
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+ config BR2_BINUTILS_VERSION_2_30_X
+ 	bool "binutils 2.30"
++	depends on !BR2_csky
+ 
+ config BR2_BINUTILS_VERSION_2_31_X
+ 	bool "binutils 2.31.1"
++	depends on !BR2_csky
+ 
+ config BR2_BINUTILS_VERSION_2_32_X
+ 	bool "binutils 2.32"
++	depends on !BR2_csky
+ 
+ config BR2_BINUTILS_VERSION_ARC
+ 	bool "binutils arc (2.31)"
+ 	depends on BR2_arc
++
++config BR2_BINUTILS_VERSION_CSKY
++	bool "binutils csky"
++	depends on BR2_csky
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "arc-2018.09-release"	if BR2_BINUTILS_VERSION_ARC
++	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
+ 	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
+ 	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
+ 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 039e368..9f8b419 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -5,3 +5,5 @@ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724a
+ 
+ # Locally calculated (fetched from Github)
+ sha512  a96dfcea6064fcd1aac1333ac0d631491bed8b0be9bdcf62f1447909c8f30d2cb8d9323ffeb7c9ad6b326ecddb72e3d28281684e73343189d0a4a37a11aef62f  binutils-gdb-arc-2018.09-release.tar.gz
++# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
++sha512  979552d4b3a4f31e9f3b9a7027321bd4eb3ac6c2d8deac1720e94e54f81d736db09c53c5d87c301010e307b64127e14400a036c7a35e5d63a954a4edd9cc8e2c  binutils-c66d8bbcebfddf713b2b436e1b135e6b125a55a5.tar.gz
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index c70ba13..6d2b710 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -20,6 +20,13 @@ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,
+ BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
+ BINUTILS_FROM_GIT = y
+ endif
++
 +ifeq ($(BR2_csky),y)
-+ifeq ($(BR2_ck610),y)
-+ABI = abiv1
-+else
-+ABI = abiv2
-+endif
++BINUTILS_SITE = $(call github,c-sky,binutils-gdb,$(BINUTILS_VERSION))
++BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
++BINUTILS_FROM_GIT = y
 +endif
 +
- # For FSL PowerPC there's SPE
- ifeq ($(BR2_powerpc_SPE),y)
- ABI = spe
+ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
+ BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
+ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
 -- 
 2.7.4
 

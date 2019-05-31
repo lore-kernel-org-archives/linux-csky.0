@@ -2,77 +2,79 @@ Return-Path: <SRS0=wqK1=T7=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B30E0C04AB6
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 10:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E21C04AB6
+	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 21:04:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8447A26763
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 10:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559297801;
-	bh=7WcP7geRnCdillAQ5KdZSxTQZjeTSwXA+zJ2pR9Vmew=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=wvffmfmydqChPvNw3Kjv5GYMxdURKq6RQqIVjYDFsYjr9C/P1XF1v2vCUmlsslnf3
-	 7z09G2p47ehWNT8qmSVqPy5bDmos8cI+mIoMgcVaVA06ifIxl3SG18F7sLGbgxOrT3
-	 lVqVDCGIhtWnOoBMMQ53GxNpEgy1ZpQ8SaEObZDY=
+	by mail.kernel.org (Postfix) with ESMTP id 65FF326F18
+	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 21:04:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbfEaKQl (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 31 May 2019 06:16:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40544 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726002AbfEaKQl (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 31 May 2019 06:16:41 -0400
-Received: from localhost.localdomain (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 65E5C24B7D;
-        Fri, 31 May 2019 10:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559297800;
-        bh=7WcP7geRnCdillAQ5KdZSxTQZjeTSwXA+zJ2pR9Vmew=;
-        h=From:To:Cc:Subject:Date:From;
-        b=A7a7vIvf/+gzll8Xx18yAaIBbUUAgYxWuegrvHa7Zgs22w00QHcMmLSIK8FfCxCjc
-         UmJgWKGHmQQZlprtrRYoPeAIWgV2sdRvabvd8CVmHSJE3NBuLzJdfyR53REErd/u6v
-         nBDjNmVLEmUiQ4CfZO+9cRPkbLgIBhW6PgiuMnR8=
-From:   guoren@kernel.org
-To:     arnd@arndb.de, torvalds@linux-foundation.org
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH] MAINTAINERS: Add mailing list for csky architecture
-Date:   Fri, 31 May 2019 18:16:10 +0800
-Message-Id: <1559297770-11633-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1727607AbfEaVEF (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 31 May 2019 17:04:05 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:48501 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726558AbfEaVEF (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 31 May 2019 17:04:05 -0400
+Received: from windsurf (132.230.147.77.rev.sfr.net [77.147.230.132])
+        (Authenticated sender: thomas.petazzoni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id AF7BF240009;
+        Fri, 31 May 2019 21:03:56 +0000 (UTC)
+Date:   Fri, 31 May 2019 23:03:55 +0200
+From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To:     guoren@kernel.org
+Cc:     Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+        arnout@mind.be, Guo Ren <ren_guo@c-sky.com>,
+        linux-csky@vger.kernel.org, buildroot@buildroot.org
+Subject: Re: [Buildroot] [PATCH V4 00/11] Update arch/csky for buildroot
+Message-ID: <20190531230355.7d8112bc@windsurf>
+In-Reply-To: <1559284748-32011-1-git-send-email-guoren@kernel.org>
+References: <1559284748-32011-1-git-send-email-guoren@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+Hello Guo,
 
-Add the newly created linux-csky@vger.kernel.org mailing list for patch
-reviews and discussions.
+On Fri, 31 May 2019 14:38:57 +0800
+guoren@kernel.org wrote:
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+> Guo Ren (11):
+>   arch/csky: Add arch.mk.csky for -mcpu=xxx
+>   arch/csky: Change DSP to VDSP for -mcpu
+>   arch/csky: Add ck860 supported
+>   arch/csky: Add FLOAT_ABI compiler options
+>   arch/csky: Add ABI variable for toolchain build
+>   package/binutils: Add C-SKY support
+>   package/gcc: Add C-SKY support
+>   package/gdb: Add C-SKY support
+>   package/glibc: Add C-SKY support
+>   configs/qemu_cskyXXX_virt: new defconfig
+>   arch/csky: Enable csky toolchain build
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5cfbea4..b5fadcc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3474,6 +3474,7 @@ F:	sound/pci/oxygen/
- 
- C-SKY ARCHITECTURE
- M:	Guo Ren <guoren@kernel.org>
-+L:	linux-csky@vger.kernel.org
- T:	git https://github.com/c-sky/csky-linux.git
- S:	Supported
- F:	arch/csky/
+I have applied the entire series to the next branch, except patch
+"configs/qemu_cskyXXX_virt: new defconfig".
+
+I made some changes in several patches, especially in the commit logs.
+I'll reply to some of the individual patches when I did more than
+changing the commit log.
+
+I had to add one patch to package/linux-headers, so that only Linux
+kernel versions that have C-SKY support can be selected. This was
+missing in your series.
+
+Thanks a lot for this contribution!
+
+Thomas
 -- 
-2.7.4
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

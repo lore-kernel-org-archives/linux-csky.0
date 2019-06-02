@@ -1,144 +1,256 @@
-Return-Path: <SRS0=wqK1=T7=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=cdmM=UB=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99624C04AB6
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 21:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FB06C282DC
+	for <linux-csky@archiver.kernel.org>; Sun,  2 Jun 2019 09:42:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7185C26F21
-	for <linux-csky@archiver.kernel.org>; Fri, 31 May 2019 21:09:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10691278AE
+	for <linux-csky@archiver.kernel.org>; Sun,  2 Jun 2019 09:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559468533;
+	bh=NTyjXXwR/qtFylpW3GS3quEDhJT6NPhEfPG31LfHU6g=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=ChbPtgJqio5g8hLNaktyy9N21QbZ3vl7gAxJUgrcEt9wS9Q1XInL7xGMV2Mw6HmgY
+	 iAFoMmBCLu6ebg/qdjTUgTXH8ZXf23sCjfwj24WTROE7+zQL1zzJ6xBzYhOVPgU4eV
+	 RTF3NrsOdIZNMjiOXwLrzlVHdTdghhvE3f39iSU4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727087AbfEaVJ1 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 31 May 2019 17:09:27 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:46453 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727075AbfEaVJ0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 31 May 2019 17:09:26 -0400
-X-Originating-IP: 77.147.230.132
-Received: from windsurf (132.230.147.77.rev.sfr.net [77.147.230.132])
-        (Authenticated sender: thomas.petazzoni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 2193840005;
-        Fri, 31 May 2019 21:09:21 +0000 (UTC)
-Date:   Fri, 31 May 2019 23:09:20 +0200
-From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To:     guoren@kernel.org
-Cc:     Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
-        arnout@mind.be, Guo Ren <ren_guo@c-sky.com>,
-        linux-csky@vger.kernel.org, buildroot@buildroot.org
-Subject: Re: [Buildroot] [PATCH V4 10/11] configs/qemu_cskyXXX_virt: new
- defconfig
-Message-ID: <20190531230920.302c0222@windsurf>
-In-Reply-To: <1559284748-32011-11-git-send-email-guoren@kernel.org>
-References: <1559284748-32011-1-git-send-email-guoren@kernel.org>
-        <1559284748-32011-11-git-send-email-guoren@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726269AbfFBJmM (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 2 Jun 2019 05:42:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45990 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725977AbfFBJmM (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 2 Jun 2019 05:42:12 -0400
+Received: from localhost.localdomain (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C0FAA278AB;
+        Sun,  2 Jun 2019 09:42:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559468531;
+        bh=NTyjXXwR/qtFylpW3GS3quEDhJT6NPhEfPG31LfHU6g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GyImxSQSrbikvAEAWC27bTKui04ccy1O0JlYg2LcHWtMwOIqsycIxZdse9CL4ZMX6
+         djFdifjWtSySktQKqpW/72fwjxwk7OyJwH2T+RQtSF/HNNem1+XI8z4qji/XoYkIRE
+         Ss8dAq5Y42rsIs6dUO/UfX20ZV2xpfmDb0PRV6LA=
+From:   guoren@kernel.org
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+        arnout@mind.be
+Cc:     linux-csky@vger.kernel.org, buildroot@buildroot.org,
+        zhiwei_liu@c-sky.com, Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH V5 1/2] configs/qemu_cskyXXX_virt: new defconfig
+Date:   Sun,  2 Jun 2019 17:41:49 +0800
+Message-Id: <1559468510-22085-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello Guo;
+From: Guo Ren <ren_guo@c-sky.com>
 
-On Fri, 31 May 2019 14:39:07 +0800
-guoren@kernel.org wrote:
+Add C-SKY defconfig for QEMU virt machine.
 
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> Add C-SKY defconfig for QEMU virt machine.
-> 
-> Tested with https://gitlab.com/c-sky/buildroot/pipelines
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->  .gitlab-ci.yml                      |   4 +
->  board/qemu/csky/610_defconfig       | 526 +++++++++++++++++++++++++++++++++++
->  board/qemu/csky/807_defconfig       | 531 +++++++++++++++++++++++++++++++++++
->  board/qemu/csky/810_defconfig       | 531 +++++++++++++++++++++++++++++++++++
->  board/qemu/csky/860_defconfig       | 533 ++++++++++++++++++++++++++++++++++++
+Tested with https://gitlab.com/c-sky/buildroot/pipelines
 
-These kernel defconfig files are too long, they contain lots of options
-that seem unnecessary. Could you trim them down by removing many
-unnecessary options ?
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                              |  4 ++++
+ board/qemu/csky/linux-ck610.config.fragment |  5 +++++
+ board/qemu/csky/linux-ck807.config.fragment |  5 +++++
+ board/qemu/csky/linux-ck810.config.fragment |  5 +++++
+ board/qemu/csky/linux-ck860.config.fragment |  9 +++++++++
+ configs/qemu_csky610_virt_defconfig         | 20 ++++++++++++++++++++
+ configs/qemu_csky807_virt_defconfig         | 21 +++++++++++++++++++++
+ configs/qemu_csky810_virt_defconfig         | 21 +++++++++++++++++++++
+ configs/qemu_csky860_virt_defconfig         | 21 +++++++++++++++++++++
+ 9 files changed, 111 insertions(+)
+ create mode 100644 board/qemu/csky/linux-ck610.config.fragment
+ create mode 100644 board/qemu/csky/linux-ck807.config.fragment
+ create mode 100644 board/qemu/csky/linux-ck810.config.fragment
+ create mode 100644 board/qemu/csky/linux-ck860.config.fragment
+ create mode 100644 configs/qemu_csky610_virt_defconfig
+ create mode 100644 configs/qemu_csky807_virt_defconfig
+ create mode 100644 configs/qemu_csky810_virt_defconfig
+ create mode 100644 configs/qemu_csky860_virt_defconfig
 
-Also, perhaps there could be a file with the set of common options, and
-a fragment for each CPU core, to avoid all the duplication ?
-
-In addition, they should have a name that makes it clear they are Linux
-kernel configuration file.
-
->  configs/qemu_csky610_virt_defconfig |  29 ++
->  configs/qemu_csky807_virt_defconfig |  30 ++
->  configs/qemu_csky810_virt_defconfig |  30 ++
->  configs/qemu_csky860_virt_defconfig |  30 ++
->  9 files changed, 2244 insertions(+)
-
-Please add the appropriate board/qemu/csky/readme.txt file to explain
-how to run these in Qemu, and which Qemu version it was tested with.
-
-Finally, make sure to add the appropriate entries to the DEVELOPERS
-file.
-
-
-> diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
-> new file mode 100644
-> index 0000000..118ad51
-> --- /dev/null
-> +++ b/configs/qemu_csky860_virt_defconfig
-> @@ -0,0 +1,30 @@
-> +# Architecture
-> +BR2_csky=y
-> +BR2_ck860=y
-> +
-> +# System
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-
-We typically don't enable mdev in minimal defconfigs.
-
-> +BR2_TARGET_ROOTFS_INITRAMFS=y
-> +
-> +# Toolchain
-> +BR2_OPTIMIZE_2=y
-> +BR2_SHARED_STATIC_LIBS=y
-> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> +BR2_PACKAGE_HOST_GDB=y
-> +BR2_TARGET_OPTIMIZATION="-mbacktrace"
-
-Please drop these options, and keep the default.
-
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/csky/860_defconfig"
-> +
-> +# Packages on board
-> +BR2_PACKAGE_LINUX_TOOLS_PERF=y
-> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> +BR2_PACKAGE_GDB=y
-> +BR2_PACKAGE_BASH=y
-> +BR2_PACKAGE_KMOD=y
-> +BR2_PACKAGE_UTIL_LINUX=y
-> +BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
-
-Ditto, please drop these "Packages on board" options: our defconfig
-should be minimal, i.e build just a bootloader (if needed), a Linux
-kernel image and the default Buildroot package set (just Busybox).
-
-Thanks!
-
-Thomas
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 374dbfe..4fa3473 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -248,6 +248,10 @@ qemu_aarch64_virt_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
+ qemu_arm_vexpress_defconfig: { extends: .defconfig }
++qemu_csky610_virt_defconfig: { extends: .defconfig }
++qemu_csky807_virt_defconfig: { extends: .defconfig }
++qemu_csky810_virt_defconfig: { extends: .defconfig }
++qemu_csky860_virt_defconfig: { extends: .defconfig }
+ qemu_m68k_mcf5208_defconfig: { extends: .defconfig }
+ qemu_m68k_q800_defconfig: { extends: .defconfig }
+ qemu_microblazebe_mmu_defconfig: { extends: .defconfig }
+diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
+new file mode 100644
+index 0000000..d80d0ee
+--- /dev/null
++++ b/board/qemu/csky/linux-ck610.config.fragment
+@@ -0,0 +1,5 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK610=y
++CONFIG_CPU_PM_WAIT=y
++CONFIG_CSKY_APB_INTC=y
++CONFIG_GX6605S_TIMER=y
+diff --git a/board/qemu/csky/linux-ck807.config.fragment b/board/qemu/csky/linux-ck807.config.fragment
+new file mode 100644
+index 0000000..b6974f0
+--- /dev/null
++++ b/board/qemu/csky/linux-ck807.config.fragment
+@@ -0,0 +1,5 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK807=y
++# CONFIG_CPU_HAS_FPU is not set
++CONFIG_CPU_PM_WAIT=y
++CONFIG_CSKY_APB_INTC=y
+diff --git a/board/qemu/csky/linux-ck810.config.fragment b/board/qemu/csky/linux-ck810.config.fragment
+new file mode 100644
+index 0000000..50fa1f4
+--- /dev/null
++++ b/board/qemu/csky/linux-ck810.config.fragment
+@@ -0,0 +1,5 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK810=y
++# CONFIG_CPU_HAS_FPU is not set
++CONFIG_CPU_PM_WAIT=y
++CONFIG_CSKY_APB_INTC=y
+diff --git a/board/qemu/csky/linux-ck860.config.fragment b/board/qemu/csky/linux-ck860.config.fragment
+new file mode 100644
+index 0000000..e8f6af1
+--- /dev/null
++++ b/board/qemu/csky/linux-ck860.config.fragment
+@@ -0,0 +1,9 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK860=y
++# CONFIG_CPU_HAS_FPU is not set
++CONFIG_CPU_PM_WAIT=y
++CONFIG_SMP=y
++CONFIG_HOTPLUG_CPU=y
++CONFIG_CSKY_APB_INTC=y
++CONFIG_CSKY_MPINTC=y
++CONFIG_CSKY_MP_TIMER=y
+diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
+new file mode 100644
+index 0000000..9a82d57
+--- /dev/null
++++ b/configs/qemu_csky610_virt_defconfig
+@@ -0,0 +1,20 @@
++# Architecture
++BR2_csky=y
++BR2_ck610=y
++
++# System
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# Toolchain
++BR2_OPTIMIZE_2=y
++BR2_SHARED_STATIC_LIBS=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_PACKAGE_HOST_GDB=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
+diff --git a/configs/qemu_csky807_virt_defconfig b/configs/qemu_csky807_virt_defconfig
+new file mode 100644
+index 0000000..8fe32e8
+--- /dev/null
++++ b/configs/qemu_csky807_virt_defconfig
+@@ -0,0 +1,21 @@
++# Architecture
++BR2_csky=y
++BR2_ck807=y
++
++# System
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# Toolchain
++BR2_OPTIMIZE_2=y
++BR2_SHARED_STATIC_LIBS=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_PACKAGE_HOST_GDB=y
++BR2_TARGET_OPTIMIZATION="-mbacktrace"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config.fragment"
+diff --git a/configs/qemu_csky810_virt_defconfig b/configs/qemu_csky810_virt_defconfig
+new file mode 100644
+index 0000000..8fe3a0c
+--- /dev/null
++++ b/configs/qemu_csky810_virt_defconfig
+@@ -0,0 +1,21 @@
++# Architecture
++BR2_csky=y
++BR2_ck810=y
++
++# System
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# Toolchain
++BR2_OPTIMIZE_2=y
++BR2_SHARED_STATIC_LIBS=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_PACKAGE_HOST_GDB=y
++BR2_TARGET_OPTIMIZATION="-mbacktrace"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config.fragment"
+diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
+new file mode 100644
+index 0000000..02408ad
+--- /dev/null
++++ b/configs/qemu_csky860_virt_defconfig
+@@ -0,0 +1,21 @@
++# Architecture
++BR2_csky=y
++BR2_ck860=y
++
++# System
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# Toolchain
++BR2_OPTIMIZE_2=y
++BR2_SHARED_STATIC_LIBS=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_PACKAGE_HOST_GDB=y
++BR2_TARGET_OPTIMIZATION="-mbacktrace"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config.fragment"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
+

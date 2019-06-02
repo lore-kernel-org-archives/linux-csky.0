@@ -7,47 +7,49 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FB06C282DC
-	for <linux-csky@archiver.kernel.org>; Sun,  2 Jun 2019 09:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE00AC282DC
+	for <linux-csky@archiver.kernel.org>; Sun,  2 Jun 2019 09:42:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10691278AE
-	for <linux-csky@archiver.kernel.org>; Sun,  2 Jun 2019 09:42:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4256278AE
+	for <linux-csky@archiver.kernel.org>; Sun,  2 Jun 2019 09:42:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559468533;
-	bh=NTyjXXwR/qtFylpW3GS3quEDhJT6NPhEfPG31LfHU6g=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=ChbPtgJqio5g8hLNaktyy9N21QbZ3vl7gAxJUgrcEt9wS9Q1XInL7xGMV2Mw6HmgY
-	 iAFoMmBCLu6ebg/qdjTUgTXH8ZXf23sCjfwj24WTROE7+zQL1zzJ6xBzYhOVPgU4eV
-	 RTF3NrsOdIZNMjiOXwLrzlVHdTdghhvE3f39iSU4=
+	s=default; t=1559468535;
+	bh=T4CCmq0ZrEFjSUeWiZvqjMD0NfR4SgsghhvcUoLdkk0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=KVPc3vfyk3xMIVe/USNokIV5MgI8L3ZjbgN2S3y973T+64R0WKiM7BSpdiz4xRvUe
+	 Y0xznF6DcbQhn/Uf1tMpRzmsoK06VZDt+9AXdZLIzQTaTWFG+4k+ji6eIBWrNnfjGF
+	 E2tBvAACcLq6Yo4lYWLcnmr060Z61gGhxS9FCaqc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbfFBJmM (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 2 Jun 2019 05:42:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45990 "EHLO mail.kernel.org"
+        id S1726270AbfFBJmP (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 2 Jun 2019 05:42:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46014 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725977AbfFBJmM (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 2 Jun 2019 05:42:12 -0400
+        id S1725977AbfFBJmP (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 2 Jun 2019 05:42:15 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C0FAA278AB;
-        Sun,  2 Jun 2019 09:42:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 41ACE278AC;
+        Sun,  2 Jun 2019 09:42:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559468531;
-        bh=NTyjXXwR/qtFylpW3GS3quEDhJT6NPhEfPG31LfHU6g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GyImxSQSrbikvAEAWC27bTKui04ccy1O0JlYg2LcHWtMwOIqsycIxZdse9CL4ZMX6
-         djFdifjWtSySktQKqpW/72fwjxwk7OyJwH2T+RQtSF/HNNem1+XI8z4qji/XoYkIRE
-         Ss8dAq5Y42rsIs6dUO/UfX20ZV2xpfmDb0PRV6LA=
+        s=default; t=1559468534;
+        bh=T4CCmq0ZrEFjSUeWiZvqjMD0NfR4SgsghhvcUoLdkk0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DHicq/oBKdG9bqv6JbWCN0NaZAvp4NyFtoO08r2Bs9awW+7Q+vFLVexlC4YT4fqa9
+         4uOGbG6AwEmsOuRsFw8l1syzw8ZSKAYnU7Sc4tlADZg7JrrOGJTEdjPDr2nuZoBccd
+         OzVQ+lw/fJUcUJV013WZTeEMjAipICw+OoPwRf8E=
 From:   guoren@kernel.org
 To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
         arnout@mind.be
 Cc:     linux-csky@vger.kernel.org, buildroot@buildroot.org,
         zhiwei_liu@c-sky.com, Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH V5 1/2] configs/qemu_cskyXXX_virt: new defconfig
-Date:   Sun,  2 Jun 2019 17:41:49 +0800
-Message-Id: <1559468510-22085-1-git-send-email-guoren@kernel.org>
+Subject: [PATCH V5 2/2] board/qemu/csky/readme.txt: Add C-SKY Qemu run Documentation
+Date:   Sun,  2 Jun 2019 17:41:50 +0800
+Message-Id: <1559468510-22085-2-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1559468510-22085-1-git-send-email-guoren@kernel.org>
+References: <1559468510-22085-1-git-send-email-guoren@kernel.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
@@ -55,202 +57,36 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-Add C-SKY defconfig for QEMU virt machine.
-
-Tested with https://gitlab.com/c-sky/buildroot/pipelines
-
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Liu Zhiwei <zhiwei_liu@c-sky.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                              |  4 ++++
- board/qemu/csky/linux-ck610.config.fragment |  5 +++++
- board/qemu/csky/linux-ck807.config.fragment |  5 +++++
- board/qemu/csky/linux-ck810.config.fragment |  5 +++++
- board/qemu/csky/linux-ck860.config.fragment |  9 +++++++++
- configs/qemu_csky610_virt_defconfig         | 20 ++++++++++++++++++++
- configs/qemu_csky807_virt_defconfig         | 21 +++++++++++++++++++++
- configs/qemu_csky810_virt_defconfig         | 21 +++++++++++++++++++++
- configs/qemu_csky860_virt_defconfig         | 21 +++++++++++++++++++++
- 9 files changed, 111 insertions(+)
- create mode 100644 board/qemu/csky/linux-ck610.config.fragment
- create mode 100644 board/qemu/csky/linux-ck807.config.fragment
- create mode 100644 board/qemu/csky/linux-ck810.config.fragment
- create mode 100644 board/qemu/csky/linux-ck860.config.fragment
- create mode 100644 configs/qemu_csky610_virt_defconfig
- create mode 100644 configs/qemu_csky807_virt_defconfig
- create mode 100644 configs/qemu_csky810_virt_defconfig
- create mode 100644 configs/qemu_csky860_virt_defconfig
+ board/qemu/csky/readme.txt | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 board/qemu/csky/readme.txt
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 374dbfe..4fa3473 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -248,6 +248,10 @@ qemu_aarch64_virt_defconfig: { extends: .defconfig }
- qemu_arm_versatile_defconfig: { extends: .defconfig }
- qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
- qemu_arm_vexpress_defconfig: { extends: .defconfig }
-+qemu_csky610_virt_defconfig: { extends: .defconfig }
-+qemu_csky807_virt_defconfig: { extends: .defconfig }
-+qemu_csky810_virt_defconfig: { extends: .defconfig }
-+qemu_csky860_virt_defconfig: { extends: .defconfig }
- qemu_m68k_mcf5208_defconfig: { extends: .defconfig }
- qemu_m68k_q800_defconfig: { extends: .defconfig }
- qemu_microblazebe_mmu_defconfig: { extends: .defconfig }
-diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
+diff --git a/board/qemu/csky/readme.txt b/board/qemu/csky/readme.txt
 new file mode 100644
-index 0000000..d80d0ee
+index 0000000..c36c755d
 --- /dev/null
-+++ b/board/qemu/csky/linux-ck610.config.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK610=y
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_CSKY_APB_INTC=y
-+CONFIG_GX6605S_TIMER=y
-diff --git a/board/qemu/csky/linux-ck807.config.fragment b/board/qemu/csky/linux-ck807.config.fragment
-new file mode 100644
-index 0000000..b6974f0
---- /dev/null
-+++ b/board/qemu/csky/linux-ck807.config.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK807=y
-+# CONFIG_CPU_HAS_FPU is not set
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_CSKY_APB_INTC=y
-diff --git a/board/qemu/csky/linux-ck810.config.fragment b/board/qemu/csky/linux-ck810.config.fragment
-new file mode 100644
-index 0000000..50fa1f4
---- /dev/null
-+++ b/board/qemu/csky/linux-ck810.config.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK810=y
-+# CONFIG_CPU_HAS_FPU is not set
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_CSKY_APB_INTC=y
-diff --git a/board/qemu/csky/linux-ck860.config.fragment b/board/qemu/csky/linux-ck860.config.fragment
-new file mode 100644
-index 0000000..e8f6af1
---- /dev/null
-+++ b/board/qemu/csky/linux-ck860.config.fragment
-@@ -0,0 +1,9 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK860=y
-+# CONFIG_CPU_HAS_FPU is not set
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_SMP=y
-+CONFIG_HOTPLUG_CPU=y
-+CONFIG_CSKY_APB_INTC=y
-+CONFIG_CSKY_MPINTC=y
-+CONFIG_CSKY_MP_TIMER=y
-diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
-new file mode 100644
-index 0000000..9a82d57
---- /dev/null
-+++ b/configs/qemu_csky610_virt_defconfig
-@@ -0,0 +1,20 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck610=y
++++ b/board/qemu/csky/readme.txt
+@@ -0,0 +1,16 @@
++Run with qemu:
 +
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
++ wget https://gitlab.com/c-sky/buildroot/-/jobs/197192514/artifacts/raw/output/images/csky_toolchain_csky_860_fpga_4.9_glibc_br_defconfig_56683a5a67ecf1dd0e67b05b9541de74530d0047.tar.xz;
++ mkdir tools;
++ tar -Jxf csky_toolchain_csky_860_fpga_4.9_glibc_br_defconfig_56683a5a67ecf1dd0e67b05b9541de74530d0047.tar.xz -C tools;
++ LD_LIBRARY_PATH=./tools/lib ./tools/csky-qemu/bin/qemu-system-cskyv2 -M virt -cpu ck860 -smp 2 -kernel output/images/vmlinux -nographic;
 +
-+# Toolchain
-+BR2_OPTIMIZE_2=y
-+BR2_SHARED_STATIC_LIBS=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_PACKAGE_HOST_GDB=y
++For ck810/ck807:
++ LD_LIBRARY_PATH=./tools/lib ./tools/csky-qemu/bin/qemu-system-cskyv2 -M virt -kernel output/images/vmlinux -nographic;
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
-diff --git a/configs/qemu_csky807_virt_defconfig b/configs/qemu_csky807_virt_defconfig
-new file mode 100644
-index 0000000..8fe32e8
---- /dev/null
-+++ b/configs/qemu_csky807_virt_defconfig
-@@ -0,0 +1,21 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck807=y
++For ck610:
++ LD_LIBRARY_PATH=./tools/lib ./tools/csky-qemu/bin/qemu-system-cskyv1 -M virt -kernel output/images/vmlinux -nographic;
 +
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
++The login prompt will appear in the terminal that started Qemu. Username is root and no password.
 +
-+# Toolchain
-+BR2_OPTIMIZE_2=y
-+BR2_SHARED_STATIC_LIBS=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_PACKAGE_HOST_GDB=y
-+BR2_TARGET_OPTIMIZATION="-mbacktrace"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config.fragment"
-diff --git a/configs/qemu_csky810_virt_defconfig b/configs/qemu_csky810_virt_defconfig
-new file mode 100644
-index 0000000..8fe3a0c
---- /dev/null
-+++ b/configs/qemu_csky810_virt_defconfig
-@@ -0,0 +1,21 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck810=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Toolchain
-+BR2_OPTIMIZE_2=y
-+BR2_SHARED_STATIC_LIBS=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_PACKAGE_HOST_GDB=y
-+BR2_TARGET_OPTIMIZATION="-mbacktrace"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config.fragment"
-diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
-new file mode 100644
-index 0000000..02408ad
---- /dev/null
-+++ b/configs/qemu_csky860_virt_defconfig
-@@ -0,0 +1,21 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck860=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Toolchain
-+BR2_OPTIMIZE_2=y
-+BR2_SHARED_STATIC_LIBS=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_PACKAGE_HOST_GDB=y
-+BR2_TARGET_OPTIMIZATION="-mbacktrace"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config.fragment"
++Tested with QEMU 3.0 in https://gitlab.com/guoren83/qemu, C-SKY qemu upstream is on its way.
 -- 
 2.7.4
 

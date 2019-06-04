@@ -2,110 +2,86 @@ Return-Path: <SRS0=R725=UD=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1752C28CC3
-	for <linux-csky@archiver.kernel.org>; Tue,  4 Jun 2019 10:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93102C282CE
+	for <linux-csky@archiver.kernel.org>; Tue,  4 Jun 2019 11:05:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ABA0A24A1D
-	for <linux-csky@archiver.kernel.org>; Tue,  4 Jun 2019 10:56:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67EA624805
+	for <linux-csky@archiver.kernel.org>; Tue,  4 Jun 2019 11:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559646343;
+	bh=XJhuHE9sWpCcCAc50dBRC17o3tRa2Q/ayJCS7jIGqjQ=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=CGHKZ6Cn8g39pV8cXE2ucwSczLBe08oW4WAX+KjfLxAyU9cHXAZGjk7997091/vu3
+	 o+ZTf46F0iO3ZbaxMFcTOW9OndqRnaCKqWBQNiPsiLdxkUH+lE5LzFKi8/J0EB44q7
+	 rV5dxqvE60CW7XINP7Fi/OCg+FMAgS6s46VfwxRY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727513AbfFDK4K (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 4 Jun 2019 06:56:10 -0400
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:58686 "EHLO
-        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727486AbfFDK4J (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 4 Jun 2019 06:56:09 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07517718|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.6789-0.00815059-0.31295;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07447;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.EhJOZAc_1559645766;
-Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.EhJOZAc_1559645766)
-          by smtp.aliyun-inc.com(10.147.42.135);
-          Tue, 04 Jun 2019 18:56:06 +0800
-From:   Mao Han <han_mao@c-sky.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mao Han <han_mao@c-sky.com>, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH V5 2/6] csky: Add count-width property for csky pmu
-Date:   Tue,  4 Jun 2019 18:54:45 +0800
-Message-Id: <93df91a6bdd2fe46dcf71fdd996fa1e164a8adf4.1559644961.git.han_mao@c-sky.com>
+        id S1727295AbfFDLFn (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 4 Jun 2019 07:05:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727242AbfFDLFn (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 4 Jun 2019 07:05:43 -0400
+Received: from localhost.localdomain (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B2E16247B8;
+        Tue,  4 Jun 2019 11:05:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559646342;
+        bh=XJhuHE9sWpCcCAc50dBRC17o3tRa2Q/ayJCS7jIGqjQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kC8WGpgkLDDawz5eFAy3YsqRM8xx64wuGoRXj5gEG/9hgz7CBjTpR/tWVIX4ViUS0
+         j9N87YSqG0Cg7ISjyetqfxUfHQFuTShBQLIp1HtfzH8dasjnlUhc0hGdgeDraUrbH6
+         nWIpAyLvXb1DGQ9gxIQhoa/lISYqvbVmENnkiM2A=
+From:   guoren@kernel.org
+To:     marc.zyngier@arm.com, mark.rutland@arm.com, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, jason@lakedaemon.net,
+        guoren@kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH V4 0/4] irqchip/irq-csky-mpintc: Update some features
+Date:   Tue,  4 Jun 2019 19:05:02 +0800
+Message-Id: <1559646306-18860-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1559644961.git.han_mao@c-sky.com>
-References: <cover.1559644961.git.han_mao@c-sky.com>
-In-Reply-To: <cover.1559644961.git.han_mao@c-sky.com>
-References: <cover.1559644961.git.han_mao@c-sky.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The csky pmu counter may have different io width. When the counter is
-smaller then 64 bits and counter value is smaller than the old value, it
-will result to a extremely large delta value. So the sampled value should
-be extend to 64 bits to avoid this, the extension bits base on the
-count-width property from dts.
+From: Guo Ren <ren_guo@c-sky.com>
 
-Signed-off-by: Mao Han <han_mao@c-sky.com>
-Cc: Guo Ren <guoren@kernel.org>
----
- arch/csky/kernel/perf_event.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+Here are some patches for irq-csky-mpintc. Any feedback is welcome.
 
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index 2282554..a15b397 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -9,6 +9,7 @@
- #include <linux/platform_device.h>
- 
- #define CSKY_PMU_MAX_EVENTS 32
-+#define DEFAULT_COUNT_WIDTH 48
- 
- #define HPCR		"<0, 0x0>"	/* PMU Control reg */
- #define HPCNTENR	"<0, 0x4>"	/* Count Enable reg */
-@@ -18,6 +19,7 @@ static void (*hw_raw_write_mapping[CSKY_PMU_MAX_EVENTS])(uint64_t val);
- 
- struct csky_pmu_t {
- 	struct pmu	pmu;
-+	uint32_t	count_width;
- 	uint32_t	hpcr;
- } csky_pmu;
- 
-@@ -804,7 +806,12 @@ static void csky_perf_event_update(struct perf_event *event,
- 				   struct hw_perf_event *hwc)
- {
- 	uint64_t prev_raw_count = local64_read(&hwc->prev_count);
--	uint64_t new_raw_count = hw_raw_read_mapping[hwc->idx]();
-+	/*
-+	 * Sign extend count value to 64bit, otherwise delta calculation
-+	 * would be incorrect when overflow occurs.
-+	 */
-+	uint64_t new_raw_count = sign_extend64(
-+		hw_raw_read_mapping[hwc->idx](), csky_pmu.count_width - 1);
- 	int64_t delta = new_raw_count - prev_raw_count;
- 
- 	/*
-@@ -1032,6 +1039,7 @@ int init_hw_perf_events(void)
- int csky_pmu_device_probe(struct platform_device *pdev,
- 			  const struct of_device_id *of_table)
- {
-+	struct device_node *node = pdev->dev.of_node;
- 	int ret;
- 
- 	ret = init_hw_perf_events();
-@@ -1040,6 +1048,11 @@ int csky_pmu_device_probe(struct platform_device *pdev,
- 		return ret;
- 	}
- 
-+	if (of_property_read_u32(node, "count-width",
-+				 &csky_pmu.count_width)) {
-+		csky_pmu.count_width = DEFAULT_COUNT_WIDTH;
-+	}
-+
- 	return ret;
- }
- 
+Changes for V4:
+ - Remove priority setting
+ - Add remove loop in csky_mpintc_handler in a seperate patch
+ - Add auto irq deliver fixup patch
+ - Add include file for devicetree document's example
+ - Add --cover-letter
+
+Changes for V3:
+ - Use IRQ_TYPE_LEVEL_HIGH as default instead of IRQ_TYPE_NONE
+ - Remove unnecessary loop in csky_mpintc_handler
+ - Update commit log msg
+
+Changes for V2:
+ - Fixup this_cpu_read() preempted problem
+ - Optimize the coding style
+ - Optimize #interrupt-cells to one style
+
+Guo Ren (4):
+  irqchip/irq-csky-mpintc: Add triger type
+  dt-bindings: interrupt-controller: Update csky mpintc
+  irqchip/irq-csky-mpintc: Support auto irq deliver to all cpus
+  irqchip/irq-csky-mpintc: Remove unnecessary loop in interrupt handler
+
+ .../bindings/interrupt-controller/csky,mpintc.txt  |  20 +++-
+ drivers/irqchip/irq-csky-mpintc.c                  | 102 +++++++++++++++++++--
+ 2 files changed, 109 insertions(+), 13 deletions(-)
+
 -- 
 2.7.4
 

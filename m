@@ -1,126 +1,92 @@
-Return-Path: <SRS0=R725=UD=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=5xVz=UF=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D780C282CE
-	for <linux-csky@archiver.kernel.org>; Tue,  4 Jun 2019 12:32:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1A17C04AB5
+	for <linux-csky@archiver.kernel.org>; Thu,  6 Jun 2019 07:38:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6144824B7E
-	for <linux-csky@archiver.kernel.org>; Tue,  4 Jun 2019 12:32:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B582820872
+	for <linux-csky@archiver.kernel.org>; Thu,  6 Jun 2019 07:38:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559651542;
-	bh=mQdOZZdjwnnzpAJPKdYd3WuB5icZFW/aX0zjXI6udbw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=R/oubY2HXTHOURGRjkhg4CWzCRNDsBwslS2bGKkmPEWn1ODTiYD/L4QxlJLI3YVYA
-	 lULF2gXmtMHjhNIekS/EkthEDHzBWBq9HUsqnMJ+/P2ahCVWfG+biXM3dSTPWtsRrf
-	 LH+Ke/NsffPXKfJsF4hJBvI66vDmuVgnq1nZjbiw=
+	s=default; t=1559806686;
+	bh=kUhxb6y9/x7K/KEBo2rYjsmRiInlugkMcXaHDaMG5jE=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=qSqh4pvCB+wwY6yZdKpfW7mvuubCLsgHjVz2CktPWhxKhTtaDv779RstoDqsdoY7D
+	 /Lc0yxywqPq8j/kF3HpWXsu7YbWjTNJ5YzFgwGhiXDjtNjdwcling83eZ9laNqoCvl
+	 TNuActUib6LUHYdkglYwdW9jTyZLsWfneK3CnVzI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727394AbfFDMcW (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 4 Jun 2019 08:32:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36690 "EHLO mail.kernel.org"
+        id S1726103AbfFFHiG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 6 Jun 2019 03:38:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727403AbfFDMcW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 4 Jun 2019 08:32:22 -0400
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725769AbfFFHiG (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 6 Jun 2019 03:38:06 -0400
+Received: from localhost.localdomain (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4309724B7E;
-        Tue,  4 Jun 2019 12:32:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 00890207E0;
+        Thu,  6 Jun 2019 07:38:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559651541;
-        bh=mQdOZZdjwnnzpAJPKdYd3WuB5icZFW/aX0zjXI6udbw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NNm+b4jCy+R9bfD2mCX97LmKHmX1zgYOBq7iHxDQsFY1uRnqcaj42F+SBy3Uj4OCi
-         FLIC1jGHNYtbmrDZ4ej2I6X+mGB8gjPhJSJ6EGoP1r9Jv9EDBZTq9Bbxr8Bv55jFK1
-         bnX+XhS0rJbOGNODFNVAnhJa9CcSRHG/hTBpia4w=
-Received: by mail-wm1-f53.google.com with SMTP id s3so7351867wms.2;
-        Tue, 04 Jun 2019 05:32:21 -0700 (PDT)
-X-Gm-Message-State: APjAAAWICTRPiaiQs7OoO9GndXkdma3yLSFbi3+494nbPBSeM50iZmpd
-        NyonBOaLi/Jy6otdR7fyGARY2J7k7HIDiER2eWI=
-X-Google-Smtp-Source: APXvYqwDGMccRrpd+YBBy+1wLHwiIMpY3OciWZVO+o2nfKjKJL7Y5KP49u36RWkg2izaLegeuo/FbxKfVCmR68qPoEg=
-X-Received: by 2002:a05:600c:20c3:: with SMTP id y3mr2007579wmm.3.1559651539850;
- Tue, 04 Jun 2019 05:32:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <1559646306-18860-1-git-send-email-guoren@kernel.org>
- <1559646306-18860-4-git-send-email-guoren@kernel.org> <7943816e-1cf0-dbc9-157d-71a83c5016c6@arm.com>
-In-Reply-To: <7943816e-1cf0-dbc9-157d-71a83c5016c6@arm.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 4 Jun 2019 20:32:08 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRo5kSjv68X29kNYMhnvd7ByTiiBSR8KwpcoMKUpkN8zQ@mail.gmail.com>
-Message-ID: <CAJF2gTRo5kSjv68X29kNYMhnvd7ByTiiBSR8KwpcoMKUpkN8zQ@mail.gmail.com>
-Subject: Re: [PATCH V4 3/4] irqchip/irq-csky-mpintc: Support auto irq deliver
- to all cpus
-To:     Marc Zyngier <marc.zyngier@arm.com>
-Cc:     mark.rutland@arm.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, jason@lakedaemon.net,
-        linux-csky@vger.kernel.org, Guo Ren <ren_guo@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
+        s=default; t=1559806685;
+        bh=kUhxb6y9/x7K/KEBo2rYjsmRiInlugkMcXaHDaMG5jE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ykQxP54n53i4lIc5K1Cpz3oe+oxrNvwwljXXmG3lBM8FQDN3uB/OyatN5vf95X/Nu
+         cDPF8BUXAhQH3LL5wiQ6j0wvUVJqh7CzdhhZG03g5HPFmeSGUwH2tMYKuQdDa3tGCL
+         D/jCFhjhyRhR/HGjyU1a/D4WxpngLsSQZ5Lx7btk=
+From:   guoren@kernel.org
+To:     marc.zyngier@arm.com, mark.rutland@arm.com, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, jason@lakedaemon.net,
+        guoren@kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH V5 0/3] irqchip/irq-csky-mpintc: Update some features
+Date:   Thu,  6 Jun 2019 15:37:30 +0800
+Message-Id: <1559806653-11249-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello Marc,
+From: Guo Ren <ren_guo@c-sky.com>
 
-On Tue, Jun 4, 2019 at 7:54 PM Marc Zyngier <marc.zyngier@arm.com> wrote:
->
-> On 04/06/2019 12:05, guoren@kernel.org wrote:
-> > From: Guo Ren <ren_guo@c-sky.com>
-> >
-> > The csky,mpintc could deliver a external irq to one cpu or all cpus, but
-> > it couldn't deliver a external irq to a group of cpus with cpu_mask. So
-> > we only use auto deliver mode when affinity mask_val is equal to
-> > cpu_present_mask.
-> >
-> > There is no limitation for only two cpus in SMP system.
-> >
-> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> > Cc: Marc Zyngier <marc.zyngier@arm.com>
-> > ---
-> >  drivers/irqchip/irq-csky-mpintc.c | 15 +++++++++++++--
-> >  1 file changed, 13 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/irqchip/irq-csky-mpintc.c b/drivers/irqchip/irq-csky-mpintc.c
-> > index a451a07..2740dd5 100644
-> > --- a/drivers/irqchip/irq-csky-mpintc.c
-> > +++ b/drivers/irqchip/irq-csky-mpintc.c
-> > @@ -143,8 +143,19 @@ static int csky_irq_set_affinity(struct irq_data *d,
-> >       if (cpu >= nr_cpu_ids)
-> >               return -EINVAL;
-> >
-> > -     /* Enable interrupt destination */
-> > -     cpu |= BIT(31);
-> > +     /*
-> > +      * The csky,mpintc could support auto irq deliver, but it only
-> > +      * could deliver external irq to one cpu or all cpus. So it
-> > +      * doesn't support deliver external irq to a group of cpus
-> > +      * with cpu_mask.
-> > +      * SO we only use auto deliver mode when affinity mask_val is
-> > +      * equal to cpu_present_mask.
-> > +      *
-> > +      */
-> > +     if (cpumask_equal(mask_val, cpu_present_mask))
-> > +             cpu = 0;
-> > +     else
-> > +             cpu |= BIT(31);
-> >
-> >       writel_relaxed(cpu, INTCG_base + INTCG_CIDSTR + offset);
-> >
-> >
->
-> Isn't that the same patch as [1]? In which case, I've queued it as a fix
-> already.
-Yes, they are the same. It's duplicate.
+Here are some patches for irq-csky-mpintc. Any feedback is welcome.
 
-I think you've queued this one:
-https://lore.kernel.org/lkml/1558425245-20995-1-git-send-email-guoren@kernel.org/
+Changes for V5:
+ - Remove "auto irq deliver patch" in this patchset, because it has been
+   queued as a fix already.
+ - Move "remove INTCL_HPPIR define" into remove-unnecessary-loop.patch
+   to make patch's sequence better.
 
-That's OK.
+Changes for V4:
+ - Remove priority setting
+ - Add remove loop in csky_mpintc_handler in a seperate patch
+ - Add auto irq deliver fixup patch
+ - Add include file for devicetree document's example
+ - Add --cover-letter
 
-Best Regards
- Guo Ren
+Changes for V3:
+ - Use IRQ_TYPE_LEVEL_HIGH as default instead of IRQ_TYPE_NONE
+ - Remove unnecessary loop in csky_mpintc_handler
+ - Update commit log msg
+
+Changes for V2:
+ - Fixup this_cpu_read() preempted problem
+ - Optimize the coding style
+ - Optimize #interrupt-cells to one style
+
+Guo Ren (3):
+  irqchip/irq-csky-mpintc: Add triger type
+  dt-bindings: interrupt-controller: Update csky mpintc
+  irqchip/irq-csky-mpintc: Remove unnecessary loop in interrupt handler
+
+ .../bindings/interrupt-controller/csky,mpintc.txt  | 20 ++++-
+ drivers/irqchip/irq-csky-mpintc.c                  | 86 ++++++++++++++++++++--
+ 2 files changed, 95 insertions(+), 11 deletions(-)
+
+-- 
+2.7.4
+

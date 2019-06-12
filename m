@@ -1,120 +1,288 @@
-Return-Path: <SRS0=5xVz=UF=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=jGRj=UL=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-12.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 372E0C46470
-	for <linux-csky@archiver.kernel.org>; Thu,  6 Jun 2019 07:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08326C31E46
+	for <linux-csky@archiver.kernel.org>; Wed, 12 Jun 2019 05:43:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 011FA20872
-	for <linux-csky@archiver.kernel.org>; Thu,  6 Jun 2019 07:38:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C69E020874
+	for <linux-csky@archiver.kernel.org>; Wed, 12 Jun 2019 05:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559806702;
-	bh=SaCo5XTxFSdoSTx0adxdVSEm12HbPMedDe8u08eNtC4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=znKLEEg8SrLaEYNjOcB/fifl6f+rS9QLRn+r6APSZ9UfW79VE9NcJPR4XG3gljaIF
-	 an0lXLvsUuhdXgMbFCQW9sirzEUqBWKRf7Vu7g59nH70Go4i6p/RgHAPzu3S6PxJfX
-	 7kg5gDxdOQ0KHsrh8xV05eK9UtoO5EeXerU5uq3k=
+	s=default; t=1560318232;
+	bh=gPKYSf2vdkda4Um8TvvH+oFND+4dq/TFWVg4ZxOuNCE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=YC1BOB7UI0aLUDBUmo16CvgOrxK8FdaWgoRuvU8GhfRQtNWlp7zzUBtc08NwiEe5Z
+	 XtwI6HM5CdkPqxiNAnOJTJlyfDCfIPWEXBGyrqRq/+wf2Vx+gp5NfZpaBvq42JDbAR
+	 xg/YRKM087u+yqDkuEMSv7sTWPgkJdvlUkiK6X28=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726040AbfFFHiO (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 6 Jun 2019 03:38:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35916 "EHLO mail.kernel.org"
+        id S1730624AbfFLFnw (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 12 Jun 2019 01:43:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725782AbfFFHiN (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 6 Jun 2019 03:38:13 -0400
-Received: from localhost.localdomain (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1726593AbfFLFnw (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 12 Jun 2019 01:43:52 -0400
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D511120872;
-        Thu,  6 Jun 2019 07:38:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9894620B1F
+        for <linux-csky@vger.kernel.org>; Wed, 12 Jun 2019 05:43:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559806692;
-        bh=SaCo5XTxFSdoSTx0adxdVSEm12HbPMedDe8u08eNtC4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OIUKUn6shQ6GwRLxaWBHSnKYtvydlkduoU3TpKCNajvOUsFFqkQ7O2+rGEpGNcZOQ
-         vgpYq56PxceZAPGsLZ1OfHqwe9z62Uo9/gE/efaP7o7pzxdXBUmIa2qjVRVK1a0ce5
-         wmr+Cowh4Kokl7XQjm3+qHRM0oP76DfrH+iD8HH0=
-From:   guoren@kernel.org
-To:     marc.zyngier@arm.com, mark.rutland@arm.com, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, jason@lakedaemon.net,
-        guoren@kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH V5 2/3] dt-bindings: interrupt-controller: Update csky mpintc
-Date:   Thu,  6 Jun 2019 15:37:32 +0800
-Message-Id: <1559806653-11249-3-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1559806653-11249-1-git-send-email-guoren@kernel.org>
-References: <1559806653-11249-1-git-send-email-guoren@kernel.org>
+        s=default; t=1560318230;
+        bh=gPKYSf2vdkda4Um8TvvH+oFND+4dq/TFWVg4ZxOuNCE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UtxUNjrp3k3MXmeyhVJ0nuet2Vae+ByOIctnJpkkfgx3mioJEk1DKenympRSptWdN
+         3tPZwm+W5O1uqYrksZkDuiAi+93hU7YnGg+Gw/yrO1NF3x6hvp7+e9ZSx6ziyrJDVn
+         ytHLRdzt6knSvWzkNgOX9wn8tq2FYSxzcY5DV6PI=
+Received: by mail-wm1-f53.google.com with SMTP id w9so3424761wmd.1
+        for <linux-csky@vger.kernel.org>; Tue, 11 Jun 2019 22:43:50 -0700 (PDT)
+X-Gm-Message-State: APjAAAVogbKYdDfcUY250Ut+fXuenKqmnlxbyXaI+x86UGto+THZ46xt
+        6miPG+Xy5luM8wlkR3AN6H4MdWbdTsIxo77jpkw=
+X-Google-Smtp-Source: APXvYqwUAuh7sBYrLE2xDYNXtWWwSjjuVclYSzNwM4fNCUcd3Wpe+SF03lnKJhJOdT0IkQEBSPgzBqnhC8liXT7PIsg=
+X-Received: by 2002:a7b:cd84:: with SMTP id y4mr20646787wmj.79.1560318229108;
+ Tue, 11 Jun 2019 22:43:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <1559551865-8662-1-git-send-email-guoren@kernel.org>
+In-Reply-To: <1559551865-8662-1-git-send-email-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 12 Jun 2019 13:43:37 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS2MfTcP5t=8piwrOQe41G9jdt_wfD0crE06b6U0hJr+g@mail.gmail.com>
+Message-ID: <CAJF2gTS2MfTcP5t=8piwrOQe41G9jdt_wfD0crE06b6U0hJr+g@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH V6] configs/qemu_cskyXXX_virt: new defconfig
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+        arnout@mind.be
+Cc:     Guo Ren <ren_guo@c-sky.com>, zhiwei_liu@c-sky.com,
+        linux-csky@vger.kernel.org, buildroot@buildroot.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+Hello Thomas,
 
-Add trigger type setting for csky,mpintc. The driver also could
-support #interrupt-cells <1> and it wouldn't invalidate existing
-DTs. Here we only show the complete format.
+Ping ... Is the patch all right?
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Reviewed-by: Rob Herring <robh+dt@kernel.org>
-Cc: Marc Zyngier <marc.zyngier@arm.com>
----
- .../bindings/interrupt-controller/csky,mpintc.txt    | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+Best Regards
+ Guo Ren
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt b/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt
-index ab921f1..e134053 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt
-+++ b/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt
-@@ -6,11 +6,16 @@ C-SKY Multi-processors Interrupt Controller is designed for ck807/ck810/ck860
- SMP soc, and it also could be used in non-SMP system.
- 
- Interrupt number definition:
--
-   0-15  : software irq, and we use 15 as our IPI_IRQ.
-  16-31  : private  irq, and we use 16 as the co-processor timer.
-  31-1024: common irq for soc ip.
- 
-+Interrupt triger mode: (Defined in dt-bindings/interrupt-controller/irq.h)
-+ IRQ_TYPE_LEVEL_HIGH (default)
-+ IRQ_TYPE_LEVEL_LOW
-+ IRQ_TYPE_EDGE_RISING
-+ IRQ_TYPE_EDGE_FALLING
-+
- =============================
- intc node bindings definition
- =============================
-@@ -26,15 +31,22 @@ intc node bindings definition
- 	- #interrupt-cells
- 		Usage: required
- 		Value type: <u32>
--		Definition: must be <1>
-+		Definition: <2>
- 	- interrupt-controller:
- 		Usage: required
- 
--Examples:
-+Examples: ("interrupts = <irq_num IRQ_TYPE_XXX>")
- ---------
-+#include <dt-bindings/interrupt-controller/irq.h>
- 
- 	intc: interrupt-controller {
- 		compatible = "csky,mpintc";
--		#interrupt-cells = <1>;
-+		#interrupt-cells = <2>;
- 		interrupt-controller;
- 	};
-+
-+	device: device-example {
-+		...
-+		interrupts = <34 IRQ_TYPE_EDGE_RISING>;
-+		interrupt-parent = <&intc>;
-+	};
--- 
-2.7.4
-
+On Mon, Jun 3, 2019 at 4:51 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <ren_guo@c-sky.com>
+>
+> Add C-SKY defconfig for QEMU virt machine.
+>
+> Tested with https://gitlab.com/c-sky/buildroot/pipelines
+>
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  .gitlab-ci.yml                              |  4 ++++
+>  DEVELOPERS                                  |  2 ++
+>  board/qemu/csky/linux-ck610.config.fragment |  5 +++++
+>  board/qemu/csky/linux-ck807.config.fragment |  5 +++++
+>  board/qemu/csky/linux-ck810.config.fragment |  5 +++++
+>  board/qemu/csky/linux-ck860.config.fragment |  9 +++++++++
+>  board/qemu/csky/readme.txt                  | 12 ++++++++++++
+>  configs/qemu_csky610_virt_defconfig         | 14 ++++++++++++++
+>  configs/qemu_csky807_virt_defconfig         | 14 ++++++++++++++
+>  configs/qemu_csky810_virt_defconfig         | 14 ++++++++++++++
+>  configs/qemu_csky860_virt_defconfig         | 14 ++++++++++++++
+>  11 files changed, 98 insertions(+)
+>  create mode 100644 board/qemu/csky/linux-ck610.config.fragment
+>  create mode 100644 board/qemu/csky/linux-ck807.config.fragment
+>  create mode 100644 board/qemu/csky/linux-ck810.config.fragment
+>  create mode 100644 board/qemu/csky/linux-ck860.config.fragment
+>  create mode 100644 board/qemu/csky/readme.txt
+>  create mode 100644 configs/qemu_csky610_virt_defconfig
+>  create mode 100644 configs/qemu_csky807_virt_defconfig
+>  create mode 100644 configs/qemu_csky810_virt_defconfig
+>  create mode 100644 configs/qemu_csky860_virt_defconfig
+>
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index 374dbfe..4fa3473 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -248,6 +248,10 @@ qemu_aarch64_virt_defconfig: { extends: .defconfig }
+>  qemu_arm_versatile_defconfig: { extends: .defconfig }
+>  qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
+>  qemu_arm_vexpress_defconfig: { extends: .defconfig }
+> +qemu_csky610_virt_defconfig: { extends: .defconfig }
+> +qemu_csky807_virt_defconfig: { extends: .defconfig }
+> +qemu_csky810_virt_defconfig: { extends: .defconfig }
+> +qemu_csky860_virt_defconfig: { extends: .defconfig }
+>  qemu_m68k_mcf5208_defconfig: { extends: .defconfig }
+>  qemu_m68k_q800_defconfig: { extends: .defconfig }
+>  qemu_microblazebe_mmu_defconfig: { extends: .defconfig }
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 5bfc456..edb372e 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -976,7 +976,9 @@ F:  package/reaver/
+>  N:     Guo Ren <ren_guo@c-sky.com>
+>  F:     arch/Config.in.csky
+>  F:     board/csky/
+> +F:     board/qemu/csky
+>  F:     configs/csky_*
+> +F:     configs/qemu_csky*
+>
+>  N:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+>  F:     configs/arm_juno_defconfig
+> diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
+> new file mode 100644
+> index 0000000..d80d0ee
+> --- /dev/null
+> +++ b/board/qemu/csky/linux-ck610.config.fragment
+> @@ -0,0 +1,5 @@
+> +CONFIG_COMPILE_TEST=y
+> +CONFIG_CPU_CK610=y
+> +CONFIG_CPU_PM_WAIT=y
+> +CONFIG_CSKY_APB_INTC=y
+> +CONFIG_GX6605S_TIMER=y
+> diff --git a/board/qemu/csky/linux-ck807.config.fragment b/board/qemu/csky/linux-ck807.config.fragment
+> new file mode 100644
+> index 0000000..b6974f0
+> --- /dev/null
+> +++ b/board/qemu/csky/linux-ck807.config.fragment
+> @@ -0,0 +1,5 @@
+> +CONFIG_COMPILE_TEST=y
+> +CONFIG_CPU_CK807=y
+> +# CONFIG_CPU_HAS_FPU is not set
+> +CONFIG_CPU_PM_WAIT=y
+> +CONFIG_CSKY_APB_INTC=y
+> diff --git a/board/qemu/csky/linux-ck810.config.fragment b/board/qemu/csky/linux-ck810.config.fragment
+> new file mode 100644
+> index 0000000..50fa1f4
+> --- /dev/null
+> +++ b/board/qemu/csky/linux-ck810.config.fragment
+> @@ -0,0 +1,5 @@
+> +CONFIG_COMPILE_TEST=y
+> +CONFIG_CPU_CK810=y
+> +# CONFIG_CPU_HAS_FPU is not set
+> +CONFIG_CPU_PM_WAIT=y
+> +CONFIG_CSKY_APB_INTC=y
+> diff --git a/board/qemu/csky/linux-ck860.config.fragment b/board/qemu/csky/linux-ck860.config.fragment
+> new file mode 100644
+> index 0000000..e8f6af1
+> --- /dev/null
+> +++ b/board/qemu/csky/linux-ck860.config.fragment
+> @@ -0,0 +1,9 @@
+> +CONFIG_COMPILE_TEST=y
+> +CONFIG_CPU_CK860=y
+> +# CONFIG_CPU_HAS_FPU is not set
+> +CONFIG_CPU_PM_WAIT=y
+> +CONFIG_SMP=y
+> +CONFIG_HOTPLUG_CPU=y
+> +CONFIG_CSKY_APB_INTC=y
+> +CONFIG_CSKY_MPINTC=y
+> +CONFIG_CSKY_MP_TIMER=y
+> diff --git a/board/qemu/csky/readme.txt b/board/qemu/csky/readme.txt
+> new file mode 100644
+> index 0000000..89d68aa
+> --- /dev/null
+> +++ b/board/qemu/csky/readme.txt
+> @@ -0,0 +1,12 @@
+> +Run with qemu:
+> +
+> +For ck860 smp:
+> + qemu-system-cskyv2 -M virt -cpu ck860 -smp 2 -nographic -kernel vmlinux
+> +
+> +For ck810/ck807:
+> + qemu-system-cskyv2 -M virt -nographic -kernel vmlinux
+> +
+> +For ck610:
+> + qemu-system-cskyv1 -M virt -nographic -kernel vmlinux
+> +
+> +The login prompt will appear in the terminal that started Qemu. Username is root and no password.
+> diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
+> new file mode 100644
+> index 0000000..b75a5b8
+> --- /dev/null
+> +++ b/configs/qemu_csky610_virt_defconfig
+> @@ -0,0 +1,14 @@
+> +# Architecture
+> +BR2_csky=y
+> +BR2_ck610=y
+> +
+> +# System
+> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+> +BR2_TARGET_ROOTFS_INITRAMFS=y
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
+> diff --git a/configs/qemu_csky807_virt_defconfig b/configs/qemu_csky807_virt_defconfig
+> new file mode 100644
+> index 0000000..035bf66
+> --- /dev/null
+> +++ b/configs/qemu_csky807_virt_defconfig
+> @@ -0,0 +1,14 @@
+> +# Architecture
+> +BR2_csky=y
+> +BR2_ck807=y
+> +
+> +# System
+> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+> +BR2_TARGET_ROOTFS_INITRAMFS=y
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config.fragment"
+> diff --git a/configs/qemu_csky810_virt_defconfig b/configs/qemu_csky810_virt_defconfig
+> new file mode 100644
+> index 0000000..9ce2aa9
+> --- /dev/null
+> +++ b/configs/qemu_csky810_virt_defconfig
+> @@ -0,0 +1,14 @@
+> +# Architecture
+> +BR2_csky=y
+> +BR2_ck810=y
+> +
+> +# System
+> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+> +BR2_TARGET_ROOTFS_INITRAMFS=y
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config.fragment"
+> diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
+> new file mode 100644
+> index 0000000..d86c1e6
+> --- /dev/null
+> +++ b/configs/qemu_csky860_virt_defconfig
+> @@ -0,0 +1,14 @@
+> +# Architecture
+> +BR2_csky=y
+> +BR2_ck860=y
+> +
+> +# System
+> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+> +BR2_TARGET_ROOTFS_INITRAMFS=y
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config.fragment"
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot

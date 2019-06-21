@@ -2,68 +2,98 @@ Return-Path: <SRS0=iZ6Q=UU=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7723FC43613
-	for <linux-csky@archiver.kernel.org>; Fri, 21 Jun 2019 10:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EDC0C43613
+	for <linux-csky@archiver.kernel.org>; Fri, 21 Jun 2019 11:05:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5820E208CA
-	for <linux-csky@archiver.kernel.org>; Fri, 21 Jun 2019 10:10:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D88842166E
+	for <linux-csky@archiver.kernel.org>; Fri, 21 Jun 2019 11:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1561115154;
+	bh=ReCmP6mZfL1ydIGUwQ4K2uET7mhSIXqXsNY0Kqa1ySw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=N0XpcRGMw3H98jQIcqBMxnC/7KPj8bSelcfZUbZsJoBa6GwUhX3UoNQuRHp/sJ7jg
+	 LIlkIie1jKYDFTuyW/WSuNqD94VfXQTY2kAcv1z2rG1osDqLyke/deAnt7Z81j3J88
+	 c1IMnvbFSpl0MuObOA5wzvAIx+FQ/eedP6o84QOA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfFUKKp (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 21 Jun 2019 06:10:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:57004 "EHLO foss.arm.com"
+        id S1726339AbfFULFy (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 21 Jun 2019 07:05:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726250AbfFUKKo (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 21 Jun 2019 06:10:44 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B7B6142F;
-        Fri, 21 Jun 2019 03:10:44 -0700 (PDT)
-Received: from [10.1.196.50] (e108454-lin.cambridge.arm.com [10.1.196.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29C863F718;
-        Fri, 21 Jun 2019 03:10:43 -0700 (PDT)
+        id S1726229AbfFULFy (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 21 Jun 2019 07:05:54 -0400
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 164A92166E;
+        Fri, 21 Jun 2019 11:05:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561115153;
+        bh=ReCmP6mZfL1ydIGUwQ4K2uET7mhSIXqXsNY0Kqa1ySw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NIC2KOGLU15vwFdrXsQ21f9HMYashjo+GAIUq6aifrxmM89h8cRes6df3JvCiA7eq
+         2DU/z/gk090aRiPnYt4ngLLocux78M7bA8oaGNvZXxPpV78wQjOzz8AxZKgp8xaFRk
+         xDli3JazZtxwjq8C6BEzFWnnz0XkygQ00Q2fhhMY=
+Received: by mail-wr1-f46.google.com with SMTP id n9so6208745wru.0;
+        Fri, 21 Jun 2019 04:05:53 -0700 (PDT)
+X-Gm-Message-State: APjAAAVFUdqBp+EiemohGH3+QizgWYIoMp03p4ryAUSP3opqTnxStBSP
+        QrRxJ5eGdDFk98YNEAKf2FmCvQ3VadrcBgUNKDM=
+X-Google-Smtp-Source: APXvYqy3WEx+tbb1lSRS7oX70n7cxQ8/V6LHDFq6jUOe/chVbdAzS0mtEBdOyy3UK2+rxyQyjrTafv2Wkf8jsgV+2d8=
+X-Received: by 2002:adf:dd89:: with SMTP id x9mr18958136wrl.7.1561115151644;
+ Fri, 21 Jun 2019 04:05:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <1561109999-4322-1-git-send-email-guoren@kernel.org>
+ <1561109999-4322-3-git-send-email-guoren@kernel.org> <2c6acec4-07b7-b214-9eeb-964dc3a0d632@arm.com>
+In-Reply-To: <2c6acec4-07b7-b214-9eeb-964dc3a0d632@arm.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 21 Jun 2019 19:05:40 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ0xQtQY1t-g9FgWaxfDXppMkFooCQzTFy7+ouwUfyA6w@mail.gmail.com>
+Message-ID: <CAJF2gTQ0xQtQY1t-g9FgWaxfDXppMkFooCQzTFy7+ouwUfyA6w@mail.gmail.com>
 Subject: Re: [PATCH V2 2/4] csky: Add new asid lib code from arm
-To:     guoren@kernel.org, arnd@arndb.de, linux-kernel@vger.kernel.org
-Cc:     linux-csky@vger.kernel.org, Guo Ren <ren_guo@c-sky.com>,
+To:     Julien Grall <julien.grall@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, Guo Ren <ren_guo@c-sky.com>,
         Arnd Bergmann <arnd@arnd.de>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         Catalin Marinas <Catalin.Marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>
-References: <1561109999-4322-1-git-send-email-guoren@kernel.org>
- <1561109999-4322-3-git-send-email-guoren@kernel.org>
-From:   Julien Grall <julien.grall@arm.com>
-Message-ID: <2c6acec4-07b7-b214-9eeb-964dc3a0d632@arm.com>
-Date:   Fri, 21 Jun 2019 11:10:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <1561109999-4322-3-git-send-email-guoren@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi,
+Sorry, I forgot delete arm's. It's mistake, no change arm64 file.
 
-On 21/06/2019 10:39, guoren@kernel.org wrote:
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> Cc: Arnd Bergmann <arnd@arnd.de>
-> Cc: Julien Grall <julien.grall@arm.com>
-> ---
->   arch/arm64/lib/asid.c        |   9 ++-
+On Fri, Jun 21, 2019 at 6:10 PM Julien Grall <julien.grall@arm.com> wrote:
+>
+> Hi,
+>
+> On 21/06/2019 10:39, guoren@kernel.org wrote:
+> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> > Cc: Arnd Bergmann <arnd@arnd.de>
+> > Cc: Julien Grall <julien.grall@arm.com>
+> > ---
+> >   arch/arm64/lib/asid.c        |   9 ++-
+>
+> This change should be in a separate e-mail with the Arm64 maintainers in CC.
+>
+> But you seem to have a copy of the allocator in csky now. So why do you need to
+> modify arm64/lib/asid.c here?
+>
+> Cheers,
+>
+> --
+> Julien Grall
 
-This change should be in a separate e-mail with the Arm64 maintainers in CC.
 
-But you seem to have a copy of the allocator in csky now. So why do you need to 
-modify arm64/lib/asid.c here?
-
-Cheers,
 
 -- 
-Julien Grall
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

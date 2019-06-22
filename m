@@ -1,99 +1,71 @@
-Return-Path: <SRS0=iZ6Q=UU=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=Nb8v=UV=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EDC0C43613
-	for <linux-csky@archiver.kernel.org>; Fri, 21 Jun 2019 11:05:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AAAFC43613
+	for <linux-csky@archiver.kernel.org>; Sat, 22 Jun 2019 08:18:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D88842166E
-	for <linux-csky@archiver.kernel.org>; Fri, 21 Jun 2019 11:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561115154;
-	bh=ReCmP6mZfL1ydIGUwQ4K2uET7mhSIXqXsNY0Kqa1ySw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=N0XpcRGMw3H98jQIcqBMxnC/7KPj8bSelcfZUbZsJoBa6GwUhX3UoNQuRHp/sJ7jg
-	 LIlkIie1jKYDFTuyW/WSuNqD94VfXQTY2kAcv1z2rG1osDqLyke/deAnt7Z81j3J88
-	 c1IMnvbFSpl0MuObOA5wzvAIx+FQ/eedP6o84QOA=
+	by mail.kernel.org (Postfix) with ESMTP id 762612089C
+	for <linux-csky@archiver.kernel.org>; Sat, 22 Jun 2019 08:18:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726339AbfFULFy (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 21 Jun 2019 07:05:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34698 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726229AbfFULFy (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 21 Jun 2019 07:05:54 -0400
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 164A92166E;
-        Fri, 21 Jun 2019 11:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561115153;
-        bh=ReCmP6mZfL1ydIGUwQ4K2uET7mhSIXqXsNY0Kqa1ySw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NIC2KOGLU15vwFdrXsQ21f9HMYashjo+GAIUq6aifrxmM89h8cRes6df3JvCiA7eq
-         2DU/z/gk090aRiPnYt4ngLLocux78M7bA8oaGNvZXxPpV78wQjOzz8AxZKgp8xaFRk
-         xDli3JazZtxwjq8C6BEzFWnnz0XkygQ00Q2fhhMY=
-Received: by mail-wr1-f46.google.com with SMTP id n9so6208745wru.0;
-        Fri, 21 Jun 2019 04:05:53 -0700 (PDT)
-X-Gm-Message-State: APjAAAVFUdqBp+EiemohGH3+QizgWYIoMp03p4ryAUSP3opqTnxStBSP
-        QrRxJ5eGdDFk98YNEAKf2FmCvQ3VadrcBgUNKDM=
-X-Google-Smtp-Source: APXvYqy3WEx+tbb1lSRS7oX70n7cxQ8/V6LHDFq6jUOe/chVbdAzS0mtEBdOyy3UK2+rxyQyjrTafv2Wkf8jsgV+2d8=
-X-Received: by 2002:adf:dd89:: with SMTP id x9mr18958136wrl.7.1561115151644;
- Fri, 21 Jun 2019 04:05:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <1561109999-4322-1-git-send-email-guoren@kernel.org>
- <1561109999-4322-3-git-send-email-guoren@kernel.org> <2c6acec4-07b7-b214-9eeb-964dc3a0d632@arm.com>
-In-Reply-To: <2c6acec4-07b7-b214-9eeb-964dc3a0d632@arm.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Jun 2019 19:05:40 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ0xQtQY1t-g9FgWaxfDXppMkFooCQzTFy7+ouwUfyA6w@mail.gmail.com>
-Message-ID: <CAJF2gTQ0xQtQY1t-g9FgWaxfDXppMkFooCQzTFy7+ouwUfyA6w@mail.gmail.com>
-Subject: Re: [PATCH V2 2/4] csky: Add new asid lib code from arm
-To:     Julien Grall <julien.grall@arm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        id S1726272AbfFVISi (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sat, 22 Jun 2019 04:18:38 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:40043 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbfFVISi (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 22 Jun 2019 04:18:38 -0400
+X-Originating-IP: 37.168.134.180
+Received: from windsurf (unknown [37.168.134.180])
+        (Authenticated sender: thomas.petazzoni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id EB8061C0008;
+        Sat, 22 Jun 2019 08:18:23 +0000 (UTC)
+Date:   Sat, 22 Jun 2019 10:18:21 +0200
+From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To:     Thomas Huth <huth@tuxfamily.org>
+Cc:     guoren@kernel.org, buildroot@buildroot.org,
+        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
         linux-csky@vger.kernel.org, Guo Ren <ren_guo@c-sky.com>,
-        Arnd Bergmann <arnd@arnd.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        zhiwei_liu@c-sky.com,
+        Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/qemu: Move patches to version
+ directory
+Message-ID: <20190622101821.4ef025b0@windsurf>
+In-Reply-To: <20190604095605.7c9e7ef1@thl530.multi.box>
+References: <1559564887-4088-1-git-send-email-guoren@kernel.org>
+        <20190604095605.7c9e7ef1@thl530.multi.box>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Sorry, I forgot delete arm's. It's mistake, no change arm64 file.
+On Tue, 4 Jun 2019 09:56:05 +0200
+Thomas Huth <huth@tuxfamily.org> wrote:
 
-On Fri, Jun 21, 2019 at 6:10 PM Julien Grall <julien.grall@arm.com> wrote:
->
-> Hi,
->
-> On 21/06/2019 10:39, guoren@kernel.org wrote:
-> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> > Cc: Arnd Bergmann <arnd@arnd.de>
-> > Cc: Julien Grall <julien.grall@arm.com>
-> > ---
-> >   arch/arm64/lib/asid.c        |   9 ++-
->
-> This change should be in a separate e-mail with the Arm64 maintainers in CC.
->
-> But you seem to have a copy of the allocator in csky now. So why do you need to
-> modify arm64/lib/asid.c here?
->
-> Cheers,
->
-> --
-> Julien Grall
+> At least the usbfs patch seems to be included in QEMU v4.0, so maybe it
+> would be better to bump the version to 4.0 first?
 
+Bumping to 4.0 would certainly be nice, but it really is a different
+thing than what Guo is doing. Since it's not really necessary to add
+support for C-SKY's Qemu version, I don't want to make bumping to 4.0 a
+requirement for Guo's work.
 
+> Thomas, did you ever send the first patch to upstream QEMU, too? Looks
+> like a valid patch to me, so I think it should be accepted there,
+> too...?
 
+To be honest, I don't remember if I ever sent it upstream :-/
+
+Thomas
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

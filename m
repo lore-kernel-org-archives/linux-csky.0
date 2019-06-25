@@ -1,61 +1,258 @@
-Return-Path: <SRS0=mu5m=UX=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=/JCA=UY=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BD3AC4646C
-	for <linux-csky@archiver.kernel.org>; Mon, 24 Jun 2019 23:53:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F03C3C4646B
+	for <linux-csky@archiver.kernel.org>; Tue, 25 Jun 2019 00:28:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5AD6520679
-	for <linux-csky@archiver.kernel.org>; Mon, 24 Jun 2019 23:53:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C000820663
+	for <linux-csky@archiver.kernel.org>; Tue, 25 Jun 2019 00:28:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728603AbfFXXxN (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 24 Jun 2019 19:53:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43164 "EHLO mx1.suse.de"
+        id S1727806AbfFYA2k (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 24 Jun 2019 20:28:40 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50534 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728547AbfFXXxN (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 24 Jun 2019 19:53:13 -0400
+        id S1726395AbfFYA2k (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 24 Jun 2019 20:28:40 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8583EAC41
-        for <linux-csky@vger.kernel.org>; Mon, 24 Jun 2019 23:53:11 +0000 (UTC)
-Subject: Re: [5.2-rc6] GX6605S testing
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
+        by mx1.suse.de (Postfix) with ESMTP id 45525ADD5;
+        Tue, 25 Jun 2019 00:28:38 +0000 (UTC)
+From:   =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>
 To:     linux-csky@vger.kernel.org
-References: <5cc9c383-3e1c-344f-cff1-8e95797b4b2c@suse.de>
-Openpgp: preference=signencrypt
-Organization: SUSE Linux GmbH
-Message-ID: <b1e6e69b-2c61-fd0d-8b12-f72daab97809@suse.de>
-Date:   Tue, 25 Jun 2019 01:53:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Guo Ren <guoren@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH] csky: dts: Add NationalChip GX6605S
+Date:   Tue, 25 Jun 2019 02:28:29 +0200
+Message-Id: <20190625002829.17409-1-afaerber@suse.de>
+X-Mailer: git-send-email 2.16.4
 MIME-Version: 1.0
-In-Reply-To: <5cc9c383-3e1c-344f-cff1-8e95797b4b2c@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Am 24.06.19 um 20:12 schrieb Andreas Färber:
-> Hello,
-> 
-> Newbie alert. I've tailored a Kconfig for the GX6605S dev board based on
-> defconfig, which required to drop "if COMPILE_TEST" for GX6605S_TIMER
-> since nothing was selecting it.
+Add Device Trees for NationalChip GX6605S SoC (based on CK610 CPU) and its
+dev board. GxLoader expects as filename gx6605s.dtb, so keep that.
+The bootargs are prepared to boot from USB and to output to serial.
 
-Turns out this Kconfig issue is already fixed in linux-next.git; the
-other two reported issues remain.
+Compatibles for the SoC and board are left out for now.
 
-Regards,
-Andreas
+Signed-off-by: Andreas Färber <afaerber@suse.de>
+---
+ arch/csky/boot/dts/gx6605s.dts  | 104 ++++++++++++++++++++++++++++++++++++++++
+ arch/csky/boot/dts/gx6605s.dtsi |  82 +++++++++++++++++++++++++++++++
+ 2 files changed, 186 insertions(+)
+ create mode 100644 arch/csky/boot/dts/gx6605s.dts
+ create mode 100644 arch/csky/boot/dts/gx6605s.dtsi
 
+diff --git a/arch/csky/boot/dts/gx6605s.dts b/arch/csky/boot/dts/gx6605s.dts
+new file mode 100644
+index 000000000000..f7511024ec6f
+--- /dev/null
++++ b/arch/csky/boot/dts/gx6605s.dts
+@@ -0,0 +1,104 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause */
++/*
++ * GX6605S dev board
++ *
++ * Copyright (c) 2019 Andreas Färber
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/gpio/gpio.h>
++
++#include "gx6605s.dtsi"
++
++/ {
++	model = "Nationalchip GX6605S";
++
++	aliases {
++		serial0 = &uart;
++	};
++
++	chosen {
++		bootargs = "console=ttyS0,115200n8 root=/dev/sda2 rw rootwait";
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@10000000 {
++		device_type = "memory";
++		reg = <0x10000000 0x04000000>;
++	};
++
++	dummy_apb_clk: dummy-apb-clk {
++		compatible = "fixed-clock";
++		clock-frequency = <24000000>; /* guesstimate */
++		#clock-cells = <0>;
++	};
++
++	buttons {
++		compatible = "gpio-keys-polled";
++		poll-interval = <100>;
++		autorepeat;
++
++		button5 {
++			label = "button5";
++			linux,code = <103>;
++			gpios = <&gpio 5 GPIO_ACTIVE_LOW>;
++		};
++
++		button6 {
++			label = "button6";
++			linux,code = <106>;
++			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
++		};
++
++		button7 {
++			label = "button7";
++			linux,code = <28>;
++			gpios = <&gpio 7 GPIO_ACTIVE_LOW>;
++		};
++
++		button8 {
++			label = "button8";
++			linux,code = <105>;
++			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
++		};
++
++		button9 {
++			label = "button9";
++			linux,code = <108>;
++			gpios = <&gpio 9 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led0 {
++			label = "led10";
++			gpios = <&gpio 10 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "heartbeat";
++		};
++
++		led1 {
++			label = "led11";
++			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "timer";
++		};
++
++		led2 {
++			label = "led12";
++			gpios = <&gpio 12 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "default-on";
++		};
++
++		led3 {
++			label = "led13";
++			gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "default-on";
++		};
++	};
++};
++
++&timer0 {
++		clocks = <&dummy_apb_clk>;
++};
+diff --git a/arch/csky/boot/dts/gx6605s.dtsi b/arch/csky/boot/dts/gx6605s.dtsi
+new file mode 100644
+index 000000000000..956af5674add
+--- /dev/null
++++ b/arch/csky/boot/dts/gx6605s.dtsi
+@@ -0,0 +1,82 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause */
++/*
++ * NationalChip GX6605S SoC
++ *
++ * Copyright (c) 2019 Andreas Färber
++ */
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "csky,ck610";
++			reg = <0>;
++		};
++	};
++
++	soc {
++		compatible = "simple-bus";
++		interrupt-parent = <&intc>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		timer0: timer@20a000 {
++			compatible = "csky,gx6605s-timer";
++			reg = <0x0020a000 0x400>;
++			clocks = <&dummy_apb_clk>;
++			interrupts = <10>;
++		};
++
++		gpio: gpio@305000 {
++			compatible = "wd,mbl-gpio";
++			reg-names = "dirout", "dat", "set", "clr";
++			reg = <0x00305000 0x4>,
++			      <0x00305004 0x4>,
++			      <0x00305008 0x4>,
++			      <0x0030500c 0x4>;
++			gpio-controller;
++			#gpio-cells = <2>;
++		};
++
++		uart: serial@403000 {
++			compatible = "ns16550a";
++			reg = <0x00403000 0x400>;
++			interrupts = <15>;
++			clock-frequency = <29491200>;
++			reg-shift = <2>;
++			reg-io-width = <1>;
++		};
++
++		intc: interrupt-controller@500000 {
++			compatible = "csky,gx6605s-intc";
++			reg = <0x00500000 0x400>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++		};
++
++		ehci_hcd: usb@900000 {
++			compatible = "generic-ehci";
++			reg = <0x00900000 0x400>;
++			interrupts = <59>;
++		};
++
++		ohci_hcd0: usb@a00000 {
++			compatible = "generic-ohci";
++			reg = <0x00a00000 0x400>;
++			interrupts = <58>;
++		};
++
++		ohci_hcd1: usb@b00000 {
++			compatible = "generic-ohci";
++			reg = <0x00b00000 0x400>;
++			interrupts = <57>;
++		};
++	};
++};
 -- 
-SUSE Linux GmbH, Maxfeldstr. 5, 90409 Nürnberg, Germany
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+2.16.4
+

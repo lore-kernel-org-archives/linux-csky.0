@@ -2,248 +2,193 @@ Return-Path: <SRS0=/JCA=UY=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A377C4646B
-	for <linux-csky@archiver.kernel.org>; Tue, 25 Jun 2019 01:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0552CC48BD6
+	for <linux-csky@archiver.kernel.org>; Tue, 25 Jun 2019 07:25:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 09E992077C
-	for <linux-csky@archiver.kernel.org>; Tue, 25 Jun 2019 01:57:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561427879;
-	bh=MJtxpRjdgeKsk26oDPJlP5SZ3sdJ7xVel8rCfI+KFQw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=1CoYtRGqugqGYU8IIuwGH2vu7+KC1DBCK12mL8mMXu9ihSXkYnLJ/PiNIiYD8VWdh
-	 uLyjHhgUU0e0vNYcnbPVh4AG5xCjMekr6dpcdOlK3SE2JN2Keqq0WhGfleE86NTYi8
-	 h/rFPnZwHjcUA8XHCyoeKwGpI8gTQOs/CqKybWAE=
+	by mail.kernel.org (Postfix) with ESMTP id D3E902085A
+	for <linux-csky@archiver.kernel.org>; Tue, 25 Jun 2019 07:25:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729994AbfFYB5y (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 24 Jun 2019 21:57:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729894AbfFYB5x (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 24 Jun 2019 21:57:53 -0400
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8157D2077C;
-        Tue, 25 Jun 2019 01:57:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561427871;
-        bh=MJtxpRjdgeKsk26oDPJlP5SZ3sdJ7xVel8rCfI+KFQw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OeVfDOhXwkdHsuv30TcUVHuS5CGGEteTOw4/RjtT/8EOZ30xuE580ExalG5bqfmVc
-         B4+cWaTq/9LzqBFF44awiqFvhomIF+TwfYNm+3gpdCTtuZg+PWzaGM9PfgspgZcDjP
-         4eTrsCjkpz0glIZM+0rPZaAyJV1EVuqwDY0ajKUA=
-Received: by mail-wm1-f50.google.com with SMTP id s3so1117724wms.2;
-        Mon, 24 Jun 2019 18:57:51 -0700 (PDT)
-X-Gm-Message-State: APjAAAUb6pOnsAF1fUJJFZXo5l6vY0zDMOi0TTkiNAd3ijr+DB/HQefx
-        kZNOz5uOgYZhb2FaLbFDASqEKMZX0xGsX35oBks=
-X-Google-Smtp-Source: APXvYqzkCXe52mlQoLGvpJrB37dUOrIl+OdJu8k0kgiwPLIagTSgY8ydNzJ37lBhg64m2YTHjPqAvODk8VK8MaqhCc8=
-X-Received: by 2002:a7b:cd84:: with SMTP id y4mr17852370wmj.79.1561427870082;
- Mon, 24 Jun 2019 18:57:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190625002829.17409-1-afaerber@suse.de> <CAJF2gTTnhTQK-mOyC+e8U8xrDwaoDUACb1R_zQfDCKwdKzc96w@mail.gmail.com>
- <a27255d3-e21c-787d-c510-359d72f53a1c@suse.de>
-In-Reply-To: <a27255d3-e21c-787d-c510-359d72f53a1c@suse.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 25 Jun 2019 09:57:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRkB+W_pYJYJLLcL=hkUm5Y6dvH_Z=BSdkz=M0+D0UOiA@mail.gmail.com>
-Message-ID: <CAJF2gTRkB+W_pYJYJLLcL=hkUm5Y6dvH_Z=BSdkz=M0+D0UOiA@mail.gmail.com>
-Subject: Re: [PATCH] csky: dts: Add NationalChip GX6605S
-To:     =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1730051AbfFYHZl (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 25 Jun 2019 03:25:41 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:35864 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730031AbfFYHZj (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 25 Jun 2019 03:25:39 -0400
+Received: by mail-pl1-f193.google.com with SMTP id k8so8366752plt.3
+        for <linux-csky@vger.kernel.org>; Tue, 25 Jun 2019 00:25:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=D5TcDpWvSvR6guGVHBK74rSc1eO/xYZXbYoBMxMUInU=;
+        b=ujtqgtKO6naYBjlDKRpqKVRFB/HZRdc6Jcz+pObGECKk+s2K+8skWh+UZZow932iu3
+         /SZSQIKy2KaiXCkAvV/e6qdbERFfrv9of/HBeqe5aOqdILK4UtKXyGKn+WWCv6iCXYX0
+         T0i4QixjiIpbVgjiFF/mYb6JRs3rgFATV5GJxV8H0AipHpATb4KMP/qOs9/TFnkhL/Qz
+         O9cWF4+PD0qO1lTtCqgcbmHvVl5id1l+V6+FfzuiUxi5xyPmW6WY+1vUQB3Os8nEZ6S+
+         7e6OLIAh8qLizPT1Hk/zCJknL2SHtZi/+R/kdnKlxoH3CYgUM+e+G6dXZqYbJDOVpAPu
+         YDIQ==
+X-Gm-Message-State: APjAAAUWMzLtCvkD0edemApFiJV1j6GbmD8p32GraTsYaNhyrkYCs/QC
+        K5C8DNza2W5Xfvr+cbl6JLFIgg==
+X-Google-Smtp-Source: APXvYqyhnohLrNNrcI6vZeIQBQp/G4PBGqvQA75lKl/2Tpz7XDtiEUVz7aNrXVF4nP1pxWqGGr2wLg==
+X-Received: by 2002:a17:902:bf08:: with SMTP id bi8mr118969510plb.189.1561447538458;
+        Tue, 25 Jun 2019 00:25:38 -0700 (PDT)
+Received: from localhost (220-132-236-182.HINET-IP.hinet.net. [220.132.236.182])
+        by smtp.gmail.com with ESMTPSA id v4sm14845133pff.45.2019.06.25.00.25.37
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 25 Jun 2019 00:25:37 -0700 (PDT)
+Date:   Tue, 25 Jun 2019 00:25:37 -0700 (PDT)
+X-Google-Original-Date: Tue, 25 Jun 2019 00:24:47 PDT (-0700)
+Subject:     Re: [PATCH] arm64: asid: Optimize cache_flush for SMT
+In-Reply-To: <20190624114010.GA51882@lakrids.cambridge.arm.com>
+CC:     guoren@kernel.org, julien.grall@arm.com,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, ren_guo@c-sky.com,
+        catalin.marinas@arm.com
+From:   Palmer Dabbelt <palmer@sifive.com>
+To:     mark.rutland@arm.com
+Message-ID: <mhng-1ed90194-b48d-42f0-b558-c369cc116527@palmer-si-x1e>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Andreas,
+On Mon, 24 Jun 2019 04:40:10 PDT (-0700), mark.rutland@arm.com wrote:
+> I'm very confused by this patch. The title says arm64, yet the code is
+> under arch/csky/, and the code in question refers to HARTs, which IIUC
+> is RISC-V terminology.
+>
+> On Mon, Jun 24, 2019 at 12:04:29AM +0800, guoren@kernel.org wrote:
+>> From: Guo Ren <ren_guo@c-sky.com>
+>>
+>> The hardware threads of one core could share the same TLB for SMT+SMP
+>> system. Assume hardware threads number sequence like this:
+>>
+>> | 0 1 2 3 | 4 5 6 7 | 8 9 a b | c d e f |
+>>    core1     core2     core3     core4
+>
+> Given this is the Linux logical CPU ID rather than a physical CPU ID,
+> this assumption is not valid. For example, CPUs may be renumbered across
+> kexec.
+>
+> Even if this were a physical CPU ID, this doesn't hold on arm64 (e.g.
+> due to big.LITTLE).
+>
+>> Current algorithm seems is correct for SMT+SMP, but it'll give some
+>> duplicate local_tlb_flush. Because one hardware threads local_tlb_flush
+>> will also flush other hardware threads' TLB entry in one core TLB.
+>
+> Does any architecture specification mandate that behaviour?
+>
+> That isn't true for arm64, I have no idea whether RISC-V mandates that,
+> and as below it seems this is irrelevant on C-SKY.
 
-On Tue, Jun 25, 2019 at 9:25 AM Andreas F=C3=A4rber <afaerber@suse.de> wrot=
-e:
->
-> Am 25.06.19 um 02:45 schrieb Guo Ren:
-> > Thx for the patch. No need seperate part into dtsi,
->
-> Sorry, I know from many arm contributions that using a .dtsi is the
-> right thing here. It logically separates the chip from the board, even
-> if there's only one evaluation board currently. Think about set-top
-> boxes that someone might author a .dts for - they should be able to
-> reuse the .dtsi for the SoC rather than copy it.
-gx6605s.dts is simple now, it's unnecessary to seperate it into two
-pieces. Other things from you is all OK for me.
+There is no event defined by RISC-V that ever requires implementations flush
+the TLB of more than one hart at a time.  There is also nothing in the
+normative text of the RISC-V manuals that allows for any differentiation
+between multiple threads on a single core and multiple cores (though I am about
+to suggest adding two, against my will :)).
 
+>> So we can use bitmap to reduce local_tlb_flush for SMT.
+>>
+>> C-SKY cores don't support SMT and the patch is no benefit for C-SKY.
 >
-> > just follow:
-> > https://lore.kernel.org/linux-csky/1561376581-19568-1-git-send-email-gu=
-oren@kernel.org/T/#u
+> As above, this patch is very confusing -- if this doesn't benefit C-SKY,
+> why modify the C-SKY code?
 >
-> Thanks for that pointer! I still think my node names are cleaner and
-> also the structure of keeping clocks and gpio users outside of /soc. I
-> see the value you use is 27 MHz, will try it tomorrow. I see you use
-> nice KEY_ constants, whereas I just took the raw values from the dtb.
+> Thanks,
+> Mark.
 >
-> I notice that your patch doesn't have any Copyright header, how should I
-> credit you in the resulting combined patch? I would then also add your
-> SoB from the patch you linked to.
-Copyright could be the same in arch/csky/kernel/setup.c or add yours
-in addition.
-
->
-> More comments inline...
->
-> > On Tue, Jun 25, 2019 at 8:28 AM Andreas F=C3=A4rber <afaerber@suse.de> =
-wrote:
-> >>
-> >> Add Device Trees for NationalChip GX6605S SoC (based on CK610 CPU) and=
- its
-> >> dev board. GxLoader expects as filename gx6605s.dtb, so keep that.
-> >> The bootargs are prepared to boot from USB and to output to serial.
-> >>
-> >> Compatibles for the SoC and board are left out for now.
-> >>
-> >> Signed-off-by: Andreas F=C3=A4rber <afaerber@suse.de>
-> >> ---
-> >>  arch/csky/boot/dts/gx6605s.dts  | 104 +++++++++++++++++++++++++++++++=
-+++++++++
-> >>  arch/csky/boot/dts/gx6605s.dtsi |  82 +++++++++++++++++++++++++++++++
-> >>  2 files changed, 186 insertions(+)
-> >>  create mode 100644 arch/csky/boot/dts/gx6605s.dts
-> >>  create mode 100644 arch/csky/boot/dts/gx6605s.dtsi
-> >>
-> >> diff --git a/arch/csky/boot/dts/gx6605s.dts b/arch/csky/boot/dts/gx660=
-5s.dts
-> >> new file mode 100644
-> >> index 000000000000..f7511024ec6f
-> >> --- /dev/null
-> >> +++ b/arch/csky/boot/dts/gx6605s.dts
-> [...]
-> >> +       leds {
-> >> +               compatible =3D "gpio-leds";
-> >> +
-> >> +               led0 {
-> >> +                       label =3D "led10";
->
-> I forgot to align the numbering here. The label matches the GPIO and
-> what is printed on the board.
-leds and button is so specific, that's is just a example. You could
-keep your own style in the dts.
-
->
-> >> +                       gpios =3D <&gpio 10 GPIO_ACTIVE_LOW>;
-> >> +                       linux,default-trigger =3D "heartbeat";
->
-> This green one stops blinking and stays on.
-Seems there is no driver for it.
-
->
-> >> +               };
-> >> +
-> >> +               led1 {
-> >> +                       label =3D "led11";
-> >> +                       gpios =3D <&gpio 11 GPIO_ACTIVE_LOW>;
-> >> +                       linux,default-trigger =3D "timer";
->
-> This red one keeps blinking after the panic.
->
-> >> +               };
-> >> +
-> >> +               led2 {
-> >> +                       label =3D "led12";
-> >> +                       gpios =3D <&gpio 12 GPIO_ACTIVE_LOW>;
-> >> +                       linux,default-trigger =3D "default-on";
-> >> +               };
-> >> +
-> >> +               led3 {
-> >> +                       label =3D "led13";
-> >> +                       gpios =3D <&gpio 13 GPIO_ACTIVE_LOW>;
-> >> +                       linux,default-trigger =3D "default-on";
->
-> These two remain off. So I wonder whether the GPIO polarity is wrong?
-> In the example usb.img the gpio-leds module is not loaded by default, so
-> maybe it wasn't noticed before?
-I try this 1 years ago in linux-4.9 and it need verifying.
-
->
-> Also, many arm boards use more complex LED labels with multiple parts
-> separated by colon, like "boardname:name:function" or so.
-Name is Ok for me as long as it's correct.
-
->
-> >> +               };
-> >> +       };
-> [...]
-> >> diff --git a/arch/csky/boot/dts/gx6605s.dtsi b/arch/csky/boot/dts/gx66=
-05s.dtsi
-> >> new file mode 100644
-> >> index 000000000000..956af5674add
-> >> --- /dev/null
-> >> +++ b/arch/csky/boot/dts/gx6605s.dtsi
-> >> @@ -0,0 +1,82 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause */
-> >> +/*
-> >> + * NationalChip GX6605S SoC
-> >> + *
-> >> + * Copyright (c) 2019 Andreas F=C3=A4rber
-> >> + */
-> >> +
-> >> +/ {
-> >> +       #address-cells =3D <1>;
-> >> +       #size-cells =3D <1>;
-> >> +
-> >> +       cpus {
-> >> +               #address-cells =3D <1>;
-> >> +               #size-cells =3D <0>;
-> >> +
-> >> +               cpu0: cpu@0 {
-> >> +                       device_type =3D "cpu";
-> >> +                       compatible =3D "csky,ck610";
-> >> +                       reg =3D <0>;
-> >> +               };
-> >> +       };
-> >> +
-> >> +       soc {
-> >> +               compatible =3D "simple-bus";
-> >> +               interrupt-parent =3D <&intc>;
-> >> +               #address-cells =3D <1>;
-> >> +               #size-cells =3D <1>;
-> >> +               ranges;
-> >> +
-> >> +               timer0: timer@20a000 {
-> >> +                       compatible =3D "csky,gx6605s-timer";
->
-> The reason I left out the compatible for the SoC/board is that it looks
-> unclean to me that you're using a "csky," vendor prefix for interrupt
-> controller and timer instead of a new "nationalchip," prefix for the SoC
-> vendor. Did I miss some reasoning for that, or did that slip through
-> patch review?
-csky is my current company and nationalchip is my prior company. The
-gx6605s is belong to nationachip and gx6605s use csky 610 as its CPU.
-
->
-> Being the first board we'd need to create a new YAML file to document
-> them, I assume. Not sure what the best scope (=3Dname) would be here.
->
-> >> +                       reg =3D <0x0020a000 0x400>;
-> >> +                       clocks =3D <&dummy_apb_clk>;
-> >> +                       interrupts =3D <10>;
-> >> +               };
-> [...]
-> >> +               intc: interrupt-controller@500000 {
-> >> +                       compatible =3D "csky,gx6605s-intc";
->
-> Here's the other SoC compatible.
-It's defined in irqchip/irq-csky-apb-intc.c.
-
---=20
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+>>
+>> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Julien Grall <julien.grall@arm.com>
+>> ---
+>>  arch/csky/include/asm/asid.h |  4 ++++
+>>  arch/csky/mm/asid.c          | 11 ++++++++++-
+>>  arch/csky/mm/context.c       |  2 +-
+>>  3 files changed, 15 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/csky/include/asm/asid.h b/arch/csky/include/asm/asid.h
+>> index ac08b0f..f654492 100644
+>> --- a/arch/csky/include/asm/asid.h
+>> +++ b/arch/csky/include/asm/asid.h
+>> @@ -23,6 +23,9 @@ struct asid_info
+>>  	unsigned int		ctxt_shift;
+>>  	/* Callback to locally flush the context. */
+>>  	void			(*flush_cpu_ctxt_cb)(void);
+>> +	/* To reduce duplicate tlb_flush for SMT */
+>> +	unsigned int		harts_per_core;
+>> +	unsigned int		harts_per_core_mask;
+>>  };
+>>
+>>  #define NUM_ASIDS(info)			(1UL << ((info)->bits))
+>> @@ -73,6 +76,7 @@ static inline void asid_check_context(struct asid_info *info,
+>>
+>>  int asid_allocator_init(struct asid_info *info,
+>>  			u32 bits, unsigned int asid_per_ctxt,
+>> +			unsigned int harts_per_core,
+>>  			void (*flush_cpu_ctxt_cb)(void));
+>>
+>>  #endif
+>> diff --git a/arch/csky/mm/asid.c b/arch/csky/mm/asid.c
+>> index b2e9147..50a983e 100644
+>> --- a/arch/csky/mm/asid.c
+>> +++ b/arch/csky/mm/asid.c
+>> @@ -148,8 +148,13 @@ void asid_new_context(struct asid_info *info, atomic64_t *pasid,
+>>  		atomic64_set(pasid, asid);
+>>  	}
+>>
+>> -	if (cpumask_test_and_clear_cpu(cpu, &info->flush_pending))
+>> +	if (cpumask_test_cpu(cpu, &info->flush_pending)) {
+>> +		unsigned int i;
+>> +		unsigned int harts_base = cpu & info->harts_per_core_mask;
+>>  		info->flush_cpu_ctxt_cb();
+>> +		for (i = 0; i < info->harts_per_core; i++)
+>> +			cpumask_clear_cpu(harts_base + i, &info->flush_pending);
+>> +	}
+>>
+>>  	atomic64_set(&active_asid(info, cpu), asid);
+>>  	cpumask_set_cpu(cpu, mm_cpumask(mm));
+>> @@ -162,15 +167,19 @@ void asid_new_context(struct asid_info *info, atomic64_t *pasid,
+>>   * @info: Pointer to the asid allocator structure
+>>   * @bits: Number of ASIDs available
+>>   * @asid_per_ctxt: Number of ASIDs to allocate per-context. ASIDs are
+>> + * @harts_per_core: Number hardware threads per core, must be 1, 2, 4, 8, 16 ...
+>>   * allocated contiguously for a given context. This value should be a power of
+>>   * 2.
+>>   */
+>>  int asid_allocator_init(struct asid_info *info,
+>>  			u32 bits, unsigned int asid_per_ctxt,
+>> +			unsigned int harts_per_core,
+>>  			void (*flush_cpu_ctxt_cb)(void))
+>>  {
+>>  	info->bits = bits;
+>>  	info->ctxt_shift = ilog2(asid_per_ctxt);
+>> +	info->harts_per_core = harts_per_core;
+>> +	info->harts_per_core_mask = ~((1 << ilog2(harts_per_core)) - 1);
+>>  	info->flush_cpu_ctxt_cb = flush_cpu_ctxt_cb;
+>>  	/*
+>>  	 * Expect allocation after rollover to fail if we don't have at least
+>> diff --git a/arch/csky/mm/context.c b/arch/csky/mm/context.c
+>> index 0d95bdd..b58523b 100644
+>> --- a/arch/csky/mm/context.c
+>> +++ b/arch/csky/mm/context.c
+>> @@ -30,7 +30,7 @@ static int asids_init(void)
+>>  {
+>>  	BUG_ON(((1 << CONFIG_CPU_ASID_BITS) - 1) <= num_possible_cpus());
+>>
+>> -	if (asid_allocator_init(&asid_info, CONFIG_CPU_ASID_BITS, 1,
+>> +	if (asid_allocator_init(&asid_info, CONFIG_CPU_ASID_BITS, 1, 1,
+>>  				asid_flush_cpu_ctxt))
+>>  		panic("Unable to initialize ASID allocator for %lu ASIDs\n",
+>>  		      NUM_ASIDS(&asid_info));
+>> --
+>> 2.7.4
+>>

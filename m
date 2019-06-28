@@ -1,88 +1,69 @@
-Return-Path: <SRS0=VPke=U2=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=UowE=U3=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2941FC48BD3
-	for <linux-csky@archiver.kernel.org>; Thu, 27 Jun 2019 01:50:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91C2BC5B576
+	for <linux-csky@archiver.kernel.org>; Fri, 28 Jun 2019 00:45:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EFCC3217F9
-	for <linux-csky@archiver.kernel.org>; Thu, 27 Jun 2019 01:50:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64FD52086D
+	for <linux-csky@archiver.kernel.org>; Fri, 28 Jun 2019 00:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561600254;
-	bh=kCCG90D35IV6/JmLNcgUS4jnvzH9yFn+nds5+DI2754=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=Z2kmIqzh36EbKO6ekXFtTvj5ZCeifOaqi4YoTGUiNPtIgPBBgJLsbpC+ehmKvpf4+
-	 6cN+LeJ5lD7bz9QUKA/9XRCElVT6bUao4oEAhhpyke4yW7c2w0di/3aPDS73fTV8FP
-	 iHP97Lop+J/BLIfKp49yf9VLK+6m9iAqpAebBTPw=
+	s=default; t=1561682718;
+	bh=mkQ8RibRw6gwWJhsHFhTnCmSfeTNicYA7fdSh0sooUk=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
+	b=wwRbWLDHDsbDiShKfSjWlARqzxmRH/2fJVmOG12b+o6IcZLtqSjeMA4eicfC3YEPY
+	 COLOHol+eVbuMjfLUUntciLsQKvDWAN/biEG1M8cvXP2mHG3FVNuy626g4VhIGjf5r
+	 uNo0iW2ck36GMRS/PFF4Freb3tLtmZSf0S8Dax8E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727010AbfF0Bux (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 26 Jun 2019 21:50:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46578 "EHLO mail.kernel.org"
+        id S1726720AbfF1ApG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 27 Jun 2019 20:45:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726891AbfF0Bux (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 26 Jun 2019 21:50:53 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C88A2182B;
-        Thu, 27 Jun 2019 01:50:52 +0000 (UTC)
+        id S1726579AbfF1ApF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 27 Jun 2019 20:45:05 -0400
+Subject: Re: [GIT PULL] csky fixup gcc unwind for v5.2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561600252;
-        bh=kCCG90D35IV6/JmLNcgUS4jnvzH9yFn+nds5+DI2754=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bi7erOcR7QL1tePUbWhxhRfVOdK7TUZAMULCWZL9xnLFzz30Srg/V8mE7CCxhLBK5
-         WX11pFvjEm1RflWFQ6Jt/8NGtOslRE6425qqHv/RhKVUzUFXrCIoBgRS9v1Zx+DZGO
-         g4JomsMEaY5kaE95S+ODC+MHKwIR5p6il9nIZ1RM=
-Received: by mail-wr1-f41.google.com with SMTP id k11so524389wrl.1;
-        Wed, 26 Jun 2019 18:50:52 -0700 (PDT)
-X-Gm-Message-State: APjAAAUevrsFASnPdDROqGNGDSS0aQahtdNcmAxrnPCOewSrbMiJg8N0
-        UPuluxoya7QpDpQ2SxMyscXpw+CRU/yw51+Epjg=
-X-Google-Smtp-Source: APXvYqzSoiCCwTva2gZnnCXkLLyAW+tzKHN3GTfbeiNhlGr44n/II6VYQL1m25Vd73mFO8g1zpf1AARDHFO6xBB6VR0=
-X-Received: by 2002:adf:f483:: with SMTP id l3mr626375wro.256.1561600251203;
- Wed, 26 Jun 2019 18:50:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1561531557.git.han_mao@c-sky.com> <d874d7782d9acdad5d98f2f5c4a6fb26fbe41c5d.1561531557.git.han_mao@c-sky.com>
- <CAJF2gTRyma8sDMJaWCde1eOe6KSwn4_e=tJOT4d3kgmvzOxz8g@mail.gmail.com> <20190626185156.GC3902@kernel.org>
-In-Reply-To: <20190626185156.GC3902@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 27 Jun 2019 09:50:39 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTGX-UO3WPJZHn0ANk=sgAqimfyq14bFbm-Kz=ydcX+YQ@mail.gmail.com>
-Message-ID: <CAJF2gTTGX-UO3WPJZHn0ANk=sgAqimfyq14bFbm-Kz=ydcX+YQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] perf annotate csky: Add perf annotate support
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mao Han <han_mao@c-sky.com>, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        s=default; t=1561682704;
+        bh=mkQ8RibRw6gwWJhsHFhTnCmSfeTNicYA7fdSh0sooUk=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=sPFr68fkzqA2AQpQx4iZ50Gki2u/52yaOy05BXg/Cvv3tJuJo9kOfCMdIf2/gayx7
+         DnoKnAz2CRtOvtuQvoJMMEnnjYjFJOyG+Kp4sIFaQbYSCTG8xzt6KfIDbZkqwma2tY
+         KVslwiY6pLi5GRC0DEO+KmNYwOCyvZhJTPDiINo4=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1561529663-29852-1-git-send-email-guoren@kernel.org>
+References: <1561529663-29852-1-git-send-email-guoren@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1561529663-29852-1-git-send-email-guoren@kernel.org>
+X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git
+ tags/csky-for-linus-5.2-fixup-gcc-unwind
+X-PR-Tracked-Commit-Id: 19e5e2ae9c883f5651eaaeab2f258e2c4b78fda3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 139ca258055057e64d59ec92b6fd1ad3ca3a9fbc
+Message-Id: <156168270492.1895.4552295813118856621.pr-tracker-bot@kernel.org>
+Date:   Fri, 28 Jun 2019 00:45:04 +0000
+To:     guoren@kernel.org
+Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 2:52 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Wed, Jun 26, 2019 at 02:56:55PM +0800, Guo Ren escreveu:
-> > Thx Mao,
-> >
-> > Approved!
->
-> I guess I can take this as a:
->
-> Acked-by: Guo Ren <guoren@kernel.org>
->
-> Or would this better be:
->
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-Reviewed-by is OK.
-Thx for help to merge.
+The pull request you sent on Wed, 26 Jun 2019 14:14:23 +0800:
 
-Best regards
- Guo Ren
+> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.2-fixup-gcc-unwind
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/139ca258055057e64d59ec92b6fd1ad3ca3a9fbc
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker

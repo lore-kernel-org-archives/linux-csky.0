@@ -1,88 +1,207 @@
-Return-Path: <SRS0=DOgB=U6=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=KUKs=U7=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D8A6C0650E
-	for <linux-csky@archiver.kernel.org>; Mon,  1 Jul 2019 15:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EA70C5B578
+	for <linux-csky@archiver.kernel.org>; Tue,  2 Jul 2019 02:28:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1167620B7C
-	for <linux-csky@archiver.kernel.org>; Mon,  1 Jul 2019 15:46:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C6AD206A2
+	for <linux-csky@archiver.kernel.org>; Tue,  2 Jul 2019 02:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1562034526;
+	bh=fUxD0Jat8tuNrd30NBRuSl6fEb+qL0jvXcSgqFn/1aU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=rqYRyOg9jmR2X/19+/nnNfHj6IKV6w9bdofoiwD9fVvVFAYgt3bPXsrqWvOjuzVF3
+	 4WBrj3jYa77zj5GH6cYYY9GmikSYx3sRmaYeacX2Y9s47CZ3FgBVHnjhwQL/YNVWbO
+	 u30W3pQomEWHZom8OBkJAZll6zg63a2B+uh4Yiwc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbfGAPq1 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 1 Jul 2019 11:46:27 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46688 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727373AbfGAPq1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 1 Jul 2019 11:46:27 -0400
-Received: by mail-qt1-f196.google.com with SMTP id h21so15098885qtn.13;
-        Mon, 01 Jul 2019 08:46:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IE22YG1kj16IknP7QlS/hcyZEqytvttQhTXFYfXjkWQ=;
-        b=JZv1F4YqJtPhAD7h1ykGuxlrCeOge9AiDu+iifDTSfkTBPL9kwDIlLEOaExrExZwrE
-         JSJs7s8+5EgzIoiK7UyTazIW9rW6WTBdlDRZnm3PE1p9km7iuK73hiR15701RUATuIEB
-         KLtiG7rtw/x5UzvWSDKdtIb0ewbmE9kLZnB5sECj6FK6WEwEvzChCIryBB4isI7npzOB
-         Zs/wNt83u6acDh3kESPeEsrcTRpaopbJmYIL/9QI9HwzPfGjNXrFLgp4F3fwiuiwRwJr
-         xqP+AcLYwRI+Gy7GYgUmqoBiiCtTmQQnBaTCoSATMY6XiXco0EzACgfIfgQb3aNIXOlE
-         MtYQ==
-X-Gm-Message-State: APjAAAXjPrtR7lylTVSlV0b2BJU3ezushxf5jFtDMigAO05eaWo9zkxp
-        3jBo074Q6J/gkR+gyU7RM6+ZFBatK1hbvRSufY8=
-X-Google-Smtp-Source: APXvYqzhz6wel8eAmEo0Rl5DHwP4U2CGItmP91pzq58M0NTwxUCzkZGOsPaq9nefB0EZ4xIpLiX+rlXeAW8kLRBehXg=
-X-Received: by 2002:ac8:5311:: with SMTP id t17mr20545556qtn.304.1561995986128;
- Mon, 01 Jul 2019 08:46:26 -0700 (PDT)
+        id S1727242AbfGBC2p (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 1 Jul 2019 22:28:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41102 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727197AbfGBC2n (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 1 Jul 2019 22:28:43 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.35.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1AEC321851;
+        Tue,  2 Jul 2019 02:28:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562034522;
+        bh=fUxD0Jat8tuNrd30NBRuSl6fEb+qL0jvXcSgqFn/1aU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pXeQLQI1bKE9rqAra0tZaP4EhA+BzO0tmBI5YvHehvKQrbqHRQTJ2EX9Q/Z9lR9o8
+         qbnMAVJUTtVKaG7x5Z14iFpG0j7oH/Aigc4MT5dIM3PnFWrx76Je9cTXtGMmYy32d9
+         vHjPv+HNmp5S21Ctl1hovujMh+itWIyAGKvrl9zw=
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Mao Han <han_mao@c-sky.com>, Guo Ren <guoren@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-csky@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 42/43] perf annotate: Add csky support
+Date:   Mon,  1 Jul 2019 23:26:15 -0300
+Message-Id: <20190702022616.1259-43-acme@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190702022616.1259-1-acme@kernel.org>
+References: <20190702022616.1259-1-acme@kernel.org>
 MIME-Version: 1.0
-References: <1561786601-19512-1-git-send-email-guoren@kernel.org>
- <CAK8P3a0F5-wtJHbLvEwUXE8EnALMpQb5KeX4FK3S90Ce81oN-Q@mail.gmail.com> <CAJF2gTR7ooY=gxKW2zWK9MnuJ9YDm_1r6QTdJ=A=WqRDTuecRQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTR7ooY=gxKW2zWK9MnuJ9YDm_1r6QTdJ=A=WqRDTuecRQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 1 Jul 2019 17:46:09 +0200
-Message-ID: <CAK8P3a1j+4u_xdP45rEX7H+m+ttd9AEjeL0ittRZjtKN5fApDw@mail.gmail.com>
-Subject: Re: [PATCH] csky: Improve abiv1 mem ops performance with glibc codes
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <ren_guo@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Jul 1, 2019 at 5:26 PM Guo Ren <guoren@kernel.org> wrote:
-> On Mon, Jul 1, 2019 at 10:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Sat, Jun 29, 2019 at 7:36 AM <guoren@kernel.org> wrote:
-> > >
-> > > From: Guo Ren <ren_guo@c-sky.com>
-> > >
-> > > These codes are copied from glibc/string directory, they are the generic
-> > > implementation for string operations. We may further optimize them with
-> > > assembly code in the future.
-> > >
-> > > In fact these code isn't tested enough for kernel, but we've tested them
-> > > on glibc and it seems good. We just trust them :)
-> >
-> > Are these files from the architecture independent portion of glibc or
-> > are they csky specific? If they are architecture independent, we might
-> > want to see if they make sense for other architectures as well, and
-> > add them to lib/ rather than arch/csky/lib/
-> They are just copied from glibc-2.28/string/*.c and they are generic.
-> OK, I'll try to add them to lib/.
+From: Mao Han <han_mao@c-sky.com>
 
-Ok. Note that lib/string.c contains very basic versions of these already,
-so please see which of the functions you have actually make a
-difference in practice over those (if you haven't done that already).
+This patch add basic arch initialization and instruction associate
+support for the csky CPU architecture.
 
-Otherwise you can probably follow the example of the libgcc functions
-in lib/ashldi3.c etc: add a Kconfig symbol like CONFIG_GENERIC_LIB_ASHLDI3
-for each function you had, put the glibc version into a new file, and allow
-architectures to select them individually, which in turn should
-replace the version from lib/string.c.
+E.g.:
 
-       Arnd
+  $ perf annotate --stdio2
+  Samples: 161  of event 'cpu-clock:pppH', 4000 Hz, Event count (approx.):
+  40250000, [percent: local period]
+  test_4() /usr/lib/perf-test/callchain_test
+  Percent
+
+              Disassembly of section .text:
+
+              00008420 <test_4>:
+            test_4():
+                subi  sp, sp, 4
+                st.w  r8, (sp, 0x0)
+                mov   r8, sp
+                subi  sp, sp, 8
+                subi  r3, r8, 4
+                movi  r2, 0
+                st.w  r2, (r3, 0x0)
+              ↓ br    2e
+  100.00  14:   subi  r3, r8, 4
+                ld.w  r2, (r3, 0x0)
+                subi  r3, r8, 8
+                st.w  r2, (r3, 0x0)
+                subi  r3, r8, 4
+                ld.w  r3, (r3, 0x0)
+                addi  r2, r3, 1
+                subi  r3, r8, 4
+                st.w  r2, (r3, 0x0)
+          2e:   subi  r3, r8, 4
+                ld.w  r2, (r3, 0x0)
+                lrw   r3, 0x98967f    // 8598 <main+0x28>
+                cmplt r3, r2
+              ↑ bf    14
+                mov   r0, r0
+                mov   r0, r0
+                mov   sp, r8
+                ld.w  r8, (sp, 0x0)
+                addi  sp, sp, 4
+              ← rts
+
+Signed-off-by: Mao Han <han_mao@c-sky.com>
+Acked-by: Guo Ren <guoren@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-csky@vger.kernel.org
+Link: http://lkml.kernel.org/r/d874d7782d9acdad5d98f2f5c4a6fb26fbe41c5d.1561531557.git.han_mao@c-sky.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/arch/csky/annotate/instructions.c | 48 ++++++++++++++++++++
+ tools/perf/util/annotate.c                   |  5 ++
+ 2 files changed, 53 insertions(+)
+ create mode 100644 tools/perf/arch/csky/annotate/instructions.c
+
+diff --git a/tools/perf/arch/csky/annotate/instructions.c b/tools/perf/arch/csky/annotate/instructions.c
+new file mode 100644
+index 000000000000..5337bfb7d5fc
+--- /dev/null
++++ b/tools/perf/arch/csky/annotate/instructions.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd.
++
++#include <linux/compiler.h>
++
++static struct ins_ops *csky__associate_ins_ops(struct arch *arch,
++					       const char *name)
++{
++	struct ins_ops *ops = NULL;
++
++	/* catch all kind of jumps */
++	if (!strcmp(name, "bt") ||
++	    !strcmp(name, "bf") ||
++	    !strcmp(name, "bez") ||
++	    !strcmp(name, "bnez") ||
++	    !strcmp(name, "bnezad") ||
++	    !strcmp(name, "bhsz") ||
++	    !strcmp(name, "bhz") ||
++	    !strcmp(name, "blsz") ||
++	    !strcmp(name, "blz") ||
++	    !strcmp(name, "br") ||
++	    !strcmp(name, "jmpi") ||
++	    !strcmp(name, "jmp"))
++		ops = &jump_ops;
++
++	/* catch function call */
++	if (!strcmp(name, "bsr") ||
++	    !strcmp(name, "jsri") ||
++	    !strcmp(name, "jsr"))
++		ops = &call_ops;
++
++	/* catch function return */
++	if (!strcmp(name, "rts"))
++		ops = &ret_ops;
++
++	if (ops)
++		arch__associate_ins_ops(arch, name, ops);
++	return ops;
++}
++
++static int csky__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
++{
++	arch->initialized = true;
++	arch->objdump.comment_char = '/';
++	arch->associate_instruction_ops = csky__associate_ins_ops;
++
++	return 0;
++}
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index 2d08c4b62c63..ec7aaf31c2b2 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -145,6 +145,7 @@ static int arch__associate_ins_ops(struct arch* arch, const char *name, struct i
+ #include "arch/arc/annotate/instructions.c"
+ #include "arch/arm/annotate/instructions.c"
+ #include "arch/arm64/annotate/instructions.c"
++#include "arch/csky/annotate/instructions.c"
+ #include "arch/x86/annotate/instructions.c"
+ #include "arch/powerpc/annotate/instructions.c"
+ #include "arch/s390/annotate/instructions.c"
+@@ -163,6 +164,10 @@ static struct arch architectures[] = {
+ 		.name = "arm64",
+ 		.init = arm64__annotate_init,
+ 	},
++	{
++		.name = "csky",
++		.init = csky__annotate_init,
++	},
+ 	{
+ 		.name = "x86",
+ 		.init = x86__annotate_init,
+-- 
+2.20.1
+

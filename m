@@ -2,73 +2,58 @@ Return-Path: <SRS0=z0i5=VH=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B587FC73C6D
-	for <linux-csky@archiver.kernel.org>; Wed, 10 Jul 2019 06:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B140C73C6D
+	for <linux-csky@archiver.kernel.org>; Wed, 10 Jul 2019 06:36:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9386120693
-	for <linux-csky@archiver.kernel.org>; Wed, 10 Jul 2019 06:28:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20CF620693
+	for <linux-csky@archiver.kernel.org>; Wed, 10 Jul 2019 06:36:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726284AbfGJG2M (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 10 Jul 2019 02:28:12 -0400
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:51773 "EHLO
-        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725844AbfGJG2M (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 10 Jul 2019 02:28:12 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.156616|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.12626-0.0242319-0.849508;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03300;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=3;RT=3;SR=0;TI=SMTPD_---.EvUy.L-_1562740089;
-Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.EvUy.L-_1562740089)
-          by smtp.aliyun-inc.com(10.147.40.26);
-          Wed, 10 Jul 2019 14:28:09 +0800
-From:   Mao Han <han_mao@c-sky.com>
-To:     libc-alpha@sourceware.org
-Cc:     linux-csky@vger.kernel.org, Mao Han <han_mao@c-sky.com>
-Subject: [PATCH 1/1] locale/tst-locale-locpath: Fix arguments passing
-Date:   Wed, 10 Jul 2019 14:26:34 +0800
-Message-Id: <7901d4ee7ba91c963a9a7c9365267552edad32f3.1562739903.git.han_mao@c-sky.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726192AbfGJGgY (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 10 Jul 2019 02:36:24 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41926 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725844AbfGJGgX (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 10 Jul 2019 02:36:23 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id B7FC030001D9;
+        Wed, 10 Jul 2019 06:36:23 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-116-84.ams2.redhat.com [10.36.116.84])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A9D075B0BA;
+        Wed, 10 Jul 2019 06:36:22 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mao Han <han_mao@c-sky.com>
+Cc:     libc-alpha@sourceware.org, linux-csky@vger.kernel.org
+Subject: Re: [PATCH 1/1] locale/tst-locale-locpath: Fix arguments passing
+References: <7901d4ee7ba91c963a9a7c9365267552edad32f3.1562739903.git.han_mao@c-sky.com>
+Date:   Wed, 10 Jul 2019 08:36:20 +0200
+In-Reply-To: <7901d4ee7ba91c963a9a7c9365267552edad32f3.1562739903.git.han_mao@c-sky.com>
+        (Mao Han's message of "Wed, 10 Jul 2019 14:26:34 +0800")
+Message-ID: <87wogqbdln.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Wed, 10 Jul 2019 06:36:23 +0000 (UTC)
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The arguments passed by Makefile are missing match with the arguments
-taken by locale/tst-locale-locpath.sh. Without this patch
-cross-test-ssh.sh will be called twice in a single command while
-doing the make check test wish ssh test wrapper.
+* Mao Han:
 
-	* locale/Makefile: Fix tst-locale-locpath arguments passing.
----
- ChangeLog       | 4 ++++
- locale/Makefile | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+> The arguments passed by Makefile are missing match with the arguments
+> taken by locale/tst-locale-locpath.sh. Without this patch
+> cross-test-ssh.sh will be called twice in a single command while
+> doing the make check test wish ssh test wrapper.
+>
+> 	* locale/Makefile: Fix tst-locale-locpath arguments passing.
 
-diff --git a/ChangeLog b/ChangeLog
-index 158337a..632e180 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,7 @@
-+2019-07-10  Mao Han  <han_mao@c-sky.com>
-+
-+	* locale/Makefile: Fix tst-locale-locpath arguments passing.
-+
- 2019-07-09  Paul A. Clarke  <pc@us.ibm.com>
-     
- 	* sysdeps/powerpc/fpu/fenv_libc.h (_FPU_GET_RC): Protect use of
-diff --git a/locale/Makefile b/locale/Makefile
-index 0ad99ec..d78cf9b 100644
---- a/locale/Makefile
-+++ b/locale/Makefile
-@@ -113,5 +113,5 @@ lib := locale-programs
- include $(patsubst %,$(..)libof-iterator.mk,$(cpp-srcs-left))
- 
- $(objpfx)tst-locale-locpath.out : tst-locale-locpath.sh $(objpfx)locale
--	$(SHELL) $< '$(common-objpfx)' '$(test-wrapper)' '$(test-wrapper-env)' > $@; \
-+	$(SHELL) $< '$(common-objpfx)' '$(test-wrapper-env)' '$(run-program-env)' > $@; \
- 	$(evaluate-test)
--- 
-2.7.4
+Still looks good.  Thanks.
 
+Florian

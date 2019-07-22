@@ -1,69 +1,77 @@
-Return-Path: <SRS0=Ke3y=VQ=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=8Jhg=VT=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 654B0C76195
-	for <linux-csky@archiver.kernel.org>; Fri, 19 Jul 2019 19:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A677C7618F
+	for <linux-csky@archiver.kernel.org>; Mon, 22 Jul 2019 16:38:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3B85F2184E
-	for <linux-csky@archiver.kernel.org>; Fri, 19 Jul 2019 19:45:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563565542;
-	bh=aP1uajN4RkEc62uSVyX2/7IxF58EZ73oI5bmRCpheGU=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=weXq7SvPgA3J5X1tXHACK6xqChJ84d8jZhssBJAA+WlHPZ09sb7Icn6pKcXlVcJRE
-	 847K9loUKoOT6noVdbF8igk0BMWfI1Y2dv70I7XxTejduPFfoMHBpLCFWjkiPaJxiB
-	 GDfzttAsrXfczJ054CpN6TDyHYgTx/vkvD85bgGY=
+	by mail.kernel.org (Postfix) with ESMTP id 743F221901
+	for <linux-csky@archiver.kernel.org>; Mon, 22 Jul 2019 16:38:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387729AbfGSTpl (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 19 Jul 2019 15:45:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34478 "EHLO mail.kernel.org"
+        id S1727744AbfGVQiS (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 22 Jul 2019 12:38:18 -0400
+Received: from foss.arm.com ([217.140.110.172]:41824 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387549AbfGSTpY (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 19 Jul 2019 15:45:24 -0400
-Subject: Re: [GIT PULL] csky changes for v5.3-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563565523;
-        bh=aP1uajN4RkEc62uSVyX2/7IxF58EZ73oI5bmRCpheGU=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=hMH4VkYHzLirEMCx7ZDnbMPAqIhcgMmO+trANNRDc35AoT7hcRGQhQiu64EBMXpX9
-         0EipM+BZcLdYREGzUiLnK8/Py7cxV4xxpI7Bzze/TzK4OjLW6RRLbTOLtFF+BR7b6E
-         HLicpBOc+BwDKS816L6ubJ0goZMYaMJRNhEw256w=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1563522380-9180-1-git-send-email-guoren@kernel.org>
-References: <1563522380-9180-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1563522380-9180-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git
- tags/csky-for-linus-5.3-rc1
-X-PR-Tracked-Commit-Id: bdfeb0ccea1a12b58299b95eb0f28e2aa26de4c2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a84d2d2906f983fb80f5dcc3e8e7c3ad70aa9f0d
-Message-Id: <156356552349.25668.2927095785166445669.pr-tracker-bot@kernel.org>
-Date:   Fri, 19 Jul 2019 19:45:23 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
+        id S1727731AbfGVQiR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 22 Jul 2019 12:38:17 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E72BF28;
+        Mon, 22 Jul 2019 09:38:16 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C3953F694;
+        Mon, 22 Jul 2019 09:38:14 -0700 (PDT)
+Date:   Mon, 22 Jul 2019 17:38:12 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Julien Grall <julien.grall@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        aou@eecs.berkeley.edu, gary@garyguo.net,
+        Atish Patra <Atish.Patra@wdc.com>, hch@infradead.org,
+        paul.walmsley@sifive.com, rppt@linux.ibm.com,
+        linux-riscv@lists.infradead.org, Anup Patel <anup.Patel@wdc.com>,
+        Palmer Dabbelt <palmer@sifive.com>, suzuki.poulose@arm.com,
+        Marc Zyngier <marc.zyngier@arm.com>, julien.thierry@arm.com,
+        Will Deacon <will.deacon@arm.com>, christoffer.dall@arm.com,
+        james.morse@arm.com, linux-csky@vger.kernel.org
+Subject: Re: [PATCH RFC 11/14] arm64: Move the ASID allocator code in a
+ separate file
+Message-ID: <20190722163811.GJ60625@arrakis.emea.arm.com>
+References: <0dfe120b-066a-2ac8-13bc-3f5a29e2caa3@arm.com>
+ <CAJF2gTTXHHgDboaexdHA284y6kNZVSjLis5-Q2rDnXCxr4RSmA@mail.gmail.com>
+ <c871a5ae-914f-a8bb-9474-1dcfec5d45bf@arm.com>
+ <CAJF2gTStSR7Jmu7=HaO5Wxz=Zn8A5-RD8ktori3oKEhM9vozAA@mail.gmail.com>
+ <20190621141606.GF18954@arrakis.emea.arm.com>
+ <CAJF2gTTVUToRkRtxTmtWDotMGXy5YQCpL1h_2neTBuN3e6oz1w@mail.gmail.com>
+ <20190624153820.GH29120@arrakis.emea.arm.com>
+ <CAJF2gTRUzHUNV+nzECUp5n2L1akdy=Aovb6tSd+PNVnpasBrqw@mail.gmail.com>
+ <20190701091711.GA21774@arrakis.emea.arm.com>
+ <CAJF2gTTEbhA-pZCPGuUNqXT9F-vk8fSTyNJyEOpn=QE=toAN3g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTTEbhA-pZCPGuUNqXT9F-vk8fSTyNJyEOpn=QE=toAN3g@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The pull request you sent on Fri, 19 Jul 2019 15:46:20 +0800:
+On Tue, Jul 16, 2019 at 11:31:27AM +0800, Guo Ren wrote:
+> I saw arm64 to prevent speculation by temporarily setting TTBR0.el1 to
+> a zero page table. Is that used to prevent speculative execution user
+> space code or just prevent ld/st in copy_use_* ?
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.3-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a84d2d2906f983fb80f5dcc3e8e7c3ad70aa9f0d
-
-Thank you!
+Only to prevent explicit ld/st from user. On ARMv8.1+, we don't normally
+use the TTBR0 trick but rather disable user space access using the PAN
+(privileged access never) feature. However, I don't think PAN disables
+speculative accesses, only explicit loads/stores. Also, with ARMv8.2
+Linux uses the LDTR/STTR instructions in copy_*_user() which don't need
+to disable PAN explicitly.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Catalin

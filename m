@@ -4,50 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2081C433FF
-	for <linux-csky@archiver.kernel.org>; Tue, 30 Jul 2019 12:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CDADC433FF
+	for <linux-csky@archiver.kernel.org>; Tue, 30 Jul 2019 12:16:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 753C2208E3
-	for <linux-csky@archiver.kernel.org>; Tue, 30 Jul 2019 12:15:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E03F208E3
+	for <linux-csky@archiver.kernel.org>; Tue, 30 Jul 2019 12:16:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564488954;
-	bh=mM5RrFnCl4ACu3AYx0zr+lmIkY7fJjdY73Sg6NC1sTE=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=m9Fwcs7fWUSOoj26/TliBhjTYUgL0OUeIj4xgUBrgP9DLO0ItJdhWmW+R7v4jMIzy
-	 GpKn2hETFVGAH066ZqwDmNQdYHgJGd6VlSSEdUL1ZnT+QItX+t0nGsroADjYL8p7TF
-	 t44YNXT7NGAILTLbXRUedkLNrdDhwPbjODkUkMsU=
+	s=default; t=1564488964;
+	bh=NKGhiwnRCc3377gzaEWKpoj3fCR+8PfpK7w5Fo30zO4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=uUePoVeKkhFKnz7/+rU/OnLF7RpH7UYlVuKq56zC9IO4ChymJlDexZ4Kw1ZfIgY/T
+	 fSGkliAEYGJ9Q2KBXmivTc9QD2s+ksQuztU1/ChlQVBUd41R368zlGCtsvJuZd1Oij
+	 5a+cLZQ+CA84GRc4EPsVe72VPS0bo+lLHfruGhnY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbfG3MPy (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 30 Jul 2019 08:15:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52228 "EHLO mail.kernel.org"
+        id S1729414AbfG3MQA (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 30 Jul 2019 08:16:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726557AbfG3MPy (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 30 Jul 2019 08:15:54 -0400
+        id S1729374AbfG3MP7 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 30 Jul 2019 08:15:59 -0400
 Received: from guoren-Inspiron-7460.lan (unknown [60.186.223.164])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 880092087F;
-        Tue, 30 Jul 2019 12:15:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EC8A3216C8;
+        Tue, 30 Jul 2019 12:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564488952;
-        bh=mM5RrFnCl4ACu3AYx0zr+lmIkY7fJjdY73Sg6NC1sTE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fu2v/bNYADBCraRK0loty2EzcoKoV4BclBBmd/IZYANyeCkLAUwgOe9nwvcPGN/DT
-         q6g832rbzfLlCii0k/h7UuDxnU2H7XEp5PC7q9eB9oMuHdAFzWOezeY4ZVvdW/MO8O
-         EcvtVnTt4TJOkWHs0LGRzxqjFEGcN5JajuquVSgk=
+        s=default; t=1564488958;
+        bh=NKGhiwnRCc3377gzaEWKpoj3fCR+8PfpK7w5Fo30zO4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YJ8rCMe2Th9eGOA6/T0a06iQnYC6mFzDItadwwx2Ccw26+hDOmxs8iroxHZI6I30E
+         1Nd4o1uasRaiCH92nCWMYQA/qWN7tSqay8rQj1ar1gTGknX9VQQCb54HJG8eLPtOi7
+         vCJoBp7q7awxfRxjx8TpxcjicesETGc3SNCqaujE=
 From:   guoren@kernel.org
 To:     arnd@arndb.de
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-csky@vger.kernel.org, feng_shizhu@dahuatech.com,
         zhang_jian5@dahuatech.com, zheng_xingjian@dahuatech.com,
         zhu_peng@dahuatech.com, Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH 1/4] csky: Fixup dma_rmb/wmb synchronization problem
-Date:   Tue, 30 Jul 2019 20:15:42 +0800
-Message-Id: <1564488945-20149-1-git-send-email-guoren@kernel.org>
+Subject: [PATCH 3/4] csky/dma: Fixup cache_op failed when cross memory ZONEs
+Date:   Tue, 30 Jul 2019 20:15:44 +0800
+Message-Id: <1564488945-20149-3-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1564488945-20149-1-git-send-email-guoren@kernel.org>
+References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
@@ -55,43 +57,119 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-If arch didn't define dma_r/wmb(), linux will use w/rmb instead. Csky
-use bar.xxx to implement mb() and that will cause problem when sync data
-with dma device, becasue bar.xxx couldn't guarantee bus transactions
-finished at outside bus level. We must use sync.s instead of bar.xxx for
-dma data synchronization and it will guarantee retirement after getting
-the bus bresponse.
+If the paddr and size are cross between NORMAL_ZONE and HIGHMEM_ZONE
+memory range, cache_op will panic in do_page_fault with bad_area.
+
+Optimize the code to support the range which cross memory ZONEs.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- arch/csky/include/asm/barrier.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/csky/mm/dma-mapping.c | 73 +++++++++++++++++-----------------------------
+ 1 file changed, 27 insertions(+), 46 deletions(-)
 
-diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
-index 476eb78..061a633 100644
---- a/arch/csky/include/asm/barrier.h
-+++ b/arch/csky/include/asm/barrier.h
-@@ -9,7 +9,9 @@
- #define nop()	asm volatile ("nop\n":::"memory")
+diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+index 80783bb..3f1ff9d 100644
+--- a/arch/csky/mm/dma-mapping.c
++++ b/arch/csky/mm/dma-mapping.c
+@@ -18,71 +18,52 @@ static int __init atomic_pool_init(void)
+ {
+ 	return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
+ }
+-postcore_initcall(atomic_pool_init);
+-
+-void arch_dma_prep_coherent(struct page *page, size_t size)
+-{
+-	if (PageHighMem(page)) {
+-		unsigned int count = PAGE_ALIGN(size) >> PAGE_SHIFT;
+-
+-		do {
+-			void *ptr = kmap_atomic(page);
+-			size_t _size = (size < PAGE_SIZE) ? size : PAGE_SIZE;
+-
+-			memset(ptr, 0, _size);
+-			dma_wbinv_range((unsigned long)ptr,
+-					(unsigned long)ptr + _size);
+-
+-			kunmap_atomic(ptr);
+-
+-			page++;
+-			size -= PAGE_SIZE;
+-			count--;
+-		} while (count);
+-	} else {
+-		void *ptr = page_address(page);
+-
+-		memset(ptr, 0, size);
+-		dma_wbinv_range((unsigned long)ptr, (unsigned long)ptr + size);
+-	}
+-}
++arch_initcall(atomic_pool_init);
  
- /*
-- * sync:        completion barrier
-+ * sync:        completion barrier, all sync.xx instructions
-+ *              guarantee the last response recieved by bus transaction
-+ *              made by ld/st instructions before sync.s
-  * sync.s:      completion barrier and shareable to other cores
-  * sync.i:      completion barrier with flush cpu pipeline
-  * sync.is:     completion barrier with flush cpu pipeline and shareable to
-@@ -31,6 +33,9 @@
- #define rmb()		asm volatile ("bar.brar\n":::"memory")
- #define wmb()		asm volatile ("bar.bwaw\n":::"memory")
+ static inline void cache_op(phys_addr_t paddr, size_t size,
+ 			    void (*fn)(unsigned long start, unsigned long end))
+ {
+-	struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+-	unsigned int offset = paddr & ~PAGE_MASK;
+-	size_t left = size;
+-	unsigned long start;
++	struct page *page    = phys_to_page(paddr);
++	void *start          = __va(page_to_phys(page));
++	unsigned long offset = offset_in_page(paddr);
++	size_t left          = size;
  
-+#define dma_rmb()	asm volatile ("sync.s\n":::"memory")
-+#define dma_wmb()	asm volatile ("sync.s\n":::"memory")
+ 	do {
+ 		size_t len = left;
+ 
++		if (offset + len > PAGE_SIZE)
++			len = PAGE_SIZE - offset;
 +
- #ifdef CONFIG_SMP
- #define __smp_mb()	asm volatile ("bar.brwarws\n":::"memory")
- #define __smp_rmb()	asm volatile ("bar.brars\n":::"memory")
+ 		if (PageHighMem(page)) {
+-			void *addr;
++			start = kmap_atomic(page);
+ 
+-			if (offset + len > PAGE_SIZE) {
+-				if (offset >= PAGE_SIZE) {
+-					page += offset >> PAGE_SHIFT;
+-					offset &= ~PAGE_MASK;
+-				}
+-				len = PAGE_SIZE - offset;
+-			}
++			fn((unsigned long)start + offset,
++					(unsigned long)start + offset + len);
+ 
+-			addr = kmap_atomic(page);
+-			start = (unsigned long)(addr + offset);
+-			fn(start, start + len);
+-			kunmap_atomic(addr);
++			kunmap_atomic(start);
+ 		} else {
+-			start = (unsigned long)phys_to_virt(paddr);
+-			fn(start, start + size);
++			fn((unsigned long)start + offset,
++					(unsigned long)start + offset + len);
+ 		}
+ 		offset = 0;
++
+ 		page++;
++		start += PAGE_SIZE;
+ 		left -= len;
+ 	} while (left);
+ }
+ 
++static void dma_wbinv_set_zero_range(unsigned long start, unsigned long end)
++{
++	memset((void *)start, 0, end - start);
++	dma_wbinv_range(start, end);
++}
++
++void arch_dma_prep_coherent(struct page *page, size_t size)
++{
++	cache_op(page_to_phys(page), size, dma_wbinv_set_zero_range);
++}
++
+ void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
+ 			      size_t size, enum dma_data_direction dir)
+ {
 -- 
 2.7.4
 

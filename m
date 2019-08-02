@@ -1,107 +1,62 @@
-Return-Path: <SRS0=fLiT=V3=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=8I0L=V6=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43C2AC433FF
-	for <linux-csky@archiver.kernel.org>; Tue, 30 Jul 2019 15:48:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E87C32750
+	for <linux-csky@archiver.kernel.org>; Fri,  2 Aug 2019 21:46:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B21A206B8
-	for <linux-csky@archiver.kernel.org>; Tue, 30 Jul 2019 15:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564501701;
-	bh=u8G3uu/YLVUjZICLkZ9ngEhNPuxZKK87scZFtu1ZmgY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=LnC/Lz1m5OKVFC7TULc1OgC9xWFdzxYqEXOcuFcCLg2fc6/qkeHZUX1A79by+OTap
-	 KS5ga9kJlatBPjdLYA/+ZjnUn9uphvnEqILHoqkOlm3z7W/8dHRRnkoUS038VpwwZP
-	 Mb69s2AJsqlFVZqrAd+ud4DiHRF88XrMtYBIsJRw=
+	by mail.kernel.org (Postfix) with ESMTP id A8EBD2087C
+	for <linux-csky@archiver.kernel.org>; Fri,  2 Aug 2019 21:46:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730107AbfG3PsR (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 30 Jul 2019 11:48:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35266 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725974AbfG3PsR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 30 Jul 2019 11:48:17 -0400
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3900F208E3;
-        Tue, 30 Jul 2019 15:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564501696;
-        bh=u8G3uu/YLVUjZICLkZ9ngEhNPuxZKK87scZFtu1ZmgY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i1Lsevi8fySkHyU5LXwS5gZUwf3cfIKuX2KQHwjdzh8snOZu8xwAQ1Wk+8+fvpbdC
-         jBuXYUTXy+spMjRuWnCiD5B1+46Kha3w/JXnCYstU7g9vMl1ZrLWov5rLxjmUn8USg
-         3Ar6lwmN8o1Fe4irwWkiObgVm27qZRJGEXDTv/Yk=
-Received: by mail-wm1-f46.google.com with SMTP id s3so57627350wms.2;
-        Tue, 30 Jul 2019 08:48:16 -0700 (PDT)
-X-Gm-Message-State: APjAAAUOUyXnBSVUBofNXekrQp5yclIW1m9drkl6066UfqqIf+Z6xhqy
-        MC/zy1pzeJ0AGdEmaOVQuyqBzdBy2krf3/r4JBY=
-X-Google-Smtp-Source: APXvYqzy094AIRwYpa7T0yizmHQReD9dLlNYBxyC0FmWxogigflCzHYWW1iUGyikNSAoRQRF4+oKPDeKtgn4z6mdlL4=
-X-Received: by 2002:a05:600c:20c3:: with SMTP id y3mr108901006wmm.3.1564501694671;
- Tue, 30 Jul 2019 08:48:14 -0700 (PDT)
+        id S1731911AbfHBVqW (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 2 Aug 2019 17:46:22 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:41067 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726052AbfHBVqW (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Aug 2019 17:46:22 -0400
+X-Originating-IP: 90.76.216.45
+Received: from windsurf.home (lfbn-1-2159-45.w90-76.abo.wanadoo.fr [90.76.216.45])
+        (Authenticated sender: thomas.petazzoni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id D0CB4240002;
+        Fri,  2 Aug 2019 21:46:19 +0000 (UTC)
+Date:   Fri, 2 Aug 2019 23:46:19 +0200
+From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To:     guoren@kernel.org
+Cc:     Guo Ren <ren_guo@c-sky.com>, linux-csky@vger.kernel.org,
+        buildroot@buildroot.org
+Subject: Re: [Buildroot] [PATCH V2] configs/csky_gx6605s: bump kernel to 5.0
+ and use buildroot toolchain
+Message-ID: <20190802234619.0342bfe5@windsurf.home>
+In-Reply-To: <1561376581-19568-1-git-send-email-guoren@kernel.org>
+References: <1561376581-19568-1-git-send-email-guoren@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
- <1564488945-20149-4-git-send-email-guoren@kernel.org> <CAK8P3a0v3oVS5cCkORxA7na+VE7ofTQRxiv5o5xNf5v=esnN9A@mail.gmail.com>
- <CAJF2gTQC0e3zGxtCdwvZpen=Gj8CtgjNYCuy3hSupDXt3KM0Zg@mail.gmail.com> <CAK8P3a0miz=yghtqK+1=1APGf4R1-NW64TJTtGiO5pOPBQNgKg@mail.gmail.com>
-In-Reply-To: <CAK8P3a0miz=yghtqK+1=1APGf4R1-NW64TJTtGiO5pOPBQNgKg@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 30 Jul 2019 23:48:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRf1461+9HgqSPh5UEoVz7J_je3yeg=jji6myE0OKKcKg@mail.gmail.com>
-Message-ID: <CAJF2gTRf1461+9HgqSPh5UEoVz7J_je3yeg=jji6myE0OKKcKg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] csky: Add dma_inv_range for DMA_FROM_DEVICE
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, feng_shizhu@dahuatech.com,
-        zhang_jian5@dahuatech.com, zheng_xingjian@dahuatech.com,
-        zhu_peng@dahuatech.com, Guo Ren <ren_guo@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx Arnd,
+Hello Guo,
 
-On Tue, Jul 30, 2019 at 11:22 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Jul 30, 2019 at 5:11 PM Guo Ren <guoren@kernel.org> wrote:
-> > > > diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-> > > >                 cache_op(paddr, size, dma_wb_range);
-> > > >                 break;
-> > > >         case DMA_FROM_DEVICE:
-> > > > +               cache_op(paddr, size, dma_inv_range);
-> > > > +               break;
-> > > >         case DMA_BIDIRECTIONAL:
-> > > >                 cache_op(paddr, size, dma_wbinv_range);
-> > > >                 break;
-> > >
-> > > When syncing 'for_cpu', you should not need to write back, because
-> > > there won't be any dirty cache lines.
-> >
-> > I just follow the dma_data_direction param, seems dir param and
-> > function are a little bit duplicated. And our cpu won't clear clean
-> > cache line into memory, so dma_wb_page won't cause problem.
-> > Seems arch_sync_dma_for_cpu with dir=DMA_TO_DEVICE is
-> > self-contradictory.
->
-> Right, you generally don't need to do cache management for that
-> combination.
->
-> There might be other things to do here though, e.g. with a strict
-> iommu implementation one could tear down the i/o page table
-> entry to prevent the device from accessing a buffer while that is
-> owned by the cpu.
-Tear down i/o page table shouldn't be put here and it's for map/unmap().
-And I think arch_sync_dma_for_cpu/device should only do cache issues.
+On Mon, 24 Jun 2019 19:43:01 +0800
+guoren@kernel.org wrote:
 
---
-Best Regards
- Guo Ren
+> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
 
-ML: https://lore.kernel.org/linux-csky/
+I dropped this option to keep the default behavior of using devtmpfs,
+and applied.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

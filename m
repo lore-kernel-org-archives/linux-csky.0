@@ -1,68 +1,76 @@
-Return-Path: <SRS0=8I0L=V6=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=u6yK=WC=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 664D7C433FF
-	for <linux-csky@archiver.kernel.org>; Fri,  2 Aug 2019 21:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E017C433FF
+	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 06:49:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FC0120880
-	for <linux-csky@archiver.kernel.org>; Fri,  2 Aug 2019 21:46:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3045420665
+	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 06:49:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fC6pguVA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733130AbfHBVqw (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 2 Aug 2019 17:46:52 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:55959 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726052AbfHBVqv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Aug 2019 17:46:51 -0400
-X-Originating-IP: 90.76.216.45
-Received: from windsurf.home (lfbn-1-2159-45.w90-76.abo.wanadoo.fr [90.76.216.45])
-        (Authenticated sender: thomas.petazzoni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id ECAC960006;
-        Fri,  2 Aug 2019 21:46:48 +0000 (UTC)
-Date:   Fri, 2 Aug 2019 23:46:48 +0200
-From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+        id S1731822AbfHFGtf (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 6 Aug 2019 02:49:35 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44786 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731675AbfHFGte (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 6 Aug 2019 02:49:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=rm0+00l4g4M8Jlarfzp2TnutmOwlpDyDflb61FCcaPo=; b=fC6pguVAZjLWVOsBGk2/l01Tu
+        RnLqIFg8yf6SaSMKdg4uG55HM8B0OvLZBCvpRN7cmsGFWOdOCMGEFt9k3Fz6HY36/nULry5COEIFq
+        GpjzwCF7PlP5U7MtrvNlfoksXQXGvbnJ5UHRDQd5G1TvOk7DAW83a/ulQpwlKjv8rK6/2QlDjYqlw
+        2LhGom7pCsGIAZwoqnPR6jg5YJ4SFsLTyL8RHG41ui0ozUtu++TJ14eGmmL4wWewIY0vAafeKi9/l
+        1KRquVK/3j/7Gk7QzgAOtq5FWnKY3pIUbSuz7C9l8OMXQIsw6Uz/5U7fyQ5k5Wfdiy/v3xQgMIZtr
+        aBkJjcyzQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hutHp-000239-Da; Tue, 06 Aug 2019 06:49:33 +0000
+Date:   Mon, 5 Aug 2019 23:49:33 -0700
+From:   Christoph Hellwig <hch@infradead.org>
 To:     guoren@kernel.org
-Cc:     Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
-        Guo Ren <ren_guo@c-sky.com>, zhiwei_liu@c-sky.com,
-        linux-csky@vger.kernel.org, buildroot@buildroot.org
-Subject: Re: [Buildroot] [PATCH V7] configs/qemu_cskyXXX_virt: new defconfig
-Message-ID: <20190802234648.3adfa316@windsurf.home>
-In-Reply-To: <1560438870-25124-1-git-send-email-guoren@kernel.org>
-References: <1560438870-25124-1-git-send-email-guoren@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        feng_shizhu@dahuatech.com, zhang_jian5@dahuatech.com,
+        zheng_xingjian@dahuatech.com, zhu_peng@dahuatech.com,
+        Guo Ren <ren_guo@c-sky.com>
+Subject: Re: [PATCH 3/4] csky/dma: Fixup cache_op failed when cross memory
+ ZONEs
+Message-ID: <20190806064933.GA2508@infradead.org>
+References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
+ <1564488945-20149-3-git-send-email-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564488945-20149-3-git-send-email-guoren@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello,
+On Tue, Jul 30, 2019 at 08:15:44PM +0800, guoren@kernel.org wrote:
+> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> index 80783bb..3f1ff9d 100644
+> --- a/arch/csky/mm/dma-mapping.c
+> +++ b/arch/csky/mm/dma-mapping.c
+> @@ -18,71 +18,52 @@ static int __init atomic_pool_init(void)
+>  {
+>  	return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
+>  }
+> -postcore_initcall(atomic_pool_init);
 
-On Thu, 13 Jun 2019 23:14:30 +0800
-guoren@kernel.org wrote:
+Please keep the postcore_initcall next to the function it calls.
 
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> Add C-SKY defconfig for QEMU virt machine.
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-
-I dropped these lines from each of the defconfigs, and applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+In this particular case I also plan to remove the function for 5.4 by
+moving it to the common dma code, so it is more important than just style.

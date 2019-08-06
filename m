@@ -2,88 +2,84 @@ Return-Path: <SRS0=u6yK=WC=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 613B5C433FF
-	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 07:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFA24C31E40
+	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 07:18:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 37D002070C
-	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 07:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565075492;
-	bh=J4N5lnXWpDXT9JqaahBuM8YWglXlyfMSplL895YamMk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=XaBfRutE9ZqLujHXb4/+5EZWujgZGOCYEZW+9ElAEXTE9Tl1YaxIAhIXz5FBvvfIK
-	 rnpwOVWt9oaANyowu8NE/rg6h96/NazZUEqEOJPwBI3zcg9YFdtppzjf+mgLZ4oBXL
-	 f3SDa+HqPbg2peKB9LPRyQaYlhAbpakX3rptxj88=
+	by mail.kernel.org (Postfix) with ESMTP id A3FAC2173B
+	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 07:18:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="l2v8MJqV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731996AbfHFHL2 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 6 Aug 2019 03:11:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37170 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731576AbfHFHL2 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 6 Aug 2019 03:11:28 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10163216F4;
-        Tue,  6 Aug 2019 07:11:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565075487;
-        bh=J4N5lnXWpDXT9JqaahBuM8YWglXlyfMSplL895YamMk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gWdwarr/4ZOEaXlXOoVNLfcon5HZrxtHVoWJYjSuYymEIpNxWL2YzeaGQzOUbAsP0
-         Rsp+PDlJqUzmi4ceSJ/Esdyz4risX3PqrfV+DzYznsB1h4APax4H41nKefPZMXTCU8
-         q9R5xFdubDJ0vw4FWL/OhAqgjxtGjGJxcEAs7TiY=
-Received: by mail-wr1-f54.google.com with SMTP id x4so33567567wrt.6;
-        Tue, 06 Aug 2019 00:11:26 -0700 (PDT)
-X-Gm-Message-State: APjAAAWtV6mwiHdu5pxKauB6wAht07qE5yTPQlMe+be+8Mc8OkciKFhm
-        +9m1bvgt/InasqPKgRjiqp0b4b9vHD0If1ZOC5Y=
-X-Google-Smtp-Source: APXvYqwWdFrBgnlrPvQM+PFNKRmvVdIqQwvU9zvSBwF4qHNlCpk8f5KcSnWsmpuAORokS4MOJFLQhAc4k0uQgRWy98Y=
-X-Received: by 2002:adf:f3d1:: with SMTP id g17mr2715775wrp.38.1565075485547;
- Tue, 06 Aug 2019 00:11:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
- <1564488945-20149-3-git-send-email-guoren@kernel.org> <20190806064933.GA2508@infradead.org>
-In-Reply-To: <20190806064933.GA2508@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 6 Aug 2019 15:11:13 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR1vCz504X20rBnQkAXGhJ-QbL4pORxnJTRVJqXx2t4uQ@mail.gmail.com>
-Message-ID: <CAJF2gTR1vCz504X20rBnQkAXGhJ-QbL4pORxnJTRVJqXx2t4uQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] csky/dma: Fixup cache_op failed when cross memory ZONEs
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        id S1731898AbfHFHSv (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 6 Aug 2019 03:18:51 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:48042 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731807AbfHFHSu (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 6 Aug 2019 03:18:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=oLYhz3paV5MkuuulGm1xoGGN9XCcqSM1IHMqI7nhK4c=; b=l2v8MJqVGbUTCnoAcTYdcSsg8
+        iL4Rx1SvnIoyPj5tt0HHf2cGKEJEkSm2rPtqB3xwN3Pi0u3erVD2zycQncT3dEsVKu+lsmeXyknPF
+        UV4VfWvZyUVw39nEj+W9aDTztjYs6KEfbiqGwNMmEhZF26G+QJhwWLkpHsvsHCT+qKBSSbwZ4Y9Vy
+        Jq96s5cX6W4sylbDHqYgV+xjml/O8mznc/eik84kRokkVbMGfNZExX6Eq1HoKQbi9X9+E0nFwzZR9
+        Xtj+W26r7wyCqZZIyKwcM3fcplXLsqKb+/qUIsZtSHth9j1w179c+vZZmGAS55++rGJKP3waA8TV2
+        oovG3jW1w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hutk6-0002dB-5e; Tue, 06 Aug 2019 07:18:46 +0000
+Date:   Tue, 6 Aug 2019 00:18:46 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-csky@vger.kernel.org, feng_shizhu@dahuatech.com,
         zhang_jian5@dahuatech.com, zheng_xingjian@dahuatech.com,
         zhu_peng@dahuatech.com, Guo Ren <ren_guo@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 3/4] csky/dma: Fixup cache_op failed when cross memory
+ ZONEs
+Message-ID: <20190806071846.GA10032@infradead.org>
+References: <1564488945-20149-1-git-send-email-guoren@kernel.org>
+ <1564488945-20149-3-git-send-email-guoren@kernel.org>
+ <20190806064933.GA2508@infradead.org>
+ <CAJF2gTR1vCz504X20rBnQkAXGhJ-QbL4pORxnJTRVJqXx2t4uQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTR1vCz504X20rBnQkAXGhJ-QbL4pORxnJTRVJqXx2t4uQ@mail.gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Aug 6, 2019 at 2:49 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Tue, Jul 30, 2019 at 08:15:44PM +0800, guoren@kernel.org wrote:
-> > diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-> > index 80783bb..3f1ff9d 100644
-> > --- a/arch/csky/mm/dma-mapping.c
-> > +++ b/arch/csky/mm/dma-mapping.c
-> > @@ -18,71 +18,52 @@ static int __init atomic_pool_init(void)
-> >  {
-> >       return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
-> >  }
-> > -postcore_initcall(atomic_pool_init);
->
-> Please keep the postcore_initcall next to the function it calls.
-Ok. Change arch_initcall back to postcore_initcall. :)
+On Tue, Aug 06, 2019 at 03:11:13PM +0800, Guo Ren wrote:
+> On Tue, Aug 6, 2019 at 2:49 PM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > On Tue, Jul 30, 2019 at 08:15:44PM +0800, guoren@kernel.org wrote:
+> > > diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> > > index 80783bb..3f1ff9d 100644
+> > > --- a/arch/csky/mm/dma-mapping.c
+> > > +++ b/arch/csky/mm/dma-mapping.c
+> > > @@ -18,71 +18,52 @@ static int __init atomic_pool_init(void)
+> > >  {
+> > >       return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
+> > >  }
+> > > -postcore_initcall(atomic_pool_init);
+> >
+> > Please keep the postcore_initcall next to the function it calls.
+> Ok. Change arch_initcall back to postcore_initcall. :)
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Well, if you have a good reason to change it please keep the type
+init level change, but put it in a separate patch.  But most importantly
+don't move the place where is called around.

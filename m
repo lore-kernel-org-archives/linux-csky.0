@@ -1,4 +1,4 @@
-Return-Path: <SRS0=u6yK=WC=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=K30P=WL=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45A0CC433FF
-	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 07:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EED7C31E40
+	for <linux-csky@archiver.kernel.org>; Thu, 15 Aug 2019 11:29:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A695216F4
-	for <linux-csky@archiver.kernel.org>; Tue,  6 Aug 2019 07:19:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1271E2084D
+	for <linux-csky@archiver.kernel.org>; Thu, 15 Aug 2019 11:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565075951;
-	bh=swLdWN/c3YNiNoEDBUnhTuMLT4pIrTC41Pfwb24gXQ8=;
+	s=default; t=1565868551;
+	bh=iiPFjQ6IpGaSo+ZfHDmX+dVXiSF+Y0k80QYxQEedsKc=;
 	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=XVUPuMQwNNOZezLECmeCidTqyH8w72WH5rWsF2epYrDcSAoB1ONL/Xgu0ArBmKEin
-	 jChSdPF0FZnoHVaVARmh9suo32kMY3NJ89bKYHMGc6L20Dr84G/G+gbDvik4UgGKee
-	 RxslcDaQXvezKy/BPWujsAUqGdLweX31I3kYtaTg=
+	b=NB+/7YjksC29jUbSp/S4IIZhpBoqhVOzAq4MyuZcy+LWYA5kbc0gn0pqJPfMXccd/
+	 95Y1gzuw3wVIERKCs7T9ahnS9RxS6FlkZ1AHvPGtR+pHrFue+tYE0UCnLxTBSvQS2F
+	 Jix2dKcgRzu/zGnX+yLCtLAuNEHQSWZ8HHw0qmkQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731828AbfHFHTL (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 6 Aug 2019 03:19:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38568 "EHLO mail.kernel.org"
+        id S1730330AbfHOL3K (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 15 Aug 2019 07:29:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53068 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731807AbfHFHTK (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 6 Aug 2019 03:19:10 -0400
+        id S1728128AbfHOL3K (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 15 Aug 2019 07:29:10 -0400
 Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B62B42070C;
-        Tue,  6 Aug 2019 07:19:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 041FA2064A;
+        Thu, 15 Aug 2019 11:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565075949;
-        bh=swLdWN/c3YNiNoEDBUnhTuMLT4pIrTC41Pfwb24gXQ8=;
+        s=default; t=1565868549;
+        bh=iiPFjQ6IpGaSo+ZfHDmX+dVXiSF+Y0k80QYxQEedsKc=;
         h=From:To:Cc:Subject:Date:From;
-        b=SA9MUzOU7xfygcVSI9BbYgctl/RUzZ359BexoHuidG2VXASkHNfMQbp9N4xUg6mJq
-         27ldNV7Dis1ZIrB5bbzjVliUSbgvsoeKgwDSiTUVBI7tUj71rnr8TRnt3h/CuHIzog
-         JDzI7VXUOtSeO04GKYVprwYmS7Oo6jWaYe7VYttM=
+        b=djZMVfT7jDb6PTyLETIQfabTlehNjYjkeLD+QO2DV69Gk9CsnFKc+KsCD+xFoPgcD
+         Yzte242KQRZnpQi03iO4rK8p9lNxk1Gb1gGqMEYRhzPFEZAtN1OxLEDIik2eLeZlrM
+         rbmc1VTP8VapiKx9nn8kxGLHavBm1BuJ5k5iQMco=
 From:   guoren@kernel.org
 To:     arnd@arndb.de
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, feng_shizhu@dahuatech.com,
-        zhang_jian5@dahuatech.com, zheng_xingjian@dahuatech.com,
-        zhu_peng@dahuatech.com, Guo Ren <ren_guo@c-sky.com>,
+        linux-csky@vger.kernel.org, zhang_jian5@dahuatech.com,
+        Guo Ren <ren_guo@c-sky.com>,
         Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH V2 2/3] csky/dma: Fixup cache_op failed when cross memory ZONEs
-Date:   Tue,  6 Aug 2019 15:18:41 +0800
-Message-Id: <1565075921-25734-1-git-send-email-guoren@kernel.org>
+Subject: [PATCH] csky: Fixup ioremap function losing
+Date:   Thu, 15 Aug 2019 19:28:57 +0800
+Message-Id: <1565868537-17753-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
@@ -56,120 +55,123 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-If the paddr and size are cross between NORMAL_ZONE and HIGHMEM_ZONE
-memory range, cache_op will panic in do_page_fault with bad_area.
+Implement the following apis to meet usage in different scenarios.
 
-Optimize the code to support the range which cross memory ZONEs.
+ - ioremap          (NonCache + StrongOrder)
+ - ioremap_nocache  (NonCache + StrongOrder)
+ - ioremap_wc       (NonCache + WeakOrder  )
+ - ioremap_cache    (   Cache + WeakOrder  )
 
-Changes for V2:
- - Revert back to postcore_initcall
+Also change flag VM_ALLOC to VM_IOREMAP in get_vm_area_caller.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Christoph Hellwig <hch@infradead.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Christoph Hellwig <hch@infradead.org>
 ---
- arch/csky/mm/dma-mapping.c | 71 +++++++++++++++++-----------------------------
- 1 file changed, 26 insertions(+), 45 deletions(-)
+ arch/csky/include/asm/io.h | 23 ++++++++++++-----------
+ arch/csky/mm/ioremap.c     | 23 +++++++++++++++++------
+ 2 files changed, 29 insertions(+), 17 deletions(-)
 
-diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-index 80783bb..65f531d 100644
---- a/arch/csky/mm/dma-mapping.c
-+++ b/arch/csky/mm/dma-mapping.c
-@@ -20,69 +20,50 @@ static int __init atomic_pool_init(void)
- }
- postcore_initcall(atomic_pool_init);
+diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+index c1dfa9c..80d071e 100644
+--- a/arch/csky/include/asm/io.h
++++ b/arch/csky/include/asm/io.h
+@@ -4,17 +4,10 @@
+ #ifndef __ASM_CSKY_IO_H
+ #define __ASM_CSKY_IO_H
  
--void arch_dma_prep_coherent(struct page *page, size_t size)
--{
--	if (PageHighMem(page)) {
--		unsigned int count = PAGE_ALIGN(size) >> PAGE_SHIFT;
+-#include <abi/pgtable-bits.h>
++#include <asm/pgtable.h>
+ #include <linux/types.h>
+ #include <linux/version.h>
+ 
+-extern void __iomem *ioremap(phys_addr_t offset, size_t size);
 -
--		do {
--			void *ptr = kmap_atomic(page);
--			size_t _size = (size < PAGE_SIZE) ? size : PAGE_SIZE;
+-extern void iounmap(void *addr);
 -
--			memset(ptr, 0, _size);
--			dma_wbinv_range((unsigned long)ptr,
--					(unsigned long)ptr + _size);
+-extern int remap_area_pages(unsigned long address, phys_addr_t phys_addr,
+-		size_t size, unsigned long flags);
 -
--			kunmap_atomic(ptr);
--
--			page++;
--			size -= PAGE_SIZE;
--			count--;
--		} while (count);
--	} else {
--		void *ptr = page_address(page);
--
--		memset(ptr, 0, size);
--		dma_wbinv_range((unsigned long)ptr, (unsigned long)ptr + size);
--	}
--}
--
- static inline void cache_op(phys_addr_t paddr, size_t size,
- 			    void (*fn)(unsigned long start, unsigned long end))
+ /*
+  * I/O memory access primitives. Reads are ordered relative to any
+  * following Normal memory access. Writes are ordered relative to any prior
+@@ -40,9 +33,17 @@ extern int remap_area_pages(unsigned long address, phys_addr_t phys_addr,
+ #define writel(v,c)		({ wmb(); writel_relaxed((v),(c)); mb(); })
+ #endif
+ 
+-#define ioremap_nocache(phy, sz)	ioremap(phy, sz)
+-#define ioremap_wc ioremap_nocache
+-#define ioremap_wt ioremap_nocache
++/*
++ * I/O memory mapping functions.
++ */
++extern void __iomem *ioremap_cache(phys_addr_t addr, size_t size);
++extern void __iomem *__ioremap(phys_addr_t addr, size_t size, pgprot_t prot);
++extern void iounmap(void *addr);
++
++#define ioremap(addr, size)		__ioremap((addr), (size), pgprot_noncached(PAGE_KERNEL))
++#define ioremap_wc(addr, size)		__ioremap((addr), (size), pgprot_writecombine(PAGE_KERNEL))
++#define ioremap_nocache(addr, size)	ioremap((addr), (size))
++#define ioremap_cache			ioremap_cache
+ 
+ #include <asm-generic/io.h>
+ 
+diff --git a/arch/csky/mm/ioremap.c b/arch/csky/mm/ioremap.c
+index 4853111..e13cd34 100644
+--- a/arch/csky/mm/ioremap.c
++++ b/arch/csky/mm/ioremap.c
+@@ -8,12 +8,12 @@
+ 
+ #include <asm/pgtable.h>
+ 
+-void __iomem *ioremap(phys_addr_t addr, size_t size)
++static void __iomem *__ioremap_caller(phys_addr_t addr, size_t size,
++				      pgprot_t prot, void *caller)
  {
--	struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
--	unsigned int offset = paddr & ~PAGE_MASK;
--	size_t left = size;
--	unsigned long start;
-+	struct page *page    = phys_to_page(paddr);
-+	void *start          = __va(page_to_phys(page));
-+	unsigned long offset = offset_in_page(paddr);
-+	size_t left          = size;
+ 	phys_addr_t last_addr;
+ 	unsigned long offset, vaddr;
+ 	struct vm_struct *area;
+-	pgprot_t prot;
  
- 	do {
- 		size_t len = left;
+ 	last_addr = addr + size - 1;
+ 	if (!size || last_addr < addr)
+@@ -23,14 +23,12 @@ void __iomem *ioremap(phys_addr_t addr, size_t size)
+ 	addr &= PAGE_MASK;
+ 	size = PAGE_ALIGN(size + offset);
  
-+		if (offset + len > PAGE_SIZE)
-+			len = PAGE_SIZE - offset;
-+
- 		if (PageHighMem(page)) {
--			void *addr;
-+			start = kmap_atomic(page);
+-	area = get_vm_area_caller(size, VM_ALLOC, __builtin_return_address(0));
++	area = get_vm_area_caller(size, VM_IOREMAP, caller);
+ 	if (!area)
+ 		return NULL;
  
--			if (offset + len > PAGE_SIZE) {
--				if (offset >= PAGE_SIZE) {
--					page += offset >> PAGE_SHIFT;
--					offset &= ~PAGE_MASK;
--				}
--				len = PAGE_SIZE - offset;
--			}
-+			fn((unsigned long)start + offset,
-+					(unsigned long)start + offset + len);
+ 	vaddr = (unsigned long)area->addr;
  
--			addr = kmap_atomic(page);
--			start = (unsigned long)(addr + offset);
--			fn(start, start + len);
--			kunmap_atomic(addr);
-+			kunmap_atomic(start);
- 		} else {
--			start = (unsigned long)phys_to_virt(paddr);
--			fn(start, start + size);
-+			fn((unsigned long)start + offset,
-+					(unsigned long)start + offset + len);
- 		}
- 		offset = 0;
-+
- 		page++;
-+		start += PAGE_SIZE;
- 		left -= len;
- 	} while (left);
+-	prot = pgprot_noncached(PAGE_KERNEL);
+-
+ 	if (ioremap_page_range(vaddr, vaddr + size, addr, prot)) {
+ 		free_vm_area(area);
+ 		return NULL;
+@@ -38,7 +36,20 @@ void __iomem *ioremap(phys_addr_t addr, size_t size)
+ 
+ 	return (void __iomem *)(vaddr + offset);
  }
+-EXPORT_SYMBOL(ioremap);
++
++void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot)
++{
++	return __ioremap_caller(phys_addr, size, prot,
++				__builtin_return_address(0));
++}
++EXPORT_SYMBOL(__ioremap);
++
++void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size)
++{
++	return __ioremap_caller(phys_addr, size, PAGE_KERNEL,
++				__builtin_return_address(0));
++}
++EXPORT_SYMBOL(ioremap_cache);
  
-+static void dma_wbinv_set_zero_range(unsigned long start, unsigned long end)
-+{
-+	memset((void *)start, 0, end - start);
-+	dma_wbinv_range(start, end);
-+}
-+
-+void arch_dma_prep_coherent(struct page *page, size_t size)
-+{
-+	cache_op(page_to_phys(page), size, dma_wbinv_set_zero_range);
-+}
-+
- void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
- 			      size_t size, enum dma_data_direction dir)
+ void iounmap(void __iomem *addr)
  {
 -- 
 2.7.4

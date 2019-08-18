@@ -2,107 +2,81 @@ Return-Path: <SRS0=OSLh=WO=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 256C7C3A59F
-	for <linux-csky@archiver.kernel.org>; Sun, 18 Aug 2019 02:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F28C3A59F
+	for <linux-csky@archiver.kernel.org>; Sun, 18 Aug 2019 18:21:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EADDD217D7
-	for <linux-csky@archiver.kernel.org>; Sun, 18 Aug 2019 02:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566094836;
-	bh=OPY3V0VybgTAW/TfTy5ht1ElPNtB7wmhajw4Ua8nsM4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=Y9+TwLxJ277PuG27QlbT77af2bWHBX30i+C3MuOTcQj+gHDr02MNdWSafUw6U4UJf
-	 SbN2eXw81k/NRbf1uG4fm8x5g9KDRL5SBJISCUV4pFd6hLjfKrWalDP3S9Y4bVtT7D
-	 UGUmrpw8lCXUBsJxvkIXSE6IFtx5zDgg8q2HkaiY=
+	by mail.kernel.org (Postfix) with ESMTP id B1A532146E
+	for <linux-csky@archiver.kernel.org>; Sun, 18 Aug 2019 18:21:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ntz5wM7H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbfHRCUd (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sat, 17 Aug 2019 22:20:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726208AbfHRCUd (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 17 Aug 2019 22:20:33 -0400
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4E158217F4;
-        Sun, 18 Aug 2019 02:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566094832;
-        bh=OPY3V0VybgTAW/TfTy5ht1ElPNtB7wmhajw4Ua8nsM4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=B8gICytMWtf9sSp2gWth8rJlo7ccG8GmZGksHlQpQZ2aQ2V8qKhezlSer8nu0kLsw
-         IEgo5T4rtcStB86cO09141TYic+/RSvTqgkBH8LFADvO4nfXnVH+lllvshW+iwmFe8
-         3khqevP1orkrp6CPHHDbbrjLKfcmdrkxyX/9Pjfg=
-Received: by mail-wm1-f46.google.com with SMTP id o4so134739wmh.2;
-        Sat, 17 Aug 2019 19:20:32 -0700 (PDT)
-X-Gm-Message-State: APjAAAXneIX53JObRcmTJJKKw3D2DWw5JS3/zs9MEJLrx0/HMiYYnzDo
-        j5YBamMSRi9j2Uj3FwRSqkwVL5/ppiG1muzPEjI=
-X-Google-Smtp-Source: APXvYqzI7WQkVURNqZ2bMcrBH43jaDIpUzhzxYNWBXKHEb1Z1mqumimCqpgOybei9ECXbxr+D02Ru3e1mc41ffC8syc=
-X-Received: by 2002:a1c:1f4e:: with SMTP id f75mr12874929wmf.137.1566094830733;
- Sat, 17 Aug 2019 19:20:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <1565868537-17753-1-git-send-email-guoren@kernel.org> <20190816070348.GA13766@infradead.org>
-In-Reply-To: <20190816070348.GA13766@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 18 Aug 2019 10:20:18 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTBc3+SnKMbVU4A+tekyjkd_7XUmDCUfNCcA-CZf=JUyg@mail.gmail.com>
-Message-ID: <CAJF2gTTBc3+SnKMbVU4A+tekyjkd_7XUmDCUfNCcA-CZf=JUyg@mail.gmail.com>
-Subject: Re: [PATCH] csky: Fixup ioremap function losing
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        id S1726995AbfHRSVU (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 18 Aug 2019 14:21:20 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52838 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726927AbfHRSVU (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 18 Aug 2019 14:21:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=XNQs7Di+mM9yt212dkcy63xyYz2ozujjbw82lN1H2+Y=; b=ntz5wM7H3nuUqsH1lwnc8DUmO
+        f5ZeIKbzfGZsihhaDdi529Q1c1Hyygv5F01cHltn3KNzKzIBXcNt9rBbTO/LGMTU4HibqxMuK31I1
+        RLSPA9T1xaePXTODF2rI8t3C1+6Y/ypla2v9yoowWGBHU9R5YS9741Aurfbck0FxQvUgi6hJgFeVy
+        5r9SUfZWKQkON4qWv4UYIKbsDNlH3iX2YVGN6Rsb71+3ysYfPsCc1bi0RU7lihj4RSfPmhbeWkHum
+        hm+ZR5xt23gbS3B3ivSS/6tHzRiGcZWk49og1v6pqrhLov+ipP59uwkjU8oPLISrCTEFg3P9djp8i
+        6+DzEXYpw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hzPnq-0008Lf-H5; Sun, 18 Aug 2019 18:21:18 +0000
+Date:   Sun, 18 Aug 2019 11:21:18 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-csky@vger.kernel.org, zhang_jian5@dahuatech.com,
         Guo Ren <ren_guo@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] csky: Fixup ioremap function losing
+Message-ID: <20190818182118.GA30141@infradead.org>
+References: <1565868537-17753-1-git-send-email-guoren@kernel.org>
+ <20190816070348.GA13766@infradead.org>
+ <CAJF2gTTBc3+SnKMbVU4A+tekyjkd_7XUmDCUfNCcA-CZf=JUyg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTTBc3+SnKMbVU4A+tekyjkd_7XUmDCUfNCcA-CZf=JUyg@mail.gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx Christoph,
-
-On Fri, Aug 16, 2019 at 3:03 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Thu, Aug 15, 2019 at 07:28:57PM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <ren_guo@c-sky.com>
+On Sun, Aug 18, 2019 at 10:20:18AM +0800, Guo Ren wrote:
+> > > Also change flag VM_ALLOC to VM_IOREMAP in get_vm_area_caller.
 > >
-> > Implement the following apis to meet usage in different scenarios.
+> > Looks generally fine, but two comments:
 > >
-> >  - ioremap          (NonCache + StrongOrder)
-> >  - ioremap_nocache  (NonCache + StrongOrder)
-> >  - ioremap_wc       (NonCache + WeakOrder  )
-> >  - ioremap_cache    (   Cache + WeakOrder  )
-> >
-> > Also change flag VM_ALLOC to VM_IOREMAP in get_vm_area_caller.
->
-> Looks generally fine, but two comments:
->
->  - do you have a need for ioremap_cache?  We are generally try to
->    phase it out in favour of memremap, and it is generally only used
->    by arch specific code.
-Yes, some drivers of our customers use ioremap_cache to map phy_addr
-which isn't belong to system memory.
+> >  - do you have a need for ioremap_cache?  We are generally try to
+> >    phase it out in favour of memremap, and it is generally only used
+> >    by arch specific code.
+> Yes, some drivers of our customers use ioremap_cache to map phy_addr
+> which isn't belong to system memory.
 
->  - I have a big series pending to clean up the mess with our
->    ioremap_* functions, including adding a generic implementation
->    that csky should be able to use.  Unless this patch is urgent it
->    might make sense to rebase it on top.  Here is my current tree, I
->    plan to post it soon:
->
->         http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/generic-ioremap
-I agree to use GENERIC_IOREMAP, but I want to add csky support
-GENERIC_IOREMAP patch by myself.
-You could remove "csky: use generic ioremap" in your patchset first
-and I'll add support GENERIC_IORMAP patch later.
-Then we won't get confilct :)
+Which driver?  We should move it over to memremap instead of adding
+a new ioremap_cache.
 
---
-Best Regards
- Guo Ren
+> I agree to use GENERIC_IOREMAP, but I want to add csky support
+> GENERIC_IOREMAP patch by myself.
+> You could remove "csky: use generic ioremap" in your patchset first
+> and I'll add support GENERIC_IORMAP patch later.
+> Then we won't get confilct :)
 
-ML: https://lore.kernel.org/linux-csky/
+Ok.

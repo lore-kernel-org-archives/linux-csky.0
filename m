@@ -2,90 +2,193 @@ Return-Path: <SRS0=hru+=WQ=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F216C3A589
-	for <linux-csky@archiver.kernel.org>; Tue, 20 Aug 2019 08:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D608FC3A589
+	for <linux-csky@archiver.kernel.org>; Tue, 20 Aug 2019 12:34:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 02FD8235EE
-	for <linux-csky@archiver.kernel.org>; Tue, 20 Aug 2019 08:26:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AAC6222DCC
+	for <linux-csky@archiver.kernel.org>; Tue, 20 Aug 2019 12:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566289607;
-	bh=hdmanysHDb8PuQuXvQtksI870aVXPSFmN+iWwoWkq+c=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=FcjSNShgiB/FREQMIvgzalLS06zyEWg7YAi1xkJKlnb0HhvBHNJbVdRny2+lM/GNY
-	 6hvgKfYfPKTHs4cLBF0/MImi8wOwdH6ntghmuMXrDuVkMR7k1iu3JvCCcZ4Yw16kRe
-	 ZpW9tYG+plhcNa0Bc8M3v/9eno0qexeo7VAfYe/w=
+	s=default; t=1566304485;
+	bh=Bam4LdkU8U7A47aMZOtA1dD1I96RQ7IHpmWNYvtcCi8=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=jbQysmf18SVF/IVVjqnD/Qd42FyzJTaXjU2mMHQV9a2mMQfnWvWE+b5oncrse5R7h
+	 MIGrmmcosPIrX6xbjd/CjRyA0hu1RyLSEX+gnXZrDeOGehMthPSwdOk7regRvw0cKL
+	 t6jfU3IXdmhwycL3Xa6SQWuTYzffC+JI5n2rf1h8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729378AbfHTI0n (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 20 Aug 2019 04:26:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50390 "EHLO mail.kernel.org"
+        id S1729820AbfHTMep (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 20 Aug 2019 08:34:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726049AbfHTI0n (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 20 Aug 2019 04:26:43 -0400
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728283AbfHTMep (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 20 Aug 2019 08:34:45 -0400
+Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6387823A84;
-        Tue, 20 Aug 2019 08:26:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E99722DA9;
+        Tue, 20 Aug 2019 12:34:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566289602;
-        bh=hdmanysHDb8PuQuXvQtksI870aVXPSFmN+iWwoWkq+c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DbMWsHnjPgOtGnoxKP4XdMnWoq3Z5bxRHRAVGMbkRxd6lVkhU92hGvtxZ0uMgaeUY
-         HWW2nArujbR6SYFcu2y9nEzMTIup5daZJcu6WMQhkoqlJRG76XmtqJ2V1r8c1oVrBM
-         qlT6hGr/0tYzbqAq1PmlGUXOaZW6AOXh1NyB0oxk=
-Received: by mail-wr1-f46.google.com with SMTP id s18so11439933wrn.1;
-        Tue, 20 Aug 2019 01:26:42 -0700 (PDT)
-X-Gm-Message-State: APjAAAWcmPVqAyDXWL+k/s+lP6Ey9XfY7cY7zzvR4DdYG5uYSfmqSPoN
-        KpRtW8LGjT5lUSibxajLORrFjzuTPem5X9I1jYc=
-X-Google-Smtp-Source: APXvYqxJDOU2yCLgISh7MDluIUhar/3J/7PrIJCYuvKYjNhX/ZO57FI5BdiPFThETR6zIPsJ1GragQc3ypBJbA0H0S8=
-X-Received: by 2002:adf:f3d1:: with SMTP id g17mr32042773wrp.38.1566289599845;
- Tue, 20 Aug 2019 01:26:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <1565868537-17753-1-git-send-email-guoren@kernel.org>
- <20190816070348.GA13766@infradead.org> <CAJF2gTTBc3+SnKMbVU4A+tekyjkd_7XUmDCUfNCcA-CZf=JUyg@mail.gmail.com>
- <20190818182118.GA30141@infradead.org>
-In-Reply-To: <20190818182118.GA30141@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 20 Aug 2019 16:26:28 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQhEHC-PUb0bORu2DLdgPOKh5kG7=mCi7=dMfCMZOUAcA@mail.gmail.com>
-Message-ID: <CAJF2gTQhEHC-PUb0bORu2DLdgPOKh5kG7=mCi7=dMfCMZOUAcA@mail.gmail.com>
-Subject: Re: [PATCH] csky: Fixup ioremap function losing
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, zhang_jian5@dahuatech.com,
+        s=default; t=1566304484;
+        bh=Bam4LdkU8U7A47aMZOtA1dD1I96RQ7IHpmWNYvtcCi8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=heQy/ICnr2RRK8OFHIih+L7JvtaiRLqvZE91tsTeDnLd4Q/+qOCN2Iuw7ZcZ5p8Ai
+         L9rXtJh/oGPqTaHU2rjLJ2CuUX7JOmAeRfyIiODWSAV9tAWeqlt7JUEx/CJdNe5Njq
+         VPLLxcq9xHZVuh+VyA+q9aJavUSEJde1dGLKan1Q=
+From:   guoren@kernel.org
+To:     arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, douzhk@nationalchip.com,
         Guo Ren <ren_guo@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH 1/3] csky: Fixup arch_get_unmapped_area() implementation
+Date:   Tue, 20 Aug 2019 20:34:27 +0800
+Message-Id: <1566304469-5601-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 2:21 AM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Sun, Aug 18, 2019 at 10:20:18AM +0800, Guo Ren wrote:
-> > > > Also change flag VM_ALLOC to VM_IOREMAP in get_vm_area_caller.
-> > >
-> > > Looks generally fine, but two comments:
-> > >
-> > >  - do you have a need for ioremap_cache?  We are generally try to
-> > >    phase it out in favour of memremap, and it is generally only used
-> > >    by arch specific code.
-> > Yes, some drivers of our customers use ioremap_cache to map phy_addr
-> > which isn't belong to system memory.
->
-> Which driver?  We should move it over to memremap instead of adding
-> a new ioremap_cache.
-The driver hasn't been upstreamed. OK, just remove ioremap_cache and
-seems it's not a big problem.
+From: Guo Ren <ren_guo@c-sky.com>
 
+Current arch_get_unmapped_area() of abiv1 doesn't use standard kernel
+api. After referring to the implementation of arch/arm, we implement
+it with vm_unmapped_area() from linux/mm.h.
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/csky/abiv1/inc/abi/page.h |  5 +--
+ arch/csky/abiv1/mmap.c         | 75 ++++++++++++++++++++++--------------------
+ 2 files changed, 43 insertions(+), 37 deletions(-)
+
+diff --git a/arch/csky/abiv1/inc/abi/page.h b/arch/csky/abiv1/inc/abi/page.h
+index 6336e92..c864519 100644
+--- a/arch/csky/abiv1/inc/abi/page.h
++++ b/arch/csky/abiv1/inc/abi/page.h
+@@ -1,13 +1,14 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
+ 
+-extern unsigned long shm_align_mask;
++#include <asm/shmparam.h>
++
+ extern void flush_dcache_page(struct page *page);
+ 
+ static inline unsigned long pages_do_alias(unsigned long addr1,
+ 					   unsigned long addr2)
+ {
+-	return (addr1 ^ addr2) & shm_align_mask;
++	return (addr1 ^ addr2) & (SHMLBA-1);
+ }
+ 
+ static inline void clear_user_page(void *addr, unsigned long vaddr,
+diff --git a/arch/csky/abiv1/mmap.c b/arch/csky/abiv1/mmap.c
+index b462fd5..6792aca 100644
+--- a/arch/csky/abiv1/mmap.c
++++ b/arch/csky/abiv1/mmap.c
+@@ -9,58 +9,63 @@
+ #include <linux/random.h>
+ #include <linux/io.h>
+ 
+-unsigned long shm_align_mask = (0x4000 >> 1) - 1;   /* Sane caches */
++#define COLOUR_ALIGN(addr,pgoff)		\
++	((((addr)+SHMLBA-1)&~(SHMLBA-1)) +	\
++	 (((pgoff)<<PAGE_SHIFT) & (SHMLBA-1)))
+ 
+-#define COLOUR_ALIGN(addr, pgoff) \
+-	((((addr) + shm_align_mask) & ~shm_align_mask) + \
+-	 (((pgoff) << PAGE_SHIFT) & shm_align_mask))
+-
+-unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
++/*
++ * We need to ensure that shared mappings are correctly aligned to
++ * avoid aliasing issues with VIPT caches.  We need to ensure that
++ * a specific page of an object is always mapped at a multiple of
++ * SHMLBA bytes.
++ *
++ * We unconditionally provide this function for all cases.
++ */
++unsigned long
++arch_get_unmapped_area(struct file *filp, unsigned long addr,
+ 		unsigned long len, unsigned long pgoff, unsigned long flags)
+ {
+-	struct vm_area_struct *vmm;
+-	int do_color_align;
++	struct mm_struct *mm = current->mm;
++	struct vm_area_struct *vma;
++	int do_align = 0;
++	struct vm_unmapped_area_info info;
++
++	/*
++	 * We only need to do colour alignment if either the I or D
++	 * caches alias.
++	 */
++	do_align = filp || (flags & MAP_SHARED);
+ 
++	/*
++	 * We enforce the MAP_FIXED case.
++	 */
+ 	if (flags & MAP_FIXED) {
+-		/*
+-		 * We do not accept a shared mapping if it would violate
+-		 * cache aliasing constraints.
+-		 */
+-		if ((flags & MAP_SHARED) &&
+-			((addr - (pgoff << PAGE_SHIFT)) & shm_align_mask))
++		if (flags & MAP_SHARED &&
++		    (addr - (pgoff << PAGE_SHIFT)) & (SHMLBA - 1))
+ 			return -EINVAL;
+ 		return addr;
+ 	}
+ 
+ 	if (len > TASK_SIZE)
+ 		return -ENOMEM;
+-	do_color_align = 0;
+-	if (filp || (flags & MAP_SHARED))
+-		do_color_align = 1;
++
+ 	if (addr) {
+-		if (do_color_align)
++		if (do_align)
+ 			addr = COLOUR_ALIGN(addr, pgoff);
+ 		else
+ 			addr = PAGE_ALIGN(addr);
+-		vmm = find_vma(current->mm, addr);
++
++		vma = find_vma(mm, addr);
+ 		if (TASK_SIZE - len >= addr &&
+-				(!vmm || addr + len <= vmm->vm_start))
++		    (!vma || addr + len <= vm_start_gap(vma)))
+ 			return addr;
+ 	}
+-	addr = TASK_UNMAPPED_BASE;
+-	if (do_color_align)
+-		addr = COLOUR_ALIGN(addr, pgoff);
+-	else
+-		addr = PAGE_ALIGN(addr);
+ 
+-	for (vmm = find_vma(current->mm, addr); ; vmm = vmm->vm_next) {
+-		/* At this point: (!vmm || addr < vmm->vm_end). */
+-		if (TASK_SIZE - len < addr)
+-			return -ENOMEM;
+-		if (!vmm || addr + len <= vmm->vm_start)
+-			return addr;
+-		addr = vmm->vm_end;
+-		if (do_color_align)
+-			addr = COLOUR_ALIGN(addr, pgoff);
+-	}
++	info.flags = 0;
++	info.length = len;
++	info.low_limit = mm->mmap_base;
++	info.high_limit = TASK_SIZE;
++	info.align_mask = do_align ? (PAGE_MASK & (SHMLBA - 1)) : 0;
++	info.align_offset = pgoff << PAGE_SHIFT;
++	return vm_unmapped_area(&info);
+ }
 -- 
-Best Regards
- Guo Ren
+2.7.4
 
-ML: https://lore.kernel.org/linux-csky/

@@ -2,90 +2,185 @@ Return-Path: <SRS0=MCCa=WR=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C29C3A59E
-	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 03:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00986C3A59E
+	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 12:19:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 96F8E2339D
-	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 03:44:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBA872064A
+	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 12:19:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566359091;
-	bh=5By/2PQuRdlPIlpzsaXsOgc4JfIVlhrhXv7f5LnEHKg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=Ti67h+Ij/1rh+3clJdzAzLtoANgWUKeXx0wRcikm3fzVL9TpNTq4h/nJc1LQxdVwU
-	 56REGt7fbUWGwOiKPzgLrAzB2hQOmjBqAu9zg33+6AXZ9MfXOJFBRB+PasnO/NqBPt
-	 jlZ1dl3qzaP71kqFtfRCXm8mm4NkgGdi3EunxDmo=
+	s=default; t=1566389953;
+	bh=2vTVijIKerGwLwYL3OK2HwY2DFPeS1bOXJsN7S4xNGw=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=RMPUDKL9ojg0n5wbkeS12uBCb58nfOw4gRJfsWvpQdRO3nU5NqwNeNYKgnTLPkDQg
+	 aHiq3jXplIMko7y2sGh84wNhNYkzwUHl4/25bMOHp599gDhxY+hPiNIPI0mQDzBZ8n
+	 mzuDN7VIi63oRtXUhyYjgBvBDH+ksKXNKSNsFDDE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727210AbfHUDov (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 20 Aug 2019 23:44:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41400 "EHLO mail.kernel.org"
+        id S1727164AbfHUMTJ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 21 Aug 2019 08:19:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726463AbfHUDov (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 20 Aug 2019 23:44:51 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726785AbfHUMTJ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 21 Aug 2019 08:19:09 -0400
+Received: from localhost.localdomain (unknown [115.192.185.12])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10C682339D;
-        Wed, 21 Aug 2019 03:44:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 364E22064A;
+        Wed, 21 Aug 2019 12:18:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566359090;
-        bh=5By/2PQuRdlPIlpzsaXsOgc4JfIVlhrhXv7f5LnEHKg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QzyJdl7JfTokId/OZ05ag4GqyaLSc+97+Qr759zCC5F4lo9A+kAn6tXgReiG5wDqb
-         9pWj84VWLn6SXcDisDg+y16+eHXAlhjk1Lji0fwC2q4ZAlj9bZ/jdBEEkv5SFjn4gE
-         ar/mQNNErQoofDSufqvNxNs5c3QgEijheCaAXTx4=
-Received: by mail-wr1-f43.google.com with SMTP id c3so567568wrd.7;
-        Tue, 20 Aug 2019 20:44:49 -0700 (PDT)
-X-Gm-Message-State: APjAAAXI4E5nHAPsVRZr2L9GtaHwqMAyRj/AUCPNXe7+ScQESy4y395w
-        O1PAmVJ5QUHAr+OKJ0+/uTjtsMtUusaHjvYjvUA=
-X-Google-Smtp-Source: APXvYqwpNARCWTRvG8bJmmduzy/ZlcmBCfJsdbgjHCLXGhjssnRv6bIS4UH1D85rlz959KH9WxXZJhI1IXymcFRCT9M=
-X-Received: by 2002:a5d:66c8:: with SMTP id k8mr1028491wrw.7.1566359088581;
- Tue, 20 Aug 2019 20:44:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <1566304469-5601-1-git-send-email-guoren@kernel.org> <20190821021650.GA32710@infradead.org>
-In-Reply-To: <20190821021650.GA32710@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 21 Aug 2019 11:44:37 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR196j8BPwZZLC3f--oKWnPYZFuY78efNgnRyhzrQR4Yw@mail.gmail.com>
-Message-ID: <CAJF2gTR196j8BPwZZLC3f--oKWnPYZFuY78efNgnRyhzrQR4Yw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] csky: Fixup arch_get_unmapped_area() implementation
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        s=default; t=1566389948;
+        bh=2vTVijIKerGwLwYL3OK2HwY2DFPeS1bOXJsN7S4xNGw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WCuKrc9o7kI2KV1JIfxjPbljZffvLhDuJTYAZwdcQQM125nzwWgEHMbJvde4lWE8w
+         cLVM0ljVYRY2ZJZQ1lxTm7rc1kkzLg9uau4LEbBIYuEnf5SIt2S5fiCYcbaFYoTA42
+         /4il9T6iT/48YLJ1yDhsoDD79Bf4ZZtdSI9twTPE=
+From:   guoren@kernel.org
+To:     arnd@arndb.de, hch@infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-csky@vger.kernel.org, douzhk@nationalchip.com,
         Guo Ren <ren_guo@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH] csky: Fixup 610 vipt cache flush mechanism
+Date:   Wed, 21 Aug 2019 20:18:16 +0800
+Message-Id: <1566389896-6972-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx Christoph,
+From: Guo Ren <ren_guo@c-sky.com>
 
-On Wed, Aug 21, 2019 at 10:16 AM Christoph Hellwig <hch@infradead.org> wrote:
->
-> > +/*
-> > + * We need to ensure that shared mappings are correctly aligned to
-> > + * avoid aliasing issues with VIPT caches.  We need to ensure that
-> > + * a specific page of an object is always mapped at a multiple of
-> > + * SHMLBA bytes.
-> > + *
-> > + * We unconditionally provide this function for all cases.
-> > + */
->
-> On something unrelated: If csky has virtually indexed caches you also
-> need to implement the flush_kernel_vmap_range and
-> invalidate_kernel_vmap_range functions to avoid data corruption when
-> doing I/O on vmalloc/vmap ranges.
+610 has vipt aliasing issue, so we need to finish the cache flush
+apis mentioned in cachetlb.rst to avoid data corruption.
 
-I'll give another patch for this issue
+Here is the list of modified apis in the patch:
 
+ - flush_kernel_dcache_page      (new add)
+ - flush_dcache_mmap_lock        (new add)
+ - flush_dcache_mmap_unlock      (new add)
+ - flush_kernel_vmap_range       (new add)
+ - invalidate_kernel_vmap_range  (new add)
+ - flush_anon_page               (new add)
+ - flush_cache_range             (new add)
+ - flush_cache_vmap              (flush all)
+ - flush_cache_vunmap            (flush all)
+ - flush_cache_mm                (only dcache flush)
+ - flush_icache_page             (just nop)
+ - copy_from_user_page           (remove no need flush)
+ - copy_to_user_page             (remove no need flush)
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Christoph Hellwig <hch@infradead.org>
+---
+ arch/csky/abiv1/cacheflush.c         | 20 ++++++++++++++++++
+ arch/csky/abiv1/inc/abi/cacheflush.h | 39 ++++++++++++++++++++++++++----------
+ 2 files changed, 48 insertions(+), 11 deletions(-)
+
+diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
+index fee99fc..9f1fe80 100644
+--- a/arch/csky/abiv1/cacheflush.c
++++ b/arch/csky/abiv1/cacheflush.c
+@@ -54,3 +54,23 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
+ 			icache_inv_all();
+ 	}
+ }
++
++void flush_kernel_dcache_page(struct page *page)
++{
++	struct address_space *mapping;
++
++	mapping = page_mapping_file(page);
++
++	if (!mapping || mapping_mapped(mapping))
++		dcache_wbinv_all();
++}
++EXPORT_SYMBOL(flush_kernel_dcache_page);
++
++void flush_cache_range(struct vm_area_struct *vma, unsigned long start,
++	unsigned long end)
++{
++	dcache_wbinv_all();
++
++	if (vma->vm_flags & VM_EXEC)
++		icache_inv_all();
++}
+diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
+index fce5604..17eeebe 100644
+--- a/arch/csky/abiv1/inc/abi/cacheflush.h
++++ b/arch/csky/abiv1/inc/abi/cacheflush.h
+@@ -11,19 +11,42 @@
+ #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+ extern void flush_dcache_page(struct page *);
+ 
+-#define flush_cache_mm(mm)			cache_wbinv_all()
++#define flush_cache_mm(mm)			dcache_wbinv_all()
+ #define flush_cache_page(vma, page, pfn)	cache_wbinv_all()
+ #define flush_cache_dup_mm(mm)			cache_wbinv_all()
+ 
++#define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
++extern void flush_kernel_dcache_page(struct page *);
++
++#define flush_dcache_mmap_lock(mapping)   spin_lock_irq(&(mapping)->tree_lock)
++#define flush_dcache_mmap_unlock(mapping) spin_unlock_irq(&(mapping)->tree_lock)
++
++static inline void flush_kernel_vmap_range(void *addr, int size)
++{
++	dcache_wbinv_all();
++}
++static inline void invalidate_kernel_vmap_range(void *addr, int size)
++{
++	dcache_wbinv_all();
++}
++
++#define ARCH_HAS_FLUSH_ANON_PAGE
++static inline void flush_anon_page(struct vm_area_struct *vma,
++			 struct page *page, unsigned long vmaddr)
++{
++	if (PageAnon(page))
++		cache_wbinv_all();
++}
++
+ /*
+  * if (current_mm != vma->mm) cache_wbinv_range(start, end) will be broken.
+  * Use cache_wbinv_all() here and need to be improved in future.
+  */
+-#define flush_cache_range(vma, start, end)	cache_wbinv_all()
+-#define flush_cache_vmap(start, end)		cache_wbinv_range(start, end)
+-#define flush_cache_vunmap(start, end)		cache_wbinv_range(start, end)
++extern void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
++#define flush_cache_vmap(start, end)		cache_wbinv_all()
++#define flush_cache_vunmap(start, end)		cache_wbinv_all()
+ 
+-#define flush_icache_page(vma, page)		cache_wbinv_all()
++#define flush_icache_page(vma, page)		do {} while (0);
+ #define flush_icache_range(start, end)		cache_wbinv_range(start, end)
+ 
+ #define flush_icache_user_range(vma,page,addr,len) \
+@@ -31,19 +54,13 @@ extern void flush_dcache_page(struct page *);
+ 
+ #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+ do { \
+-	cache_wbinv_all(); \
+ 	memcpy(dst, src, len); \
+-	cache_wbinv_all(); \
+ } while (0)
+ 
+ #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
+ do { \
+-	cache_wbinv_all(); \
+ 	memcpy(dst, src, len); \
+ 	cache_wbinv_all(); \
+ } while (0)
+ 
+-#define flush_dcache_mmap_lock(mapping)		do {} while (0)
+-#define flush_dcache_mmap_unlock(mapping)	do {} while (0)
+-
+ #endif /* __ABI_CSKY_CACHEFLUSH_H */
 -- 
-Best Regards
- Guo Ren
+2.7.4
 
-ML: https://lore.kernel.org/linux-csky/

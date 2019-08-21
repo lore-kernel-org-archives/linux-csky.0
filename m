@@ -1,169 +1,69 @@
-Return-Path: <SRS0=hru+=WQ=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=MCCa=WR=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 183DFC3A589
-	for <linux-csky@archiver.kernel.org>; Tue, 20 Aug 2019 12:34:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59470C3A589
+	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 02:16:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E0AE722DCC
-	for <linux-csky@archiver.kernel.org>; Tue, 20 Aug 2019 12:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566304499;
-	bh=RHxB0eaZdN0uqIspsq16Xe6cSyoC7w1EMK7IKfrz8iw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EpMWNPmGohwwz1xGHEqD2BDXcOJ9F/8TAieREDjnDa66bDE/JwvJDRKW+8Kc/Q+fO
-	 K3F7yhf/p15qH7NS0Mpm2IY0CXWV0kfyW4Ir1piKF/vdheHIWLtM6bYFm7fbLPMI/X
-	 qQNx2QtN4dvezNDCRmphi3sxA9VT6t5nVweU89K8=
+	by mail.kernel.org (Postfix) with ESMTP id 1F79922DA7
+	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 02:16:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="eNFBx0uT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730024AbfHTMes (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 20 Aug 2019 08:34:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37612 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729810AbfHTMes (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 20 Aug 2019 08:34:48 -0400
-Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A0BB422DBF;
-        Tue, 20 Aug 2019 12:34:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566304487;
-        bh=RHxB0eaZdN0uqIspsq16Xe6cSyoC7w1EMK7IKfrz8iw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PjB5+3tRE8cPeLFiigUiI/NeNLTxQE/pSJG498PboBjScSPG2c8vHrbBWaavWRfT8
-         YhacaTsg95/zF/HX2AX42D77ej8nqbSvQBJMW3GpBLUYFf2F18pMCt6D84eyxiVLWF
-         XvY8b3cWDoyFE2CwLJ8PsQ6aSExnL4JzuoQrnJSI=
-From:   guoren@kernel.org
-To:     arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, douzhk@nationalchip.com,
-        Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH 2/3] csky: Fixup defer cache flush for 610
-Date:   Tue, 20 Aug 2019 20:34:28 +0800
-Message-Id: <1566304469-5601-2-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566304469-5601-1-git-send-email-guoren@kernel.org>
+        id S1726751AbfHUCQz (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 20 Aug 2019 22:16:55 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:53776 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726512AbfHUCQy (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 20 Aug 2019 22:16:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=6fhtHzg47p/BjEhxXWfY/uri7DF3nACrkqX4IVZvknc=; b=eNFBx0uTZTv3kpObtFFodLkhr
+        ZoScbNT4CexDJX8LcyfWQdhMWO/D73I5R7mWungXcjWhlZaK/ANKYmFqL2R5+Md3n2dns6tgiHPIm
+        zo411HHOOcZnoPm8UHr3w3gW5CPkM4X9LstsPsQrPC0+vZoH+aZpUY2vsfffjwvXHLluqRzane8aX
+        0pcnUiGErQ/lgmwVkmsMD5u2YOyimIEPai+HOwIO22NLDXYqKyHnNCeEUHexFCqhybvrX4Y5pSfZx
+        fN+/UjW4lMMWbLcgwTWV2m96FK9oLeP91jXIz6cwZOGcfPKyg5X3QM7l4DRlOG8N6PO5gQ9eDyg3e
+        u/5kXRUYQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1i0GB8-0003b1-BP; Wed, 21 Aug 2019 02:16:50 +0000
+Date:   Tue, 20 Aug 2019 19:16:50 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        douzhk@nationalchip.com, Guo Ren <ren_guo@c-sky.com>
+Subject: Re: [PATCH 1/3] csky: Fixup arch_get_unmapped_area() implementation
+Message-ID: <20190821021650.GA32710@infradead.org>
 References: <1566304469-5601-1-git-send-email-guoren@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1566304469-5601-1-git-send-email-guoren@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+> +/*
+> + * We need to ensure that shared mappings are correctly aligned to
+> + * avoid aliasing issues with VIPT caches.  We need to ensure that
+> + * a specific page of an object is always mapped at a multiple of
+> + * SHMLBA bytes.
+> + *
+> + * We unconditionally provide this function for all cases.
+> + */
 
-We use defer cache flush mechanism to improve the performance of
-610, but the implementation is wrong. We fix it up now and update
-the mechanism:
-
- - Zero page needn't be flushed.
- - If page is file mapping & non-touched in user space, defer flush.
- - If page is anon mapping or dirty file mapping, flush immediately.
- - In update_mmu_cache finish the defer flush by flush_dcache_page().
-
-For 610 we need take care the dcache aliasing issue:
- - VIPT cache with 8K-bytes size per way in 4K page granularity.
-
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
----
- arch/csky/abiv1/cacheflush.c         | 50 +++++++++++++++++++-----------------
- arch/csky/abiv1/inc/abi/cacheflush.h |  4 +--
- 2 files changed, 29 insertions(+), 25 deletions(-)
-
-diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
-index 10af8b6..fee99fc 100644
---- a/arch/csky/abiv1/cacheflush.c
-+++ b/arch/csky/abiv1/cacheflush.c
-@@ -11,42 +11,46 @@
- #include <asm/cacheflush.h>
- #include <asm/cachectl.h>
- 
-+#define PG_dcache_clean		PG_arch_1
-+
- void flush_dcache_page(struct page *page)
- {
--	struct address_space *mapping = page_mapping(page);
--	unsigned long addr;
-+	struct address_space *mapping;
- 
--	if (mapping && !mapping_mapped(mapping)) {
--		set_bit(PG_arch_1, &(page)->flags);
-+	if (page == ZERO_PAGE(0))
- 		return;
--	}
- 
--	/*
--	 * We could delay the flush for the !page_mapping case too.  But that
--	 * case is for exec env/arg pages and those are %99 certainly going to
--	 * get faulted into the tlb (and thus flushed) anyways.
--	 */
--	addr = (unsigned long) page_address(page);
--	dcache_wb_range(addr, addr + PAGE_SIZE);
-+	mapping = page_mapping_file(page);
-+
-+	if (mapping && !page_mapcount(page))
-+		clear_bit(PG_dcache_clean, &page->flags);
-+	else {
-+		dcache_wbinv_all();
-+		if (mapping)
-+			icache_inv_all();
-+		set_bit(PG_dcache_clean, &page->flags);
-+	}
- }
-+EXPORT_SYMBOL(flush_dcache_page);
- 
--void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
--		      pte_t *pte)
-+void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
-+	pte_t *ptep)
- {
--	unsigned long addr;
-+	unsigned long pfn = pte_pfn(*ptep);
- 	struct page *page;
--	unsigned long pfn;
- 
--	pfn = pte_pfn(*pte);
--	if (unlikely(!pfn_valid(pfn)))
-+	if (!pfn_valid(pfn))
- 		return;
- 
- 	page = pfn_to_page(pfn);
--	addr = (unsigned long) page_address(page);
-+	if (page == ZERO_PAGE(0))
-+		return;
- 
--	if (vma->vm_flags & VM_EXEC ||
--	    pages_do_alias(addr, address & PAGE_MASK))
--		cache_wbinv_all();
-+	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-+		dcache_wbinv_all();
- 
--	clear_bit(PG_arch_1, &(page)->flags);
-+	if (page_mapping_file(page)) {
-+		if (vma->vm_flags & VM_EXEC)
-+			icache_inv_all();
-+	}
- }
-diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
-index 5f663ae..fce5604 100644
---- a/arch/csky/abiv1/inc/abi/cacheflush.h
-+++ b/arch/csky/abiv1/inc/abi/cacheflush.h
-@@ -26,8 +26,8 @@ extern void flush_dcache_page(struct page *);
- #define flush_icache_page(vma, page)		cache_wbinv_all()
- #define flush_icache_range(start, end)		cache_wbinv_range(start, end)
- 
--#define flush_icache_user_range(vma, pg, adr, len) \
--				cache_wbinv_range(adr, adr + len)
-+#define flush_icache_user_range(vma,page,addr,len) \
-+	flush_dcache_page(page)
- 
- #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
- do { \
--- 
-2.7.4
-
+On something unrelated: If csky has virtually indexed caches you also
+need to implement the flush_kernel_vmap_range and
+invalidate_kernel_vmap_range functions to avoid data corruption when
+doing I/O on vmalloc/vmap ranges.

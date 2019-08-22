@@ -1,51 +1,51 @@
-Return-Path: <SRS0=MCCa=WR=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=PVwp=WS=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00986C3A59E
-	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 12:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 136ECC3A59E
+	for <linux-csky@archiver.kernel.org>; Thu, 22 Aug 2019 03:05:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBA872064A
-	for <linux-csky@archiver.kernel.org>; Wed, 21 Aug 2019 12:19:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDA2222DD3
+	for <linux-csky@archiver.kernel.org>; Thu, 22 Aug 2019 03:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566389953;
-	bh=2vTVijIKerGwLwYL3OK2HwY2DFPeS1bOXJsN7S4xNGw=;
+	s=default; t=1566443133;
+	bh=a5Ew7eb6cqPDgQY6v0geKQo8QWx+WuyGsAB/zRhoQ/I=;
 	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=RMPUDKL9ojg0n5wbkeS12uBCb58nfOw4gRJfsWvpQdRO3nU5NqwNeNYKgnTLPkDQg
-	 aHiq3jXplIMko7y2sGh84wNhNYkzwUHl4/25bMOHp599gDhxY+hPiNIPI0mQDzBZ8n
-	 mzuDN7VIi63oRtXUhyYjgBvBDH+ksKXNKSNsFDDE=
+	b=OsaEvYdFS6L294LEXjy2Q+zFHWaWjmpN2YHY5HzE2w5W9e7AML0+mOVT93nPbs8g8
+	 EMJ0Ob12HqQ5Jt0estR05GbB4PvMyIOkiYXxFYpdqLfO4XoRmtI3FexsHc1GDshPPv
+	 yo+MIJNmJFr0rmVjvAUzGXn6LdsKE5G7vH4GhJiE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727164AbfHUMTJ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 21 Aug 2019 08:19:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59210 "EHLO mail.kernel.org"
+        id S1729681AbfHVDFd (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 21 Aug 2019 23:05:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42092 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726785AbfHUMTJ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:19:09 -0400
-Received: from localhost.localdomain (unknown [115.192.185.12])
+        id S1727874AbfHVDFd (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 21 Aug 2019 23:05:33 -0400
+Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 364E22064A;
-        Wed, 21 Aug 2019 12:18:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 83C3222CE3;
+        Thu, 22 Aug 2019 03:05:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566389948;
-        bh=2vTVijIKerGwLwYL3OK2HwY2DFPeS1bOXJsN7S4xNGw=;
+        s=default; t=1566443132;
+        bh=a5Ew7eb6cqPDgQY6v0geKQo8QWx+WuyGsAB/zRhoQ/I=;
         h=From:To:Cc:Subject:Date:From;
-        b=WCuKrc9o7kI2KV1JIfxjPbljZffvLhDuJTYAZwdcQQM125nzwWgEHMbJvde4lWE8w
-         cLVM0ljVYRY2ZJZQ1lxTm7rc1kkzLg9uau4LEbBIYuEnf5SIt2S5fiCYcbaFYoTA42
-         /4il9T6iT/48YLJ1yDhsoDD79Bf4ZZtdSI9twTPE=
+        b=tYBAQLcV/cTzE/J5aOHvHvqKFIqo281kZFw8rcPOL8i1MxxEiWdu4eVTq8egPr3yQ
+         TNrbyVfFoaIrA2x5m64yrKGiz9ZnNLnH6tmcA2QDwfrMW+cIs1OX8wWPrXx1cUx+B7
+         vGiDH5ug0Cr15AOa8U+T510unNGyGxeELVlky+tA=
 From:   guoren@kernel.org
 To:     arnd@arndb.de, hch@infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-csky@vger.kernel.org, douzhk@nationalchip.com,
         Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH] csky: Fixup 610 vipt cache flush mechanism
-Date:   Wed, 21 Aug 2019 20:18:16 +0800
-Message-Id: <1566389896-6972-1-git-send-email-guoren@kernel.org>
+Subject: [PATCH V2] csky: Fixup 610 vipt cache flush mechanism
+Date:   Thu, 22 Aug 2019 11:05:22 +0800
+Message-Id: <1566443122-17540-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
@@ -73,13 +73,16 @@ Here is the list of modified apis in the patch:
  - copy_from_user_page           (remove no need flush)
  - copy_to_user_page             (remove no need flush)
 
+Change to V2:
+ - Fixup compile error with xa_lock*(&mapping->i_pages)
+
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Christoph Hellwig <hch@infradead.org>
 ---
  arch/csky/abiv1/cacheflush.c         | 20 ++++++++++++++++++
- arch/csky/abiv1/inc/abi/cacheflush.h | 39 ++++++++++++++++++++++++++----------
- 2 files changed, 48 insertions(+), 11 deletions(-)
+ arch/csky/abiv1/inc/abi/cacheflush.h | 41 +++++++++++++++++++++++++-----------
+ 2 files changed, 49 insertions(+), 12 deletions(-)
 
 diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
 index fee99fc..9f1fe80 100644
@@ -110,10 +113,18 @@ index fee99fc..9f1fe80 100644
 +		icache_inv_all();
 +}
 diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
-index fce5604..17eeebe 100644
+index fce5604..79ef9e8 100644
 --- a/arch/csky/abiv1/inc/abi/cacheflush.h
 +++ b/arch/csky/abiv1/inc/abi/cacheflush.h
-@@ -11,19 +11,42 @@
+@@ -4,26 +4,49 @@
+ #ifndef __ABI_CSKY_CACHEFLUSH_H
+ #define __ABI_CSKY_CACHEFLUSH_H
+ 
+-#include <linux/compiler.h>
++#include <linux/mm.h>
+ #include <asm/string.h>
+ #include <asm/cache.h>
+ 
  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
  extern void flush_dcache_page(struct page *);
  
@@ -125,8 +136,8 @@ index fce5604..17eeebe 100644
 +#define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
 +extern void flush_kernel_dcache_page(struct page *);
 +
-+#define flush_dcache_mmap_lock(mapping)   spin_lock_irq(&(mapping)->tree_lock)
-+#define flush_dcache_mmap_unlock(mapping) spin_unlock_irq(&(mapping)->tree_lock)
++#define flush_dcache_mmap_lock(mapping)		xa_lock_irq(&mapping->i_pages)
++#define flush_dcache_mmap_unlock(mapping)	xa_unlock_irq(&mapping->i_pages)
 +
 +static inline void flush_kernel_vmap_range(void *addr, int size)
 +{

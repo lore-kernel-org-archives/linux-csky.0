@@ -2,65 +2,87 @@ Return-Path: <SRS0=tu2x=WW=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CCE7C3A59E
-	for <linux-csky@archiver.kernel.org>; Mon, 26 Aug 2019 06:38:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 819A9C3A59E
+	for <linux-csky@archiver.kernel.org>; Mon, 26 Aug 2019 06:54:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7B7420674
-	for <linux-csky@archiver.kernel.org>; Mon, 26 Aug 2019 06:38:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XIOGeVHa"
+	by mail.kernel.org (Postfix) with ESMTP id 58CCE217F4
+	for <linux-csky@archiver.kernel.org>; Mon, 26 Aug 2019 06:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1566802485;
+	bh=3PjlUTBUR/XzFsMz/GXZD8iuSFefN6Th+8lZSsWt360=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=CD0mxJZNLq0FxQQDX2ZhcJ+v30rO7XBfh/VZwWG7lQwWkTmNaXO5fSRY7jALpxg7M
+	 YrIEzEeIoX0n25X8bw2RTEeTfUqcyVX+V9ZqJV5uzgCOEbxmIpShrtsq55WZRPMc/P
+	 QVK/f0XWcXzVFfyriDHyoyzO2xs7EDL7E4UIzj0U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729772AbfHZGi0 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 26 Aug 2019 02:38:26 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:54920 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729260AbfHZGi0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 26 Aug 2019 02:38:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=/cTefX4WriggdI6xhCa46FySFPWkgwoZoZ9aeiu49hA=; b=XIOGeVHaCMWHYSZ9wmgjF2NFC
-        PTwXn2qYkGpq+fMW7LX+UATKkUuM5w26sjIMRKCQ8PagJDIdum11NIfubHvureFR7OQRuchBlr7RO
-        6izRKXx55CuysG9Zv7vnhxbHSIkGlKTpbUYdbI4MBXPFrBfDRLMs7aaLNST+loT1uU8Ldkiy1Aznz
-        SSE41Nx1ExYQeiXd1PUydNdlgFgpx2UWyo7/5HFO77VoPQY4mqtltHiiL2ON0qT8QfHs8m+uYu02K
-        hBECoAa+O9qLrIrPwXYPS49s3fWAiT1yUxfG61yCzAQNmP8Y5qUTu5YuvpVnMDogGukC5Ce1T9nFB
-        tDfPs4sMg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1i28du-0007y0-F9; Mon, 26 Aug 2019 06:38:18 +0000
-Date:   Sun, 25 Aug 2019 23:38:18 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, hch@infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-        douzhk@nationalchip.com, Guo Ren <ren_guo@c-sky.com>
-Subject: Re: [PATCH V2] csky: Fixup 610 vipt cache flush mechanism
-Message-ID: <20190826063818.GA29871@infradead.org>
-References: <1566443122-17540-1-git-send-email-guoren@kernel.org>
+        id S1729625AbfHZGyl (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 26 Aug 2019 02:54:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34044 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727097AbfHZGyk (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 26 Aug 2019 02:54:40 -0400
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B8B0B2190F;
+        Mon, 26 Aug 2019 06:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566802480;
+        bh=3PjlUTBUR/XzFsMz/GXZD8iuSFefN6Th+8lZSsWt360=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AzCabFC0rp/scNtav1blpO98d8C32C+cd7uVoKTGw7Aoo+LXyg/cM9gZxewmOH3MP
+         S8ZY49+3Uc9J9S1ZdvwURzlPnjqzzrXz2WyGqh4p0euGWWlDRY+XMp9MKEqpdqjQct
+         JZgeRMA6gixPGForz37C56o2Xf0SYV4BPlCoM49g=
+Received: by mail-wm1-f44.google.com with SMTP id l2so14697895wmg.0;
+        Sun, 25 Aug 2019 23:54:39 -0700 (PDT)
+X-Gm-Message-State: APjAAAUfL3U8mSKvS6LXFdRer14ap5TwD/6iFGhawC6mQbnZ2LDk9h4H
+        5Oyl+d92ZKtOcQDYyX4hLcXz9w2wpIfKmZus33w=
+X-Google-Smtp-Source: APXvYqze+5N431NKumJz/IGZ4nQDxsfQfeu2kHe+0HCxIp34UIlce18pt7ezfYCMT6xzAK9hM4kCj2tPkQ3AOfbaGnw=
+X-Received: by 2002:a1c:a5c2:: with SMTP id o185mr19302796wme.172.1566802478272;
+ Sun, 25 Aug 2019 23:54:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1566443122-17540-1-git-send-email-guoren@kernel.org>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <1566443122-17540-1-git-send-email-guoren@kernel.org> <20190826063818.GA29871@infradead.org>
+In-Reply-To: <20190826063818.GA29871@infradead.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 26 Aug 2019 14:54:26 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS6myiYmPqMLhSxHJd3tL1rmy+K9Kj42cYq9HLxSMPWCg@mail.gmail.com>
+Message-ID: <CAJF2gTS6myiYmPqMLhSxHJd3tL1rmy+K9Kj42cYq9HLxSMPWCg@mail.gmail.com>
+Subject: Re: [PATCH V2] csky: Fixup 610 vipt cache flush mechanism
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-csky@vger.kernel.org, douzhk@nationalchip.com,
+        Guo Ren <ren_guo@c-sky.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 11:05:22AM +0800, guoren@kernel.org wrote:
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> 610 has vipt aliasing issue, so we need to finish the cache flush
-> apis mentioned in cachetlb.rst to avoid data corruption.
-> 
-> Here is the list of modified apis in the patch:
+Thx Christoph,
 
-Looks sensible to me, although I can't really verify the details.
-You might also want to Cc linux-mm.
+On Mon, Aug 26, 2019 at 2:38 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Thu, Aug 22, 2019 at 11:05:22AM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <ren_guo@c-sky.com>
+> >
+> > 610 has vipt aliasing issue, so we need to finish the cache flush
+> > apis mentioned in cachetlb.rst to avoid data corruption.
+> >
+> > Here is the list of modified apis in the patch:
+>
+> Looks sensible to me, although I can't really verify the details.
+> You might also want to Cc linux-mm.
+
+I'll re-send it to linux-mm.
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

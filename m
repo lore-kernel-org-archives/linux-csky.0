@@ -1,197 +1,114 @@
-Return-Path: <SRS0=tu2x=WW=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=Yua3=WY=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A27DAC3A59E
-	for <linux-csky@archiver.kernel.org>; Mon, 26 Aug 2019 06:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 434F2C3A5A1
+	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 13:35:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 761C02190F
-	for <linux-csky@archiver.kernel.org>; Mon, 26 Aug 2019 06:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566802797;
-	bh=a5Ew7eb6cqPDgQY6v0geKQo8QWx+WuyGsAB/zRhoQ/I=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=q3vgMejK1c6VtnCnpWaYhT5QQEs7kdoDGkKAFMeL2LVOu8nPqA4m0Tltvb2IRzvGw
-	 QDiz3ZpS3aq/jX0RWOnicAhS6FzZd9W3GKbFHwim6siFoxXlx5UVy0RNgshHvfLF32
-	 mwgrggzPI5o4XAElV9oKHaPK1FRUiuFZQlQi+I+k=
+	by mail.kernel.org (Postfix) with ESMTP id 1FDC922DA7
+	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 13:35:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729831AbfHZG75 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 26 Aug 2019 02:59:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38038 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729437AbfHZG75 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 26 Aug 2019 02:59:57 -0400
-Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D782C217F4;
-        Mon, 26 Aug 2019 06:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566802795;
-        bh=a5Ew7eb6cqPDgQY6v0geKQo8QWx+WuyGsAB/zRhoQ/I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=a2U8wbAFJLIR89Zxq31tq9JRzjmOOjQJHb7wO5PTtR/bOZKg+M/C6mhPXZDDh007f
-         r8q1YkZE0lzMS1O8W5bStqwkfe3mXUzmWAbDTUr2qH96+VAsPzDuWkPioZu+WjAdhs
-         kri6KgWXXub6+7p2hRaG7E2NsdgXBq+M+xgvOta8=
-From:   guoren@kernel.org
-To:     arnd@arndb.de, hch@infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mm@kvack.org,
-        Guo Ren <ren_guo@c-sky.com>
-Subject: [RESEND PATCH V2] csky: Fixup 610 vipt cache flush mechanism
-Date:   Mon, 26 Aug 2019 14:59:33 +0800
-Message-Id: <1566802773-24707-1-git-send-email-guoren@kernel.org>
+        id S1726394AbfH1Nfe (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 28 Aug 2019 09:35:34 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34784 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726368AbfH1Nfd (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 28 Aug 2019 09:35:33 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SDJBUJ047992
+        for <linux-csky@vger.kernel.org>; Wed, 28 Aug 2019 09:35:32 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2unsqg2t36-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-csky@vger.kernel.org>; Wed, 28 Aug 2019 09:35:32 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-csky@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Wed, 28 Aug 2019 14:35:29 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 28 Aug 2019 14:35:26 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7SDZQmd33620436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Aug 2019 13:35:26 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 00FE9A4054;
+        Wed, 28 Aug 2019 13:35:26 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 908E0A405C;
+        Wed, 28 Aug 2019 13:35:24 +0000 (GMT)
+Received: from rapoport-lnx (unknown [9.148.8.86])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 28 Aug 2019 13:35:24 +0000 (GMT)
+Received: by rapoport-lnx (sSMTP sendmail emulation); Wed, 28 Aug 2019 16:35:23 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH] csky: use generic free_initrd_mem()
+Date:   Wed, 28 Aug 2019 16:35:19 +0300
 X-Mailer: git-send-email 2.7.4
+X-TM-AS-GCONF: 00
+x-cbid: 19082813-0016-0000-0000-000002A3E9D0
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19082813-0017-0000-0000-000033043AA3
+Message-Id: <1566999319-8151-1-git-send-email-rppt@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=666 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908280143
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+The csky implementation of free_initrd_mem() is an open-coded version of
+free_reserved_area() without poisoning.
 
-610 has vipt aliasing issue, so we need to finish the cache flush
-apis mentioned in cachetlb.rst to avoid data corruption.
+Remove it and make csky use the generic version of free_initrd_mem().
 
-Here is the list of modified apis in the patch:
-
- - flush_kernel_dcache_page      (new add)
- - flush_dcache_mmap_lock        (new add)
- - flush_dcache_mmap_unlock      (new add)
- - flush_kernel_vmap_range       (new add)
- - invalidate_kernel_vmap_range  (new add)
- - flush_anon_page               (new add)
- - flush_cache_range             (new add)
- - flush_cache_vmap              (flush all)
- - flush_cache_vunmap            (flush all)
- - flush_cache_mm                (only dcache flush)
- - flush_icache_page             (just nop)
- - copy_from_user_page           (remove no need flush)
- - copy_to_user_page             (remove no need flush)
-
-Change to V2:
- - Fixup compile error with xa_lock*(&mapping->i_pages)
-
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- arch/csky/abiv1/cacheflush.c         | 20 ++++++++++++++++++
- arch/csky/abiv1/inc/abi/cacheflush.h | 41 +++++++++++++++++++++++++-----------
- 2 files changed, 49 insertions(+), 12 deletions(-)
+ arch/csky/mm/init.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
-index fee99fc..9f1fe80 100644
---- a/arch/csky/abiv1/cacheflush.c
-+++ b/arch/csky/abiv1/cacheflush.c
-@@ -54,3 +54,23 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
- 			icache_inv_all();
- 	}
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index eb0dc9e..d4c2292 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -60,22 +60,6 @@ void __init mem_init(void)
+ 	mem_init_print_info(NULL);
  }
-+
-+void flush_kernel_dcache_page(struct page *page)
-+{
-+	struct address_space *mapping;
-+
-+	mapping = page_mapping_file(page);
-+
-+	if (!mapping || mapping_mapped(mapping))
-+		dcache_wbinv_all();
-+}
-+EXPORT_SYMBOL(flush_kernel_dcache_page);
-+
-+void flush_cache_range(struct vm_area_struct *vma, unsigned long start,
-+	unsigned long end)
-+{
-+	dcache_wbinv_all();
-+
-+	if (vma->vm_flags & VM_EXEC)
-+		icache_inv_all();
-+}
-diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
-index fce5604..79ef9e8 100644
---- a/arch/csky/abiv1/inc/abi/cacheflush.h
-+++ b/arch/csky/abiv1/inc/abi/cacheflush.h
-@@ -4,26 +4,49 @@
- #ifndef __ABI_CSKY_CACHEFLUSH_H
- #define __ABI_CSKY_CACHEFLUSH_H
  
--#include <linux/compiler.h>
-+#include <linux/mm.h>
- #include <asm/string.h>
- #include <asm/cache.h>
- 
- #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
- extern void flush_dcache_page(struct page *);
- 
--#define flush_cache_mm(mm)			cache_wbinv_all()
-+#define flush_cache_mm(mm)			dcache_wbinv_all()
- #define flush_cache_page(vma, page, pfn)	cache_wbinv_all()
- #define flush_cache_dup_mm(mm)			cache_wbinv_all()
- 
-+#define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
-+extern void flush_kernel_dcache_page(struct page *);
-+
-+#define flush_dcache_mmap_lock(mapping)		xa_lock_irq(&mapping->i_pages)
-+#define flush_dcache_mmap_unlock(mapping)	xa_unlock_irq(&mapping->i_pages)
-+
-+static inline void flush_kernel_vmap_range(void *addr, int size)
-+{
-+	dcache_wbinv_all();
-+}
-+static inline void invalidate_kernel_vmap_range(void *addr, int size)
-+{
-+	dcache_wbinv_all();
-+}
-+
-+#define ARCH_HAS_FLUSH_ANON_PAGE
-+static inline void flush_anon_page(struct vm_area_struct *vma,
-+			 struct page *page, unsigned long vmaddr)
-+{
-+	if (PageAnon(page))
-+		cache_wbinv_all();
-+}
-+
- /*
-  * if (current_mm != vma->mm) cache_wbinv_range(start, end) will be broken.
-  * Use cache_wbinv_all() here and need to be improved in future.
-  */
--#define flush_cache_range(vma, start, end)	cache_wbinv_all()
--#define flush_cache_vmap(start, end)		cache_wbinv_range(start, end)
--#define flush_cache_vunmap(start, end)		cache_wbinv_range(start, end)
-+extern void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
-+#define flush_cache_vmap(start, end)		cache_wbinv_all()
-+#define flush_cache_vunmap(start, end)		cache_wbinv_all()
- 
--#define flush_icache_page(vma, page)		cache_wbinv_all()
-+#define flush_icache_page(vma, page)		do {} while (0);
- #define flush_icache_range(start, end)		cache_wbinv_range(start, end)
- 
- #define flush_icache_user_range(vma,page,addr,len) \
-@@ -31,19 +54,13 @@ extern void flush_dcache_page(struct page *);
- 
- #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
- do { \
--	cache_wbinv_all(); \
- 	memcpy(dst, src, len); \
--	cache_wbinv_all(); \
- } while (0)
- 
- #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
- do { \
--	cache_wbinv_all(); \
- 	memcpy(dst, src, len); \
- 	cache_wbinv_all(); \
- } while (0)
- 
--#define flush_dcache_mmap_lock(mapping)		do {} while (0)
--#define flush_dcache_mmap_unlock(mapping)	do {} while (0)
+-#ifdef CONFIG_BLK_DEV_INITRD
+-void free_initrd_mem(unsigned long start, unsigned long end)
+-{
+-	if (start < end)
+-		pr_info("Freeing initrd memory: %ldk freed\n",
+-			(end - start) >> 10);
 -
- #endif /* __ABI_CSKY_CACHEFLUSH_H */
+-	for (; start < end; start += PAGE_SIZE) {
+-		ClearPageReserved(virt_to_page(start));
+-		init_page_count(virt_to_page(start));
+-		free_page(start);
+-		totalram_pages_inc();
+-	}
+-}
+-#endif
+-
+ extern char __init_begin[], __init_end[];
+ 
+ void free_initmem(void)
 -- 
 2.7.4
 

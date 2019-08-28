@@ -2,140 +2,136 @@ Return-Path: <SRS0=Yua3=WY=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC71C3A5A4
-	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 14:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04284C3A5A1
+	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 16:08:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 005662077B
-	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 14:50:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBF9F20828
+	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 16:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567008506;
+	bh=eLovFhfmXzqDIk/TDKv2aE9tBBV+t8nqpUbBWhhHJ0A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=SFXJzzPMXcMZJcJpLA2teyuPVoRwq6WlHxfHQ1wpwA/6T4T6eSd01Sks3TVVOesL2
+	 IkbvTwysCQG7O1NdOYBHowL1297gIsWLjQzAOs4kX9hiTGGF7nzJJ5ZMLUrp/qfBNB
+	 meP6vKy/dJ6Gw0GcyMVXTluAP5O4dHu/bmT/sYMc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbfH1OuF (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 28 Aug 2019 10:50:05 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14456 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726430AbfH1OuF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 28 Aug 2019 10:50:05 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SEhV67182715
-        for <linux-csky@vger.kernel.org>; Wed, 28 Aug 2019 10:50:04 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2umnmw3bbs-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-csky@vger.kernel.org>; Wed, 28 Aug 2019 10:50:03 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-csky@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Wed, 28 Aug 2019 15:39:53 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 28 Aug 2019 15:39:50 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7SEdRfs35062130
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Aug 2019 14:39:27 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 13DE64C04A;
-        Wed, 28 Aug 2019 14:39:49 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B006A4C046;
-        Wed, 28 Aug 2019 14:39:48 +0000 (GMT)
-Received: from rapoport-lnx (unknown [9.148.8.86])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 28 Aug 2019 14:39:48 +0000 (GMT)
-Date:   Wed, 28 Aug 2019 17:39:47 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Guo Ren <guoren@kernel.org>
+        id S1726428AbfH1QI0 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 28 Aug 2019 12:08:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42816 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726415AbfH1QI0 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 28 Aug 2019 12:08:26 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7425D20828;
+        Wed, 28 Aug 2019 16:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567008505;
+        bh=eLovFhfmXzqDIk/TDKv2aE9tBBV+t8nqpUbBWhhHJ0A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=w4ONHUiRrU0nxEr70fyR2MWO9PAeQgmAcFJMR0HtkOwvztAppvkFT+c4qGWAXfjik
+         IbTkIGIuAN6WMd9S3dwNnQjOw93S0vGbUHHQ1Dzxt2ow9A61SFXMvj41uC70lnHUiG
+         f5N883US8Ejxz2WG/HUDRRftZQlxF6flsarbt0ck=
+Received: by mail-wr1-f42.google.com with SMTP id t16so373465wra.6;
+        Wed, 28 Aug 2019 09:08:25 -0700 (PDT)
+X-Gm-Message-State: APjAAAUa9/nhab1UJpJmZLU1MNaEOE6Tl/5jq5BZQdSW8WaQAIwUW3kR
+        5pahH7EwzrcYwZQUKQr2z3o19wef3SU02M4Ef2Q=
+X-Google-Smtp-Source: APXvYqy2MdNrtC6cq/V0NhMLDf5lyTJAjLNy45uH8vKk7uRjJ0ygP5+oz3XINQQBpLNvZCOwwgVgmUlH8ULL13TEFrc=
+X-Received: by 2002:adf:f3d1:: with SMTP id g17mr5650476wrp.38.1567008503934;
+ Wed, 28 Aug 2019 09:08:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <1566999319-8151-1-git-send-email-rppt@linux.ibm.com>
+ <CAJF2gTTF0W18kPzXP8hOA64FuOx=atxFnCk0syEhP7s7LOm0Kw@mail.gmail.com> <20190828143946.GA21342@rapoport-lnx>
+In-Reply-To: <20190828143946.GA21342@rapoport-lnx>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 29 Aug 2019 00:08:12 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQXf23s-7urhRLX3-bc+6atiO5WewN+PYr3T1-C-rLKig@mail.gmail.com>
+Message-ID: <CAJF2gTQXf23s-7urhRLX3-bc+6atiO5WewN+PYr3T1-C-rLKig@mail.gmail.com>
+Subject: Re: [PATCH] csky: use generic free_initrd_mem()
+To:     Mike Rapoport <rppt@linux.ibm.com>
 Cc:     linux-csky@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] csky: use generic free_initrd_mem()
-References: <1566999319-8151-1-git-send-email-rppt@linux.ibm.com>
- <CAJF2gTTF0W18kPzXP8hOA64FuOx=atxFnCk0syEhP7s7LOm0Kw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTTF0W18kPzXP8hOA64FuOx=atxFnCk0syEhP7s7LOm0Kw@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-TM-AS-GCONF: 00
-x-cbid: 19082814-0016-0000-0000-000002A3ED62
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19082814-0017-0000-0000-000033043E8B
-Message-Id: <20190828143946.GA21342@rapoport-lnx>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=986 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908280155
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi,
+Sure, no problem.
 
-On Wed, Aug 28, 2019 at 10:12:52PM +0800, Guo Ren wrote:
-> Acked-by: Guo Ren <guoren@kernel.org>
-
-Do you mind taking it via csky tree?
- 
-> On Wed, Aug 28, 2019 at 9:35 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
+On Wed, Aug 28, 2019 at 10:39 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
+>
+> Hi,
+>
+> On Wed, Aug 28, 2019 at 10:12:52PM +0800, Guo Ren wrote:
+> > Acked-by: Guo Ren <guoren@kernel.org>
+>
+> Do you mind taking it via csky tree?
+>
+> > On Wed, Aug 28, 2019 at 9:35 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
+> > >
+> > > The csky implementation of free_initrd_mem() is an open-coded version of
+> > > free_reserved_area() without poisoning.
+> > >
+> > > Remove it and make csky use the generic version of free_initrd_mem().
+> > >
+> > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > > ---
+> > >  arch/csky/mm/init.c | 16 ----------------
+> > >  1 file changed, 16 deletions(-)
+> > >
+> > > diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+> > > index eb0dc9e..d4c2292 100644
+> > > --- a/arch/csky/mm/init.c
+> > > +++ b/arch/csky/mm/init.c
+> > > @@ -60,22 +60,6 @@ void __init mem_init(void)
+> > >         mem_init_print_info(NULL);
+> > >  }
+> > >
+> > > -#ifdef CONFIG_BLK_DEV_INITRD
+> > > -void free_initrd_mem(unsigned long start, unsigned long end)
+> > > -{
+> > > -       if (start < end)
+> > > -               pr_info("Freeing initrd memory: %ldk freed\n",
+> > > -                       (end - start) >> 10);
+> > > -
+> > > -       for (; start < end; start += PAGE_SIZE) {
+> > > -               ClearPageReserved(virt_to_page(start));
+> > > -               init_page_count(virt_to_page(start));
+> > > -               free_page(start);
+> > > -               totalram_pages_inc();
+> > > -       }
+> > > -}
+> > > -#endif
+> > > -
+> > >  extern char __init_begin[], __init_end[];
+> > >
+> > >  void free_initmem(void)
+> > > --
+> > > 2.7.4
+> > >
 > >
-> > The csky implementation of free_initrd_mem() is an open-coded version of
-> > free_reserved_area() without poisoning.
 > >
-> > Remove it and make csky use the generic version of free_initrd_mem().
-> >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > ---
-> >  arch/csky/mm/init.c | 16 ----------------
-> >  1 file changed, 16 deletions(-)
-> >
-> > diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-> > index eb0dc9e..d4c2292 100644
-> > --- a/arch/csky/mm/init.c
-> > +++ b/arch/csky/mm/init.c
-> > @@ -60,22 +60,6 @@ void __init mem_init(void)
-> >         mem_init_print_info(NULL);
-> >  }
-> >
-> > -#ifdef CONFIG_BLK_DEV_INITRD
-> > -void free_initrd_mem(unsigned long start, unsigned long end)
-> > -{
-> > -       if (start < end)
-> > -               pr_info("Freeing initrd memory: %ldk freed\n",
-> > -                       (end - start) >> 10);
-> > -
-> > -       for (; start < end; start += PAGE_SIZE) {
-> > -               ClearPageReserved(virt_to_page(start));
-> > -               init_page_count(virt_to_page(start));
-> > -               free_page(start);
-> > -               totalram_pages_inc();
-> > -       }
-> > -}
-> > -#endif
-> > -
-> >  extern char __init_begin[], __init_end[];
-> >
-> >  void free_initmem(void)
 > > --
-> > 2.7.4
+> > Best Regards
+> >  Guo Ren
 > >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
-> 
+> > ML: https://lore.kernel.org/linux-csky/
+> >
+>
+> --
+> Sincerely yours,
+> Mike.
+>
+
 
 -- 
-Sincerely yours,
-Mike.
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

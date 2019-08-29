@@ -2,27 +2,28 @@ Return-Path: <SRS0=EOae=WZ=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E51F6C3A59F
-	for <linux-csky@archiver.kernel.org>; Thu, 29 Aug 2019 06:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15C1DC3A5A6
+	for <linux-csky@archiver.kernel.org>; Thu, 29 Aug 2019 06:57:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDE9D22CF5
-	for <linux-csky@archiver.kernel.org>; Thu, 29 Aug 2019 06:57:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC2BC215EA
+	for <linux-csky@archiver.kernel.org>; Thu, 29 Aug 2019 06:57:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbfH2G5M (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 29 Aug 2019 02:57:12 -0400
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:37909 "EHLO
+        id S1727768AbfH2G5Q (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 29 Aug 2019 02:57:16 -0400
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:33795 "EHLO
         smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725776AbfH2G5M (ORCPT
+        by vger.kernel.org with ESMTP id S1725883AbfH2G5P (ORCPT
         <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 29 Aug 2019 02:57:12 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07443786|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.555851-0.0983114-0.345837;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07391;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.FKpKZrt_1567061827;
-Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.FKpKZrt_1567061827)
-          by smtp.aliyun-inc.com(10.147.42.135);
-          Thu, 29 Aug 2019 14:57:07 +0800
+        Thu, 29 Aug 2019 02:57:15 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07440399|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.365205-0.0142482-0.620547;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03302;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.FKp9f21_1567061830;
+Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.FKp9f21_1567061830)
+          by smtp.aliyun-inc.com(10.147.44.145);
+          Thu, 29 Aug 2019 14:57:10 +0800
 From:   Mao Han <han_mao@c-sky.com>
 To:     linux-riscv@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
@@ -31,78 +32,162 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         Greentime Hu <green.hu@gmail.com>,
         Palmer Dabbelt <palmer@sifive.com>,
         Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>
-Subject: [PATCH V6 0/3] riscv: Add perf callchain support
-Date:   Thu, 29 Aug 2019 14:56:59 +0800
-Message-Id: <cover.1567060834.git.han_mao@c-sky.com>
+Subject: [PATCH V6 2/3] riscv: Add support for perf registers sampling
+Date:   Thu, 29 Aug 2019 14:57:01 +0800
+Message-Id: <0179424c5edc166273d5fe261f70b1a4c13a90f8.1567060834.git.han_mao@c-sky.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1567060834.git.han_mao@c-sky.com>
+References: <cover.1567060834.git.han_mao@c-sky.com>
+In-Reply-To: <cover.1567060834.git.han_mao@c-sky.com>
+References: <cover.1567060834.git.han_mao@c-sky.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This patch set add perf callchain(FP/DWARF) support for RISC-V.
-It comes from the csky version callchain support with some
-slight modifications. The patchset base on Linux 5.3-rc6.
+This patch implements the perf registers sampling and validation API
+for riscv arch. The valid registers and their register ID are defined in
+perf_regs.h. Perf tool can backtrace in userspace with unwind library
+and the registers/user stack dump support.
 
-Changes since v5:
-  - use walk_stackframe from stacktrace.c to handle
-    kernel callchain unwinding(fix invalid mem access)
-
-Changes since v4:
-  - Add missing PERF_HAVE_ARCH_REGS_QUERY_REGISTER_OFFSET
-    verified with extra CFLAGS(-Wall -Werror)
-
-Changes since v3:
-  - Add more strict check for unwind_frame_kernel
-  - update for kernel 5.3
-
-Changes since v2:
-  - fix inconsistent comment
-  - force to build kernel with -fno-omit-frame-pointer if perf
-    event is enabled
-
-Changes since v1:
-  - simplify implementation and code convention
-
+Signed-off-by: Mao Han <han_mao@c-sky.com>
 Cc: Paul Walmsley <paul.walmsley@sifive.com>
 Cc: Greentime Hu <green.hu@gmail.com>
 Cc: Palmer Dabbelt <palmer@sifive.com>
 Cc: linux-riscv <linux-riscv@lists.infradead.org>
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Guo Ren <guoren@kernel.org>
-
-Mao Han (3):
-  riscv: Add perf callchain support
-  riscv: Add support for perf registers sampling
-  riscv: Add support for libdw
-
- arch/riscv/Kconfig                            |  2 +
- arch/riscv/Makefile                           |  3 +
- arch/riscv/include/uapi/asm/perf_regs.h       | 42 ++++++++++++
- arch/riscv/kernel/Makefile                    |  4 +-
- arch/riscv/kernel/perf_callchain.c            | 95 ++++++++++++++++++++++++++
- arch/riscv/kernel/perf_regs.c                 | 44 ++++++++++++
- arch/riscv/kernel/stacktrace.c                |  2 +-
- tools/arch/riscv/include/uapi/asm/perf_regs.h | 42 ++++++++++++
- tools/perf/Makefile.config                    |  6 +-
- tools/perf/arch/riscv/Build                   |  1 +
- tools/perf/arch/riscv/Makefile                |  4 ++
- tools/perf/arch/riscv/include/perf_regs.h     | 96 +++++++++++++++++++++++++++
- tools/perf/arch/riscv/util/Build              |  2 +
- tools/perf/arch/riscv/util/dwarf-regs.c       | 72 ++++++++++++++++++++
- tools/perf/arch/riscv/util/unwind-libdw.c     | 57 ++++++++++++++++
- 15 files changed, 469 insertions(+), 3 deletions(-)
+---
+ arch/riscv/Kconfig                      |  2 ++
+ arch/riscv/include/uapi/asm/perf_regs.h | 42 +++++++++++++++++++++++++++++++
+ arch/riscv/kernel/Makefile              |  1 +
+ arch/riscv/kernel/perf_regs.c           | 44 +++++++++++++++++++++++++++++++++
+ 4 files changed, 89 insertions(+)
  create mode 100644 arch/riscv/include/uapi/asm/perf_regs.h
- create mode 100644 arch/riscv/kernel/perf_callchain.c
  create mode 100644 arch/riscv/kernel/perf_regs.c
- create mode 100644 tools/arch/riscv/include/uapi/asm/perf_regs.h
- create mode 100644 tools/perf/arch/riscv/Build
- create mode 100644 tools/perf/arch/riscv/Makefile
- create mode 100644 tools/perf/arch/riscv/include/perf_regs.h
- create mode 100644 tools/perf/arch/riscv/util/Build
- create mode 100644 tools/perf/arch/riscv/util/dwarf-regs.c
- create mode 100644 tools/perf/arch/riscv/util/unwind-libdw.c
 
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 59a4727..4bc976d 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -35,6 +35,8 @@ config RISCV
+ 	select HAVE_DMA_CONTIGUOUS
+ 	select HAVE_FUTEX_CMPXCHG if FUTEX
+ 	select HAVE_PERF_EVENTS
++	select HAVE_PERF_REGS
++	select HAVE_PERF_USER_STACK_DUMP
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select IRQ_DOMAIN
+ 	select SPARSE_IRQ
+diff --git a/arch/riscv/include/uapi/asm/perf_regs.h b/arch/riscv/include/uapi/asm/perf_regs.h
+new file mode 100644
+index 0000000..df1a581
+--- /dev/null
++++ b/arch/riscv/include/uapi/asm/perf_regs.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd. */
++
++#ifndef _ASM_RISCV_PERF_REGS_H
++#define _ASM_RISCV_PERF_REGS_H
++
++enum perf_event_riscv_regs {
++	PERF_REG_RISCV_PC,
++	PERF_REG_RISCV_RA,
++	PERF_REG_RISCV_SP,
++	PERF_REG_RISCV_GP,
++	PERF_REG_RISCV_TP,
++	PERF_REG_RISCV_T0,
++	PERF_REG_RISCV_T1,
++	PERF_REG_RISCV_T2,
++	PERF_REG_RISCV_S0,
++	PERF_REG_RISCV_S1,
++	PERF_REG_RISCV_A0,
++	PERF_REG_RISCV_A1,
++	PERF_REG_RISCV_A2,
++	PERF_REG_RISCV_A3,
++	PERF_REG_RISCV_A4,
++	PERF_REG_RISCV_A5,
++	PERF_REG_RISCV_A6,
++	PERF_REG_RISCV_A7,
++	PERF_REG_RISCV_S2,
++	PERF_REG_RISCV_S3,
++	PERF_REG_RISCV_S4,
++	PERF_REG_RISCV_S5,
++	PERF_REG_RISCV_S6,
++	PERF_REG_RISCV_S7,
++	PERF_REG_RISCV_S8,
++	PERF_REG_RISCV_S9,
++	PERF_REG_RISCV_S10,
++	PERF_REG_RISCV_S11,
++	PERF_REG_RISCV_T3,
++	PERF_REG_RISCV_T4,
++	PERF_REG_RISCV_T5,
++	PERF_REG_RISCV_T6,
++	PERF_REG_RISCV_MAX,
++};
++#endif /* _ASM_RISCV_PERF_REGS_H */
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index b1bea89..696020f 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -40,5 +40,6 @@ obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+ 
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
++obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+ 
+ clean:
+diff --git a/arch/riscv/kernel/perf_regs.c b/arch/riscv/kernel/perf_regs.c
+new file mode 100644
+index 0000000..04a38fb
+--- /dev/null
++++ b/arch/riscv/kernel/perf_regs.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd. */
++
++#include <linux/errno.h>
++#include <linux/kernel.h>
++#include <linux/perf_event.h>
++#include <linux/bug.h>
++#include <asm/perf_regs.h>
++#include <asm/ptrace.h>
++
++u64 perf_reg_value(struct pt_regs *regs, int idx)
++{
++	if (WARN_ON_ONCE((u32)idx >= PERF_REG_RISCV_MAX))
++		return 0;
++
++	return ((unsigned long *)regs)[idx];
++}
++
++#define REG_RESERVED (~((1ULL << PERF_REG_RISCV_MAX) - 1))
++
++int perf_reg_validate(u64 mask)
++{
++	if (!mask || mask & REG_RESERVED)
++		return -EINVAL;
++
++	return 0;
++}
++
++u64 perf_reg_abi(struct task_struct *task)
++{
++#if __riscv_xlen == 64
++	return PERF_SAMPLE_REGS_ABI_64;
++#else
++	return PERF_SAMPLE_REGS_ABI_32;
++#endif
++}
++
++void perf_get_regs_user(struct perf_regs *regs_user,
++			struct pt_regs *regs,
++			struct pt_regs *regs_user_copy)
++{
++	regs_user->regs = task_pt_regs(current);
++	regs_user->abi = perf_reg_abi(current);
++}
 -- 
 2.7.4
 

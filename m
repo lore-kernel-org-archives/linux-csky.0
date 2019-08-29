@@ -1,137 +1,108 @@
-Return-Path: <SRS0=Yua3=WY=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=EOae=WZ=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04284C3A5A1
-	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 16:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E51F6C3A59F
+	for <linux-csky@archiver.kernel.org>; Thu, 29 Aug 2019 06:57:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBF9F20828
-	for <linux-csky@archiver.kernel.org>; Wed, 28 Aug 2019 16:08:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567008506;
-	bh=eLovFhfmXzqDIk/TDKv2aE9tBBV+t8nqpUbBWhhHJ0A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=SFXJzzPMXcMZJcJpLA2teyuPVoRwq6WlHxfHQ1wpwA/6T4T6eSd01Sks3TVVOesL2
-	 IkbvTwysCQG7O1NdOYBHowL1297gIsWLjQzAOs4kX9hiTGGF7nzJJ5ZMLUrp/qfBNB
-	 meP6vKy/dJ6Gw0GcyMVXTluAP5O4dHu/bmT/sYMc=
+	by mail.kernel.org (Postfix) with ESMTP id BDE9D22CF5
+	for <linux-csky@archiver.kernel.org>; Thu, 29 Aug 2019 06:57:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbfH1QI0 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 28 Aug 2019 12:08:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42816 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726415AbfH1QI0 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 28 Aug 2019 12:08:26 -0400
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7425D20828;
-        Wed, 28 Aug 2019 16:08:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567008505;
-        bh=eLovFhfmXzqDIk/TDKv2aE9tBBV+t8nqpUbBWhhHJ0A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=w4ONHUiRrU0nxEr70fyR2MWO9PAeQgmAcFJMR0HtkOwvztAppvkFT+c4qGWAXfjik
-         IbTkIGIuAN6WMd9S3dwNnQjOw93S0vGbUHHQ1Dzxt2ow9A61SFXMvj41uC70lnHUiG
-         f5N883US8Ejxz2WG/HUDRRftZQlxF6flsarbt0ck=
-Received: by mail-wr1-f42.google.com with SMTP id t16so373465wra.6;
-        Wed, 28 Aug 2019 09:08:25 -0700 (PDT)
-X-Gm-Message-State: APjAAAUa9/nhab1UJpJmZLU1MNaEOE6Tl/5jq5BZQdSW8WaQAIwUW3kR
-        5pahH7EwzrcYwZQUKQr2z3o19wef3SU02M4Ef2Q=
-X-Google-Smtp-Source: APXvYqy2MdNrtC6cq/V0NhMLDf5lyTJAjLNy45uH8vKk7uRjJ0ygP5+oz3XINQQBpLNvZCOwwgVgmUlH8ULL13TEFrc=
-X-Received: by 2002:adf:f3d1:: with SMTP id g17mr5650476wrp.38.1567008503934;
- Wed, 28 Aug 2019 09:08:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <1566999319-8151-1-git-send-email-rppt@linux.ibm.com>
- <CAJF2gTTF0W18kPzXP8hOA64FuOx=atxFnCk0syEhP7s7LOm0Kw@mail.gmail.com> <20190828143946.GA21342@rapoport-lnx>
-In-Reply-To: <20190828143946.GA21342@rapoport-lnx>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 29 Aug 2019 00:08:12 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQXf23s-7urhRLX3-bc+6atiO5WewN+PYr3T1-C-rLKig@mail.gmail.com>
-Message-ID: <CAJF2gTQXf23s-7urhRLX3-bc+6atiO5WewN+PYr3T1-C-rLKig@mail.gmail.com>
-Subject: Re: [PATCH] csky: use generic free_initrd_mem()
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1725973AbfH2G5M (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 29 Aug 2019 02:57:12 -0400
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:37909 "EHLO
+        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725776AbfH2G5M (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 29 Aug 2019 02:57:12 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07443786|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.555851-0.0983114-0.345837;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07391;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.FKpKZrt_1567061827;
+Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.FKpKZrt_1567061827)
+          by smtp.aliyun-inc.com(10.147.42.135);
+          Thu, 29 Aug 2019 14:57:07 +0800
+From:   Mao Han <han_mao@c-sky.com>
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Mao Han <han_mao@c-sky.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>
+Subject: [PATCH V6 0/3] riscv: Add perf callchain support
+Date:   Thu, 29 Aug 2019 14:56:59 +0800
+Message-Id: <cover.1567060834.git.han_mao@c-sky.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Sure, no problem.
+This patch set add perf callchain(FP/DWARF) support for RISC-V.
+It comes from the csky version callchain support with some
+slight modifications. The patchset base on Linux 5.3-rc6.
 
-On Wed, Aug 28, 2019 at 10:39 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
->
-> Hi,
->
-> On Wed, Aug 28, 2019 at 10:12:52PM +0800, Guo Ren wrote:
-> > Acked-by: Guo Ren <guoren@kernel.org>
->
-> Do you mind taking it via csky tree?
->
-> > On Wed, Aug 28, 2019 at 9:35 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
-> > >
-> > > The csky implementation of free_initrd_mem() is an open-coded version of
-> > > free_reserved_area() without poisoning.
-> > >
-> > > Remove it and make csky use the generic version of free_initrd_mem().
-> > >
-> > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > > ---
-> > >  arch/csky/mm/init.c | 16 ----------------
-> > >  1 file changed, 16 deletions(-)
-> > >
-> > > diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-> > > index eb0dc9e..d4c2292 100644
-> > > --- a/arch/csky/mm/init.c
-> > > +++ b/arch/csky/mm/init.c
-> > > @@ -60,22 +60,6 @@ void __init mem_init(void)
-> > >         mem_init_print_info(NULL);
-> > >  }
-> > >
-> > > -#ifdef CONFIG_BLK_DEV_INITRD
-> > > -void free_initrd_mem(unsigned long start, unsigned long end)
-> > > -{
-> > > -       if (start < end)
-> > > -               pr_info("Freeing initrd memory: %ldk freed\n",
-> > > -                       (end - start) >> 10);
-> > > -
-> > > -       for (; start < end; start += PAGE_SIZE) {
-> > > -               ClearPageReserved(virt_to_page(start));
-> > > -               init_page_count(virt_to_page(start));
-> > > -               free_page(start);
-> > > -               totalram_pages_inc();
-> > > -       }
-> > > -}
-> > > -#endif
-> > > -
-> > >  extern char __init_begin[], __init_end[];
-> > >
-> > >  void free_initmem(void)
-> > > --
-> > > 2.7.4
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
-> >
-> > ML: https://lore.kernel.org/linux-csky/
-> >
->
-> --
-> Sincerely yours,
-> Mike.
->
+Changes since v5:
+  - use walk_stackframe from stacktrace.c to handle
+    kernel callchain unwinding(fix invalid mem access)
 
+Changes since v4:
+  - Add missing PERF_HAVE_ARCH_REGS_QUERY_REGISTER_OFFSET
+    verified with extra CFLAGS(-Wall -Werror)
+
+Changes since v3:
+  - Add more strict check for unwind_frame_kernel
+  - update for kernel 5.3
+
+Changes since v2:
+  - fix inconsistent comment
+  - force to build kernel with -fno-omit-frame-pointer if perf
+    event is enabled
+
+Changes since v1:
+  - simplify implementation and code convention
+
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+Cc: Palmer Dabbelt <palmer@sifive.com>
+Cc: linux-riscv <linux-riscv@lists.infradead.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Guo Ren <guoren@kernel.org>
+
+Mao Han (3):
+  riscv: Add perf callchain support
+  riscv: Add support for perf registers sampling
+  riscv: Add support for libdw
+
+ arch/riscv/Kconfig                            |  2 +
+ arch/riscv/Makefile                           |  3 +
+ arch/riscv/include/uapi/asm/perf_regs.h       | 42 ++++++++++++
+ arch/riscv/kernel/Makefile                    |  4 +-
+ arch/riscv/kernel/perf_callchain.c            | 95 ++++++++++++++++++++++++++
+ arch/riscv/kernel/perf_regs.c                 | 44 ++++++++++++
+ arch/riscv/kernel/stacktrace.c                |  2 +-
+ tools/arch/riscv/include/uapi/asm/perf_regs.h | 42 ++++++++++++
+ tools/perf/Makefile.config                    |  6 +-
+ tools/perf/arch/riscv/Build                   |  1 +
+ tools/perf/arch/riscv/Makefile                |  4 ++
+ tools/perf/arch/riscv/include/perf_regs.h     | 96 +++++++++++++++++++++++++++
+ tools/perf/arch/riscv/util/Build              |  2 +
+ tools/perf/arch/riscv/util/dwarf-regs.c       | 72 ++++++++++++++++++++
+ tools/perf/arch/riscv/util/unwind-libdw.c     | 57 ++++++++++++++++
+ 15 files changed, 469 insertions(+), 3 deletions(-)
+ create mode 100644 arch/riscv/include/uapi/asm/perf_regs.h
+ create mode 100644 arch/riscv/kernel/perf_callchain.c
+ create mode 100644 arch/riscv/kernel/perf_regs.c
+ create mode 100644 tools/arch/riscv/include/uapi/asm/perf_regs.h
+ create mode 100644 tools/perf/arch/riscv/Build
+ create mode 100644 tools/perf/arch/riscv/Makefile
+ create mode 100644 tools/perf/arch/riscv/include/perf_regs.h
+ create mode 100644 tools/perf/arch/riscv/util/Build
+ create mode 100644 tools/perf/arch/riscv/util/dwarf-regs.c
+ create mode 100644 tools/perf/arch/riscv/util/unwind-libdw.c
 
 -- 
-Best Regards
- Guo Ren
+2.7.4
 
-ML: https://lore.kernel.org/linux-csky/

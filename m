@@ -1,95 +1,85 @@
-Return-Path: <SRS0=++d+=XA=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=6qp2=XN=gmail.com=bahdja213000@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=0.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2513AC3A5A5
-	for <linux-csky@archiver.kernel.org>; Thu,  5 Sep 2019 07:55:31 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE9BB2173B
-	for <linux-csky@archiver.kernel.org>; Thu,  5 Sep 2019 07:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8641C4CEC4
+	for <linux-csky@archiver.kernel.org>; Wed, 18 Sep 2019 10:59:00 +0000 (UTC)
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mail.kernel.org (Postfix) with ESMTPS id 5490F218AF
+	for <linux-csky@archiver.kernel.org>; Wed, 18 Sep 2019 10:59:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="I2t+igV+"
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731609AbfIEHza (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 5 Sep 2019 03:55:30 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:33311 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731390AbfIEHza (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 5 Sep 2019 03:55:30 -0400
-Received: by mail-io1-f68.google.com with SMTP id m11so2744794ioo.0
-        for <linux-csky@vger.kernel.org>; Thu, 05 Sep 2019 00:55:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l7lCLSUS"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5490F218AF
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=bahdja213000@gmail.com
+Received: by mail-qt1-f174.google.com with SMTP id n7so8311386qtb.6
+        for <linux-csky@archiver.kernel.org>; Wed, 18 Sep 2019 03:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=C5c7K1Hw4FjCF2xV5vuGtI/cNoltJZ5oqSBi17hs6i0=;
-        b=I2t+igV+hg/20Cs7tSHvQRhOdgxcKrBFnKFMkbgfAOGGLKQ5rD53Fyq8x08c4hM38u
-         rQujPpaXuKkVSUOHjfVYjTCq8fMWUZMAxXQfjZ3g6Mpk2o38aAJEKPYW0v9nO4B8WITq
-         ki+UPop151pYxHkpNWOg3HyrlfnXCyZ/41la7iMsOo3512dJvfjfLGEHw339fTc2xZ9J
-         CLssR4wQHnqV4w26NYHbPTFZ2s2NShfg+5RHYHYKXAug6EZtEtTPSMb1JYElI+BptV2J
-         wKT9lhhK0YFtImBGIKPryVgP7cdfdGw5hDLJuYGJvbzjKjXN95cjimp4Cndqiv7HYVMa
-         O/Fw==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=1MaCbxUQyW2nEXO/HydYARyyQ10Y620bTUxXYMw0TIU=;
+        b=l7lCLSUS5nz6Fw2mbZ2So4GXMD2C2elaxTXf2Uur1q8aS6UVt1xA1UDJ9/5EylkXzF
+         /S1vyi92o1SO+uaCYGpj1Slbb3ggsWMh8TfjjeRbA6mGytMsU0p+54ttx0Ae9Be9eEXC
+         V9+Xg+h09QYfgr1OsoArp6YzHiwWoqdvCNQB0U0U8eMO2tdqxgtytGWE9McYSeMLudua
+         vqvs8qSqy4F1dCxKcXewPlcBGADR3m5oKOv/DOA0zEqmnX4bglVMk5WQ2l7PsIxwF18p
+         ie8AWqP9qrOh8HnuSI3sgTrJqVpkvWlqSWtuUdzyzTTIMj1L2ho3FVHLh2mLE1SVdl9i
+         eRvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=C5c7K1Hw4FjCF2xV5vuGtI/cNoltJZ5oqSBi17hs6i0=;
-        b=Zx+zFIsfu8rMZ4yTM5MXOeJejl4X3ZIxMIS+e2IVgZZaFS4gJBOFJe1o/jzpnZ6JLL
-         EN7NQuF2+RogmYEU2LAZ9gMWejsKeLAGJ96F4EgvgYWYI2dqRZWuW9mIvpl4FMmMA71f
-         1ePwKRSvYLTqckwhyNU+KmkfD8fAGDVyu0aM8kztSSodLQG0Sbw7rkhcEaC+CLZoCrr8
-         Zzr06pWAROcFj1W5ff2uICIwa5oUaTmT0bkeuOZA5OgJPwOp+1aKsu/arXKSMhY49xsG
-         YNaKjhw8eNQGdBSOWQqKe9uThjDq8YkvqhF7zfnBffZcSAswgZtd1hKXuIOdv8CDc6xi
-         Trdw==
-X-Gm-Message-State: APjAAAXVWPlJSC2Bu8h5x61YZTrkpT3IWP7ZFGzgl6qYJFg7cvBcpclP
-        RCH5GS5E+NjvO8dDLo4yac7/hg==
-X-Google-Smtp-Source: APXvYqyFpbub+uXlwt/4a1kSj0KNHkUibFYHOqfSUlNcIlDIps2KWkPgcOc3xfU2wvTsHUeYG7GTrQ==
-X-Received: by 2002:a6b:f806:: with SMTP id o6mr271583ioh.213.1567670129077;
-        Thu, 05 Sep 2019 00:55:29 -0700 (PDT)
-Received: from localhost ([2601:8c4:0:9294:cb6f:4cf:b239:2fee])
-        by smtp.gmail.com with ESMTPSA id z20sm1319236iof.38.2019.09.05.00.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 00:55:28 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 00:55:26 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Mao Han <han_mao@c-sky.com>
-cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, Greentime Hu <green.hu@gmail.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH V7 2/2] riscv: Add support for libdw
-In-Reply-To: <e30754638a4eabce6f26ecca9d5292cc7dfa2633.1567653632.git.han_mao@c-sky.com>
-Message-ID: <alpine.DEB.2.21.9999.1909050054170.27305@viisi.sifive.com>
-References: <cover.1567653632.git.han_mao@c-sky.com> <e30754638a4eabce6f26ecca9d5292cc7dfa2633.1567653632.git.han_mao@c-sky.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=1MaCbxUQyW2nEXO/HydYARyyQ10Y620bTUxXYMw0TIU=;
+        b=TRPRErzBun3+QrIOeWnZdXjBqPtWfOVNt42TXNipBG5tCy+0Cb3FaEs/iTvN2DyJSW
+         BtbUXbQvcY3Ynfj5it6e1OgEpZXkoSrPmVzn4KUnInU0akoyMYoxOa458pSqBsc1RKEQ
+         D6wyYRMISQDZdLAegyS+jZK8Jxz+9dy1cqrR/uJqtQJ4GAl9IjQhp2dlcGEt3dK66Sf3
+         WzWOSdAqEIw1bvSVRVGgfow9+85RI+yNJTmsBEiF7JdVOYqib0SSAlkiym5vUwAbknEW
+         K9SSqrN4T9BIURqfLDn+gilI5jTCX/zNqkOOvOINGZZtPYVLCAv8yHlrt07Ys4qaabHk
+         FnSg==
+X-Gm-Message-State: APjAAAXIQIJOBuoa9YsR0Q8dC3hECxIqNJaxttlRzLM0J1hqQ66UyIAm
+	ac+vWZCLNaBBhTYICe/87MnjhXG603WMrCgXXV9CgQ==
+X-Google-Smtp-Source: APXvYqyRINPu2NAffCzbq5ferVNfvVVLMLg/R0t3MqaBsfFYvIPrXqo2xQe+hJsgooGSZHqD7gSG56kicpkqNjjdS2Q=
+X-Received: by 2002:a0c:add6:: with SMTP id x22mr2627344qvc.203.1568804339002;
+ Wed, 18 Sep 2019 03:58:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Sender: linux-csky-owner@vger.kernel.org
-Precedence: bulk
-List-ID: <linux-csky.vger.kernel.org>
-X-Mailing-List: linux-csky@vger.kernel.org
+From: Bahdja Bahdja <bahdja213000@gmail.com>
+Date: Wed, 18 Sep 2019 12:58:48 +0200
+Message-ID: <CAH1cjhS_zE87xq_+oYLVc+6eNSDLCQ6j+FdOqEjzLfdXzr_90g@mail.gmail.com>
+Subject: information and help
+To: linux-csky@archiver.kernel.org
+Content-Type: multipart/alternative; boundary="00000000000059319a0592d1b930"
+List-Id: <linux-csky.vger.kernel.org>
 
-On Thu, 5 Sep 2019, Mao Han wrote:
+--00000000000059319a0592d1b930
+Content-Type: text/plain; charset="UTF-8"
 
-> This patch adds support for DWARF register mappings and libdw registers
-> initialization, which is used by perf callchain analyzing when
-> --call-graph=dwarf is given.
-> 
-> Signed-off-by: Mao Han <han_mao@c-sky.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Greentime Hu <green.hu@gmail.com>
-> Cc: Palmer Dabbelt <palmer@sifive.com>
-> Cc: linux-riscv <linux-riscv@lists.infradead.org>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Guo Ren <guoren@kernel.org>
+Hi sir.
+dear/
+i have kernel "romfs" i want to compresse with lzo algorithm to add it in
+my sw.
+i try many time with lzo oberhumer but i cant make it.
+If you have any information or documents and video how to make it, please
+send it to me.
+please accept my best congratulation.
 
-Thanks, queued for v5.4-rc1 with Greentime's Tested-by: (since the changes 
-from v6 to v7 had no functional impact).
+best regards
 
+--00000000000059319a0592d1b930
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-- Paul
+<div dir=3D"rtl"><div dir=3D"ltr">Hi sir.</div><div dir=3D"ltr">dear/</div>=
+<div dir=3D"ltr">i have kernel &quot;romfs&quot; i want to compresse with l=
+zo algorithm to add it in my sw.</div><div dir=3D"ltr">i try many time with=
+ lzo oberhumer but i cant make it.</div><div dir=3D"ltr">If you have any in=
+formation or documents and video how to make it, please send=C2=A0it to me.=
+</div><div dir=3D"ltr">please accept my best congratulation.</div><div dir=
+=3D"ltr"><br></div><div dir=3D"ltr">best regards</div><div dir=3D"ltr"><br>=
+</div></div>
+
+--00000000000059319a0592d1b930--

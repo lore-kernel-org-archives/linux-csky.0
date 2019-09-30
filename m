@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0F1BC32792
-	for <linux-csky@archiver.kernel.org>; Mon, 30 Sep 2019 10:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2928CC35280
+	for <linux-csky@archiver.kernel.org>; Mon, 30 Sep 2019 10:34:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A47EE2190F
-	for <linux-csky@archiver.kernel.org>; Mon, 30 Sep 2019 10:31:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01534216F4
+	for <linux-csky@archiver.kernel.org>; Mon, 30 Sep 2019 10:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569839495;
+	s=default; t=1569839650;
 	bh=0HeOPYXdrIrODY+4Ljv3JDbm2MSyawGhlpS79Ws8AAI=;
 	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=XdkEgu3iYS0LG4WTJFFBIQ3JAW4t8QbXOOwp9+s1hW4YikiOmK2dThpr3Rh8is1GW
-	 z33aVduuPNObP38ZDfCgRkZrv5Li29glbh7LDGj2/YJW9/0WYLdXOETPqnOA1vSABV
-	 Q3t6HTTOAANFT5afaNkMZOIxL19OUC2lBlGh4vDY=
+	b=DxOWrhOlPQhF9/kIl9jmmiWa2rmDuagGsOerQUYuDK1FKQkKEMEftAt/IBiJUqm8i
+	 DR6/HerNnGVKSgmxTj0t6uw8bUiUeXNCrtq8yHKySR7shFkj5qawVOppotLR+Js5Ii
+	 u5REYLdyRh8MW+TpwXYHtEO+Rs1NTqLBENHlJpHg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730437AbfI3Kbf (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 30 Sep 2019 06:31:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37150 "EHLO mail.kernel.org"
+        id S1730706AbfI3KeG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 30 Sep 2019 06:34:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38082 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729415AbfI3Kbf (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 30 Sep 2019 06:31:35 -0400
+        id S1728214AbfI3KeG (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 30 Sep 2019 06:34:06 -0400
 Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F2C9216F4;
-        Mon, 30 Sep 2019 10:31:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DAF7B216F4;
+        Mon, 30 Sep 2019 10:33:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569839493;
+        s=default; t=1569839645;
         bh=0HeOPYXdrIrODY+4Ljv3JDbm2MSyawGhlpS79Ws8AAI=;
         h=From:To:Cc:Subject:Date:From;
-        b=dpJ3mz6FATbQOKH3zBlIwGqbdSid4M2BOw1F9yGM16iiplhNYGQUTY4044OWw2GU8
-         /1lYxQBW373+RanCN6q3P3bX6Le+CUZvoiavND/LRwp3ROFzjFJ8cImq7YaFjX9yAU
-         dVOd4MIlNpyj3ws3Zfe0+DV6wyQudVBuZtsQWJCQ=
+        b=Z2q85nSCsRDjoN9KW0FkP0uSlwo3kA9pKAwpf9dLHckDPqjxWnctgppiUOU68+Q+G
+         6OzoMxiUUFsQUJ3duNyRv6zgj5ccEj35+78Khkd3r5vQa+ttYLVxzq6cBaFpB6ZQws
+         ja6KuK1L+9Ki0+pEJfzpZPWghma/ka/QYDgX3dtU=
 From:   guoren@kernel.org
 To:     torvalds@linux-foundation.org
 Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky changes for v5.3-rc1
-Date:   Mon, 30 Sep 2019 18:31:24 +0800
-Message-Id: <1569839484-28170-1-git-send-email-guoren@kernel.org>
+Subject: [GIT PULL] csky changes for v5.4-rc1
+Date:   Mon, 30 Sep 2019 18:33:48 +0800
+Message-Id: <1569839628-29030-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk

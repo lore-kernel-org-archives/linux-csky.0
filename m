@@ -1,162 +1,99 @@
-Return-Path: <SRS0=vTNM=YF=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=EojY=ZU=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63878C4360C
-	for <linux-csky@archiver.kernel.org>; Sat, 12 Oct 2019 08:26:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47515C432C0
+	for <linux-csky@archiver.kernel.org>; Thu, 28 Nov 2019 22:40:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 313F7206A1
-	for <linux-csky@archiver.kernel.org>; Sat, 12 Oct 2019 08:26:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570868780;
-	bh=aubyP9gSP7lFm7cUQQCZt/rsziAndkFQdXv181VLZ2Q=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-ID:From;
-	b=GsbweraKADzX5f5MmQb/T/UA5Fi0E4QVSO3GgwxmhAXRmx8MnC/APCcvWMdTmwvqt
-	 6fYa7Vh/adcqQeRzQZitI7NJQgXRypjdOZs5MsY02ydtEwzHkz1nFkhNWmk+Ey/FjL
-	 GqOqwguEzfTpu2kbH9HbFMaP2GdUgjuLkYu/8FLw=
+	by mail.kernel.org (Postfix) with ESMTP id 13CF320880
+	for <linux-csky@archiver.kernel.org>; Thu, 28 Nov 2019 22:40:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UIBQKkwY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728782AbfJLI0T (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sat, 12 Oct 2019 04:26:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42468 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728259AbfJLI0T (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 12 Oct 2019 04:26:19 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 239F2206A1
-        for <linux-csky@vger.kernel.org>; Sat, 12 Oct 2019 08:26:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570868778;
-        bh=aubyP9gSP7lFm7cUQQCZt/rsziAndkFQdXv181VLZ2Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:From;
-        b=QKIKQdmqAUieh1ZsNkheYeNAnlPk4Q5MNZw9lkOSvd+UpcXhR/o+yGgzxsBDnMyLu
-         ri/mFS2QrzqaO9/gteRsOn2eDapjyWUVWEN+uLKgtJ0gCYun7gKYj3gdwH1zkOnWr7
-         qW9zBz5cekG2moGExKH23Oa5OyOBf/QQ00gXPXDQ=
-Received: by mail-wm1-f41.google.com with SMTP id r17so10879896wme.0
-        for <linux-csky@vger.kernel.org>; Sat, 12 Oct 2019 01:26:18 -0700 (PDT)
-X-Gm-Message-State: APjAAAUftJ9SDboCTkoMFE4Ug7Dy84d9y1My7lzml0WBgZ27AuC2SSU7
-        Ceg+Q4VGYU4GxXobanK59d0mIT/2R730ojuzMGw=
-X-Google-Smtp-Source: APXvYqypIsYqxs//J6qRRKBL9y7Q+HWMJ/BivhZNuuDrBCSRMSaP9TDyHlEF0HwfQX9PjFGRIvEay/3Cf+SfSXx7Ea4=
-X-Received: by 2002:a1c:20d8:: with SMTP id g207mr6546915wmg.79.1570868776604;
- Sat, 12 Oct 2019 01:26:16 -0700 (PDT)
+        id S1726609AbfK1WkZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 28 Nov 2019 17:40:25 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:48154 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726582AbfK1WkZ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 28 Nov 2019 17:40:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=8s4OV8QdxGuKeWypyj3UNsLPvMPu6eIU4B1rnNMiCVk=; b=UIBQKkwYlA9v9WMMmXJQwIW3o
+        ul8DnxLBsDJcre9bnLzGrSbi3mx4Hrc9IwLNHl7BmkY3gOMJsrwqpHYRy7bj6oh9QnSNjd5sRPbfe
+        7GwbMXtP1MLrFuWld0bcdKHTX8az7ijTNuN2Ix0Z7xx+2dmWbXcVx9SAhkAPsTIHWe1jfD3l/Ip40
+        QuvBSD53+5bYSoo5afxJImzsvt0m1moQSXnjWNtw2/s3Wr8iQdYmYnnnLaiP8vQkvzgm6aoC0Nexh
+        zNGfjcjuyytb51YVH3guxoPn2C/V6yKfLLV7qI+nyXFbez6nI9bpxWqW4I1XNAzY7ED2Bd5+i7a1y
+        FeyKGkpxg==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iaSSW-0000OZ-D3; Thu, 28 Nov 2019 22:40:24 +0000
+To:     LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Guo Ren <guoren@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] clocksource: minor Kconfig help text fixes
+Message-ID: <87922baa-223a-345d-38ac-be5a94d15b34@infradead.org>
+Date:   Thu, 28 Nov 2019 14:40:22 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-References: <1570762615-4256-1-git-send-email-han_mao@c-sky.com>
-In-Reply-To: <1570762615-4256-1-git-send-email-han_mao@c-sky.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 12 Oct 2019 16:26:05 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ8b_EH=fozH7RXwXGp7-yaVLGPnd-1DSKUp=K_xiHZcg@mail.gmail.com>
-Message-ID: <CAJF2gTQ8b_EH=fozH7RXwXGp7-yaVLGPnd-1DSKUp=K_xiHZcg@mail.gmail.com>
-Subject: Fwd: [PATCH] csky: Initial stack protector support
-To:     linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
----------- Forwarded message ---------
-From: Mao Han <han_mao@c-sky.com>
-Date: Fri, Oct 11, 2019 at 10:59 AM
-Subject: [PATCH] csky: Initial stack protector support
-To: <linux-kernel@vger.kernel.org>
-Cc: Mao Han <han_mao@c-sky.com>, Guo Ren <guoren@kernel.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
+Minor cleanups in Kconfig help text:
 
-This is a basic -fstack-protector support without per-task canary
-switching. The protector will report something like when stack
-corruption is detected:
+- End a sentence with a period.
+- Fix verb grammar.
 
-stack-protector: Kernel stack is corrupted in: sys_kill+0x23c/0x23c
-
-Tested with a local array overflow in kill system call.
-
-Signed-off-by: Mao Han <han_mao@c-sky.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: John Stultz <john.stultz@linaro.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org
 Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
 ---
- arch/csky/Kconfig                      |  1 +
- arch/csky/include/asm/stackprotector.h | 29 +++++++++++++++++++++++++++++
- arch/csky/kernel/process.c             |  6 ++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 arch/csky/include/asm/stackprotector.h
+ drivers/clocksource/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 3973847..2852343 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -48,6 +48,7 @@ config CSKY
-        select HAVE_PERF_USER_STACK_DUMP
-        select HAVE_DMA_API_DEBUG
-        select HAVE_DMA_CONTIGUOUS
-+       select HAVE_STACKPROTECTOR
-        select HAVE_SYSCALL_TRACEPOINTS
-        select MAY_HAVE_SPARSE_IRQ
-        select MODULES_USE_ELF_RELA if MODULES
-diff --git a/arch/csky/include/asm/stackprotector.h
-b/arch/csky/include/asm/stackprotector.h
-new file mode 100644
-index 0000000..d7cd4e5
---- /dev/null
-+++ b/arch/csky/include/asm/stackprotector.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_STACKPROTECTOR_H
-+#define _ASM_STACKPROTECTOR_H 1
-+
-+#include <linux/random.h>
-+#include <linux/version.h>
-+
-+extern unsigned long __stack_chk_guard;
-+
-+/*
-+ * Initialize the stackprotector canary value.
-+ *
-+ * NOTE: this must only be called from functions that never return,
-+ * and it must always be inlined.
-+ */
-+static __always_inline void boot_init_stack_canary(void)
-+{
-+       unsigned long canary;
-+
-+       /* Try to get a semi random initial value. */
-+       get_random_bytes(&canary, sizeof(canary));
-+       canary ^= LINUX_VERSION_CODE;
-+       canary &= CANARY_MASK;
-+
-+       current->stack_canary = canary;
-+       __stack_chk_guard = current->stack_canary;
-+}
-+
-+#endif /* __ASM_SH_STACKPROTECTOR_H */
-diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-index f320d92..5349cd8 100644
---- a/arch/csky/kernel/process.c
-+++ b/arch/csky/kernel/process.c
-@@ -16,6 +16,12 @@
-
- struct cpuinfo_csky cpu_data[NR_CPUS];
-
-+#ifdef CONFIG_STACKPROTECTOR
-+#include <linux/stackprotector.h>
-+unsigned long __stack_chk_guard __read_mostly;
-+EXPORT_SYMBOL(__stack_chk_guard);
-+#endif
-+
- asmlinkage void ret_from_fork(void);
- asmlinkage void ret_from_kernel_thread(void);
-
---
-2.7.4
+--- lnx-54.orig/drivers/clocksource/Kconfig
++++ lnx-54/drivers/clocksource/Kconfig
+@@ -312,7 +312,7 @@ config ARC_TIMERS_64BIT
+ 	depends on ARC_TIMERS
+ 	select TIMER_OF
+ 	help
+-	  This enables 2 different 64-bit timers: RTC (for UP) and GFRC (for SMP)
++	  This enables 2 different 64-bit timers: RTC (for UP) and GFRC (for SMP).
+ 	  RTC is implemented inside the core, while GFRC sits outside the core in
+ 	  ARConnect IP block. Driver automatically picks one of them for clocksource
+ 	  as appropriate.
+@@ -666,7 +666,7 @@ config CSKY_MP_TIMER
+ 	  Say yes here to enable C-SKY SMP timer driver used for C-SKY SMP
+ 	  system.
+ 	  csky,mptimer is not only used in SMP system, it also could be used
+-	  single core system. It's not a mmio reg and it use mtcr/mfcr instruction.
++	  single core system. It's not a mmio reg and it uses mtcr/mfcr instruction.
+ 
+ config GX6605S_TIMER
+ 	bool "Gx6605s SOC system timer driver" if COMPILE_TEST
 
 
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

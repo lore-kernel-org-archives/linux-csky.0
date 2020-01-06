@@ -2,74 +2,149 @@ Return-Path: <SRS0=fbZk=23=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05140C32767
-	for <linux-csky@archiver.kernel.org>; Mon,  6 Jan 2020 03:13:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1799BC32767
+	for <linux-csky@archiver.kernel.org>; Mon,  6 Jan 2020 03:27:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D771221582
-	for <linux-csky@archiver.kernel.org>; Mon,  6 Jan 2020 03:13:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DCBBE2072C
+	for <linux-csky@archiver.kernel.org>; Mon,  6 Jan 2020 03:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1578281235;
+	bh=Zo+Fm8zO3lwsW6sZymHRh/4KsQXc6l1b/Ks9odphPR0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=tIdabhDKrKfquMhiGjSYOVgLfLrdzL5lmzj9x+0fxObJcuTTcVfMAbA76BC0b2oHP
+	 Yxgd0OjtVo01xRIZrE1TyXddXGcxX+TDaDAxaKme+6VfikXFgVLt4uLRn/fEea+bZJ
+	 5Y48LT7VQCYtZQq5GqXVqnDHfkX2rLlQn99b667U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbgAFDNl (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 5 Jan 2020 22:13:41 -0500
-Received: from 59-120-53-16.HINET-IP.hinet.net ([59.120.53.16]:44264 "EHLO
-        ATCSQR.andestech.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727369AbgAFDNl (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 5 Jan 2020 22:13:41 -0500
-X-Greylist: delayed 1661 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 Jan 2020 22:13:40 EST
-Received: from ATCSQR.andestech.com (localhost [127.0.0.2] (may be forged))
-        by ATCSQR.andestech.com with ESMTP id 0062hOig061663;
-        Mon, 6 Jan 2020 10:43:24 +0800 (GMT-8)
-        (envelope-from alankao@andestech.com)
-Received: from mail.andestech.com (atcpcs16.andestech.com [10.0.1.222])
-        by ATCSQR.andestech.com with ESMTP id 0062gfv8061600;
-        Mon, 6 Jan 2020 10:42:41 +0800 (GMT-8)
-        (envelope-from alankao@andestech.com)
-Received: from andestech.com (10.0.15.65) by ATCPCS16.andestech.com
- (10.0.1.222) with Microsoft SMTP Server id 14.3.123.3; Mon, 6 Jan 2020
- 10:45:15 +0800
-Date:   Mon, 6 Jan 2020 10:45:16 +0800
-From:   Alan Kao <alankao@andestech.com>
-To:     <guoren@kernel.org>
-CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <Anup.Patel@wdc.com>,
-        <vincent.chen@sifive.com>, <zong.li@sifive.com>,
-        <greentime.hu@sifive.com>, <bmeng.cn@gmail.com>,
-        <atish.patra@wdc.com>, <linux-arch@vger.kernel.org>,
-        <arnd@arndb.de>, <linux-kernel@vger.kernel.org>,
-        <linux-csky@vger.kernel.org>, Guo Ren <ren_guo@c-sky.com>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 2/2] riscv: Add vector ISA support
-Message-ID: <20200106024515.GA1021@andestech.com>
-References: <20200105025215.2522-1-guoren@kernel.org>
- <20200105025215.2522-2-guoren@kernel.org>
+        id S1727405AbgAFD1P (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 5 Jan 2020 22:27:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45298 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727307AbgAFD1P (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 5 Jan 2020 22:27:15 -0500
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED6AC218AC;
+        Mon,  6 Jan 2020 03:27:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578281234;
+        bh=Zo+Fm8zO3lwsW6sZymHRh/4KsQXc6l1b/Ks9odphPR0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Z0UwdeIDHhcH0bW8cMbIjnpqCStxe5BOfqJVW76lGxrpfgsRH/Q5lih0aZlEABzDm
+         HWQaCImcVIi5OjEYe6PikuM8t2KLZVnbSDxhAcN/gg4q9UCZsitaCmAs7YI07pswKo
+         teIg6PGUXySLYj4xI8Wf6fm+vkRcDmm/pqwRE70M=
+Received: by mail-lf1-f46.google.com with SMTP id f15so35416333lfl.13;
+        Sun, 05 Jan 2020 19:27:13 -0800 (PST)
+X-Gm-Message-State: APjAAAVIHFBWBbVbG+dfgBB45WwviUUKcLYmZoh5tob+4URTToTnnKZL
+        EQz4x2QQGkRmfp/uNdiOCobQ/cIDQ8MWql0GX7Q=
+X-Google-Smtp-Source: APXvYqygCSR6wPl5Ag17BA0i6KBc166EX6D0V4oaPVYvRn207pSfZ3zxEP1EqHI7xIYOgn2TOflxuC6xqb3hUkXGgbA=
+X-Received: by 2002:ac2:4476:: with SMTP id y22mr55916850lfl.169.1578281232059;
+ Sun, 05 Jan 2020 19:27:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200105025215.2522-2-guoren@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.0.15.65]
-X-DNSRBL: 
-X-MAIL: ATCSQR.andestech.com 0062gfv8061600
+References: <20200105025215.2522-2-guoren@kernel.org> <202001052007.tXdAjjwN%lkp@intel.com>
+In-Reply-To: <202001052007.tXdAjjwN%lkp@intel.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 6 Jan 2020 11:27:00 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTxu+rWAB2nZqQ8P-Z6xoFDi82ZSjHjjG-Ub99mU9yA-A@mail.gmail.com>
+Message-ID: <CAJF2gTTxu+rWAB2nZqQ8P-Z6xoFDi82ZSjHjjG-Ub99mU9yA-A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: Add vector ISA support
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        Anup Patel <Anup.Patel@wdc.com>, vincent.chen@sifive.com,
+        zong.li@sifive.com, greentime.hu@sifive.com,
+        Bin Meng <bmeng.cn@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <ren_guo@c-sky.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Guo,
+__uint128_t could work with gcc 8.1.
 
-On Sun, Jan 05, 2020 at 10:52:15AM +0800, guoren@kernel.org wrote:
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
-> 128bit-vlen and it's based on linux-5.5-rc4.
-> 
+If compile the patch we need some small patch for binutils to support
+several vector instructions, 0-day gcc need be updated in future.
 
-According to https://lkml.org/lkml/2019/11/22/2169, in which Paul has stated
-that "we plan to only accept patches for new modules or extensions that have
-been frozen or ratified by the RISC-V Foundation."
 
-Is v0.8 ratified enough for now?
+On Sun, Jan 5, 2020 at 8:33 PM kbuild test robot <lkp@intel.com> wrote:
+>
+> Hi,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v5.5-rc4 next-20191220]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+>
+> url:    https://github.com/0day-ci/linux/commits/guoren-kernel-org/riscv-Fixup-obvious-bug-for-fp-regs-reset/20200105-105609
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c420ddda506b80ec2686e405698d37fafeea3b7a
+> config: riscv-rv32_defconfig (attached as .config)
+> compiler: riscv32-linux-gcc (GCC) 7.5.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # save the attached .config to linux build tree
+>         GCC_VERSION=7.5.0 make.cross ARCH=riscv
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from arch/riscv/include/asm/ptrace.h:9:0,
+>                     from arch/riscv/include/asm/processor.h:11,
+>                     from arch/riscv/include/asm/irqflags.h:10,
+>                     from include/linux/irqflags.h:16,
+>                     from arch/riscv/include/asm/bitops.h:14,
+>                     from include/linux/bitops.h:26,
+>                     from include/linux/kernel.h:12,
+>                     from include/asm-generic/bug.h:19,
+>                     from arch/riscv/include/asm/bug.h:75,
+>                     from include/linux/bug.h:5,
+>                     from include/linux/page-flags.h:10,
+>                     from kernel/bounds.c:10:
+> >> arch/riscv/include/uapi/asm/ptrace.h:75:2: error: unknown type name '__uint128_t'
+>      __uint128_t v[32];
+>      ^~~~~~~~~~~
+>    make[2]: *** [kernel/bounds.s] Error 1
+>    make[2]: Target '__build' not remade because of errors.
+>    make[1]: *** [prepare0] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [sub-make] Error 2
+>    507 real  2 user  5 sys  1.58% cpu   make prepare
+>
+> vim +/__uint128_t +75 arch/riscv/include/uapi/asm/ptrace.h
+>
+>     73
+>     74  struct __riscv_v_state {
+>   > 75          __uint128_t v[32];
+>     76          unsigned long vstart;
+>     77          unsigned long vxsat;
+>     78          unsigned long vxrm;
+>     79          unsigned long vl;
+>     80          unsigned long vtype;
+>     81  };
+>     82
+>
+> ---
+> 0-DAY kernel test infrastructure                 Open Source Technology Center
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
 
+
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

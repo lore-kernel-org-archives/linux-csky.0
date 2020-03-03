@@ -7,44 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B647AC3F2D8
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D846C3F2CD
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83F1224677
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62E7F217F4
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583204387;
-	bh=F4Lhoeop5jyc/HLHpAGZSESF9WLzwH4clZlIidY28eo=;
+	s=default; t=1583204396;
+	bh=wy9W+fQwofwFUAdAK7CWRsY2cm5mGzcAMji3HmIrySs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qR9TPPRG//Nvxb+ViVBr+UtPKhNOxHS5Jk9+wBCRYCklI1gvaN+6UmcKuaVj29sCU
-	 QKpDoRtJpBu0cIHQyyAzPrkRrqW/FHoLi7+VWsJriyY9wT2gYfg/zj2tvgOSwqQXP9
-	 eQ6lTpVvJQSC1WrgwRmY/wQeMxNwv8rqWrZfK78A=
+	b=aEOXdNnp6/7wEYNX5YIHbvivs+FvjBBfhF7xULuZh4G3Tjq4l2kp9YAD5rIS/7JkD
+	 kR/YpRAt3tI1Kdb9IigTj3WW+Hlw66un/3IqgWprRpKa9eml0QIbapay/xDTpaUocq
+	 ZOpmbk6ZThi8113HEu8CojiZTSO0cAEcsYb9ebbQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbgCCC7q (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 2 Mar 2020 21:59:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42630 "EHLO mail.kernel.org"
+        id S1726947AbgCCC7w (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 2 Mar 2020 21:59:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728077AbgCCCrc (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:47:32 -0500
+        id S1727143AbgCCCra (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:47:30 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BCA6424699;
-        Tue,  3 Mar 2020 02:47:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D7A0246A1;
+        Tue,  3 Mar 2020 02:47:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203652;
-        bh=F4Lhoeop5jyc/HLHpAGZSESF9WLzwH4clZlIidY28eo=;
+        s=default; t=1583203650;
+        bh=wy9W+fQwofwFUAdAK7CWRsY2cm5mGzcAMji3HmIrySs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XVR1pFlAh99VGizwwRnbMGIgJvOQAiCyNyHLB9NWEWEJ4oijwv8koqYjEymDK9CI8
-         JmVM+B/n7y3ZrXfX+Hm+cJ5cUI57GfWPL9Z/bovhhm9V2MdalK3HOnoj8BDuFqKopg
-         64CTAsRC0uZbY6tWq+r1y8XodPjZjMvx0OpYPnC8=
+        b=Jusu8VVknnCrgcIAyXsuCnl63vMk6w5sQVxHAHQEHDo+Zv84eiU3RiCHjssgi9Ncy
+         q5l6Si/S8YwMmqZClp6wNLNtQIaomnukYkljbpiCn9AoPZpLjHJW6UO/JQahw3dEEU
+         HGJlgI0AXFL9k5Z5uFTVH4wQDBtDzasdmdqHarBo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guo Ren <guoren@linux.alibaba.com>,
+        Mo Qihui <qihui.mo@verisilicon.com>,
+        Zhange Jian <zhang_jian5@dahuatech.com>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 62/66] csky/smp: Fixup boot failed when CONFIG_SMP
-Date:   Mon,  2 Mar 2020 21:46:11 -0500
-Message-Id: <20200303024615.8889-62-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 60/66] csky/mm: Fixup export invalid_pte_table symbol
+Date:   Mon,  2 Mar 2020 21:46:09 -0500
+Message-Id: <20200303024615.8889-60-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200303024615.8889-1-sashal@kernel.org>
 References: <20200303024615.8889-1-sashal@kernel.org>
@@ -59,30 +61,33 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-[ Upstream commit c9492737b25ca32679ba3163609d938c9abfd508 ]
+[ Upstream commit 7f4a567332f035ab16b29010fbd04a0f10183c77 ]
 
-If we use a non-ipi-support interrupt controller, it will cause panic here.
-We should let cpu up and work with CONFIG_SMP, when we use a non-ipi intc.
+There is no present bit in csky pmd hardware, so we need to prepare invalid_pte_table
+for empty pmd entry and the functions (pmd_none & pmd_present) in pgtable.h need
+invalid_pte_talbe to get result. If a module use these functions, we need export the
+symbol for it.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Mo Qihui <qihui.mo@verisilicon.com>
+Cc: Zhange Jian <zhang_jian5@dahuatech.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/csky/kernel/smp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/csky/mm/init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
-index b753d382e4cef..0bb0954d55709 100644
---- a/arch/csky/kernel/smp.c
-+++ b/arch/csky/kernel/smp.c
-@@ -120,7 +120,7 @@ void __init setup_smp_ipi(void)
- 	int rc;
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index d4c2292ea46bc..00e96278b3776 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -31,6 +31,7 @@
  
- 	if (ipi_irq == 0)
--		panic("%s IRQ mapping failed\n", __func__);
-+		return;
- 
- 	rc = request_percpu_irq(ipi_irq, handle_ipi, "IPI Interrupt",
- 				&ipi_dummy_dev);
+ pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+ pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
++EXPORT_SYMBOL(invalid_pte_table);
+ unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
+ 						__page_aligned_bss;
+ EXPORT_SYMBOL(empty_zero_page);
 -- 
 2.20.1
 

@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B35DFC3F2D8
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BED0C3F2D2
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:48:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 821C524680
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:48:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4676924680
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:48:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583203728;
-	bh=zC3Y1C8HwIOEPRo15lvjJ/967zThZkg6I7D9cZHzu88=;
+	s=default; t=1583203729;
+	bh=1Y8fBheo+gb39pMv7lTELFyrrzvQXoZGwB0CRyzuFc4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kyVSVP/6kvqbycB41hpGgQ4R8iZ4GsrN8jtCc5HafHBbSMzw2gVpw87qvXmzDzHrZ
-	 xSaCRmvwClVl2bZ/TRGcT2qxjviySzY0hNwUzQIVE9PV1bo4wDDoSmGgxn/ekWVaFS
-	 Pf2g5a03UYiZyJ4SUjhnzb0ScPEXUuoCLRBw7xhI=
+	b=ohsUcoNeJEMv4hWVtC3TgF3N/tznOkIaKh4gs/cQOUoTiUfTSXXDlbK7HDwp6nZGi
+	 WOhqbAMm0GcWa0EGYqkVrw/sFra2F8GgN91UJWy0LrqNiRqGJfTnjLQhHcKIgWPSEC
+	 ufEun39t1V1f4jEtGLg4A7e1oC49+eHX9KNNBe4Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbgCCCsr (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 2 Mar 2020 21:48:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44656 "EHLO mail.kernel.org"
+        id S1728561AbgCCCss (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 2 Mar 2020 21:48:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728550AbgCCCsr (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:48:47 -0500
+        id S1728558AbgCCCss (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:48:48 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F3F0A24686;
-        Tue,  3 Mar 2020 02:48:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EEB80246DF;
+        Tue,  3 Mar 2020 02:48:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203726;
-        bh=zC3Y1C8HwIOEPRo15lvjJ/967zThZkg6I7D9cZHzu88=;
+        s=default; t=1583203727;
+        bh=1Y8fBheo+gb39pMv7lTELFyrrzvQXoZGwB0CRyzuFc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1zbFgYjs4W2jaCD1YD5kY3SWfNWstEpJ4sGREf81VfHbr2IvSppemdeGjfGT5BNqr
-         Sa7s31fdI6Qkfn6J3kkxpLlt3oJah+f8ESi/fsZD/8A7mG0dP4V76V9tyFvn5MbHLr
-         de5BEBQm7JFAWr8t8aCGznZJO8yA8+rK6eDBfogQ=
+        b=hJTu2RwWs+QwZznBJmgF/SvyGgADGfhI/i7/au/1L7rg1sZzNTPeoPZefRP4XXpb/
+         0rENvb9IyQgIA7d9kndLVgHZ9qrEUw1sZLKffnptVRQ4UMW9OYsMMn90YpUpVBUtet
+         s6+FyXhTovAupGatHkcBf1v1qV3jwRHZ3uz8aqo4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guo Ren <guoren@linux.alibaba.com>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 55/58] csky: Fixup ftrace modify panic
-Date:   Mon,  2 Mar 2020 21:47:37 -0500
-Message-Id: <20200303024740.9511-55-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 56/58] csky: Fixup compile warning for three unimplemented syscalls
+Date:   Mon,  2 Mar 2020 21:47:38 -0500
+Message-Id: <20200303024740.9511-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200303024740.9511-1-sashal@kernel.org>
 References: <20200303024740.9511-1-sashal@kernel.org>
@@ -59,34 +59,32 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-[ Upstream commit 359ae00d12589c31cf103894d0f32588d523ca83 ]
+[ Upstream commit 2305f60b76110cb3e8658a4ae85d1f7eb0c66a5b ]
 
-During ftrace init, linux will replace all function prologues
-(call_mcout) with nops, but it need flush_dcache and
-invalidate_icache to make it work. So flush_cache functions
-couldn't be nested called by ftrace framework.
+Implement fstat64, fstatat64, clone3 syscalls to fixup
+checksyscalls.sh compile warnings.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/csky/mm/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/csky/include/uapi/asm/unistd.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/csky/mm/Makefile b/arch/csky/mm/Makefile
-index c94ef64810986..efb7ebab342b3 100644
---- a/arch/csky/mm/Makefile
-+++ b/arch/csky/mm/Makefile
-@@ -1,8 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0-only
- ifeq ($(CONFIG_CPU_HAS_CACHEV2),y)
- obj-y +=			cachev2.o
-+CFLAGS_REMOVE_cachev2.o = $(CC_FLAGS_FTRACE)
- else
- obj-y +=			cachev1.o
-+CFLAGS_REMOVE_cachev1.o = $(CC_FLAGS_FTRACE)
- endif
+diff --git a/arch/csky/include/uapi/asm/unistd.h b/arch/csky/include/uapi/asm/unistd.h
+index 211c983c7282d..ba40189297338 100644
+--- a/arch/csky/include/uapi/asm/unistd.h
++++ b/arch/csky/include/uapi/asm/unistd.h
+@@ -1,7 +1,10 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+ // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
  
- obj-y +=			dma-mapping.o
++#define __ARCH_WANT_STAT64
++#define __ARCH_WANT_NEW_STAT
+ #define __ARCH_WANT_SYS_CLONE
++#define __ARCH_WANT_SYS_CLONE3
+ #define __ARCH_WANT_SET_GET_RLIMIT
+ #define __ARCH_WANT_TIME32_SYSCALLS
+ #include <asm-generic/unistd.h>
 -- 
 2.20.1
 

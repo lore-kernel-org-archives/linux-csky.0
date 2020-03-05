@@ -1,93 +1,128 @@
-Return-Path: <SRS0=XWXX=4U=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=f7OS=4W=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D846C3F2CD
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 121DEC3F2D7
+	for <linux-csky@archiver.kernel.org>; Thu,  5 Mar 2020 07:34:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 62E7F217F4
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583204396;
-	bh=wy9W+fQwofwFUAdAK7CWRsY2cm5mGzcAMji3HmIrySs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aEOXdNnp6/7wEYNX5YIHbvivs+FvjBBfhF7xULuZh4G3Tjq4l2kp9YAD5rIS/7JkD
-	 kR/YpRAt3tI1Kdb9IigTj3WW+Hlw66un/3IqgWprRpKa9eml0QIbapay/xDTpaUocq
-	 ZOpmbk6ZThi8113HEu8CojiZTSO0cAEcsYb9ebbQ=
+	by mail.kernel.org (Postfix) with ESMTP id E89B42073D
+	for <linux-csky@archiver.kernel.org>; Thu,  5 Mar 2020 07:34:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbgCCC7w (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 2 Mar 2020 21:59:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42546 "EHLO mail.kernel.org"
+        id S1725900AbgCEHef (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 5 Mar 2020 02:34:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:44192 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727143AbgCCCra (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:47:30 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8D7A0246A1;
-        Tue,  3 Mar 2020 02:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203650;
-        bh=wy9W+fQwofwFUAdAK7CWRsY2cm5mGzcAMji3HmIrySs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jusu8VVknnCrgcIAyXsuCnl63vMk6w5sQVxHAHQEHDo+Zv84eiU3RiCHjssgi9Ncy
-         q5l6Si/S8YwMmqZClp6wNLNtQIaomnukYkljbpiCn9AoPZpLjHJW6UO/JQahw3dEEU
-         HGJlgI0AXFL9k5Z5uFTVH4wQDBtDzasdmdqHarBo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guo Ren <guoren@linux.alibaba.com>,
-        Mo Qihui <qihui.mo@verisilicon.com>,
-        Zhange Jian <zhang_jian5@dahuatech.com>,
-        Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 60/66] csky/mm: Fixup export invalid_pte_table symbol
-Date:   Mon,  2 Mar 2020 21:46:09 -0500
-Message-Id: <20200303024615.8889-60-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303024615.8889-1-sashal@kernel.org>
-References: <20200303024615.8889-1-sashal@kernel.org>
+        id S1725866AbgCEHef (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 5 Mar 2020 02:34:35 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7F0E1FB;
+        Wed,  4 Mar 2020 23:34:33 -0800 (PST)
+Received: from [10.163.1.88] (unknown [10.163.1.88])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B93CE3F534;
+        Wed,  4 Mar 2020 23:38:16 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH] mm/special: Create generic fallbacks for pte_special()
+ and pte_mkspecial()
+To:     linux-mm@kvack.org, Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Guo Ren <guoren@kernel.org>, Brian Cain <bcain@codeaurora.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Creasey <sammy@sammy.net>, Michal Simek <monstr@monstr.eu>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, nios2-dev@lists.rocketboards.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1583114190-7678-1-git-send-email-anshuman.khandual@arm.com>
+Message-ID: <58aecdcf-ea16-c958-0deb-97541792e081@arm.com>
+Date:   Thu, 5 Mar 2020 13:04:19 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1583114190-7678-1-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
 
-[ Upstream commit 7f4a567332f035ab16b29010fbd04a0f10183c77 ]
+On 03/02/2020 07:26 AM, Anshuman Khandual wrote:
+> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> index aef5378f909c..8e4e4be1ca00 100644
+> --- a/arch/mips/include/asm/pgtable.h
+> +++ b/arch/mips/include/asm/pgtable.h
+> @@ -269,6 +269,36 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+>   */
+>  extern pgd_t swapper_pg_dir[];
+>  
+> +/*
+> + * Platform specific pte_special() and pte_mkspecial() definitions
+> + * are required only when ARCH_HAS_PTE_SPECIAL is enabled.
+> + */
+> +#if !defined(CONFIG_32BIT) && !defined(CONFIG_CPU_HAS_RIXI)
+> +#if defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
+> +static inline int pte_special(pte_t pte)
+> +{
+> +	return pte.pte_low & _PAGE_SPECIAL;
+> +}
+> +
+> +static inline pte_t pte_mkspecial(pte_t pte)
+> +{
+> +	pte.pte_low |= _PAGE_SPECIAL;
+> +	return pte;
+> +}
+> +#else
+> +static inline int pte_special(pte_t pte)
+> +{
+> +	return pte_val(pte) & _PAGE_SPECIAL;
+> +}
+> +
+> +static inline pte_t pte_mkspecial(pte_t pte)
+> +{
+> +	pte_val(pte) |= _PAGE_SPECIAL;
+> +	return pte;
+> +}
+> +#endif
+> +#endif
+> +
 
-There is no present bit in csky pmd hardware, so we need to prepare invalid_pte_table
-for empty pmd entry and the functions (pmd_none & pmd_present) in pgtable.h need
-invalid_pte_talbe to get result. If a module use these functions, we need export the
-symbol for it.
+Hello Ralf/Paul,
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Mo Qihui <qihui.mo@verisilicon.com>
-Cc: Zhange Jian <zhang_jian5@dahuatech.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/csky/mm/init.c | 1 +
- 1 file changed, 1 insertion(+)
+This change now restricts mips definitions for pte_special() and pte_mkspecial()
+and makes them visible only for configs where ARCH_HAS_PTE_SPECIAL is enabled.
+Does this look okay ? In almost all other platforms we drop the stub definitions
+for pte_special() and pte_mkspecial().
 
-diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-index d4c2292ea46bc..00e96278b3776 100644
---- a/arch/csky/mm/init.c
-+++ b/arch/csky/mm/init.c
-@@ -31,6 +31,7 @@
- 
- pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
-+EXPORT_SYMBOL(invalid_pte_table);
- unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
- 						__page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
--- 
-2.20.1
-
+- Anshuman

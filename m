@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3FE0C10DCE
-	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F41E6C10F29
+	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 66ADA2084E
-	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C369D2087F
+	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583661203;
-	bh=a+fEawxUrmRXxmSzSy/C7nojpkQvXf9neNEOdNooh+Q=;
+	s=default; t=1583661211;
+	bh=v/rkpyCiyVkM4xjp/Bzdx6fW3ahc9p7Z2LZmcrKYbCo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TycEY5Ka4oxhv3UWmfCOeCDAXYEnfT+O6BwWAv+Zfr5DHeyPS8ojGLEr1uvvckA4s
-	 3wRU9W2KrWSKrGszySG1ygrzIQ4OqtpxakbbmQt+kIJHjKQ0faSVVfkM4I77CXqJnN
-	 Fhw2kekMIzwzm1yYidnVSq7SAy600D6q5vMJE/Zk=
+	b=suj5slOkVvC7fqQG9c+mGS0UoVG1dVEKfX97WkRwFMLoQlexmN29pEsl2zHaQmK6C
+	 173JXmvaDYaMYEck/5pglwzbj1z17FxLcZpEQdcmBEV+U1//n3eJp4TBrNbcpbsq02
+	 2RTHMzMpzbO9czZyUBRAEA+0pZ0qZWFRD0eBQ1yo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgCHJxX (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 8 Mar 2020 05:53:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37156 "EHLO mail.kernel.org"
+        id S1726446AbgCHJx2 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 8 Mar 2020 05:53:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgCHJxW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 8 Mar 2020 05:53:22 -0400
+        id S1725306AbgCHJx2 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 8 Mar 2020 05:53:28 -0400
 Received: from localhost.localdomain (unknown [89.208.247.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3A3220828;
-        Sun,  8 Mar 2020 09:53:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 473AB2084E;
+        Sun,  8 Mar 2020 09:53:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583661202;
-        bh=a+fEawxUrmRXxmSzSy/C7nojpkQvXf9neNEOdNooh+Q=;
+        s=default; t=1583661207;
+        bh=v/rkpyCiyVkM4xjp/Bzdx6fW3ahc9p7Z2LZmcrKYbCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eowOCkteI7Hf21jyWkewxxreP87MDWIRPPkAP3C2tqj0EycanQMnp9TkLmAWqCEd+
-         cD8rWoNCZh+kj2Z6JktJW/B08sqaeCspHXpHIFhdK+sm8zgMF0mNSqO81Mdk4vswHQ
-         TLTKMuNiSgGkvBNzRu5YPu1lQEC7MnJ6t4JCP+D4=
+        b=COk/YYhD/miww0ROVSzFmR11LP/jEXVV6+FaX3E84SFuHxHnu2Yp+Unmbs4LAHhkS
+         yCU3abWp7tROP9Re/rE1nKGxQio1BPicgCzb1HfG2OAxB2Phy6iMWjW4A8BQ5Ifv+O
+         OG8x72VcAXMonY72tx637xB9Slgymapas1zu1MTM=
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com, Anup.Patel@wdc.com,
         greentime.hu@sifive.com
@@ -46,9 +46,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: [RFC PATCH V3 01/11] riscv: Separate patch for cflags and aflags
-Date:   Sun,  8 Mar 2020 17:49:44 +0800
-Message-Id: <20200308094954.13258-2-guoren@kernel.org>
+Subject: [RFC PATCH V3 03/11] riscv: Extending cpufeature.c to detect V-extension
+Date:   Sun,  8 Mar 2020 17:49:46 +0800
+Message-Id: <20200308094954.13258-4-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
 References: <20200308094954.13258-1-guoren@kernel.org>
@@ -61,44 +61,49 @@ From: Guo Ren <guoren@linux.alibaba.com>
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-Use "subst fd" in Makefile is a hack way and it's not convenient
-to add new ISA feature. Just separate them into riscv-march-cflags
-and riscv-march-aflags.
+Current cpufeature.c doesn't support detecting V-extension, because
+"rv64" also contain a 'v' letter and we need to skip it.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Reviewed-by: Anup Patel <anup@brainfault.org>
 ---
- arch/riscv/Makefile | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ arch/riscv/include/uapi/asm/hwcap.h | 1 +
+ arch/riscv/kernel/cpufeature.c      | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index b9009a2fbaf5..6d09b53cf106 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -35,12 +35,18 @@ else
- endif
+diff --git a/arch/riscv/include/uapi/asm/hwcap.h b/arch/riscv/include/uapi/asm/hwcap.h
+index dee98ee28318..a913e9a38819 100644
+--- a/arch/riscv/include/uapi/asm/hwcap.h
++++ b/arch/riscv/include/uapi/asm/hwcap.h
+@@ -21,5 +21,6 @@
+ #define COMPAT_HWCAP_ISA_F	(1 << ('F' - 'A'))
+ #define COMPAT_HWCAP_ISA_D	(1 << ('D' - 'A'))
+ #define COMPAT_HWCAP_ISA_C	(1 << ('C' - 'A'))
++#define COMPAT_HWCAP_ISA_V	(1 << ('V' - 'A'))
  
- # ISA string setting
--riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
--riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
--riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
--riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
--KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
--KBUILD_AFLAGS += -march=$(riscv-march-y)
-+riscv-march-cflags-$(CONFIG_ARCH_RV32I)		:= rv32ima
-+riscv-march-cflags-$(CONFIG_ARCH_RV64I)		:= rv64ima
-+riscv-march-$(CONFIG_FPU)			:= $(riscv-march-y)fd
-+riscv-march-cflags-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-cflags-y)c
-+
-+riscv-march-aflags-$(CONFIG_ARCH_RV32I)		:= rv32ima
-+riscv-march-aflags-$(CONFIG_ARCH_RV64I)		:= rv64ima
-+riscv-march-aflags-$(CONFIG_FPU)		:= $(riscv-march-aflags-y)fd
-+riscv-march-aflags-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-aflags-y)c
-+
-+KBUILD_CFLAGS += -march=$(riscv-march-cflags-y)
-+KBUILD_AFLAGS += -march=$(riscv-march-aflags-y)
+ #endif /* _UAPI_ASM_RISCV_HWCAP_H */
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index a5ad00043104..c8527d770c98 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -30,6 +30,7 @@ void riscv_fill_hwcap(void)
+ 	isa2hwcap['f'] = isa2hwcap['F'] = COMPAT_HWCAP_ISA_F;
+ 	isa2hwcap['d'] = isa2hwcap['D'] = COMPAT_HWCAP_ISA_D;
+ 	isa2hwcap['c'] = isa2hwcap['C'] = COMPAT_HWCAP_ISA_C;
++	isa2hwcap['v'] = isa2hwcap['V'] = COMPAT_HWCAP_ISA_V;
  
- KBUILD_CFLAGS += -mno-save-restore
- KBUILD_CFLAGS += -DCONFIG_PAGE_OFFSET=$(CONFIG_PAGE_OFFSET)
+ 	elf_hwcap = 0;
+ 
+@@ -44,7 +45,8 @@ void riscv_fill_hwcap(void)
+ 			continue;
+ 		}
+ 
+-		for (i = 0; i < strlen(isa); ++i)
++		/* Skip rv64/rv32 to support v/V:vector */
++		for (i = 4; i < strlen(isa); ++i)
+ 			this_hwcap |= isa2hwcap[(unsigned char)(isa[i])];
+ 
+ 		/*
 -- 
 2.17.0
 

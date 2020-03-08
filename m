@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9588FC10F27
-	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92982C10F28
+	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 661C820828
-	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C6BC2087F
+	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583661212;
-	bh=HM4Ww0uWHBrydUOUYxNwt5jptdKmQsMTeZBPstuaVQE=;
+	s=default; t=1583661219;
+	bh=+Qr7yNC094fLdfxvNgJepSw3Yh+DG6Bi7TV/2dy3vos=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=XcB4GuhvezS5SBNqGSVZfohQLnjfkN9TiFiQrvRhKjGr+Z4k1PbaNWEMn1l7/F15H
-	 yV2SooQdBsRYZNsccXil6zUOqFFQklRxZD7TBend9QpciZgUjRN9Uawt58g0a4gQ/M
-	 kcLDPGthKsu07DSe/8U8BXBVbd+w+wK0XptIQZDk=
+	b=1DPyxcV3PWwxu0vJclRi9cP+s5tgQKA5InsShj6Q2xGT15z0obPLFIODINJkUDg7G
+	 iua8a4WOsLS3QJfvp3XSTVoGNTR40+CkVkect9dstoGtg3uGT/Ucyu0p9+Be2LWNE4
+	 4Btactl5MEfpPciNnkHFw3pPwXDr1651Zccf//K8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbgCHJxZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 8 Mar 2020 05:53:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37244 "EHLO mail.kernel.org"
+        id S1726556AbgCHJxi (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 8 Mar 2020 05:53:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37724 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgCHJxZ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 8 Mar 2020 05:53:25 -0400
+        id S1726548AbgCHJxi (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 8 Mar 2020 05:53:38 -0400
 Received: from localhost.localdomain (unknown [89.208.247.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C8E4C20848;
-        Sun,  8 Mar 2020 09:53:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58CF120880;
+        Sun,  8 Mar 2020 09:53:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583661204;
-        bh=HM4Ww0uWHBrydUOUYxNwt5jptdKmQsMTeZBPstuaVQE=;
+        s=default; t=1583661217;
+        bh=+Qr7yNC094fLdfxvNgJepSw3Yh+DG6Bi7TV/2dy3vos=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WeKMEkTuKD7iOgpr5jw2zTvo1TUCqFYm1IuvQSsQ0YQhXtYd52WGFNizPCBNV213q
-         mWwBpGN4ms4i7FE+SttanGNhum/JWnt9Y4BrE1asn5GQJD8ggxnEzAsl3uX/2ihmE2
-         5lWFY3HZkskcIdUL70Dm0snQYzz/Jj5tFpKJOfMQ=
+        b=q1/n5tHIv3ZL9rfSU6sl+A2Gv8WdjWhEcZrexYOmlBaff1LPJgpTspF/kB5ksPnzG
+         kE0D6jTCxj216LcamNz7af0mYnb4v/+w4O5ajRgLAaDDWhxeiAkjAsbJ3nPkJtKcU/
+         fZXggSrRww8paZZipAIYraWOgr2fne8eAI/3fQTI=
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com, Anup.Patel@wdc.com,
         greentime.hu@sifive.com
@@ -46,9 +46,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: [RFC PATCH V3 02/11] riscv: Rename __switch_to_aux -> fpu
-Date:   Sun,  8 Mar 2020 17:49:45 +0800
-Message-Id: <20200308094954.13258-3-guoren@kernel.org>
+Subject: [RFC PATCH V3 07/11] riscv: Reset vector register
+Date:   Sun,  8 Mar 2020 17:49:50 +0800
+Message-Id: <20200308094954.13258-8-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
 References: <20200308094954.13258-1-guoren@kernel.org>
@@ -59,49 +59,97 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-From: Guo Ren <ren_guo@c-sky.com>
-
-The name of __switch_to_aux is not clear and rename it with the
-determine function: __switch_to_fpu. Next we could add other regs'
-switch.
+Reset vector registers at boot-time and disable vector instructions
+execution for kernel mode.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
 ---
- arch/riscv/include/asm/switch_to.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/riscv/kernel/entry.S |  2 +-
+ arch/riscv/kernel/head.S  | 49 +++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 48 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-index 407bcc96a710..b9234e7178d0 100644
---- a/arch/riscv/include/asm/switch_to.h
-+++ b/arch/riscv/include/asm/switch_to.h
-@@ -44,7 +44,7 @@ static inline void fstate_restore(struct task_struct *task,
- 	}
- }
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index bad4d85b5e91..449e0a7ef115 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -76,7 +76,7 @@ _save_context:
+ 	 * Disable the FPU to detect illegal usage of floating point in kernel
+ 	 * space.
+ 	 */
+-	li t0, SR_SUM | SR_FS
++	li t0, SR_SUM | SR_FS | SR_VS
  
--static inline void __switch_to_aux(struct task_struct *prev,
-+static inline void __switch_to_fpu(struct task_struct *prev,
- 				   struct task_struct *next)
- {
- 	struct pt_regs *regs;
-@@ -60,7 +60,7 @@ extern bool has_fpu;
- #define has_fpu false
- #define fstate_save(task, regs) do { } while (0)
- #define fstate_restore(task, regs) do { } while (0)
--#define __switch_to_aux(__prev, __next) do { } while (0)
-+#define __switch_to_fpu(__prev, __next) do { } while (0)
- #endif
+ 	REG_L s0, TASK_TI_USER_SP(tp)
+ 	csrrc s1, CSR_STATUS, t0
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 271860fc2c3f..b40d8ec7ad5d 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -72,10 +72,10 @@ _start_kernel:
+ .option pop
  
- extern struct task_struct *__switch_to(struct task_struct *,
-@@ -71,7 +71,7 @@ do {							\
- 	struct task_struct *__prev = (prev);		\
- 	struct task_struct *__next = (next);		\
- 	if (has_fpu)					\
--		__switch_to_aux(__prev, __next);	\
-+		__switch_to_fpu(__prev, __next);	\
- 	((last) = __switch_to(__prev, __next));		\
- } while (0)
+ 	/*
+-	 * Disable FPU to detect illegal usage of
++	 * Disable FPU & VECTOR to detect illegal usage of
+ 	 * floating point in kernel space
+ 	 */
+-	li t0, SR_FS
++	li t0, SR_FS | SR_VS
+ 	csrc CSR_STATUS, t0
  
+ #ifdef CONFIG_SMP
+@@ -290,6 +290,51 @@ ENTRY(reset_regs)
+ 	csrw	fcsr, 0
+ 	/* note that the caller must clear SR_FS */
+ #endif /* CONFIG_FPU */
++
++#ifdef CONFIG_VECTOR
++	csrr	t0, CSR_MISA
++	li	t1, (COMPAT_HWCAP_ISA_V >> 16)
++	slli	t1, t1, 16
++	and	t0, t0, t1
++	beqz	t0, .Lreset_regs_done
++
++	li	t1, SR_VS
++	csrs	CSR_STATUS, t1
++	vmv.v.i v0, 0
++	vmv.v.i v1, 0
++	vmv.v.i v2, 0
++	vmv.v.i v3, 0
++	vmv.v.i v4, 0
++	vmv.v.i v5, 0
++	vmv.v.i v6, 0
++	vmv.v.i v7, 0
++	vmv.v.i v8, 0
++	vmv.v.i v9, 0
++	vmv.v.i v10, 0
++	vmv.v.i v11, 0
++	vmv.v.i v12, 0
++	vmv.v.i v13, 0
++	vmv.v.i v14, 0
++	vmv.v.i v15, 0
++	vmv.v.i v16, 0
++	vmv.v.i v17, 0
++	vmv.v.i v18, 0
++	vmv.v.i v19, 0
++	vmv.v.i v20, 0
++	vmv.v.i v21, 0
++	vmv.v.i v22, 0
++	vmv.v.i v23, 0
++	vmv.v.i v24, 0
++	vmv.v.i v25, 0
++	vmv.v.i v26, 0
++	vmv.v.i v27, 0
++	vmv.v.i v28, 0
++	vmv.v.i v29, 0
++	vmv.v.i v30, 0
++	vmv.v.i v31, 0
++	/* note that the caller must clear SR_VS */
++#endif /* CONFIG_VECTOR */
++
+ .Lreset_regs_done:
+ 	ret
+ END(reset_regs)
 -- 
 2.17.0
 

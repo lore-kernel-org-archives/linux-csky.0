@@ -2,42 +2,42 @@ Return-Path: <SRS0=4jZv=4Z=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBF75C18E5A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9588FC10F27
 	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9BBFC21741
+	by mail.kernel.org (Postfix) with ESMTP id 661C820828
 	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:53:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1583661212;
-	bh=5bpP4wMCQfaX+IKe4Ot/2AMhW1qZtJCQhDHd5qDbi0s=;
+	bh=HM4Ww0uWHBrydUOUYxNwt5jptdKmQsMTeZBPstuaVQE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Tt6p4lec3LNJRsqAFAQo0dCq8Oa1wkCpUxpisiDA1x7Z5q/ou8zCgTc1JrLYMfaB7
-	 XX8ojeI3ne2MXhBUBjx99/UDtIPnzVtaHUpK5pXEw0bcAfoveoIszNIuV1OA6Oi/UA
-	 FFSdgIiTJCkbv/gagfkbJAWXbwfmxbswak++y13w=
+	b=XcB4GuhvezS5SBNqGSVZfohQLnjfkN9TiFiQrvRhKjGr+Z4k1PbaNWEMn1l7/F15H
+	 yV2SooQdBsRYZNsccXil6zUOqFFQklRxZD7TBend9QpciZgUjRN9Uawt58g0a4gQ/M
+	 kcLDPGthKsu07DSe/8U8BXBVbd+w+wK0XptIQZDk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgCHJxc (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 8 Mar 2020 05:53:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37418 "EHLO mail.kernel.org"
+        id S1726415AbgCHJxZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 8 Mar 2020 05:53:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37244 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgCHJxa (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 8 Mar 2020 05:53:30 -0400
+        id S1725306AbgCHJxZ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 8 Mar 2020 05:53:25 -0400
 Received: from localhost.localdomain (unknown [89.208.247.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EDB6B20828;
-        Sun,  8 Mar 2020 09:53:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C8E4C20848;
+        Sun,  8 Mar 2020 09:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583661210;
-        bh=5bpP4wMCQfaX+IKe4Ot/2AMhW1qZtJCQhDHd5qDbi0s=;
+        s=default; t=1583661204;
+        bh=HM4Ww0uWHBrydUOUYxNwt5jptdKmQsMTeZBPstuaVQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DZ3cuu0ct5yXdL2CfQe9Xou1gpghhwYdyQxzpU69tPebqcnlA6BwdgX/Q7dopJX6P
-         p80MIGbibANWcaQod6FczX+BWexkzJOY8AZN6yaySIsljcvkMF50NuUUaAJmdTpswt
-         HvvmBYjYFuOr8dXNrJ8XTUhrpnCKtTXRIn970HJo=
+        b=WeKMEkTuKD7iOgpr5jw2zTvo1TUCqFYm1IuvQSsQ0YQhXtYd52WGFNizPCBNV213q
+         mWwBpGN4ms4i7FE+SttanGNhum/JWnt9Y4BrE1asn5GQJD8ggxnEzAsl3uX/2ihmE2
+         5lWFY3HZkskcIdUL70Dm0snQYzz/Jj5tFpKJOfMQ=
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com, Anup.Patel@wdc.com,
         greentime.hu@sifive.com
@@ -46,9 +46,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>,
         Dave Martin <Dave.Martin@arm.com>
-Subject: [RFC PATCH V3 04/11] riscv: Add CSR defines related to VECTOR extension
-Date:   Sun,  8 Mar 2020 17:49:47 +0800
-Message-Id: <20200308094954.13258-5-guoren@kernel.org>
+Subject: [RFC PATCH V3 02/11] riscv: Rename __switch_to_aux -> fpu
+Date:   Sun,  8 Mar 2020 17:49:45 +0800
+Message-Id: <20200308094954.13258-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
 References: <20200308094954.13258-1-guoren@kernel.org>
@@ -59,56 +59,49 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Follow the spec to define the regs' bits and regs' number.
+From: Guo Ren <ren_guo@c-sky.com>
+
+The name of __switch_to_aux is not clear and rename it with the
+determine function: __switch_to_fpu. Next we could add other regs'
+switch.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Reviewed-by: Anup Patel <anup@brainfault.org>
 ---
- arch/riscv/include/asm/csr.h | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ arch/riscv/include/asm/switch_to.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index 435b65532e29..49b93b638680 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -24,6 +24,12 @@
- #define SR_FS_CLEAN	_AC(0x00004000, UL)
- #define SR_FS_DIRTY	_AC(0x00006000, UL)
+diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
+index 407bcc96a710..b9234e7178d0 100644
+--- a/arch/riscv/include/asm/switch_to.h
++++ b/arch/riscv/include/asm/switch_to.h
+@@ -44,7 +44,7 @@ static inline void fstate_restore(struct task_struct *task,
+ 	}
+ }
  
-+#define SR_VS           _AC(0x01800000, UL) /* Vector Status */
-+#define SR_VS_OFF       _AC(0x00000000, UL)
-+#define SR_VS_INITIAL   _AC(0x00800000, UL)
-+#define SR_VS_CLEAN     _AC(0x01000000, UL)
-+#define SR_VS_DIRTY     _AC(0x01800000, UL)
-+
- #define SR_XS		_AC(0x00018000, UL) /* Extension Status */
- #define SR_XS_OFF	_AC(0x00000000, UL)
- #define SR_XS_INITIAL	_AC(0x00008000, UL)
-@@ -31,9 +37,9 @@
- #define SR_XS_DIRTY	_AC(0x00018000, UL)
- 
- #ifndef CONFIG_64BIT
--#define SR_SD		_AC(0x80000000, UL) /* FS/XS dirty */
-+#define SR_SD		_AC(0x80000000, UL) /* FS/VS/XS dirty */
- #else
--#define SR_SD		_AC(0x8000000000000000, UL) /* FS/XS dirty */
-+#define SR_SD		_AC(0x8000000000000000, UL) /* FS/VS/XS dirty */
+-static inline void __switch_to_aux(struct task_struct *prev,
++static inline void __switch_to_fpu(struct task_struct *prev,
+ 				   struct task_struct *next)
+ {
+ 	struct pt_regs *regs;
+@@ -60,7 +60,7 @@ extern bool has_fpu;
+ #define has_fpu false
+ #define fstate_save(task, regs) do { } while (0)
+ #define fstate_restore(task, regs) do { } while (0)
+-#define __switch_to_aux(__prev, __next) do { } while (0)
++#define __switch_to_fpu(__prev, __next) do { } while (0)
  #endif
  
- /* SATP flags */
-@@ -102,6 +108,13 @@
- #define CSR_MIP			0x344
- #define CSR_MHARTID		0xf14
+ extern struct task_struct *__switch_to(struct task_struct *,
+@@ -71,7 +71,7 @@ do {							\
+ 	struct task_struct *__prev = (prev);		\
+ 	struct task_struct *__next = (next);		\
+ 	if (has_fpu)					\
+-		__switch_to_aux(__prev, __next);	\
++		__switch_to_fpu(__prev, __next);	\
+ 	((last) = __switch_to(__prev, __next));		\
+ } while (0)
  
-+#define CSR_VSTART		0x8
-+#define CSR_VXSAT		0x9
-+#define CSR_VXRM		0xa
-+#define CSR_VL			0xc20
-+#define CSR_VTYPE		0xc21
-+#define CSR_VLENB		0xc22
-+
- #ifdef CONFIG_RISCV_M_MODE
- # define CSR_STATUS	CSR_MSTATUS
- # define CSR_IE		CSR_MIE
 -- 
 2.17.0
 

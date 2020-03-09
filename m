@@ -1,105 +1,100 @@
-Return-Path: <SRS0=4jZv=4Z=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=ZTqb=42=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25DC4C10DCE
-	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7BF8C10DCE
+	for <linux-csky@archiver.kernel.org>; Mon,  9 Mar 2020 03:41:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAF9120838
-	for <linux-csky@archiver.kernel.org>; Sun,  8 Mar 2020 09:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583661242;
-	bh=WwPtYIv1nGW+mvlP8KwH+cUbKn5SIYN+qnxmc5C+cDI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=koIUNLV1GO/n59R6t/m4u8tD3dwOXdFnNgeAcIu4rNqeR+F+djNtGKlEVUIaST5AI
-	 aRCG14W4Rl5DcJbaemU0YGNPDutJZPaFzL1rIQsXkJsdAjMfR7e0VNpQBJe2LlpU3E
-	 wwQDIHrFwWZnAurhbirjhF1MmnsSS2DptRi82t1A=
+	by mail.kernel.org (Postfix) with ESMTP id A7D682064A
+	for <linux-csky@archiver.kernel.org>; Mon,  9 Mar 2020 03:41:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="VHknv8LB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725306AbgCHJxe (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 8 Mar 2020 05:53:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37538 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726481AbgCHJxc (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 8 Mar 2020 05:53:32 -0400
-Received: from localhost.localdomain (unknown [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6559320866;
-        Sun,  8 Mar 2020 09:53:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583661212;
-        bh=WwPtYIv1nGW+mvlP8KwH+cUbKn5SIYN+qnxmc5C+cDI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IgoQ9wBw8yzgnDSBgg2k8DTh+9TRWmVNnMNMJeMw6UF6pXV8A+HGRoaK3PXC1ATTU
-         jDuffFuc/qhGajhaxbKkdMNs/b0JeLO7sFsWR84OVv6fzwge6V4rSZre28TcFPhda+
-         10fiKMcekC9rR7hFcg3nTb2KTFI/ui7tAsUK/XP4=
-From:   guoren@kernel.org
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com, Anup.Patel@wdc.com,
-        greentime.hu@sifive.com
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        arnd@arndb.de, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Dave Martin <Dave.Martin@arm.com>
-Subject: [RFC PATCH V3 05/11] riscv: Add vector feature to compile
-Date:   Sun,  8 Mar 2020 17:49:48 +0800
-Message-Id: <20200308094954.13258-6-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
+        id S1726677AbgCIDlv (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 8 Mar 2020 23:41:51 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:40778 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbgCIDlv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 8 Mar 2020 23:41:51 -0400
+Received: by mail-qt1-f196.google.com with SMTP id n5so2445711qtv.7
+        for <linux-csky@vger.kernel.org>; Sun, 08 Mar 2020 20:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CNYYFTCalmUuSxAWR7XaCM/gxKPhcvr0JtZkj6eTI9Y=;
+        b=VHknv8LB3GFRw23ZbiPdreuz6d01GLWWAJvdX5EgeD9/c/GcOS3IP+ZhkeICb0JhfH
+         XVw67cYfVsHCMH6qw7HsKBL6jpr+j6KBSqMec750uAs+10sQ6riV2cVg2oqfVtKcQHyP
+         Z9hT3Z+Ws38DjPnOB/+jFMRTCz1yayzN6dXEs0YuebKNXz0BN2awgZsy5VV/cWs6MZoZ
+         d94/E5LVYK9fXw1NUB6hQ8fdh3XQZyglH788D+Wk2e0T7MP2IAqDsaAincG5B8kjJe9i
+         NQzh+apsnX9PlOHTG2BZPhAyc6uIbxHgmQJKN3JkWRl0MO23Fvjem4bcygW4f+/zlNW8
+         V8iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CNYYFTCalmUuSxAWR7XaCM/gxKPhcvr0JtZkj6eTI9Y=;
+        b=ir8qhxenk+tBozp1++tZBtbiIyujjOmQ5R1QRj1bDmsZAXIhau1V3XW8LlZC1xkYYZ
+         3bdapfNCzQ8UdDCJqSbPL4jZdmuqrNqYkj/4XA10ebyjpcZFMIzuolK6b6bOa1UcQIpp
+         eT/kreusCWHzQDBD1Zn7lqRe94g+vlbn37zgrU5fuSYRvjAOaxmmlYJlQOJb72j70+/H
+         gj2g6bhRhXysnRTgAaZakODYj7AxB5n8ukTEV/3Vtket9ePy+RJas3s6zCgOOas2iXmL
+         TRRSQZOjmtvpHQc/XvgDiFovfOJ+mZn0bWFzEfJYdZwkLe5TypkkdZHrXEAFzkLy+hqG
+         xDlA==
+X-Gm-Message-State: ANhLgQ2wbd2WKRgIHKV/H2/ZczY3qPb8kEBb3wZ710nFdSHhPxlfwZKI
+        9CT2E9go3QYvFefJndQtfYAHiPVcx8Eexfi6v4He4A==
+X-Google-Smtp-Source: ADFU+vt7hRKCpjY9Y/6PbDXX5/P/aKDMHT0L5G/8Gt3a3KMISifEbxYw8sWoZVsjM25ruYRMFoTYggX7kXK+ZNULFqA=
+X-Received: by 2002:ac8:1345:: with SMTP id f5mr12999290qtj.128.1583725308848;
+ Sun, 08 Mar 2020 20:41:48 -0700 (PDT)
+MIME-Version: 1.0
 References: <20200308094954.13258-1-guoren@kernel.org>
+In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
+From:   Greentime Hu <greentime.hu@sifive.com>
+Date:   Mon, 9 Mar 2020 11:41:37 +0800
+Message-ID: <CAHCEeh+XYD3uVmaQRGpY=VGxpO9hzMeKasNmAojhkZe9PJ9Lug@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 00/11] riscv: Add vector ISA support
+To:     guoren@kernel.org
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Anup.Patel@wdc.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, arnd@arndb.de,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Liu Zhiwei <zhiwei_liu@c-sky.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Sun, Mar 8, 2020 at 5:50 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
+> 128bit-vlen and it's based on linux-5.6-rc3 and tested with qemu [1].
+>
+> The patch implement basic context switch, sigcontext save/restore and
+> ptrace interface with a new regset NT_RISCV_VECTOR. Only fixed 128bit-vlen
+> is implemented. We need to discuss about vlen-size for libc sigcontext and
+> ptrace (the maximum size of vlen is unlimited in spec).
+>
+> Puzzle:
+> Dave Martin has talked "Growing CPU register state without breaking ABI" [2]
+> before, and riscv also met vlen size problem. Let's discuss the common issue
+> for all architectures and we need a better solution for unlimited vlen.
+>
+> Any help are welcomed :)
+>
+>  1: https://github.com/romanheros/qemu.git branch:vector-upstream-v3
 
-This patch add a config option which could enable assembler's
-vector feature.
+Hi Guo,
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/riscv/Kconfig  | 9 +++++++++
- arch/riscv/Makefile | 1 +
- 2 files changed, 10 insertions(+)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 73f029eae0cc..c36589c85700 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -288,6 +288,15 @@ config FPU
- 
- 	  If you don't know what to do here, say Y.
- 
-+config VECTOR
-+	bool "VECTOR support"
-+	default n
-+	help
-+	  Say N here if you want to disable all vector related procedure
-+	  in the kernel.
-+
-+	  If you don't know what to do here, say Y.
-+
- endmenu
- 
- menu "Kernel features"
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 6d09b53cf106..071eb1148e01 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -44,6 +44,7 @@ riscv-march-aflags-$(CONFIG_ARCH_RV32I)		:= rv32ima
- riscv-march-aflags-$(CONFIG_ARCH_RV64I)		:= rv64ima
- riscv-march-aflags-$(CONFIG_FPU)		:= $(riscv-march-aflags-y)fd
- riscv-march-aflags-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-aflags-y)c
-+riscv-march-aflags-$(CONFIG_VECTOR)		:= $(riscv-march-aflags-y)v
- 
- KBUILD_CFLAGS += -march=$(riscv-march-cflags-y)
- KBUILD_AFLAGS += -march=$(riscv-march-aflags-y)
--- 
-2.17.0
-
+Thanks for your patch.
+It seems the qemu repo doesn't have this branch?

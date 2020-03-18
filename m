@@ -1,97 +1,75 @@
-Return-Path: <SRS0=+vtQ=45=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=x6iz=5D=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38DEAC1975A
-	for <linux-csky@archiver.kernel.org>; Thu, 12 Mar 2020 16:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12CAAC10DCE
+	for <linux-csky@archiver.kernel.org>; Wed, 18 Mar 2020 04:47:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10A2B2071B
-	for <linux-csky@archiver.kernel.org>; Thu, 12 Mar 2020 16:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584029034;
-	bh=8013QSNjwl3hVjqclDefXb05VNEWtFHh+9iu+zc6Ugo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=QBQV0v1UTYxIB6MpBS92KuBQzXL4NqZXPPhNEHjDWJRihKy2eLwe7/cEwcyqL4O9K
-	 j/2hb7edQ46fbyjH47MSOVEdEfnau7GrQGpWzsnitSWXN086qsyNg3Xze6ZbOSyZgj
-	 Wtbrz+LkLc7UC85wy3tFk/5lCn0F2WXWJKy94qCk=
+	by mail.kernel.org (Postfix) with ESMTP id E0FB220768
+	for <linux-csky@archiver.kernel.org>; Wed, 18 Mar 2020 04:47:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727474AbgCLQDu (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 12 Mar 2020 12:03:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727001AbgCLQDu (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 12 Mar 2020 12:03:50 -0400
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EF1E5206FA;
-        Thu, 12 Mar 2020 16:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584029030;
-        bh=8013QSNjwl3hVjqclDefXb05VNEWtFHh+9iu+zc6Ugo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=r1FbKQMBSjx+u0m/DW4h3Pl+dtRquD3/XyVqRDGIg8vvMoU9Z5E79l4H5v70Qu77i
-         qrmaRR2f6kVk3o6FLsq/rljo8kZas1fNZADsxIHzsIhT8jBkrzVvGW/V7bSzu0YL+D
-         L2xN3GiwpuAn+Qeo77aa90Et45se/H8aJwJ1AJYk=
-Received: by mail-lf1-f41.google.com with SMTP id b13so5277712lfb.12;
-        Thu, 12 Mar 2020 09:03:49 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ34x+CkQmo7dN3X92wLxQohQszOfOUdZKIOO/TegldnoMEBorf6
-        HgMZO+p5lx9uLQeKOulrUJ/X2rYMS3iA6J3CzqA=
-X-Google-Smtp-Source: ADFU+vuoqiRPpALaPb3vAH2E88rNtmGTNcB/OqxahlgrnaZFB5AhQlWmriyJa0LvZSP3nMz82H3GA8VVRfVyYeyWYZ4=
-X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr5770907lfg.70.1584029028030;
- Thu, 12 Mar 2020 09:03:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <1583854376-15598-1-git-send-email-majun258@linux.alibaba.com>
-In-Reply-To: <1583854376-15598-1-git-send-email-majun258@linux.alibaba.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 13 Mar 2020 00:03:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRFj=aQYHgM6KV7GYM22Nti8D2q_QNi+5WhOHS9-86Wew@mail.gmail.com>
-Message-ID: <CAJF2gTRFj=aQYHgM6KV7GYM22Nti8D2q_QNi+5WhOHS9-86Wew@mail.gmail.com>
-Subject: Re: [PATCH]arch/csky:Enable the gcov function in csky achitecture
-To:     Ma Jun <majun258@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726308AbgCRErc (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 18 Mar 2020 00:47:32 -0400
+Received: from m17617.mail.qiye.163.com ([59.111.176.17]:61426 "EHLO
+        m17617.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726227AbgCRErc (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 18 Mar 2020 00:47:32 -0400
+Received: from ubuntu.localdomain (unknown [58.251.74.227])
+        by m17617.mail.qiye.163.com (Hmail) with ESMTPA id 29CE3261AA3;
+        Wed, 18 Mar 2020 12:47:26 +0800 (CST)
+From:   Wang Wenhu <wenhu.wang@vivo.com>
+To:     Guo Ren <guoren@kernel.org>, Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Wang Wenhu <wenhu.wang@vivo.com>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, trivial@kernel.org
+Subject: [PATCH] csky: delete redundant micro io_remap_pfn_range
+Date:   Tue, 17 Mar 2020 21:47:01 -0700
+Message-Id: <20200318044702.104793-1-wenhu.wang@vivo.com>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZT1VKTUJLS0tKT0NMTEhKQllXWShZQU
+        hPN1dZLVlBSVdZCQ4XHghZQVk1NCk2OjckKS43PlkG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kyo6Hhw4Szg0HjQiLhATH0MD
+        ATYwFEpVSlVKTkNPTktNQ09DTUNMVTMWGhIXVQweFRMOVQwaFRw7DRINFFUYFBZFWVdZEgtZQVlO
+        Q1VJTkpVTE9VSUlMWVdZCAFZQUpCQkw3Bg++
+X-HM-Tid: 0a70ebf7bd369375kuws29ce3261aa3
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Same definition exists in "include/asm-generic/pgtable.h",
+which is included just below the lines to be deleted.
 
-On Thu, Mar 12, 2020 at 4:59 PM Ma Jun <majun258@linux.alibaba.com> wrote:
->
-> Support the gcov function in csky architecture
->
-> Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
-> ---
->  arch/csky/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 047427f..9c4749d 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -64,6 +64,7 @@ config CSKY
->         select PCI_DOMAINS_GENERIC if PCI
->         select PCI_SYSCALL if PCI
->         select PCI_MSI if PCI
-> +       select ARCH_HAS_GCOV_PROFILE_ALL
->
->  config CPU_HAS_CACHEV2
->         bool
-> --
-> 1.8.3.1
->
+#ifndef io_remap_pfn_range
+#define io_remap_pfn_range remap_pfn_range
+#endif
 
+Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
+---
+ arch/csky/include/asm/pgtable.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
+diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+index 9b7764cb7645..bde812a785c8 100644
+--- a/arch/csky/include/asm/pgtable.h
++++ b/arch/csky/include/asm/pgtable.h
+@@ -306,9 +306,6 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+ /* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
+ #define kern_addr_valid(addr)	(1)
+ 
+-#define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
+-	remap_pfn_range(vma, vaddr, pfn, size, prot)
+-
+ #include <asm-generic/pgtable.h>
+ 
+ #endif /* __ASM_CSKY_PGTABLE_H */
 -- 
-Best Regards
- Guo Ren
+2.17.1
 
-ML: https://lore.kernel.org/linux-csky/

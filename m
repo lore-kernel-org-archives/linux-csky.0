@@ -6,72 +6,52 @@ X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B35EC4332B
-	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07A5AC43333
+	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 12:09:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2FDA320722
-	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:38:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D485E20786
+	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 12:09:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728437AbgCULey (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sat, 21 Mar 2020 07:34:54 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38418 "EHLO
+        id S1726955AbgCUMI6 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sat, 21 Mar 2020 08:08:58 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:38570 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbgCULex (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 21 Mar 2020 07:34:53 -0400
+        with ESMTP id S1726192AbgCUMI5 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 21 Mar 2020 08:08:57 -0400
 Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1jFcOQ-0001zF-3g; Sat, 21 Mar 2020 12:34:18 +0100
-Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 2A835FFBBF;
-        Sat, 21 Mar 2020 12:34:17 +0100 (CET)
-Message-Id: <20200321112544.878032781@linutronix.de>
-User-Agent: quilt/0.65
-Date:   Sat, 21 Mar 2020 12:25:44 +0100
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geoff Levand <geoff@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id 1jFcvN-00035h-He; Sat, 21 Mar 2020 13:08:21 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id E1F47FFC8D; Sat, 21 Mar 2020 13:08:20 +0100 (CET)
+To:     Guo Ren <guoren@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, balbi@kernel.org,
+        bhelgaas@google.com, dave@stgolabs.net,
+        David Miller <davem@davemloft.net>, gregkh@linuxfoundation.org,
+        joel@joelfernandes.org, kurt.schwemmer@microsemi.com,
+        kvalo@codeaurora.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        logang@deltatee.com, mingo@kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>, netdev@vger.kernel.org,
+        oleg@redhat.com, paulmck@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
         Randy Dunlap <rdunlap@infradead.org>,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: [patch V3 00/20] Lock ordering documentation and annotation for lockdep
-Content-transfer-encoding: 8-bit
+        Steven Rostedt <rostedt@goodmis.org>,
+        torvalds@linux-foundation.org, Will Deacon <will@kernel.org>,
+        linux-csky@vger.kernel.org, kbuild test robot <lkp@intel.com>
+Subject: Re: [PATCH 2/5] csky: Remove mm.h from asm/uaccess.h
+In-Reply-To: <CAJF2gTQDvmSdJB3R0By0Q6d9ganVBV1FBm3urL8Jf1fyiEi+1A@mail.gmail.com>
+References: <20200318204408.010461877@linutronix.de> <20200320094856.3453859-1-bigeasy@linutronix.de> <20200320094856.3453859-3-bigeasy@linutronix.de> <CAJF2gTQDvmSdJB3R0By0Q6d9ganVBV1FBm3urL8Jf1fyiEi+1A@mail.gmail.com>
+ From: Thomas Gleixner <tglx@linutronix.de>
+From:   Thomas Gleixner <tglx@linutronix.de>
+Date:   Sat, 21 Mar 2020 13:08:20 +0100
+Message-ID: <87zhc9rjuz.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Linutronix-Spam-Score: -1.0
 X-Linutronix-Spam-Level: -
 X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
@@ -80,22 +60,15 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This is the third and hopefully final version of this work. The second one
-can be found here:
+Guo Ren <guoren@kernel.org> writes:
 
-   https://lore.kernel.org/r/20200318204302.693307984@linutronix.de
+> Tested and Acked by me.
+>
+> Queued for next pull request, thx
 
-Changes since V2:
-
-  - Included the arch/XXX fixups for the rcuwait changes (Sebastian)
-
-  - Folded the init fix for the PS3 change (Sebastian)
-
-  - Addressed feedback on documentation (Paul, Davidlohr, Jonathan)
-
-  - Picked up acks and reviewed tags
+Can we please route that with the rcuwait changes to avoid breakage
+unless you ship it to Linus right away?
 
 Thanks,
 
-	tglx
-
+        tglx

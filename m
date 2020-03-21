@@ -1,97 +1,110 @@
-Return-Path: <SRS0=znJb=5F=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=BqLc=5G=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 620D9C4332D
-	for <linux-csky@archiver.kernel.org>; Fri, 20 Mar 2020 09:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8712BC4332B
+	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:23:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A6CD20753
-	for <linux-csky@archiver.kernel.org>; Fri, 20 Mar 2020 09:49:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5717520754
+	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:23:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1584789787;
+	bh=IrN8hft8egtKt9q2QCIAHGIVjoG+tI0cY9ujDNwCIRg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=hqiYRa6lMldUbc+ORhwDeq0JCEd7jGCpUGXFp/vMTI2LOZf8hQ09Lx4XjPrUf7Dp8
+	 I5V+8QEaiJn6Hbxjp+LWZYHYdD70oxRlQQnZYGefJK0Siwpc3Os0VROwLteIu3ekxZ
+	 m8ov28SP4lUQ9VU9KWz09K7GANaf8G968+JHlQEk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbgCTJtf (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 20 Mar 2020 05:49:35 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:35066 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726791AbgCTJtb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 20 Mar 2020 05:49:31 -0400
-Received: from localhost ([127.0.0.1] helo=flow.W.breakpoint.cc)
-        by Galois.linutronix.de with esmtp (Exim 4.80)
-        (envelope-from <bigeasy@linutronix.de>)
-        id 1jFEH1-0000vL-J1; Fri, 20 Mar 2020 10:49:03 +0100
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     tglx@linutronix.de
-Cc:     arnd@arndb.de, balbi@kernel.org, bhelgaas@google.com,
-        bigeasy@linutronix.de, dave@stgolabs.net, davem@davemloft.net,
-        gregkh@linuxfoundation.org, joel@joelfernandes.org,
-        kurt.schwemmer@microsemi.com, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, logang@deltatee.com,
-        mingo@kernel.org, mpe@ellerman.id.au, netdev@vger.kernel.org,
-        oleg@redhat.com, paulmck@kernel.org, peterz@infradead.org,
-        rdunlap@infradead.org, rostedt@goodmis.org,
-        torvalds@linux-foundation.org, will@kernel.org,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        kbuild test robot <lkp@intel.com>
-Subject: [PATCH 2/5] csky: Remove mm.h from asm/uaccess.h
-Date:   Fri, 20 Mar 2020 10:48:53 +0100
-Message-Id: <20200320094856.3453859-3-bigeasy@linutronix.de>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200320094856.3453859-1-bigeasy@linutronix.de>
-References: <20200318204408.010461877@linutronix.de>
- <20200320094856.3453859-1-bigeasy@linutronix.de>
+        id S1726652AbgCULXH (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sat, 21 Mar 2020 07:23:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41692 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725932AbgCULXG (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 21 Mar 2020 07:23:06 -0400
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B757820786;
+        Sat, 21 Mar 2020 11:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584789786;
+        bh=IrN8hft8egtKt9q2QCIAHGIVjoG+tI0cY9ujDNwCIRg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Mj+1sA3qyTxHp4YDj2Lx/59ZyUJ6tpiQZUSLPF2MWhNCRYMQZnERYuq6ABUR5x6BE
+         /fVXmUcRPtXRAKSKXitqslhPV6JtoMIkZniWk8DTOB76ldBL5JAuRNM678vK3NAUWR
+         NPP+qXQ9mlI1PByJeUo1B36mZPwxwrXc24YsziYY=
+Received: by mail-lf1-f44.google.com with SMTP id a28so6506847lfr.13;
+        Sat, 21 Mar 2020 04:23:05 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ0B145zTVE/GqZrLfVhDEQPtYbfr0QKebp+UiwPgZX4f4HxlKcS
+        0CZwQxij7YABmKaIvkI+xGD25QpoJHRXzj0nZko=
+X-Google-Smtp-Source: ADFU+vtBuGthZOiE/exncdFcOQotmhkxovU5FM+ioKG7kIdq/Q77KU7HLxMgNJ9KnymclfA9axDhFQpw7K0/sN7K6dk=
+X-Received: by 2002:a19:4f10:: with SMTP id d16mr6800457lfb.52.1584789783795;
+ Sat, 21 Mar 2020 04:23:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20200318044702.104793-1-wenhu.wang@vivo.com>
+In-Reply-To: <20200318044702.104793-1-wenhu.wang@vivo.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 21 Mar 2020 19:22:52 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTp8fwy7hRCKKzmxXv9WZfh=Lhzu4_7nK52E3T6XfW8iQ@mail.gmail.com>
+Message-ID: <CAJF2gTTp8fwy7hRCKKzmxXv9WZfh=Lhzu4_7nK52E3T6XfW8iQ@mail.gmail.com>
+Subject: Re: [PATCH] csky: delete redundant micro io_remap_pfn_range
+To:     Wang Wenhu <wenhu.wang@vivo.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel@vivo.com, trivial@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The defconfig compiles without linux/mm.h. With mm.h included the
-include chain leands to:
-|   CC      kernel/locking/percpu-rwsem.o
-| In file included from include/linux/huge_mm.h:8,
-|                  from include/linux/mm.h:567,
-|                  from arch/csky/include/asm/uaccess.h:,
-|                  from include/linux/uaccess.h:11,
-|                  from include/linux/sched/task.h:11,
-|                  from include/linux/sched/signal.h:9,
-|                  from include/linux/rcuwait.h:6,
-|                  from include/linux/percpu-rwsem.h:8,
-|                  from kernel/locking/percpu-rwsem.c:6:
-| include/linux/fs.h:1422:29: error: array type has incomplete element type=
- 'struct percpu_rw_semaphore'
-|  1422 |  struct percpu_rw_semaphore rw_sem[SB_FREEZE_LEVELS];
+Thx
 
-once rcuwait.h includes linux/sched/signal.h.
+Acked and queued.
 
-Remove the linux/mm.h include.
+On Wed, Mar 18, 2020 at 12:47 PM Wang Wenhu <wenhu.wang@vivo.com> wrote:
+>
+> Same definition exists in "include/asm-generic/pgtable.h",
+> which is included just below the lines to be deleted.
+>
+> #ifndef io_remap_pfn_range
+> #define io_remap_pfn_range remap_pfn_range
+> #endif
+>
+> Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
+> ---
+>  arch/csky/include/asm/pgtable.h | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+> index 9b7764cb7645..bde812a785c8 100644
+> --- a/arch/csky/include/asm/pgtable.h
+> +++ b/arch/csky/include/asm/pgtable.h
+> @@ -306,9 +306,6 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+>  /* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
+>  #define kern_addr_valid(addr)  (1)
+>
+> -#define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
+> -       remap_pfn_range(vma, vaddr, pfn, size, prot)
+> -
+>  #include <asm-generic/pgtable.h>
+>
+>  #endif /* __ASM_CSKY_PGTABLE_H */
+> --
+> 2.17.1
+>
 
-Cc: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- arch/csky/include/asm/uaccess.h | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/arch/csky/include/asm/uaccess.h b/arch/csky/include/asm/uacces=
-s.h
-index eaa1c3403a424..abefa125b93cf 100644
---- a/arch/csky/include/asm/uaccess.h
-+++ b/arch/csky/include/asm/uaccess.h
-@@ -11,7 +11,6 @@
- #include <linux/errno.h>
- #include <linux/types.h>
- #include <linux/sched.h>
--#include <linux/mm.h>
- #include <linux/string.h>
- #include <linux/version.h>
- #include <asm/segment.h>
---=20
-2.26.0.rc2
+-- 
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

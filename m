@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B534C43333
-	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D030FC54FCA
+	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:36:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3D31220658
-	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:36:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1B3920658
+	for <linux-csky@archiver.kernel.org>; Sat, 21 Mar 2020 11:36:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728475AbgCULgS (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sat, 21 Mar 2020 07:36:18 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38497 "EHLO
+        id S1728667AbgCULga (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sat, 21 Mar 2020 07:36:30 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:38488 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728526AbgCULe6 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 21 Mar 2020 07:34:58 -0400
+        with ESMTP id S1728496AbgCULe5 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 21 Mar 2020 07:34:57 -0400
 Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1jFcOb-0002LP-6D; Sat, 21 Mar 2020 12:34:29 +0100
+        id 1jFcOQ-0001zI-Kw; Sat, 21 Mar 2020 12:34:18 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id E04FC1040C9;
-        Sat, 21 Mar 2020 12:34:21 +0100 (CET)
-Message-Id: <20200321113242.534508206@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id EAFF31039FF;
+        Sat, 21 Mar 2020 12:34:17 +0100 (CET)
+Message-Id: <20200321113241.043380271@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Sat, 21 Mar 2020 12:26:02 +0100
+Date:   Sat, 21 Mar 2020 12:25:47 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -38,13 +38,12 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Joel Fernandes <joel@joelfernandes.org>,
         Oleg Nesterov <oleg@redhat.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         Logan Gunthorpe <logang@deltatee.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>,
+        linux-pci@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         Darren Hart <dvhart@infradead.org>,
@@ -70,7 +69,8 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Randy Dunlap <rdunlap@infradead.org>,
         Davidlohr Bueso <dbueso@suse.de>
-Subject: [patch V3 18/20] lockdep: Add hrtimer context tracing bits
+Subject: [patch V3 03/20] usb: gadget: Use completion interface instead of
+ open coding it
 References: <20200321112544.878032781@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -83,100 +83,53 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-Set current->irq_config = 1 for hrtimers which are not marked to expire in
-hard interrupt context during hrtimer_init(). These timers will expire in
-softirq context on PREEMPT_RT.
+ep_io() uses a completion on stack and open codes the waiting with:
 
-Setting this allows lockdep to differentiate these timers. If a timer is
-marked to expire in hard interrupt context then the timer callback is not
-supposed to acquire a regular spinlock instead of a raw_spinlock in the
-expiry callback.
+  wait_event_interruptible (done.wait, done.done);
+and
+  wait_event (done.wait, done.done);
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+This waits in non-exclusive mode for complete(), but there is no reason to
+do so because the completion can only be waited for by the task itself and
+complete() wakes exactly one exlusive waiter.
+
+Replace the open coded implementation with the corresponding
+wait_for_completion*() functions.
+
+No functional change.
+
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: linux-usb@vger.kernel.org
 ---
- include/linux/irqflags.h |   15 +++++++++++++++
- include/linux/sched.h    |    1 +
- kernel/locking/lockdep.c |    2 +-
- kernel/time/hrtimer.c    |    6 +++++-
- 4 files changed, 22 insertions(+), 2 deletions(-)
+V2: New patch to avoid the conversion to swait interfaces later
+---
+ drivers/usb/gadget/legacy/inode.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/include/linux/irqflags.h
-+++ b/include/linux/irqflags.h
-@@ -56,6 +56,19 @@ do {						\
- do {						\
- 	current->softirq_context--;		\
- } while (0)
-+
-+# define lockdep_hrtimer_enter(__hrtimer)		\
-+	  do {						\
-+		  if (!__hrtimer->is_hard)		\
-+			current->irq_config = 1;	\
-+	  } while (0)
-+
-+# define lockdep_hrtimer_exit(__hrtimer)		\
-+	  do {						\
-+		  if (!__hrtimer->is_hard)		\
-+			current->irq_config = 0;	\
-+	  } while (0)
-+
- #else
- # define trace_hardirqs_on()		do { } while (0)
- # define trace_hardirqs_off()		do { } while (0)
-@@ -68,6 +81,8 @@ do {						\
- # define trace_hardirq_exit()		do { } while (0)
- # define lockdep_softirq_enter()	do { } while (0)
- # define lockdep_softirq_exit()		do { } while (0)
-+# define lockdep_hrtimer_enter(__hrtimer)		do { } while (0)
-+# define lockdep_hrtimer_exit(__hrtimer)		do { } while (0)
- #endif
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -344,7 +344,7 @@ ep_io (struct ep_data *epdata, void *buf
+ 	spin_unlock_irq (&epdata->dev->lock);
  
- #if defined(CONFIG_IRQSOFF_TRACER) || \
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -983,6 +983,7 @@ struct task_struct {
- 	unsigned int			softirq_enable_event;
- 	int				softirqs_enabled;
- 	int				softirq_context;
-+	int				irq_config;
- #endif
+ 	if (likely (value == 0)) {
+-		value = wait_event_interruptible (done.wait, done.done);
++		value = wait_for_completion_interruptible(&done);
+ 		if (value != 0) {
+ 			spin_lock_irq (&epdata->dev->lock);
+ 			if (likely (epdata->ep != NULL)) {
+@@ -353,7 +353,7 @@ ep_io (struct ep_data *epdata, void *buf
+ 				usb_ep_dequeue (epdata->ep, epdata->req);
+ 				spin_unlock_irq (&epdata->dev->lock);
  
- #ifdef CONFIG_LOCKDEP
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -3759,7 +3759,7 @@ static int check_wait_context(struct tas
- 		/*
- 		 * Check if force_irqthreads will run us threaded.
- 		 */
--		if (curr->hardirq_threaded)
-+		if (curr->hardirq_threaded || curr->irq_config)
- 			curr_inner = LD_WAIT_CONFIG;
- 		else
- 			curr_inner = LD_WAIT_SPIN;
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -1404,7 +1404,7 @@ static void __hrtimer_init(struct hrtime
- 	base = softtimer ? HRTIMER_MAX_CLOCK_BASES / 2 : 0;
- 	base += hrtimer_clockid_to_base(clock_id);
- 	timer->is_soft = softtimer;
--	timer->is_hard = !softtimer;
-+	timer->is_hard = !!(mode & HRTIMER_MODE_HARD);
- 	timer->base = &cpu_base->clock_base[base];
- 	timerqueue_init(&timer->node);
- }
-@@ -1514,7 +1514,11 @@ static void __run_hrtimer(struct hrtimer
- 	 */
- 	raw_spin_unlock_irqrestore(&cpu_base->lock, flags);
- 	trace_hrtimer_expire_entry(timer, now);
-+	lockdep_hrtimer_enter(timer);
-+
- 	restart = fn(timer);
-+
-+	lockdep_hrtimer_exit(timer);
- 	trace_hrtimer_expire_exit(timer);
- 	raw_spin_lock_irq(&cpu_base->lock);
- 
+-				wait_event (done.wait, done.done);
++				wait_for_completion(&done);
+ 				if (epdata->status == -ECONNRESET)
+ 					epdata->status = -EINTR;
+ 			} else {
 
 

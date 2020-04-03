@@ -7,45 +7,44 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6941CC2BA18
-	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B24F0C2BA1A
+	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F16220B1F
-	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86D94206F8
+	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585888959;
-	bh=nvZcsugJL+0E5wF9e5T9iUO1QUbFqyTqIZWR5uk6nKM=;
+	s=default; t=1585888969;
+	bh=YlS3C3paNOPOCPOVkzGPM1lYneYCIbFiJUt5ldc4N6M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=U4t4EU4T2+k8q3cr1QHnL9Dkye8wDEiP7Ev3gho1OQ4fE0aRoh49GfnZF1lYIYvmK
-	 fMnOgEXvh3+6/AARjB3ECTC2bQsAETIKeWvij8xoQxFwIrk3YO4tcxeiTPKnp7/dt3
-	 loprbmjKxgg5r1FbZm1isRR1+9GG1Jm/sEp4rlsY=
+	b=dRCrqfkv5RR/ba+EEbwFgQrslNG58BOmGfygjL/OuMn7LxjkUwVMUHDWBH7zm6gnw
+	 CUQB97uuXtKSqj8UDZIBPn0JTgrzQED62XZAYLmCQo4DwKVYOHPwy2NSxWP8qQqHmp
+	 SJsaRTb2r1zd5VjUzx+9iHt50La6GxUWCDIuRAf8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732382AbgDCEmT (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 3 Apr 2020 00:42:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42678 "EHLO mail.kernel.org"
+        id S1725851AbgDCEmq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 3 Apr 2020 00:42:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732873AbgDCEmS (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 3 Apr 2020 00:42:18 -0400
+        id S1732601AbgDCEmQ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 3 Apr 2020 00:42:16 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C27C208E4;
-        Fri,  3 Apr 2020 04:42:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0051620B1F;
+        Fri,  3 Apr 2020 04:42:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585888937;
-        bh=nvZcsugJL+0E5wF9e5T9iUO1QUbFqyTqIZWR5uk6nKM=;
+        s=default; t=1585888936;
+        bh=YlS3C3paNOPOCPOVkzGPM1lYneYCIbFiJUt5ldc4N6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RcWYeFuqCCZ3dwgpfJ+FWtt4vQ1YSzi2xfCfuCM2H0KETmlyiGcQtBAsUoB5GP4Nh
-         bcPrEppfNJl4gTYw6XteN6HWmh4wBSl0pGRWAWAK+WCvx3mY/zsgcn+qqKrTJ5cXSc
-         YDkvMKtOHPRzxazDAWtyrcU7qIQ6SPDy8PWGcdAU=
+        b=yxbYlkXWrEJWxrS2K7TGauQLjgCj57fhBHeADV6Of20Eq+uiVeuX6nmECqHDZmlkr
+         O+LnFvA/KrEjR6u2WB2sk+DQ+mYwQmsNsWfTuBiihQnMHdZtZdUQx1Cf8O5gC5xxCn
+         EDIxWmt8lpjsEcsAxipWvEd+Kffe1TYg0cOsLw1Y=
 From:   guoren@kernel.org
 To:     arnd@arndb.de
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Ma Jun <majun258@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 07/11] csky: Enable the gcov function
-Date:   Fri,  3 Apr 2020 12:41:46 +0800
-Message-Id: <20200403044150.20562-7-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 06/11] csky: Fixup get wrong psr value from phyical reg
+Date:   Fri,  3 Apr 2020 12:41:45 +0800
+Message-Id: <20200403044150.20562-6-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 In-Reply-To: <20200403044150.20562-1-guoren@kernel.org>
 References: <20200403044150.20562-1-guoren@kernel.org>
@@ -54,29 +53,121 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Ma Jun <majun258@linux.alibaba.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Support the gcov function in csky architecture.
+We should get psr value from regs->psr in stack, not directly get
+it from phyiscal register then save the vector number in
+tsk->trap_no.
 
-Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 ---
- arch/csky/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/csky/include/asm/processor.h |  1 +
+ arch/csky/kernel/traps.c          | 11 ++++++++++-
+ arch/csky/mm/fault.c              |  7 +++++++
+ 3 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 6cf169a15794..a75b8e1fef1d 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -3,6 +3,7 @@ config CSKY
- 	def_bool y
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_DMA_PREP_COHERENT
-+	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
- 	select ARCH_USE_BUILTIN_BSWAP
+diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
+index 21e0bd5293dd..c6bcd7f7c720 100644
+--- a/arch/csky/include/asm/processor.h
++++ b/arch/csky/include/asm/processor.h
+@@ -43,6 +43,7 @@ extern struct cpuinfo_csky cpu_data[];
+ struct thread_struct {
+ 	unsigned long  ksp;       /* kernel stack pointer */
+ 	unsigned long  sr;        /* saved status register */
++	unsigned long  trap_no;   /* saved status register */
+ 
+ 	/* FPU regs */
+ 	struct user_fp __aligned(16) user_fp;
+diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
+index b057480e7463..63715cb90ee9 100644
+--- a/arch/csky/kernel/traps.c
++++ b/arch/csky/kernel/traps.c
+@@ -115,8 +115,9 @@ asmlinkage void trap_c(struct pt_regs *regs)
+ 	int sig;
+ 	unsigned long vector;
+ 	siginfo_t info;
++	struct task_struct *tsk = current;
+ 
+-	vector = (mfcr("psr") >> 16) & 0xff;
++	vector = (regs->sr >> 16) & 0xff;
+ 
+ 	switch (vector) {
+ 	case VEC_ZERODIV:
+@@ -129,6 +130,7 @@ asmlinkage void trap_c(struct pt_regs *regs)
+ 		sig = SIGTRAP;
+ 		break;
+ 	case VEC_ILLEGAL:
++		tsk->thread.trap_no = vector;
+ 		die_if_kernel("Kernel mode ILLEGAL", regs, vector);
+ #ifndef CONFIG_CPU_NO_USER_BKPT
+ 		if (*(uint16_t *)instruction_pointer(regs) != USR_BKPT)
+@@ -146,16 +148,20 @@ asmlinkage void trap_c(struct pt_regs *regs)
+ 		sig = SIGTRAP;
+ 		break;
+ 	case VEC_ACCESS:
++		tsk->thread.trap_no = vector;
+ 		return buserr(regs);
+ #ifdef CONFIG_CPU_NEED_SOFTALIGN
+ 	case VEC_ALIGN:
++		tsk->thread.trap_no = vector;
+ 		return csky_alignment(regs);
+ #endif
+ #ifdef CONFIG_CPU_HAS_FPU
+ 	case VEC_FPE:
++		tsk->thread.trap_no = vector;
+ 		die_if_kernel("Kernel mode FPE", regs, vector);
+ 		return fpu_fpe(regs);
+ 	case VEC_PRIV:
++		tsk->thread.trap_no = vector;
+ 		die_if_kernel("Kernel mode PRIV", regs, vector);
+ 		if (fpu_libc_helper(regs))
+ 			return;
+@@ -164,5 +170,8 @@ asmlinkage void trap_c(struct pt_regs *regs)
+ 		sig = SIGSEGV;
+ 		break;
+ 	}
++
++	tsk->thread.trap_no = vector;
++
+ 	send_sig(sig, current, 0);
+ }
+diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+index f76618b630f9..562c7f708749 100644
+--- a/arch/csky/mm/fault.c
++++ b/arch/csky/mm/fault.c
+@@ -179,11 +179,14 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ bad_area_nosemaphore:
+ 	/* User mode accesses just cause a SIGSEGV */
+ 	if (user_mode(regs)) {
++		tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
+ 		force_sig_fault(SIGSEGV, si_code, (void __user *)address);
+ 		return;
+ 	}
+ 
+ no_context:
++	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
++
+ 	/* Are we prepared to handle this kernel fault? */
+ 	if (fixup_exception(regs))
+ 		return;
+@@ -198,6 +201,8 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 	die_if_kernel("Oops", regs, write);
+ 
+ out_of_memory:
++	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
++
+ 	/*
+ 	 * We ran out of memory, call the OOM killer, and return the userspace
+ 	 * (which will retry the fault, or kill us if we got oom-killed).
+@@ -206,6 +211,8 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 	return;
+ 
+ do_sigbus:
++	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
++
+ 	up_read(&mm->mmap_sem);
+ 
+ 	/* Kernel mode? Handle exceptions or die */
 -- 
 2.17.0
 

@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 017A5C2D0E8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B779DC2BA19
 	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBB022145D
-	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E6C6208E4
+	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585888946;
-	bh=URqBucSp0tV4kCBFGrp7/pCKkGVwDZ94X4jFcxSpXnA=;
+	s=default; t=1585888947;
+	bh=gxsBGPQ+SZjadnosE9PH6kn6/CmHIYOSBaUfziJ2gCI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=B7U/odi6p001JowLnVdabas7bYB00AQhxs5GKNZdJUTkrCy25etxubxfGxUNG3Vk8
-	 vgac26xXxuBk8zR+VfCEuaywabMRsE4eRtsgukL/PKJEqJD7aktslB9gsmpY565UJH
-	 Fd/Giu8eZebvucn4/Lhl5N9Bci9/KaYYxh26sPUw=
+	b=PgmN9CIznAIU/qv58UG59TLyRea3RBeC3vLg0V6HFEIx+ZzYdtCh33u7EPqBFW9nH
+	 XHouEo/j9taNVpysqX8LMxkrcRFtR5V129rrVoiQ5TouhiUTypLLUO/Lj/uEJffmkM
+	 YA8NSJ83mSjVBy1tguF8XDjG+FAf4H156PkwDRpc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387584AbgDCEmW (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 3 Apr 2020 00:42:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42742 "EHLO mail.kernel.org"
+        id S2387758AbgDCEm0 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 3 Apr 2020 00:42:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733014AbgDCEmU (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 3 Apr 2020 00:42:20 -0400
+        id S2387538AbgDCEm0 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 3 Apr 2020 00:42:26 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71765214D8;
-        Fri,  3 Apr 2020 04:42:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BDA56208E4;
+        Fri,  3 Apr 2020 04:42:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585888939;
-        bh=URqBucSp0tV4kCBFGrp7/pCKkGVwDZ94X4jFcxSpXnA=;
+        s=default; t=1585888944;
+        bh=gxsBGPQ+SZjadnosE9PH6kn6/CmHIYOSBaUfziJ2gCI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VBpHRpRX8IeJRQACUBi8Fkr7EtVV+xn6NZtFy87hICg8VygFv5C5CnNNMw80KAGKh
-         ktVDE2rYL7MU+DdtgWZSEOT7YDcSCtVkFlE268djmxB27X8t62dQIbaSijBdt3hW9s
-         +3XskOT3cMMi+OS6TwIzOBSBCiUB0i1VXLc/rFRQ=
+        b=1exV2ULqjgpzcea1QaOsLCmwQn2Z7RnPLffxfDolYfBDR9KNIDmVN0s4B3RzMsicr
+         TComG5jI9nMKvfP8X/AL5KmOgw/GU9pdEEprhMIRTbwgoX4nm3dJ1X2j3ulfOvFo0S
+         WBMU8K2AcwE5RzZO3lkJMu46zqRr6yc8WdKSaCEk=
 From:   guoren@kernel.org
 To:     arnd@arndb.de
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 08/11] csky: Enable LOCKDEP_SUPPORT
-Date:   Fri,  3 Apr 2020 12:41:47 +0800
-Message-Id: <20200403044150.20562-8-guoren@kernel.org>
+Subject: [PATCH 11/11] csky: Fixup cpu speculative execution to IO area
+Date:   Fri,  3 Apr 2020 12:41:50 +0800
+Message-Id: <20200403044150.20562-11-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 In-Reply-To: <20200403044150.20562-1-guoren@kernel.org>
 References: <20200403044150.20562-1-guoren@kernel.org>
@@ -55,59 +55,205 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Lockdep is needed by proving the spinlocks and rwlocks. Currently,
-we only put trace_hardirqs_on/off with csky_irq and
-ret_from_exception.
+For the memory size ( > 512MB, < 1GB), the MSA setting is:
+
+ - SSEG0: PHY_START        , PHY_START + 512MB
+ - SSEG1: PHY_START + 512MB, PHY_START + 1GB
+
+But the real memory is no more than 1GB, there is a gap between the
+end size of memory and border of 1GB. CPU could speculatively
+execute to that gap and if the gap of the bus couldn't respond to
+the CPU request, then the crash will happen.
+
+Now make the setting with:
+
+ - SSEG0: PHY_START        , PHY_START + 512MB (no change)
+ - SSEG1: Disabled (We use highmem to use the memory of 512MB~1GB)
+
+We also deprecated zhole_szie[] settings, it's only used by arm
+style CPUs. All memory gap should use Reserved setting of dts in
+csky system.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 ---
- arch/csky/Kconfig        |  3 +++
- arch/csky/kernel/entry.S | 11 +++++++++++
- 2 files changed, 14 insertions(+)
+ arch/csky/abiv1/inc/abi/entry.h |  5 +--
+ arch/csky/abiv2/inc/abi/entry.h |  7 ++--
+ arch/csky/kernel/head.S         |  5 +++
+ arch/csky/kernel/setup.c        | 63 ++++++++-------------------------
+ arch/csky/kernel/smp.c          |  3 ++
+ 5 files changed, 25 insertions(+), 58 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index a75b8e1fef1d..998188f44fd7 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -69,6 +69,9 @@ config CSKY
- 	select PCI_SYSCALL if PCI
- 	select PCI_MSI if PCI
+diff --git a/arch/csky/abiv1/inc/abi/entry.h b/arch/csky/abiv1/inc/abi/entry.h
+index f35a9f3315ee..5056ebb902d1 100644
+--- a/arch/csky/abiv1/inc/abi/entry.h
++++ b/arch/csky/abiv1/inc/abi/entry.h
+@@ -172,10 +172,7 @@
+ 	addi	r6, 0xe
+ 	cpwcr	r6, cpcr30
  
-+config LOCKDEP_SUPPORT
-+	def_bool y
+-	lsri	r6, 28
+-	addi	r6, 2
+-	lsli	r6, 28
+-	addi	r6, 0xe
++	movi	r6, 0
+ 	cpwcr	r6, cpcr31
+ .endm
+ 
+diff --git a/arch/csky/abiv2/inc/abi/entry.h b/arch/csky/abiv2/inc/abi/entry.h
+index 6a404393d0f4..a99aff555a0a 100644
+--- a/arch/csky/abiv2/inc/abi/entry.h
++++ b/arch/csky/abiv2/inc/abi/entry.h
+@@ -290,11 +290,8 @@
+ 	addi	r6, 0x1ce
+ 	mtcr	r6, cr<30, 15> /* Set MSA0 */
+ 
+-	lsri	r6, 28
+-	addi	r6, 2
+-	lsli	r6, 28
+-	addi	r6, 0x1ce
+-	mtcr	r6, cr<31, 15> /* Set MSA1 */
++	movi    r6, 0
++	mtcr	r6, cr<31, 15> /* Clr MSA1 */
+ 
+ 	/* enable MMU */
+ 	mfcr    r6, cr18
+diff --git a/arch/csky/kernel/head.S b/arch/csky/kernel/head.S
+index 61989f9241c0..17ed9d250480 100644
+--- a/arch/csky/kernel/head.S
++++ b/arch/csky/kernel/head.S
+@@ -21,6 +21,11 @@ END(_start)
+ ENTRY(_start_smp_secondary)
+ 	SETUP_MMU
+ 
++	/* copy msa1 from CPU0 */
++	lrw     r6, secondary_msa1
++	ld.w	r6, (r6, 0)
++	mtcr	r6, cr<31, 15>
 +
- config CPU_HAS_CACHEV2
- 	bool
+ 	/* set stack point */
+ 	lrw     r6, secondary_stack
+ 	ld.w	r6, (r6, 0)
+diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
+index 3821e55742f4..819a9a7bf786 100644
+--- a/arch/csky/kernel/setup.c
++++ b/arch/csky/kernel/setup.c
+@@ -24,26 +24,9 @@ struct screen_info screen_info = {
+ };
+ #endif
  
-diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-index 0bde1d9fd277..8b040a1b11d0 100644
---- a/arch/csky/kernel/entry.S
-+++ b/arch/csky/kernel/entry.S
-@@ -225,6 +225,13 @@ ret_from_exception:
- 	cmpnei	r12, 0
- 	bt	exit_work
- 1:
-+#ifdef CONFIG_TRACE_IRQFLAGS
-+	ld	r10, (sp, LSAVE_PSR)
-+	btsti	r10, 6
-+	bf	2f
-+	jbsr	trace_hardirqs_on
-+2:
-+#endif
- 	RESTORE_ALL
+-phys_addr_t __init_memblock memblock_end_of_REG0(void)
+-{
+-	return (memblock.memory.regions[0].base +
+-		memblock.memory.regions[0].size);
+-}
+-
+-phys_addr_t __init_memblock memblock_start_of_REG1(void)
+-{
+-	return memblock.memory.regions[1].base;
+-}
+-
+-size_t __init_memblock memblock_size_of_REG1(void)
+-{
+-	return memblock.memory.regions[1].size;
+-}
+-
+ static void __init csky_memblock_init(void)
+ {
+ 	unsigned long zone_size[MAX_NR_ZONES];
+-	unsigned long zhole_size[MAX_NR_ZONES];
+ 	signed long size;
  
- exit_work:
-@@ -280,6 +287,10 @@ ENTRY(csky_irq)
- 	zero_fp
- 	psrset	ee
+ 	memblock_reserve(__pa(_stext), _end - _stext);
+@@ -54,54 +37,36 @@ static void __init csky_memblock_init(void)
+ 	memblock_dump_all();
  
-+#ifdef CONFIG_TRACE_IRQFLAGS
-+	jbsr	trace_hardirqs_off
-+#endif
+ 	memset(zone_size, 0, sizeof(zone_size));
+-	memset(zhole_size, 0, sizeof(zhole_size));
+ 
+ 	min_low_pfn = PFN_UP(memblock_start_of_DRAM());
+-	max_pfn	    = PFN_DOWN(memblock_end_of_DRAM());
+-
+-	max_low_pfn = PFN_UP(memblock_end_of_REG0());
+-	if (max_low_pfn == 0)
+-		max_low_pfn = max_pfn;
++	max_low_pfn = max_pfn = PFN_DOWN(memblock_end_of_DRAM());
+ 
+ 	size = max_pfn - min_low_pfn;
+ 
+-	if (memblock.memory.cnt > 1) {
+-		zone_size[ZONE_NORMAL]  =
+-			PFN_DOWN(memblock_start_of_REG1()) - min_low_pfn;
+-		zhole_size[ZONE_NORMAL] =
+-			PFN_DOWN(memblock_start_of_REG1()) - max_low_pfn;
++	if (size <= PFN_DOWN(SSEG_SIZE - PHYS_OFFSET_OFFSET))
++		zone_size[ZONE_NORMAL] = size;
++	else if (size < PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET)) {
++		zone_size[ZONE_NORMAL] =
++				PFN_DOWN(SSEG_SIZE - PHYS_OFFSET_OFFSET);
++		max_low_pfn = min_low_pfn + zone_size[ZONE_NORMAL];
+ 	} else {
+-		if (size <= PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET))
+-			zone_size[ZONE_NORMAL] = max_pfn - min_low_pfn;
+-		else {
+-			zone_size[ZONE_NORMAL] =
++		zone_size[ZONE_NORMAL] =
+ 				PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET);
+-			max_low_pfn = min_low_pfn + zone_size[ZONE_NORMAL];
+-		}
++		max_low_pfn = min_low_pfn + zone_size[ZONE_NORMAL];
++		write_mmu_msa1(read_mmu_msa0() + SSEG_SIZE);
+ 	}
+ 
+ #ifdef CONFIG_HIGHMEM
+-	size = 0;
+-	if (memblock.memory.cnt > 1) {
+-		size = PFN_DOWN(memblock_size_of_REG1());
+-		highstart_pfn = PFN_DOWN(memblock_start_of_REG1());
+-	} else {
+-		size = max_pfn - min_low_pfn -
+-			PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET);
+-		highstart_pfn =  min_low_pfn +
+-			PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET);
+-	}
+-
+-	if (size > 0)
+-		zone_size[ZONE_HIGHMEM] = size;
++	zone_size[ZONE_HIGHMEM] = max_pfn - max_low_pfn;
+ 
+-	highend_pfn = max_pfn;
++	highstart_pfn = max_low_pfn;
++	highend_pfn   = max_pfn;
+ #endif
+ 	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
+ 
+ 	dma_contiguous_reserve(0);
+ 
+-	free_area_init_node(0, zone_size, min_low_pfn, zhole_size);
++	free_area_init_node(0, zone_size, min_low_pfn, NULL);
+ }
+ 
+ void __init setup_arch(char **cmdline_p)
+diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+index df2e2174dbd0..b5c5bc3afeb5 100644
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -159,6 +159,8 @@ volatile unsigned int secondary_hint;
+ volatile unsigned int secondary_ccr;
+ volatile unsigned int secondary_stack;
+ 
++unsigned long secondary_msa1;
 +
- #ifdef CONFIG_PREEMPTION
- 	mov	r9, sp			/* Get current stack  pointer */
- 	bmaski	r10, THREAD_SHIFT
+ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+ {
+ 	unsigned long mask = 1 << cpu;
+@@ -167,6 +169,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+ 		(unsigned int) task_stack_page(tidle) + THREAD_SIZE - 8;
+ 	secondary_hint = mfcr("cr31");
+ 	secondary_ccr  = mfcr("cr18");
++	secondary_msa1 = read_mmu_msa1();
+ 
+ 	/*
+ 	 * Because other CPUs are in reset status, we must flush data
 -- 
 2.17.0
 

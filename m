@@ -1,173 +1,146 @@
-Return-Path: <SRS0=h3PR=5T=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=hiBB=5W=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-14.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B24F0C2BA1A
-	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05950C2BA1A
+	for <linux-csky@archiver.kernel.org>; Mon,  6 Apr 2020 12:37:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 86D94206F8
-	for <linux-csky@archiver.kernel.org>; Fri,  3 Apr 2020 04:42:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2C4421D90
+	for <linux-csky@archiver.kernel.org>; Mon,  6 Apr 2020 12:37:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585888969;
-	bh=YlS3C3paNOPOCPOVkzGPM1lYneYCIbFiJUt5ldc4N6M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dRCrqfkv5RR/ba+EEbwFgQrslNG58BOmGfygjL/OuMn7LxjkUwVMUHDWBH7zm6gnw
-	 CUQB97uuXtKSqj8UDZIBPn0JTgrzQED62XZAYLmCQo4DwKVYOHPwy2NSxWP8qQqHmp
-	 SJsaRTb2r1zd5VjUzx+9iHt50La6GxUWCDIuRAf8=
+	s=default; t=1586176639;
+	bh=SEe7dpsbSIG9Vldwf8gU5V4sDR/CwnSv9c8VsT4XWFg=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=NehZlueN4bIJFvt9vYR7g1MTmrHkR0tFQDzMYnLmdGre0Hkkb+bxlJMulBBHA+eDi
+	 QsCCH1O3VdGW+vAhiV08gfLDF0uwUfXX+bUx791iUSd99qGbcYtNOM2eZRJS3pH2qF
+	 wtw485/IkiRpBx3swteDfGSGUFp7dQWjgyU9r46Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725851AbgDCEmq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 3 Apr 2020 00:42:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42656 "EHLO mail.kernel.org"
+        id S1728029AbgDFMhT (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 6 Apr 2020 08:37:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732601AbgDCEmQ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 3 Apr 2020 00:42:16 -0400
-Received: from localhost.localdomain (unknown [223.93.147.148])
+        id S1727989AbgDFMhT (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 6 Apr 2020 08:37:19 -0400
+Received: from localhost.localdomain (89.208.247.74.16clouds.com [89.208.247.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0051620B1F;
-        Fri,  3 Apr 2020 04:42:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BDC8D21D82;
+        Mon,  6 Apr 2020 12:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585888936;
-        bh=YlS3C3paNOPOCPOVkzGPM1lYneYCIbFiJUt5ldc4N6M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yxbYlkXWrEJWxrS2K7TGauQLjgCj57fhBHeADV6Of20Eq+uiVeuX6nmECqHDZmlkr
-         O+LnFvA/KrEjR6u2WB2sk+DQ+mYwQmsNsWfTuBiihQnMHdZtZdUQx1Cf8O5gC5xxCn
-         EDIxWmt8lpjsEcsAxipWvEd+Kffe1TYg0cOsLw1Y=
+        s=default; t=1586176638;
+        bh=SEe7dpsbSIG9Vldwf8gU5V4sDR/CwnSv9c8VsT4XWFg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TFPTKDLTEfUiAs0UycDPJuwFjdV7VuPcCjOgBNXrS3AiISNs9HHgDMuLNL/+bjgjh
+         RYVOk05NhzUlzMtyar+AkgCK+KJHMAAppL8AU/5Ov3uTOusnaQWDOw96tz0QlhR9YL
+         tujw2OoSdaFi6Fe47SrpA7FPfWVE2dOHTPIQnPtE=
 From:   guoren@kernel.org
-To:     arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 06/11] csky: Fixup get wrong psr value from phyical reg
-Date:   Fri,  3 Apr 2020 12:41:45 +0800
-Message-Id: <20200403044150.20562-6-guoren@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [ GIT PULL ] csky updates for v5.7-rc1
+Date:   Mon,  6 Apr 2020 20:37:13 +0800
+Message-Id: <20200406123713.30492-1-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20200403044150.20562-1-guoren@kernel.org>
-References: <20200403044150.20562-1-guoren@kernel.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi Linus,
 
-We should get psr value from regs->psr in stack, not directly get
-it from phyiscal register then save the vector number in
-tsk->trap_no.
+Please pull the changes for v5.7-rc1. In this round, we have some features
+and fixups.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/csky/include/asm/processor.h |  1 +
- arch/csky/kernel/traps.c          | 11 ++++++++++-
- arch/csky/mm/fault.c              |  7 +++++++
- 3 files changed, 18 insertions(+), 1 deletion(-)
+Best Regards
+ Guo Ren
 
-diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
-index 21e0bd5293dd..c6bcd7f7c720 100644
---- a/arch/csky/include/asm/processor.h
-+++ b/arch/csky/include/asm/processor.h
-@@ -43,6 +43,7 @@ extern struct cpuinfo_csky cpu_data[];
- struct thread_struct {
- 	unsigned long  ksp;       /* kernel stack pointer */
- 	unsigned long  sr;        /* saved status register */
-+	unsigned long  trap_no;   /* saved status register */
- 
- 	/* FPU regs */
- 	struct user_fp __aligned(16) user_fp;
-diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
-index b057480e7463..63715cb90ee9 100644
---- a/arch/csky/kernel/traps.c
-+++ b/arch/csky/kernel/traps.c
-@@ -115,8 +115,9 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 	int sig;
- 	unsigned long vector;
- 	siginfo_t info;
-+	struct task_struct *tsk = current;
- 
--	vector = (mfcr("psr") >> 16) & 0xff;
-+	vector = (regs->sr >> 16) & 0xff;
- 
- 	switch (vector) {
- 	case VEC_ZERODIV:
-@@ -129,6 +130,7 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 		sig = SIGTRAP;
- 		break;
- 	case VEC_ILLEGAL:
-+		tsk->thread.trap_no = vector;
- 		die_if_kernel("Kernel mode ILLEGAL", regs, vector);
- #ifndef CONFIG_CPU_NO_USER_BKPT
- 		if (*(uint16_t *)instruction_pointer(regs) != USR_BKPT)
-@@ -146,16 +148,20 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 		sig = SIGTRAP;
- 		break;
- 	case VEC_ACCESS:
-+		tsk->thread.trap_no = vector;
- 		return buserr(regs);
- #ifdef CONFIG_CPU_NEED_SOFTALIGN
- 	case VEC_ALIGN:
-+		tsk->thread.trap_no = vector;
- 		return csky_alignment(regs);
- #endif
- #ifdef CONFIG_CPU_HAS_FPU
- 	case VEC_FPE:
-+		tsk->thread.trap_no = vector;
- 		die_if_kernel("Kernel mode FPE", regs, vector);
- 		return fpu_fpe(regs);
- 	case VEC_PRIV:
-+		tsk->thread.trap_no = vector;
- 		die_if_kernel("Kernel mode PRIV", regs, vector);
- 		if (fpu_libc_helper(regs))
- 			return;
-@@ -164,5 +170,8 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 		sig = SIGSEGV;
- 		break;
- 	}
-+
-+	tsk->thread.trap_no = vector;
-+
- 	send_sig(sig, current, 0);
- }
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index f76618b630f9..562c7f708749 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -179,11 +179,14 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- bad_area_nosemaphore:
- 	/* User mode accesses just cause a SIGSEGV */
- 	if (user_mode(regs)) {
-+		tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
- 		force_sig_fault(SIGSEGV, si_code, (void __user *)address);
- 		return;
- 	}
- 
- no_context:
-+	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
-+
- 	/* Are we prepared to handle this kernel fault? */
- 	if (fixup_exception(regs))
- 		return;
-@@ -198,6 +201,8 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- 	die_if_kernel("Oops", regs, write);
- 
- out_of_memory:
-+	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
-+
- 	/*
- 	 * We ran out of memory, call the OOM killer, and return the userspace
- 	 * (which will retry the fault, or kill us if we got oom-killed).
-@@ -206,6 +211,8 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- 	return;
- 
- do_sigbus:
-+	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
-+
- 	up_read(&mm->mmap_sem);
- 
- 	/* Kernel mode? Handle exceptions or die */
--- 
-2.17.0
+The following changes since commit 98d54f81e36ba3bf92172791eba5ca5bd813989b:
 
+  Linux 5.6-rc4 (2020-03-01 16:38:46 -0600)
+
+are available in the Git repository at:
+
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.7-rc1
+
+for you to fetch changes up to aefd9461d34a1b0a2acad0750c43216c1c27b9d4:
+
+  csky: Fixup cpu speculative execution to IO area (2020-04-03 12:40:07 +0800)
+
+----------------------------------------------------------------
+csky updates for 5.7-rc1
+
+ - Add kproobes/uprobes support
+ - Add lockdep, rseq, gcov support
+ - Fixup init_fpu
+ - Fixup ftrace_modify deadlock
+ - Fixup speculative execution on IO area
+
+----------------------------------------------------------------
+Guo Ren (10):
+      csky: Fixup init_fpu compile warning with __init
+      csky: Implement ptrace regs and stack API
+      csky: Add support for restartable sequence
+      csky: Implement ftrace with regs
+      csky/ftrace: Fixup ftrace_modify_code deadlock without CPU_HAS_ICACHE_INS
+      csky: Fixup get wrong psr value from phyical reg
+      csky: Enable LOCKDEP_SUPPORT
+      csky: Add kprobes supported
+      csky: Add uprobes support
+      csky: Fixup cpu speculative execution to IO area
+
+Ma Jun (1):
+      csky: Enable the gcov function
+
+ arch/csky/Kconfig                            |  13 +
+ arch/csky/abiv1/inc/abi/entry.h              |   5 +-
+ arch/csky/abiv2/fpu.c                        |   5 -
+ arch/csky/abiv2/inc/abi/entry.h              |  67 +++-
+ arch/csky/abiv2/inc/abi/fpu.h                |   3 +-
+ arch/csky/abiv2/mcount.S                     |  48 +++
+ arch/csky/include/asm/Kbuild                 |   1 -
+ arch/csky/include/asm/ftrace.h               |   2 +
+ arch/csky/include/asm/kprobes.h              |  48 +++
+ arch/csky/include/asm/probes.h               |  24 ++
+ arch/csky/include/asm/processor.h            |   1 +
+ arch/csky/include/asm/ptrace.h               |  43 +++
+ arch/csky/include/asm/thread_info.h          |   2 +
+ arch/csky/include/asm/uprobes.h              |  33 ++
+ arch/csky/kernel/Makefile                    |   1 +
+ arch/csky/kernel/asm-offsets.c               |   1 +
+ arch/csky/kernel/entry.S                     |  18 +-
+ arch/csky/kernel/ftrace.c                    |  42 +++
+ arch/csky/kernel/head.S                      |   5 +
+ arch/csky/kernel/probes/Makefile             |   7 +
+ arch/csky/kernel/probes/decode-insn.c        |  49 +++
+ arch/csky/kernel/probes/decode-insn.h        |  20 ++
+ arch/csky/kernel/probes/ftrace.c             |  66 ++++
+ arch/csky/kernel/probes/kprobes.c            | 499 +++++++++++++++++++++++++++
+ arch/csky/kernel/probes/kprobes_trampoline.S |  19 +
+ arch/csky/kernel/probes/simulate-insn.c      | 398 +++++++++++++++++++++
+ arch/csky/kernel/probes/simulate-insn.h      |  49 +++
+ arch/csky/kernel/probes/uprobes.c            | 150 ++++++++
+ arch/csky/kernel/ptrace.c                    | 103 ++++++
+ arch/csky/kernel/setup.c                     |  63 +---
+ arch/csky/kernel/signal.c                    |   6 +
+ arch/csky/kernel/smp.c                       |   6 +
+ arch/csky/kernel/traps.c                     |  29 +-
+ arch/csky/mm/cachev2.c                       |  45 ++-
+ arch/csky/mm/fault.c                         |  11 +
+ 35 files changed, 1807 insertions(+), 75 deletions(-)
+ create mode 100644 arch/csky/include/asm/kprobes.h
+ create mode 100644 arch/csky/include/asm/probes.h
+ create mode 100644 arch/csky/include/asm/uprobes.h
+ create mode 100644 arch/csky/kernel/probes/Makefile
+ create mode 100644 arch/csky/kernel/probes/decode-insn.c
+ create mode 100644 arch/csky/kernel/probes/decode-insn.h
+ create mode 100644 arch/csky/kernel/probes/ftrace.c
+ create mode 100644 arch/csky/kernel/probes/kprobes.c
+ create mode 100644 arch/csky/kernel/probes/kprobes_trampoline.S
+ create mode 100644 arch/csky/kernel/probes/simulate-insn.c
+ create mode 100644 arch/csky/kernel/probes/simulate-insn.h
+ create mode 100644 arch/csky/kernel/probes/uprobes.c

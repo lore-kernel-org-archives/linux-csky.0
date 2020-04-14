@@ -1,51 +1,52 @@
-Return-Path: <SRS0=cKcH=5Z=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=sp7d=56=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14639C2BA1A
-	for <linux-csky@archiver.kernel.org>; Thu,  9 Apr 2020 03:19:53 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D0A3B20936
-	for <linux-csky@archiver.kernel.org>; Thu,  9 Apr 2020 03:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED244C2BA19
+	for <linux-csky@archiver.kernel.org>; Tue, 14 Apr 2020 12:41:46 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id C6F442075E
+	for <linux-csky@archiver.kernel.org>; Tue, 14 Apr 2020 12:41:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586402392;
-	bh=Skv+s0+qxGwHC8wvqzFd5XQbLaeiBxIMll9IxhJBpv0=;
+	s=default; t=1586868106;
+	bh=9KRqqTKaIASeKnXv5UC9x+S15ibXz/EkB3du77R8j4I=;
 	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=1ibmt9nEFBw3h6wCgKJ/kdF7LR8ZxCWRe7c2wB8vis1L4hPkfxzOK9rpRxZxzJkoI
-	 nZSRl+MGniybxSHEdw9yhYqvOrHGmTSzpLu+xvBhWBlpt3PvTpzwTCLfI3yei4Guil
-	 i/fdmG/lnTpad7+KnfiZ1eHGduIdQC6zO/TfnXhU=
+	b=Wie7K61CD1Dyhka8NPIUwBD656LK/nkYFQ/Sgh+XL3J42Z54oUHVobyq+4hPlc3ME
+	 xnT4LTZ2pzS72PppV1l6wWKQMhge9ZhSSw97ovb4x3BwkRBewCJXARpESySVAaCYgo
+	 WobtTX96B4YjTefOauNUDqa8l0Gv72WpNyqL/f/I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726595AbgDIDTv (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 8 Apr 2020 23:19:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60370 "EHLO mail.kernel.org"
+        id S2440151AbgDNMlo (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 14 Apr 2020 08:41:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48826 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726552AbgDIDTv (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 8 Apr 2020 23:19:51 -0400
+        id S2440146AbgDNMlm (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 14 Apr 2020 08:41:42 -0400
 Received: from localhost.localdomain (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 971C1208E4;
-        Thu,  9 Apr 2020 03:19:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D44AC20768;
+        Tue, 14 Apr 2020 12:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586402391;
-        bh=Skv+s0+qxGwHC8wvqzFd5XQbLaeiBxIMll9IxhJBpv0=;
+        s=default; t=1586868101;
+        bh=9KRqqTKaIASeKnXv5UC9x+S15ibXz/EkB3du77R8j4I=;
         h=From:To:Cc:Subject:Date:From;
-        b=rizq5eNo3UnaP67wpltOyZ3tVyIIZ9aFCcXVMn9Hu4CAtQ3/v1nCqv/4s50QSD5fR
-         XzYm+hw5y9KZ+K/uCDdQZvcplSIQIESRL487ID6I5WqU5n5y4FQzbfsMyjcw6JZ3ts
-         I0f9KFhGg4v9/+N5uUA5WuQwCFatFFgcgyFTW9fA=
+        b=cs0VnoGUuOKql4W/lnTEp6dYcykdwAiqsSrzh50bWdKeHZkRzdnKDbwQdN+aQtdrQ
+         z3peq0s4qbpEn/U4llX3yw+Vxr/eKj9b7MU721nGm0HM9067E8r6B9jv1aGWjPhg70
+         tSifnl9A3Ss1T1nIzNUg/C1MFT4pEakcKPplTPSE=
 From:   guoren@kernel.org
 To:     linux-csky@vger.kernel.org
 Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, guoren@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] csky: Fixup compile error for abiv1 entry.S
-Date:   Thu,  9 Apr 2020 11:19:41 +0800
-Message-Id: <20200409031941.6288-1-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH] csky: Fixup perf probe -x hungup
+Date:   Tue, 14 Apr 2020 20:41:29 +0800
+Message-Id: <20200414124129.9048-1-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
@@ -54,38 +55,64 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-This bug is from uprobe signal definition in thread_info.h. The
-instruction (andi) of abiv1 immediate is smaller than abiv2, then
-it will cause:
+case:
+ # perf probe -x /lib/libc-2.28.9000.so memcpy
+ # perf record -e probe_libc:memcpy -aR sleep 1
 
-  AS      arch/csky/kernel/entry.o
- arch/csky/kernel/entry.S: Assembler messages:
- arch/csky/kernel/entry.S:224: Error: Operand 2 immediate is overflow.
+System hangup and cpu get in trap_c loop, because our hardware
+singlestep state could still get interrupt signal. When we get in
+uprobe_xol singlestep slot, we should disable irq in pt_regs->psr.
+
+And is_swbp_insn() need a csky arch implementation with a low 16bit
+mask.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- arch/csky/include/asm/thread_info.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/csky/kernel/probes/uprobes.c | 5 +++++
+ arch/csky/kernel/ptrace.c         | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/arch/csky/include/asm/thread_info.h b/arch/csky/include/asm/thread_info.h
-index 442fedad0260..5d33fcfd7f2a 100644
---- a/arch/csky/include/asm/thread_info.h
-+++ b/arch/csky/include/asm/thread_info.h
-@@ -54,10 +54,10 @@ static inline struct thread_info *current_thread_info(void)
- #define TIF_SIGPENDING		0	/* signal pending */
- #define TIF_NOTIFY_RESUME	1       /* callback before returning to user */
- #define TIF_NEED_RESCHED	2	/* rescheduling necessary */
--#define TIF_SYSCALL_TRACE	3	/* syscall trace active */
--#define TIF_SYSCALL_TRACEPOINT	4       /* syscall tracepoint instrumentation */
--#define TIF_SYSCALL_AUDIT	5	/* syscall auditing */
--#define TIF_UPROBE		6	/* uprobe breakpoint or singlestep */
-+#define TIF_UPROBE		3	/* uprobe breakpoint or singlestep */
-+#define TIF_SYSCALL_TRACE	4	/* syscall trace active */
-+#define TIF_SYSCALL_TRACEPOINT	5       /* syscall tracepoint instrumentation */
-+#define TIF_SYSCALL_AUDIT	6	/* syscall auditing */
- #define TIF_POLLING_NRFLAG	16	/* poll_idle() is TIF_NEED_RESCHED */
- #define TIF_MEMDIE		18      /* is terminating due to OOM killer */
- #define TIF_RESTORE_SIGMASK	20	/* restore signal mask in do_signal() */
+diff --git a/arch/csky/kernel/probes/uprobes.c b/arch/csky/kernel/probes/uprobes.c
+index b3a56c260e3e..1a9e0961b2b5 100644
+--- a/arch/csky/kernel/probes/uprobes.c
++++ b/arch/csky/kernel/probes/uprobes.c
+@@ -11,6 +11,11 @@
+ 
+ #define UPROBE_TRAP_NR	UINT_MAX
+ 
++bool is_swbp_insn(uprobe_opcode_t *insn)
++{
++	return (*insn & 0xffff) == UPROBE_SWBP_INSN;
++}
++
+ unsigned long uprobe_get_swbp_addr(struct pt_regs *regs)
+ {
+ 	return instruction_pointer(regs);
+diff --git a/arch/csky/kernel/ptrace.c b/arch/csky/kernel/ptrace.c
+index 21ac2608f205..5a82230bddf9 100644
+--- a/arch/csky/kernel/ptrace.c
++++ b/arch/csky/kernel/ptrace.c
+@@ -41,6 +41,9 @@ static void singlestep_disable(struct task_struct *tsk)
+ 
+ 	regs = task_pt_regs(tsk);
+ 	regs->sr = (regs->sr & TRACE_MODE_MASK) | TRACE_MODE_RUN;
++
++	/* Enable irq */
++	regs->sr |= BIT(6);
+ }
+ 
+ static void singlestep_enable(struct task_struct *tsk)
+@@ -49,6 +52,9 @@ static void singlestep_enable(struct task_struct *tsk)
+ 
+ 	regs = task_pt_regs(tsk);
+ 	regs->sr = (regs->sr & TRACE_MODE_MASK) | TRACE_MODE_SI;
++
++	/* Disable irq */
++	regs->sr &= ~BIT(6);
+ }
+ 
+ /*
 -- 
 2.17.0
 

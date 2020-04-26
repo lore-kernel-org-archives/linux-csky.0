@@ -1,141 +1,276 @@
-Return-Path: <SRS0=ONZz=6G=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=wsK7=6K=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EEA2C54FCB
-	for <linux-csky@archiver.kernel.org>; Wed, 22 Apr 2020 13:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A63CCC55196
+	for <linux-csky@archiver.kernel.org>; Sun, 26 Apr 2020 05:54:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A2122077D
-	for <linux-csky@archiver.kernel.org>; Wed, 22 Apr 2020 13:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587561314;
-	bh=vblH/yZ/u73C+LzZ3aNjUcEQQynkpX3Rm9l2qj6xW5E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=1L/4Z/DOh7HVhjri9wLtVHZFa3x+y/N9xIpYZtBrBoX9Iysgj548FeikBo7tvwK1C
-	 XZ3fmqH1/x32Qqtmfi8cs5/fc5bOpH4t+mOofM6AUn1HtMrDhMUHnTcwHjAxoBAb6k
-	 B9ulC3FfviBcSOzw4UADdCb6Xb8av0rJlDDkiRUE=
+	by mail.kernel.org (Postfix) with ESMTP id 8CD48206BF
+	for <linux-csky@archiver.kernel.org>; Sun, 26 Apr 2020 05:54:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgDVNPO (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 22 Apr 2020 09:15:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53572 "EHLO mail.kernel.org"
+        id S1726263AbgDZFyZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 26 Apr 2020 01:54:25 -0400
+Received: from mga06.intel.com ([134.134.136.31]:57441 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726030AbgDVNPO (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 22 Apr 2020 09:15:14 -0400
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3978B2077D
-        for <linux-csky@vger.kernel.org>; Wed, 22 Apr 2020 13:15:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587561313;
-        bh=vblH/yZ/u73C+LzZ3aNjUcEQQynkpX3Rm9l2qj6xW5E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eQb6RbKD2meFb+lh6M/nQDH5GlXcx3U9vE22B8Lyri+UzValA6AicSpH3FH5UUh8g
-         dOaZYcEWNP71rPQSVmTTvwrbEFTSyPmWMzBtfmBwv0GcKmYoMXRWNlTZVP3R2kHn9J
-         jt5yCczn+PTbNpBZzeeUJRjle4VAYJGBWMmpDsb4=
-Received: by mail-lj1-f175.google.com with SMTP id f18so2181980lja.13
-        for <linux-csky@vger.kernel.org>; Wed, 22 Apr 2020 06:15:13 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZSU28qEW4I8/+gWkHbnA3yborrX72l8uNNDSwmtkn3GFjwiHW7
-        c9NuB+PvmeMl9oF3qO8sm9Rx6ov7JAJZvwCCPD8=
-X-Google-Smtp-Source: APiQypIE/I42H8zLFht4Z5cBFmKd+zUn7Og+wtUXWKY+HsGmopmtmjmh7mgXEUf8EhSEwmRnTnE8UOxc35QncXXkves=
-X-Received: by 2002:a05:651c:119a:: with SMTP id w26mr5697284ljo.53.1587561311339;
- Wed, 22 Apr 2020 06:15:11 -0700 (PDT)
+        id S1726261AbgDZFyY (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 26 Apr 2020 01:54:24 -0400
+IronPort-SDR: pSRn4sTKqs+CzzvOCrSeldPsYyrnw/f/yZJk71/3AP69VNp9IP3UAqqgfPbGoLW6arIDB3VCbL
+ 6MgTgoNg5qQA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 22:54:24 -0700
+IronPort-SDR: ULIPpftXlRuZVncLUHSwuauSzU7AMt8SQ3FSLW4e25oH6OANV+RbXbJFufO4yzakpq0D15kNUU
+ 6n3sFI9wk+2w==
+X-IronPort-AV: E=Sophos;i="5.73,319,1583222400"; 
+   d="scan'208";a="245732999"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 22:54:23 -0700
+From:   ira.weiny@intel.com
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: [PATCH 5/5] arch/kunmap_atomic: Consolidate duplicate code
+Date:   Sat, 25 Apr 2020 22:54:06 -0700
+Message-Id: <20200426055406.134198-6-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200426055406.134198-1-ira.weiny@intel.com>
+References: <20200426055406.134198-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-References: <1587455788-9450-1-git-send-email-yibin_liu@c-sky.com>
-In-Reply-To: <1587455788-9450-1-git-send-email-yibin_liu@c-sky.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Apr 2020 21:15:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQPOuLK5n8F7zsNgsd7fcTPOTNHFn_b4hB5dUMBQhqeJA@mail.gmail.com>
-Message-ID: <CAJF2gTQPOuLK5n8F7zsNgsd7fcTPOTNHFn_b4hB5dUMBQhqeJA@mail.gmail.com>
-Subject: Re: [PATCH] Fix MSA register operation error
-To:     Liu Yibin <yibin_liu@c-sky.com>
-Cc:     linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx for the patch.
+From: Ira Weiny <ira.weiny@intel.com>
 
-On Tue, Apr 21, 2020 at 3:56 PM Liu Yibin <yibin_liu@c-sky.com> wrote:
->
-> MSA register should shift to the right 29 for bits,
-> rather than 28 bits.
->
-> Signed-off-by: Liu Yibin <yibin_liu@c-sky.com>
-> ---
->  arch/csky/abiv1/inc/abi/entry.h | 6 ++++--
->  arch/csky/abiv2/inc/abi/entry.h | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/csky/abiv1/inc/abi/entry.h b/arch/csky/abiv1/inc/abi/entry.h
-> index 5056ebb..1dc5ed8 100644
-> --- a/arch/csky/abiv1/inc/abi/entry.h
-> +++ b/arch/csky/abiv1/inc/abi/entry.h
-> @@ -16,6 +16,8 @@
->  #define LSAVE_A4       40
->  #define LSAVE_A5       44
->
-> +#define MSA_SHIFT              29
-> +
->  #define usp ss1
->
->  .macro USPTOKSP
-> @@ -167,8 +169,8 @@
->          *   BA     Reserved  C   D   V
->          */
->         cprcr   r6, cpcr30
-> -       lsri    r6, 28
-> -       lsli    r6, 28
-> +       lsri    r6, MSA_SHIFT
-> +       lsli    r6, MSA_SHIFT
->         addi    r6, 0xe
->         cpwcr   r6, cpcr30
->
-> diff --git a/arch/csky/abiv2/inc/abi/entry.h b/arch/csky/abiv2/inc/abi/entry.h
-> index a99aff5..2507cbf 100644
-> --- a/arch/csky/abiv2/inc/abi/entry.h
-> +++ b/arch/csky/abiv2/inc/abi/entry.h
-> @@ -14,6 +14,8 @@
->  #define LSAVE_A2       32
->  #define LSAVE_A3       36
->
-> +#define MSA_SHIFT              29
-> +
->  #define KSPTOUSP
->  #define USPTOKSP
->
-> @@ -285,8 +287,8 @@
->          */
->         mfcr    r6, cr<30, 15> /* Get MSA0 */
->  2:
-> -       lsri    r6, 28
-> -       lsli    r6, 28
-> +       lsri    r6, MSA_SHIFT
-> +       lsli    r6, MSA_SHIFT
-Yes, it's 512MB align and we should only reserve highest 3 bits.
+Every single architecture (including !CONFIG_HIGHMEM) calls...
 
-But I'll change it to with keeping the primary author:
--       lsri    r6, 28
--       lsli    r6, 28
-+       lsri    r6, 29
-+       lsli    r6, 29
+	pagefault_enable();
+	preempt_enable();
 
->         addi    r6, 0x1ce
->         mtcr    r6, cr<30, 15> /* Set MSA0 */
->
-> --
-> 2.7.4
->
+... before returning from __kunmap_atomic().  Lift this code into the
+kunmap_atomic() macro.
 
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+ arch/arc/mm/highmem.c                | 3 ---
+ arch/arm/mm/highmem.c                | 2 --
+ arch/csky/mm/highmem.c               | 5 +----
+ arch/microblaze/mm/highmem.c         | 2 --
+ arch/mips/mm/highmem.c               | 2 --
+ arch/nds32/mm/highmem.c              | 2 --
+ arch/parisc/include/asm/cacheflush.h | 2 --
+ arch/powerpc/mm/highmem.c            | 2 --
+ arch/sparc/mm/highmem.c              | 2 --
+ arch/x86/mm/highmem_32.c             | 3 ---
+ arch/xtensa/mm/highmem.c             | 3 ---
+ include/linux/highmem.h              | 6 ++++--
+ 12 files changed, 5 insertions(+), 29 deletions(-)
 
+diff --git a/arch/arc/mm/highmem.c b/arch/arc/mm/highmem.c
+index 1cae4b911a33..0725fc56b016 100644
+--- a/arch/arc/mm/highmem.c
++++ b/arch/arc/mm/highmem.c
+@@ -91,9 +91,6 @@ void __kunmap_atomic(void *kv)
+ 
+ 		kmap_atomic_idx_pop();
+ 	}
+-
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+ 
+diff --git a/arch/arm/mm/highmem.c b/arch/arm/mm/highmem.c
+index 4a629f616a6a..4983bf18ec32 100644
+--- a/arch/arm/mm/highmem.c
++++ b/arch/arm/mm/highmem.c
+@@ -98,8 +98,6 @@ void __kunmap_atomic(void *kvaddr)
+ 		/* this address was obtained through kmap_high_get() */
+ 		kunmap_high(pte_page(pkmap_page_table[PKMAP_NR(vaddr)]));
+ 	}
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+ 
+diff --git a/arch/csky/mm/highmem.c b/arch/csky/mm/highmem.c
+index 1191f57f53ae..106fa6773084 100644
+--- a/arch/csky/mm/highmem.c
++++ b/arch/csky/mm/highmem.c
+@@ -50,7 +50,7 @@ void __kunmap_atomic(void *kvaddr)
+ 	int idx;
+ 
+ 	if (vaddr < FIXADDR_START)
+-		goto out;
++		return;
+ 
+ #ifdef CONFIG_DEBUG_HIGHMEM
+ 	idx = KM_TYPE_NR*smp_processor_id() + kmap_atomic_idx();
+@@ -63,9 +63,6 @@ void __kunmap_atomic(void *kvaddr)
+ 	(void) idx; /* to kill a warning */
+ #endif
+ 	kmap_atomic_idx_pop();
+-out:
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+ 
+diff --git a/arch/microblaze/mm/highmem.c b/arch/microblaze/mm/highmem.c
+index 99fdf826edc2..d382c6821747 100644
+--- a/arch/microblaze/mm/highmem.c
++++ b/arch/microblaze/mm/highmem.c
+@@ -81,7 +81,5 @@ void __kunmap_atomic(void *kvaddr)
+ 	local_flush_tlb_page(NULL, vaddr);
+ 
+ 	kmap_atomic_idx_pop();
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+diff --git a/arch/mips/mm/highmem.c b/arch/mips/mm/highmem.c
+index ba03ca75d4a1..5a3fc7e84e66 100644
+--- a/arch/mips/mm/highmem.c
++++ b/arch/mips/mm/highmem.c
+@@ -79,8 +79,6 @@ void __kunmap_atomic(void *kvaddr)
+ 	}
+ #endif
+ 	kmap_atomic_idx_pop();
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+ 
+diff --git a/arch/nds32/mm/highmem.c b/arch/nds32/mm/highmem.c
+index 4aabde586489..b8862aafa189 100644
+--- a/arch/nds32/mm/highmem.c
++++ b/arch/nds32/mm/highmem.c
+@@ -49,8 +49,6 @@ void __kunmap_atomic(void *kvaddr)
+ 		ptep = pte_offset_kernel(pmd_off_k(vaddr), vaddr);
+ 		set_pte(ptep, 0);
+ 	}
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ 
+ EXPORT_SYMBOL(__kunmap_atomic);
+diff --git a/arch/parisc/include/asm/cacheflush.h b/arch/parisc/include/asm/cacheflush.h
+index 0c83644bfa5c..c8458491b9af 100644
+--- a/arch/parisc/include/asm/cacheflush.h
++++ b/arch/parisc/include/asm/cacheflush.h
+@@ -125,8 +125,6 @@ static inline void *kmap_atomic(struct page *page)
+ static inline void __kunmap_atomic(void *addr)
+ {
+ 	flush_kernel_dcache_page_addr(addr);
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ 
+ #define kmap_atomic_prot(page, prot)	kmap_atomic(page)
+diff --git a/arch/powerpc/mm/highmem.c b/arch/powerpc/mm/highmem.c
+index cdf5b716801a..7dfccf519621 100644
+--- a/arch/powerpc/mm/highmem.c
++++ b/arch/powerpc/mm/highmem.c
+@@ -76,7 +76,5 @@ void __kunmap_atomic(void *kvaddr)
+ 	}
+ 
+ 	kmap_atomic_idx_pop();
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+diff --git a/arch/sparc/mm/highmem.c b/arch/sparc/mm/highmem.c
+index 178641805567..7a99a1097f67 100644
+--- a/arch/sparc/mm/highmem.c
++++ b/arch/sparc/mm/highmem.c
+@@ -130,7 +130,5 @@ void __kunmap_atomic(void *kvaddr)
+ #endif
+ 
+ 	kmap_atomic_idx_pop();
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+diff --git a/arch/x86/mm/highmem_32.c b/arch/x86/mm/highmem_32.c
+index 34770499b0ff..b20e81b2b833 100644
+--- a/arch/x86/mm/highmem_32.c
++++ b/arch/x86/mm/highmem_32.c
+@@ -78,9 +78,6 @@ void __kunmap_atomic(void *kvaddr)
+ 		BUG_ON(vaddr >= (unsigned long)high_memory);
+ 	}
+ #endif
+-
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+ 
+diff --git a/arch/xtensa/mm/highmem.c b/arch/xtensa/mm/highmem.c
+index 38c14e0b578c..9a49263e4cd6 100644
+--- a/arch/xtensa/mm/highmem.c
++++ b/arch/xtensa/mm/highmem.c
+@@ -77,9 +77,6 @@ void __kunmap_atomic(void *kvaddr)
+ 
+ 		kmap_atomic_idx_pop();
+ 	}
+-
+-	pagefault_enable();
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__kunmap_atomic);
+ 
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index eee53e151900..94145d4200ab 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -133,8 +133,8 @@ static inline void *kmap_atomic(struct page *page)
+ 
+ static inline void __kunmap_atomic(void *addr)
+ {
+-	pagefault_enable();
+-	preempt_enable();
++	/* Nothing to do in the CONFIG_HIGHMEM=n case as kunmap_atomic()
++	 * handles re-enabling faults + preemption */
+ }
+ 
+ #define kmap_atomic_pfn(pfn)	kmap_atomic(pfn_to_page(pfn))
+@@ -185,6 +185,8 @@ static inline void kmap_atomic_idx_pop(void)
+ do {                                                            \
+ 	BUILD_BUG_ON(__same_type((addr), struct page *));       \
+ 	__kunmap_atomic(addr);                                  \
++	pagefault_enable();                                     \
++	preempt_enable();                                       \
+ } while (0)
+ 
+ 
 -- 
-Best Regards
- Guo Ren
+2.25.1
 
-ML: https://lore.kernel.org/linux-csky/

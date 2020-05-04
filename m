@@ -2,42 +2,36 @@ Return-Path: <SRS0=FLc3=6S=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B3CC47247
-	for <linux-csky@archiver.kernel.org>; Mon,  4 May 2020 01:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6611C28CBC
+	for <linux-csky@archiver.kernel.org>; Mon,  4 May 2020 01:35:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E3EC20735
-	for <linux-csky@archiver.kernel.org>; Mon,  4 May 2020 01:10:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9614F206E6
+	for <linux-csky@archiver.kernel.org>; Mon,  4 May 2020 01:35:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbgEDBKJ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 3 May 2020 21:10:09 -0400
-Received: from mga04.intel.com ([192.55.52.120]:56280 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727105AbgEDBJX (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 3 May 2020 21:09:23 -0400
-IronPort-SDR: 9Fib3TsgvOINsLEJXwIFwZNFC+bbu4N04nX2RwsVME7ByXZy++CWx5ggmbFythPHhVk75G/6rJ
- MWmgfDM2D8Cw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 18:09:22 -0700
-IronPort-SDR: 0sfTWrdVl9taYpdiQf4rbNyObgvnrL4HY5A/wwdVowOhzm+BQ1szN8Ld3ck7vtPYcDwAf8cgkk
- odi25qXkZcbQ==
-X-IronPort-AV: E=Sophos;i="5.73,350,1583222400"; 
-   d="scan'208";a="249047740"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 18:09:21 -0700
-From:   ira.weiny@intel.com
-To:     linux-kernel@vger.kernel.org,
+        id S1726906AbgEDBfY (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 3 May 2020 21:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726377AbgEDBfY (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 3 May 2020 21:35:24 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83FBC061A0E;
+        Sun,  3 May 2020 18:35:23 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jVQ0j-000SR4-3a; Mon, 04 May 2020 01:35:09 +0000
+Date:   Mon, 4 May 2020 02:35:09 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     ira.weiny@intel.com
+Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Christoph Hellwig <hch@lst.de>,
+        Huang Rui <ray.huang@amd.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
         Helge Deller <deller@gmx.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -56,66 +50,63 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Christoph Hellwig <hch@lst.de>,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH V2 02/11] arch/xtensa: Move kmap build bug out of the way
-Date:   Sun,  3 May 2020 18:09:03 -0700
-Message-Id: <20200504010912.982044-3-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200504010912.982044-1-ira.weiny@intel.com>
+Subject: Re: [PATCH V2 00/11] Subject: Remove duplicated kmap code
+Message-ID: <20200504013509.GU23230@ZenIV.linux.org.uk>
 References: <20200504010912.982044-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200504010912.982044-1-ira.weiny@intel.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Sun, May 03, 2020 at 06:09:01PM -0700, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> The kmap infrastructure has been copied almost verbatim to every architecture.
+> This series consolidates obvious duplicated code by defining core functions
+> which call into the architectures only when needed.
+> 
+> Some of the k[un]map_atomic() implementations have some similarities but the
+> similarities were not sufficient to warrant further changes.
+> 
+> In addition we remove a duplicate implementation of kmap() in DRM.
+> 
+> Testing was done by 0day to cover all the architectures I can't readily
+> build/test.
 
-Move the kmap() build bug to kmap_init() to facilitate patches to lift
-kmap() to the core.
+OK...  Looking through my old notes on kmap unification (this winter, never
+went anywhere),
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+* arch/mips/mm/cache.c ought to use linux/highmem.h, not asm/highmem.h
+I suspect that your series doesn't build on some configs there.  Hadn't
+verified that, though.
 
----
-Changes from V1:
-	combine code onto 1 line.
----
- arch/xtensa/include/asm/highmem.h | 5 -----
- arch/xtensa/mm/highmem.c          | 4 ++++
- 2 files changed, 4 insertions(+), 5 deletions(-)
+* kmap_atomic_to_page() is dead, but not quite gone - csky and nds32 brought
+the damn thing back (nds32 - only an extern).  It needs killin'...
 
-diff --git a/arch/xtensa/include/asm/highmem.h b/arch/xtensa/include/asm/highmem.h
-index 413848cc1e56..a9587c85be85 100644
---- a/arch/xtensa/include/asm/highmem.h
-+++ b/arch/xtensa/include/asm/highmem.h
-@@ -68,11 +68,6 @@ void kunmap_high(struct page *page);
- 
- static inline void *kmap(struct page *page)
- {
--	/* Check if this memory layout is broken because PKMAP overlaps
--	 * page table.
--	 */
--	BUILD_BUG_ON(PKMAP_BASE <
--		     TLBTEMP_BASE_1 + TLBTEMP_SIZE);
- 	might_sleep();
- 	if (!PageHighMem(page))
- 		return page_address(page);
-diff --git a/arch/xtensa/mm/highmem.c b/arch/xtensa/mm/highmem.c
-index 184ceadccc1a..da734a2ed641 100644
---- a/arch/xtensa/mm/highmem.c
-+++ b/arch/xtensa/mm/highmem.c
-@@ -88,6 +88,10 @@ void __init kmap_init(void)
- {
- 	unsigned long kmap_vstart;
- 
-+	/* Check if this memory layout is broken because PKMAP overlaps
-+	 * page table.
-+	 */
-+	BUILD_BUG_ON(PKMAP_BASE < TLBTEMP_BASE_1 + TLBTEMP_SIZE);
- 	/* cache the first kmap pte */
- 	kmap_vstart = __fix_to_virt(FIX_KMAP_BEGIN);
- 	kmap_pte = kmap_get_fixmap_pte(kmap_vstart);
--- 
-2.25.1
+* parisc is (arguably) abusing kunmap()/kunmap_atomic() for cache flushing.
+Replace the bulk of its highmem.h with
+#define ARCH_HAS_FLUSH_ON_KUNMAP
+#define arch_before_kunmap flush_kernel_dcache_page_addr
+and have default kunmap()/kunmap_atomic() do
+#ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+	arch_before_kunmap(page_address(page));
+#endif
+and
+#ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+	arch_before_kunmap(addr);
+#endif
+resp.  Kills ARCH_HAS_KMAP along with ifdefs on it, makes parisc use somewhat
+less hacky.
 
+I'd suggest checking various configs on mips - that's likely to cause headache.
+Said that, my analysis of include chains back then is pretty much worthless
+by now - I really hate the amount of indirect include chains leading to that
+sucker on some, but not all configs ;-/  IIRC, the proof that everything
+using kmap*/kunmap* would pull linux/highmem.h regardless of config took several
+hours of digging, ran for several pages and had been hopelessly brittle.
+arch/mips/mm/cache.c was the only exception caught by it, but these days
+there might be more.

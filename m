@@ -1,140 +1,126 @@
-Return-Path: <SRS0=33vJ=63=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=h0we=66=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1193BC2D0FA
-	for <linux-csky@archiver.kernel.org>; Wed, 13 May 2020 10:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79D31C433DF
+	for <linux-csky@archiver.kernel.org>; Sat, 16 May 2020 09:33:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E30A5206D6
-	for <linux-csky@archiver.kernel.org>; Wed, 13 May 2020 10:16:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FC382074D
+	for <linux-csky@archiver.kernel.org>; Sat, 16 May 2020 09:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589365000;
-	bh=FpdVCxMEMKolZZCRG1dZtvfPJhpK6MP9uGNdCxGdVUU=;
+	s=default; t=1589621636;
+	bh=Xa5DKDmR3i44QerUh5QmkifSI8kySf4Dm8ZehLjC7kg=;
 	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=w/CzQwFpcNBdMSciwiTenGiCqAAmv93qZEpWqX51B7cMxlpdPwy7lDl/WeeO91LeC
-	 AtloodPSa67bwPb2oZ6NCzjXUQq2pvwTvMVQMI4LrvH1Ff0sOqK3MlDlHXmt9qrDzk
-	 OxhRJXxi8EErC8X6hNbWU0+XU9CbmlNYXTL/mYS0=
+	b=e8wGFBEv3T2DAXYHl5QBNTRFTgW3Xgpj5QiuUvnt8AcYpHxgnq4IbdWcBcaDfQDOY
+	 SDq8/H6VUlwlRR1T7Vk4hXtjG+2LENB7Gk0FhZplEFaLkHjxHeY8nJp2qxhEogtQ1b
+	 VfMWTJSFm0dqSl4jA8DNjnoa1i/a2tEHSxeeRTLI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732741AbgEMKQZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 13 May 2020 06:16:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46242 "EHLO mail.kernel.org"
+        id S1726967AbgEPJdx (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sat, 16 May 2020 05:33:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729917AbgEMKQY (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 13 May 2020 06:16:24 -0400
-Received: from localhost.localdomain (unknown [42.120.72.94])
+        id S1726888AbgEPJdx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 16 May 2020 05:33:53 -0400
+Received: from localhost.localdomain (unknown [89.208.247.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6CFD5205ED;
-        Wed, 13 May 2020 10:16:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 82B7A2074D;
+        Sat, 16 May 2020 09:33:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589364984;
-        bh=FpdVCxMEMKolZZCRG1dZtvfPJhpK6MP9uGNdCxGdVUU=;
+        s=default; t=1589621632;
+        bh=Xa5DKDmR3i44QerUh5QmkifSI8kySf4Dm8ZehLjC7kg=;
         h=From:To:Cc:Subject:Date:From;
-        b=DnTHBxIw0k04yhihnlng3KE0ps5tzNuTPxZDv2rCv6APguci8zYpS7ezn6rjmPZO0
-         N6xrEObhBjR9SoshIAsBjxeHFGj+bv1vkU4jLiCbLDH1lwMCsm99IL98k1ZSCKL+/b
-         eAdO//LxvjkIwDgi+nnsSM0DslL/OLI7tKSgLv7w=
+        b=UgWaIJtsMT9RXBaxIuYN2/pFxNE2pQtFlkVoRc1I3Y+bsP4omz5+EOKEJvz5wvvkz
+         B0G7do+dn2gBOQU/OTBsklthBa6vvXyiUVzHXkOWVtFHSUSPufE69h9/ZXcbcO3spw
+         v4gxzEv0NgTmYq5N7B7tJkYZSGtgdwyLb99LqTl8=
 From:   guoren@kernel.org
-To:     linux-csky@vger.kernel.org
+To:     torvalds@linux-foundation.org
 Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, guoren@kernel.org,
-        Mao Han <han_mao@linux.alibaba.com>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 1/4] csky: Fixup perf callchain unwind
-Date:   Wed, 13 May 2020 18:16:14 +0800
-Message-Id: <20200513101617.11588-1-guoren@kernel.org>
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        guoren@kernel.org
+Subject: [GIT PULL] csky updates for v5.7-rc6
+Date:   Sat, 16 May 2020 17:33:36 +0800
+Message-Id: <20200516093336.13886-1-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Mao Han <han_mao@linux.alibaba.com>
+Hi Linus,
 
- [ 5221.974084] Unable to handle kernel paging request at virtual address 0xfffff000, pc: 0x8002c18e
- [ 5221.985929] Oops: 00000000
- [ 5221.989488]
- [ 5221.989488] CURRENT PROCESS:
- [ 5221.989488]
- [ 5221.992877] COMM=callchain_test PID=11962
- [ 5221.995213] TEXT=00008000-000087e0 DATA=00009f1c-0000a018 BSS=0000a018-0000b000
- [ 5221.999037] USER-STACK=7fc18e20  KERNEL-STACK=be204680
- [ 5221.999037]
- [ 5222.003292] PC: 0x8002c18e (perf_callchain_kernel+0x3e/0xd4)
- [ 5222.007957] LR: 0x8002c198 (perf_callchain_kernel+0x48/0xd4)
- [ 5222.074873] Call Trace:
- [ 5222.074873] [<800a248e>] get_perf_callchain+0x20a/0x29c
- [ 5222.074873] [<8009d964>] perf_callchain+0x64/0x80
- [ 5222.074873] [<8009dc1c>] perf_prepare_sample+0x29c/0x4b8
- [ 5222.074873] [<8009de6e>] perf_event_output_forward+0x36/0x98
- [ 5222.074873] [<800497e0>] search_exception_tables+0x20/0x44
- [ 5222.074873] [<8002cbb6>] do_page_fault+0x92/0x378
- [ 5222.074873] [<80098608>] __perf_event_overflow+0x54/0xdc
- [ 5222.074873] [<80098778>] perf_swevent_hrtimer+0xe8/0x164
- [ 5222.074873] [<8002ddd0>] update_mmu_cache+0x0/0xd8
- [ 5222.074873] [<8002c014>] user_backtrace+0x58/0xc4
- [ 5222.074873] [<8002c0b4>] perf_callchain_user+0x34/0xd0
- [ 5222.074873] [<800a2442>] get_perf_callchain+0x1be/0x29c
- [ 5222.074873] [<8009d964>] perf_callchain+0x64/0x80
- [ 5222.074873] [<8009d834>] perf_output_sample+0x78c/0x858
- [ 5222.074873] [<8009dc1c>] perf_prepare_sample+0x29c/0x4b8
- [ 5222.074873] [<8009de94>] perf_event_output_forward+0x5c/0x98
- [ 5222.097846]
- [ 5222.097846] [<800a0300>] perf_event_exit_task+0x58/0x43c
- [ 5222.097846] [<8006c874>] hrtimer_interrupt+0x104/0x2ec
- [ 5222.097846] [<800a0300>] perf_event_exit_task+0x58/0x43c
- [ 5222.097846] [<80437bb6>] dw_apb_clockevent_irq+0x2a/0x4c
- [ 5222.097846] [<8006c770>] hrtimer_interrupt+0x0/0x2ec
- [ 5222.097846] [<8005f2e4>] __handle_irq_event_percpu+0xac/0x19c
- [ 5222.097846] [<80437bb6>] dw_apb_clockevent_irq+0x2a/0x4c
- [ 5222.097846] [<8005f408>] handle_irq_event_percpu+0x34/0x88
- [ 5222.097846] [<8005f480>] handle_irq_event+0x24/0x64
- [ 5222.097846] [<8006218c>] handle_level_irq+0x68/0xdc
- [ 5222.097846] [<8005ec76>] __handle_domain_irq+0x56/0xa8
- [ 5222.097846] [<80450e90>] ck_irq_handler+0xac/0xe4
- [ 5222.097846] [<80029012>] csky_do_IRQ+0x12/0x24
- [ 5222.097846] [<8002a3a0>] csky_irq+0x70/0x80
- [ 5222.097846] [<800ca612>] alloc_set_pte+0xd2/0x238
- [ 5222.097846] [<8002ddd0>] update_mmu_cache+0x0/0xd8
- [ 5222.097846] [<800a0340>] perf_event_exit_task+0x98/0x43c
+Please pull the changes (10 fixups) for v5.7-rc6.
 
-The original fp check doesn't base on the real kernal stack region.
-Invalid fp address may cause kernel panic.
+Best Regards
+ Guo Ren
 
-Signed-off-by: Mao Han <han_mao@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/csky/kernel/perf_callchain.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+The following changes since commit 2ef96a5bb12be62ef75b5828c0aab838ebb29cb8:
 
-diff --git a/arch/csky/kernel/perf_callchain.c b/arch/csky/kernel/perf_callchain.c
-index e68ff375c8f8..ab55e98ee8f6 100644
---- a/arch/csky/kernel/perf_callchain.c
-+++ b/arch/csky/kernel/perf_callchain.c
-@@ -12,12 +12,17 @@ struct stackframe {
- 
- static int unwind_frame_kernel(struct stackframe *frame)
- {
--	if (kstack_end((void *)frame->fp))
-+	unsigned long low = (unsigned long)task_stack_page(current);
-+	unsigned long high = low + THREAD_SIZE;
-+
-+	if (unlikely(frame->fp < low || frame->fp > high))
- 		return -EPERM;
--	if (frame->fp & 0x3 || frame->fp < TASK_SIZE)
-+
-+	if (kstack_end((void *)frame->fp) || frame->fp & 0x3)
- 		return -EPERM;
- 
- 	*frame = *(struct stackframe *)frame->fp;
-+
- 	if (__kernel_text_address(frame->lr)) {
- 		int graph = 0;
- 
--- 
-2.17.0
+  Linux 5.7-rc5 (2020-05-10 15:16:58 -0700)
 
+are available in the Git repository at:
+
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.7-rc6
+
+for you to fetch changes up to 51bb38cb78363fdad1f89e87357b7bc73e39ba88:
+
+  csky: Fixup raw_copy_from_user() (2020-05-15 00:16:30 +0800)
+
+----------------------------------------------------------------
+csky updates for 5.7-rc6
+
+10 Fixups for this updates :P
+
+ - 1 fixup for copy_from/to_user (a hard-to-find bug, thx Viro)
+ - 1 fixup for calltrace panic without FRAME_POINT
+ - 2 fixups for perf
+ - 2 fixups for compile error
+ - 4 fixups for non-fatal bugs:
+   (msa, rm dis_irq, cleanup psr, gdbmacros.txt)
+
+----------------------------------------------------------------
+Al Viro (1):
+      csky: Fixup raw_copy_from_user()
+
+Guo Ren (6):
+      csky/ftrace: Fixup error when disable CONFIG_DYNAMIC_FTRACE
+      csky: Fixup compile error for abiv1 entry.S
+      csky: Fixup perf probe -x hungup
+      csky: Fixup calltrace panic
+      csky: Fixup remove unnecessary save/restore PSR code
+      csky: Fixup gdbmacros.txt with name sp in thread_struct
+
+Liu Yibin (2):
+      csky: Fixup msa highest 3 bits mask
+      csky: Fixup remove duplicate irq_disable
+
+Mao Han (1):
+      csky: Fixup perf callchain unwind
+
+ arch/csky/Kconfig                   |   2 +
+ arch/csky/Makefile                  |   2 +-
+ arch/csky/abiv1/inc/abi/entry.h     |   4 +-
+ arch/csky/abiv2/inc/abi/entry.h     |   4 +-
+ arch/csky/abiv2/mcount.S            |   2 +
+ arch/csky/include/asm/processor.h   |   6 +-
+ arch/csky/include/asm/ptrace.h      |  10 ++
+ arch/csky/include/asm/thread_info.h |  16 +++-
+ arch/csky/include/asm/uaccess.h     |  49 +++++-----
+ arch/csky/kernel/Makefile           |   2 +-
+ arch/csky/kernel/asm-offsets.c      |   3 +-
+ arch/csky/kernel/dumpstack.c        |  49 ----------
+ arch/csky/kernel/entry.S            |  12 +--
+ arch/csky/kernel/ftrace.c           |   2 +
+ arch/csky/kernel/perf_callchain.c   |   9 +-
+ arch/csky/kernel/probes/uprobes.c   |   5 +
+ arch/csky/kernel/process.c          |  37 +-------
+ arch/csky/kernel/ptrace.c           |   6 ++
+ arch/csky/kernel/stacktrace.c       | 176 ++++++++++++++++++++++++++++--------
+ arch/csky/lib/usercopy.c            |   8 +-
+ 20 files changed, 226 insertions(+), 178 deletions(-)
+ delete mode 100644 arch/csky/kernel/dumpstack.c

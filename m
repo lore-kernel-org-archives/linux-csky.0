@@ -2,52 +2,52 @@ Return-Path: <SRS0=84Fa=7S=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF3E2C433E0
-	for <linux-csky@archiver.kernel.org>; Fri,  5 Jun 2020 12:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99E03C433E2
+	for <linux-csky@archiver.kernel.org>; Fri,  5 Jun 2020 12:30:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77EF22075B
-	for <linux-csky@archiver.kernel.org>; Fri,  5 Jun 2020 12:29:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AEAD2070B
+	for <linux-csky@archiver.kernel.org>; Fri,  5 Jun 2020 12:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591360164;
-	bh=dC7qEY8RWldK5Tu4/BHmKfll+FauoIDgIQY9R1Du2LQ=;
+	s=default; t=1591360247;
+	bh=KBOFYH+yltsllB5kxgRuQLTpngYArcwUB4vOgu0wmTM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jMCdE4KhZ3ncE3wsZGcXDaiqzWO2EjDzoxK6KH0AFoveKBRqtfEVsFj1oRocON6XI
-	 bqsMce9w4nNmLUdbh9U1bPbRDWayU1P9eGA4NctSGYwsRTHRHwoiijR9v6Nj1VPFMu
-	 t9kFNp91fCy/nJ+PWfS+xfDHWUUV550JNQyo5HsU=
+	b=ThIlO+jpDzrwDsbbbQdnkGyK7Fjpai9YRrFaFdHJfAdqPDwRRMdesSnWCnEzNzEsD
+	 OUj3rKmdp5ZpzqUoKJXT5Cqs97XXPmryJs16VygV4sXrl+ZYLBLZbjUCgOUrzohDEJ
+	 fdZ+6hvqvhUr8SDNIPV0p/LnWcRo7aGabxDmDskw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbgFEMZx (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 5 Jun 2020 08:25:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57666 "EHLO mail.kernel.org"
+        id S1726809AbgFEMZf (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 5 Jun 2020 08:25:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726969AbgFEMZv (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 5 Jun 2020 08:25:51 -0400
+        id S1726769AbgFEMZc (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 5 Jun 2020 08:25:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9F7B206DC;
-        Fri,  5 Jun 2020 12:25:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 00513207F9;
+        Fri,  5 Jun 2020 12:25:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591359951;
-        bh=dC7qEY8RWldK5Tu4/BHmKfll+FauoIDgIQY9R1Du2LQ=;
+        s=default; t=1591359931;
+        bh=KBOFYH+yltsllB5kxgRuQLTpngYArcwUB4vOgu0wmTM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nNCrv1bliNGQ//YC3zJZQFcAXFvhXoSZIq//HLg0lL/iPcXK3NyHy0d/P6G0/wIec
-         NCOMzv0mlF14I01BQxvVYXH0Deiv/Ngtq5ZFDVaQ5cE94e4ty4MS/cd/VQPiU024Ni
-         xWyEEoW47col6UXdgEupGEK6qMx6HRhbHy2MRL6M=
+        b=r/TvWrfQXggN+n/l47/+usHPqC0X+3ROFUhn/QmsmBHg1B7tVRn8k6cA3v+cWfGM1
+         kjQ77GQWtF8Qh92tnjp5ZYsmOsDkZtcVU4RtNMCICl+/aM8rCTRnRxSj/s5fDJPDOf
+         elLYLmqvzidjM+qpNpp6W7ytJiCQ3Z53pQ0nx8Ag=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guo Ren <guoren@linux.alibaba.com>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 09/14] csky: Fixup abiv2 syscall_trace break a4 & a5
-Date:   Fri,  5 Jun 2020 08:25:35 -0400
-Message-Id: <20200605122540.2882539-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 11/17] csky: Fixup abiv2 syscall_trace break a4 & a5
+Date:   Fri,  5 Jun 2020 08:25:10 -0400
+Message-Id: <20200605122517.2882338-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200605122540.2882539-1-sashal@kernel.org>
-References: <20200605122540.2882539-1-sashal@kernel.org>
+In-Reply-To: <20200605122517.2882338-1-sashal@kernel.org>
+References: <20200605122517.2882338-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -85,7 +85,7 @@ index 9023828ede97..ac8f65a3e75a 100644
  #define KSPTOUSP
  #define USPTOKSP
 diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-index 65c55f22532a..4349528fbf38 100644
+index 9718388448a4..ff908d28f0a0 100644
 --- a/arch/csky/kernel/entry.S
 +++ b/arch/csky/kernel/entry.S
 @@ -170,8 +170,10 @@ csky_syscall_trace:

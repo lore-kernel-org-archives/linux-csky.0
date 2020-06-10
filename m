@@ -1,113 +1,91 @@
-Return-Path: <SRS0=MRas=7W=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=WVio=7X=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF689C433DF
-	for <linux-csky@archiver.kernel.org>; Tue,  9 Jun 2020 00:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC78BC433E0
+	for <linux-csky@archiver.kernel.org>; Wed, 10 Jun 2020 15:45:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE789206C3
-	for <linux-csky@archiver.kernel.org>; Tue,  9 Jun 2020 00:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662070;
-	bh=dFnDNSHS2+OAHO0LGMtY8LKC5e1OPYAD0D0Dw5/i9t8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=JmnBDhjWttsHPO87YreqD0jidrq2Hs7i5sM/ynTJwWahEYue3zgF5woS3l/niFraO
-	 oa0rP782bFw8Kd5Iqt+z6YZ32TpkCVTeql3EYhPJdqoaDtkGuKum1SB/zKD/0D9PdK
-	 jjVuHJ5Pp8MzS1YrYsNXg3hW8d0rYvjiG+v4zhiY=
+	by mail.kernel.org (Postfix) with ESMTP id 97D7D2072F
+	for <linux-csky@archiver.kernel.org>; Wed, 10 Jun 2020 15:45:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731761AbgFIAVH (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:21:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39856 "EHLO mail.kernel.org"
+        id S1730290AbgFJPpE (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 10 Jun 2020 11:45:04 -0400
+Received: from sym2.noone.org ([178.63.92.236]:38744 "EHLO sym2.noone.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730538AbgFHXRx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:17:53 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A00CF2085B;
-        Mon,  8 Jun 2020 23:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658273;
-        bh=dFnDNSHS2+OAHO0LGMtY8LKC5e1OPYAD0D0Dw5/i9t8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r8CCl1UmXpo4iTzv9wshBjKFxVk3yzmx2Vfn3CTs5PHRU2zjxtCgS5+7NetG5pX8G
-         tvGtj8HMma7BgpU9C99IKlE8dIMngUIHy4iqnZZg0eXrD+l5yBqCieURFQFRywctwR
-         V8E8i1c93JUPQ5r6Ri4ZMKH1Uu1HmQADoZ5Jzhw8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liu Yibin <jiulong@linux.alibaba.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 279/606] csky: Fixup msa highest 3 bits mask
-Date:   Mon,  8 Jun 2020 19:06:44 -0400
-Message-Id: <20200608231211.3363633-279-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1730294AbgFJPpE (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 10 Jun 2020 11:45:04 -0400
+X-Greylist: delayed 327 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jun 2020 11:45:03 EDT
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 49hrlC6wPgzvjc1; Wed, 10 Jun 2020 17:39:35 +0200 (CEST)
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Guo Ren <guoren@kernel.org>, Mao Han <han_mao@c-sky.com>
+Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] csky: remove unusued thread_saved_pc and *_segments functions/macros
+Date:   Wed, 10 Jun 2020 17:39:35 +0200
+Message-Id: <20200610153935.13794-1-tklauser@distanz.ch>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Liu Yibin <jiulong@linux.alibaba.com>
+These are used nowhere in the tree (except for some architectures which
+define them for their own use) and were already removed for other
+architectures in:
 
-[ Upstream commit 165f2d2858013253042809df082b8df7e34e86d7 ]
+commit 6474924e2b5d ("arch: remove unused macro/function thread_saved_pc()")
+commit c17c02040bf0 ("arch: remove unused *_segments() macros/functions")
 
-Just as comment mentioned, the msa format:
+Remove them from arch/csky as well.
 
- cr<30/31, 15> MSA register format:
- 31 - 29 | 28 - 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-   BA     Reserved  SH  WA  B   SO SEC  C   D   V
-
-So we should shift 29 bits not 28 bits for mask
-
-Signed-off-by: Liu Yibin <jiulong@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
 ---
- arch/csky/abiv1/inc/abi/entry.h | 4 ++--
- arch/csky/abiv2/inc/abi/entry.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/csky/include/asm/processor.h |  6 ------
+ arch/csky/kernel/process.c        | 10 ----------
+ 2 files changed, 16 deletions(-)
 
-diff --git a/arch/csky/abiv1/inc/abi/entry.h b/arch/csky/abiv1/inc/abi/entry.h
-index 5056ebb902d1..61d94ec7dd16 100644
---- a/arch/csky/abiv1/inc/abi/entry.h
-+++ b/arch/csky/abiv1/inc/abi/entry.h
-@@ -167,8 +167,8 @@
- 	 *   BA     Reserved  C   D   V
- 	 */
- 	cprcr	r6, cpcr30
--	lsri	r6, 28
--	lsli	r6, 28
-+	lsri	r6, 29
-+	lsli	r6, 29
- 	addi	r6, 0xe
- 	cpwcr	r6, cpcr30
+diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
+index 24442d8e86f9..4800f6563abb 100644
+--- a/arch/csky/include/asm/processor.h
++++ b/arch/csky/include/asm/processor.h
+@@ -82,12 +82,6 @@ static inline void release_thread(struct task_struct *dead_task)
  
-diff --git a/arch/csky/abiv2/inc/abi/entry.h b/arch/csky/abiv2/inc/abi/entry.h
-index 111973c6c713..9023828ede97 100644
---- a/arch/csky/abiv2/inc/abi/entry.h
-+++ b/arch/csky/abiv2/inc/abi/entry.h
-@@ -225,8 +225,8 @@
- 	 */
- 	mfcr	r6, cr<30, 15> /* Get MSA0 */
- 2:
--	lsri	r6, 28
--	lsli	r6, 28
-+	lsri	r6, 29
-+	lsli	r6, 29
- 	addi	r6, 0x1ce
- 	mtcr	r6, cr<30, 15> /* Set MSA0 */
+ extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
  
+-#define copy_segments(tsk, mm)		do { } while (0)
+-#define release_segments(mm)		do { } while (0)
+-#define forget_segments()		do { } while (0)
+-
+-extern unsigned long thread_saved_pc(struct task_struct *tsk);
+-
+ unsigned long get_wchan(struct task_struct *p);
+ 
+ #define KSTK_EIP(tsk)		(task_pt_regs(tsk)->pc)
+diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
+index 8b3fad062ab2..3da63cf0bfde 100644
+--- a/arch/csky/kernel/process.c
++++ b/arch/csky/kernel/process.c
+@@ -30,16 +30,6 @@ asmlinkage void ret_from_kernel_thread(void);
+  */
+ void flush_thread(void){}
+ 
+-/*
+- * Return saved PC from a blocked thread
+- */
+-unsigned long thread_saved_pc(struct task_struct *tsk)
+-{
+-	struct switch_stack *sw = (struct switch_stack *)tsk->thread.sp;
+-
+-	return sw->r15;
+-}
+-
+ int copy_thread_tls(unsigned long clone_flags,
+ 		unsigned long usp,
+ 		unsigned long kthread_arg,
 -- 
-2.25.1
+2.27.0
 

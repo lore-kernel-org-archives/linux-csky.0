@@ -2,51 +2,54 @@ Return-Path: <SRS0=fy8R=75=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69B1BC433E1
-	for <linux-csky@archiver.kernel.org>; Tue, 16 Jun 2020 15:58:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BC3EC433DF
+	for <linux-csky@archiver.kernel.org>; Tue, 16 Jun 2020 15:58:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D493207C4
-	for <linux-csky@archiver.kernel.org>; Tue, 16 Jun 2020 15:58:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27A5621532
+	for <linux-csky@archiver.kernel.org>; Tue, 16 Jun 2020 15:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592323086;
-	bh=L7HAS4sYz0Q0M+EaHokWTKwpor0s3bgHozek18pK5LY=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=H/5A69ouxSzD3g2GYmo/3gm82UFVwuopem9Tb2dkhPzmD3+MFatWGxY7Ts661aGUe
-	 I5YAbqC8RDS7cPdl+2m7yxu5KAZRZeXOScQlwZvtFExljQMyERssp/kYpeqySJS5v3
-	 QTp39yGDJxtalf/bL2lmvhp9YFUDelgdpzaX4g5E=
+	s=default; t=1592323121;
+	bh=sgXwaomXepBCa/0fDyNfAVT1CtdQZ5euClhe+3TgUC4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=uOrkHU6KzEpnWucJFcDNO/8WQf0+7XR4nQ9XPm87pgWr+y/hmygmQekbQ5/uT8Lcr
+	 mToF18EOlv9+WIKFgngpGHDZn5Fh5oobRwa46EgijK63KGCrswPFhKMbJMpPzqJ4RT
+	 SD68AdULWtoPEYvb92rahNpVOOs+F+PH+1K9ofy4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732344AbgFPP6F (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 16 Jun 2020 11:58:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59090 "EHLO mail.kernel.org"
+        id S1731753AbgFPP6k (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 16 Jun 2020 11:58:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59838 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733119AbgFPP6E (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 16 Jun 2020 11:58:04 -0400
+        id S1731245AbgFPP6j (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 16 Jun 2020 11:58:39 -0400
 Received: from localhost.localdomain (unknown [42.120.72.72])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9ADA21548;
-        Tue, 16 Jun 2020 15:57:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C689A207C4;
+        Tue, 16 Jun 2020 15:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592323084;
-        bh=L7HAS4sYz0Q0M+EaHokWTKwpor0s3bgHozek18pK5LY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AuOpr7G3+Fh9kTygW02K/pdHhG0lP5NrT3swgnodY5YTjhLi6ow3Y1S3k66sWESZ/
-         RP1goGarTA+IuSP+K765jpDunyR1Ns6xKyskcRjY5NEQqnRznAxXKesdm0b01twqRG
-         EseNQ8zymopKcK248UAlBjPE8fpWH14y3pKaQ334=
+        s=default; t=1592323118;
+        bh=sgXwaomXepBCa/0fDyNfAVT1CtdQZ5euClhe+3TgUC4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pyl4GXoL86elhFybpnrMPN+eqqMnFaRQvaxnXf6fFPN2JVHWE8boWLKbrJaVWPby0
+         YDgBSkh8Wj3MSc+dkUFKsFUYmgprt6LBlgNxSrB5yfqjVE2uhJ6BIrIA3rdWJXq3vu
+         sshRBXlpUsosDv8ZtiU9Gl+LyjHMsNuhDMWO7wd8=
 From:   guoren@kernel.org
 To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
         anup@brainfault.org, zong.li@sifive.com, aou@eecs.berkeley.edu,
         tglx@linutronix.de, tycho@tycho.ws, nickhu@andestech.com
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 0/3] riscv: Enable LOCKDEP
-Date:   Tue, 16 Jun 2020 15:56:58 +0000
-Message-Id: <1592323021-98541-1-git-send-email-guoren@kernel.org>
+Subject: [PATCH 1/3] riscv: Fixup static_obj() fail
+Date:   Tue, 16 Jun 2020 15:56:59 +0000
+Message-Id: <1592323021-98541-2-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1592323021-98541-1-git-send-email-guoren@kernel.org>
+References: <1592323021-98541-1-git-send-email-guoren@kernel.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
@@ -54,25 +57,71 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Lockdep is needed by proving the spinlocks and rwlocks. To suupport
-it, we need fixup TRACE_IRQFLAGS_SUPPORT in kernel/entry.S. This
-patch follow Documentation/irqflags-tracing.txt.
+When enable LOCKDEP, static_obj() will cause error. Because some
+__initdata static variables is before _stext:
 
-And there are 2 bugs block the lockdep implementation.
+static int static_obj(const void *obj)
+{
+        unsigned long start = (unsigned long) &_stext,
+                      end   = (unsigned long) &_end,
+                      addr  = (unsigned long) obj;
 
-Guo Ren (2):
-  riscv: Fixup static_obj() fail
-  riscv: Enable LOCKDEP_SUPPORT & fixup TRACE_IRQFLAGS_SUPPORT
+        /*
+         * static variable?
+         */
+        if ((addr >= start) && (addr < end))
+                return 1;
 
-Zong Li (1):
-  riscv: Fixup lockdep_assert_held with wrong param cpu_running
+[    0.067192] INFO: trying to register non-static key.
+[    0.067325] the code is fine but needs lockdep annotation.
+[    0.067449] turning off the locking correctness validator.
+[    0.067718] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.7.0-rc7-dirty #44
+[    0.067945] Call Trace:
+[    0.068369] [<ffffffe00020323c>] walk_stackframe+0x0/0xa4
+[    0.068506] [<ffffffe000203422>] show_stack+0x2a/0x34
+[    0.068631] [<ffffffe000521e4e>] dump_stack+0x94/0xca
+[    0.068757] [<ffffffe000255a4e>] register_lock_class+0x5b8/0x5bc
+[    0.068969] [<ffffffe000255abe>] __lock_acquire+0x6c/0x1d5c
+[    0.069101] [<ffffffe0002550fe>] lock_acquire+0xae/0x312
+[    0.069228] [<ffffffe000989a8e>] _raw_spin_lock_irqsave+0x40/0x5a
+[    0.069357] [<ffffffe000247c64>] complete+0x1e/0x50
+[    0.069479] [<ffffffe000984c38>] rest_init+0x1b0/0x28a
+[    0.069660] [<ffffffe0000016a2>] 0xffffffe0000016a2
+[    0.069779] [<ffffffe000001b84>] 0xffffffe000001b84
+[    0.069953] [<ffffffe000001092>] 0xffffffe000001092
 
- arch/riscv/Kconfig              |  3 +++
- arch/riscv/kernel/entry.S       | 41 ++++++++++++++++++++++++++++++++++++++++-
- arch/riscv/kernel/smpboot.c     |  1 -
- arch/riscv/kernel/vmlinux.lds.S |  2 +-
- 4 files changed, 44 insertions(+), 3 deletions(-)
+static __initdata DECLARE_COMPLETION(kthreadd_done);
 
+noinline void __ref rest_init(void)
+{
+	...
+	complete(&kthreadd_done);
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+---
+ arch/riscv/kernel/vmlinux.lds.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
+index 0339b6b..bf3f34d 100644
+--- a/arch/riscv/kernel/vmlinux.lds.S
++++ b/arch/riscv/kernel/vmlinux.lds.S
+@@ -22,6 +22,7 @@ SECTIONS
+ 	/* Beginning of code and text segment */
+ 	. = LOAD_OFFSET;
+ 	_start = .;
++	_stext = .;
+ 	HEAD_TEXT_SECTION
+ 	. = ALIGN(PAGE_SIZE);
+ 
+@@ -49,7 +50,6 @@ SECTIONS
+ 	. = ALIGN(SECTION_ALIGN);
+ 	.text : {
+ 		_text = .;
+-		_stext = .;
+ 		TEXT_TEXT
+ 		SCHED_TEXT
+ 		CPUIDLE_TEXT
 -- 
 2.7.4
 

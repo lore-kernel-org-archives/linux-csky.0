@@ -2,94 +2,145 @@ Return-Path: <SRS0=Jkn3=77=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80652C433E0
-	for <linux-csky@archiver.kernel.org>; Thu, 18 Jun 2020 18:37:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FDDAC433E0
+	for <linux-csky@archiver.kernel.org>; Thu, 18 Jun 2020 21:24:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51FC02083B
-	for <linux-csky@archiver.kernel.org>; Thu, 18 Jun 2020 18:37:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592505424;
-	bh=IHSg7lrBwuQ14jZuv3YABsiAz3/2MFfyoMLk+VJ10Yo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=muYXnjr6E1qBfZIt+nghiGdhFWe+sZB4TWNYUm1WvhhExZh/qB3r90tl+mnxsqrlg
-	 30Ze+3Vt4NwdBuaiEiM3++K3j1C6c60cTN3PbOT7GjPRG4uL5Rm+iHWVlmYfDkyQ/P
-	 zGeO83mIqFL4upo9QYnQ3EAbhy6MLXaHd43Cdnwk=
+	by mail.kernel.org (Postfix) with ESMTP id 633C6208C3
+	for <linux-csky@archiver.kernel.org>; Thu, 18 Jun 2020 21:24:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FMlpmJdS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727978AbgFRShE (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 18 Jun 2020 14:37:04 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:38879 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725829AbgFRShD (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 18 Jun 2020 14:37:03 -0400
-Received: by mail-io1-f65.google.com with SMTP id h4so590595ior.5;
-        Thu, 18 Jun 2020 11:37:02 -0700 (PDT)
+        id S1729211AbgFRVYi (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 18 Jun 2020 17:24:38 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:59408 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728392AbgFRVYh (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 18 Jun 2020 17:24:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592515475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=haaLTYqgVfoC0FVdaFLPcnNGgU33JcWlnnRtWPFZDGE=;
+        b=FMlpmJdSuKlMKZjSaCHn9xr4MowuUwnPghGhWo+taOHQxmZevhmy5nW2cA2Y0w8u+9EkPE
+        43Ocb7CpBaeUX0jkybhQGTj8baGy2YaUVKxZBAaHFtZb2m11x2mST5gWNqpyT89c/+A4U9
+        1YT67h9H+lOGs9diJMTxEHhwKCLykdY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-221-lvJ9QkKcN5SigqnodsZiCA-1; Thu, 18 Jun 2020 17:24:33 -0400
+X-MC-Unique: lvJ9QkKcN5SigqnodsZiCA-1
+Received: by mail-qv1-f72.google.com with SMTP id h30so5071004qva.17
+        for <linux-csky@vger.kernel.org>; Thu, 18 Jun 2020 14:24:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=wygYqTNT6G3QvAJfF7oyk+ZOc5oZNOBZOOgIykuzly8=;
-        b=unuRsbLiDXvXXT4IYidu/5EkWcPMQFSxjt5hnnLEKBV5bIJwNGn3CpjiuJhFC9r4QU
-         7p1OVF0/JU5gpuccqE77VqIn1PUeQEFm/Ws3yuybb/jOAyuEGycCSvUFSk9I5NHsj3UD
-         udWG3BEH+IRvy1R7s0f12EfqJ4AvRnmBlea4OzIGB9KJPmdzHjlyrAdqAnjcgrWFsIEU
-         9mSVZ2koLW96gpFhhgCtGGW/axwnhEEdzIhI1O6LL1eJt8xI8ZBTFiYloGyILdBqz2uU
-         6IZXcLvjY0fAQkQqnlMtYx891zqN+qEZUcYLrcgYEqDzTHCsnDNWjh6rqZYXUFr1rM59
-         QCtA==
-X-Gm-Message-State: AOAM53043od1TP61ZvFsiqL1DegUmM6l7Wp0wuSdzVd94XwW69O0mmbT
-        r3358PgRij8v0sbcHSpv8A==
-X-Google-Smtp-Source: ABdhPJx7xeR3+HQ8b4NxOi/J+ZFJIhmbXIg3/1OQ2uZoV0cZx8iWwPc1ZPoV9VCjHN+gnoYYhdUOlw==
-X-Received: by 2002:a02:844d:: with SMTP id l13mr5723498jah.105.1592505422376;
-        Thu, 18 Jun 2020 11:37:02 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id b8sm2065295ior.35.2020.06.18.11.37.00
+        bh=haaLTYqgVfoC0FVdaFLPcnNGgU33JcWlnnRtWPFZDGE=;
+        b=e+XmeVjpC61FZUO+OM7f83pW9x+kIdsnVeXrQQ9GGLVSWK9s1ALum1wGfD9A9uahmr
+         zvdBTUvm+01G+yAfShjsZr+w6gL7U5R1La+Y/Vn8e3XrN5zxCPPcTeo5+CntfBbhLHS4
+         0+L+lFk/O0/CH8xHntUQkW1IBfacBE2SiyR1T82VEGmJbGF98KhucUQaIOTDodG0FVWL
+         06mOWVkOxOEyIoPgL0tT5oR1/XitnxNmhP8G0Xl/hjTtBJwPOdeLWu3sUZINto7G09dU
+         x6lgirl4T14EMXyXNgHgttm3Sl39iRUBtbATiczmYmm6pEr6ukN9o1wMatbUD3sc/WHa
+         evIg==
+X-Gm-Message-State: AOAM531P1mHjERauFM25JcLGVlAGgHS8JqPzV2jMeRwaFiIp+c8RaFPD
+        XoECJnvvi7I86URBFr+UdYZxyPuadqvYcfaTQK8z2lrmRYWG1rGMe6X9ROsSMZAeqmb9w4+NPZ5
+        FKKfxOLqceegpDEXh8q8rNA==
+X-Received: by 2002:a37:a89:: with SMTP id 131mr449509qkk.92.1592515473213;
+        Thu, 18 Jun 2020 14:24:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxOI3BDf105zZFrrtKLefw+JPntFffyT9jzVBn+gtJGfiQ/ZPPE81O97Qn5Qh7QuKxUQSj2Mg==
+X-Received: by 2002:a37:a89:: with SMTP id 131mr449488qkk.92.1592515472972;
+        Thu, 18 Jun 2020 14:24:32 -0700 (PDT)
+Received: from xz-x1 ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id y16sm4723019qty.1.2020.06.18.14.24.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 11:37:01 -0700 (PDT)
-Received: (nullmailer pid 679615 invoked by uid 1000);
-        Thu, 18 Jun 2020 18:36:59 -0000
-Date:   Thu, 18 Jun 2020 12:36:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Flavio Suligoi <f.suligoi@asem.it>
-Cc:     linux-gpio@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH v1] doc: devicetree: bindings: fix spelling mistake
-Message-ID: <20200618183659.GA679453@bogus>
-References: <20200615075835.15202-1-f.suligoi@asem.it>
+        Thu, 18 Jun 2020 14:24:32 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 17:24:30 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guo Ren <guoren@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        linux-csky@vger.kernel.org
+Subject: Re: [PATCH 07/25] mm/csky: Use mm_fault_accounting()
+Message-ID: <20200618212430.GO76766@xz-x1>
+References: <20200615221607.7764-1-peterx@redhat.com>
+ <20200615221607.7764-8-peterx@redhat.com>
+ <CAJF2gTSVSXO=phc1eeb-ZmDMrSDjSSLd3tN6ng_8n-pCSZh5zw@mail.gmail.com>
+ <20200617154925.GC76766@xz-x1>
+ <CAHk-=wi=58J7d5iyFyYyHrU+pzjWB55cit_LQCkSkavpH-trsg@mail.gmail.com>
+ <20200617195807.GH76766@xz-x1>
+ <CAHk-=wj_V2Tps2QrMn20_W0OJF9xqNh52XSGA42s-ZJ8Y+GyKw@mail.gmail.com>
+ <20200618143801.GK76766@xz-x1>
+ <CAHk-=whFEZbTJZaNwEkyevUV2aqRwbeVmtp6hhk1sK2mW4vaGA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200615075835.15202-1-f.suligoi@asem.it>
+In-Reply-To: <CAHk-=whFEZbTJZaNwEkyevUV2aqRwbeVmtp6hhk1sK2mW4vaGA@mail.gmail.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, 15 Jun 2020 09:58:35 +0200, Flavio Suligoi wrote:
-> Fix typo: "triger" --> "trigger"
+On Thu, Jun 18, 2020 at 10:15:50AM -0700, Linus Torvalds wrote:
+> On Thu, Jun 18, 2020 at 7:38 AM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > GUP needs the per-task accounting, but not the perf events.  We can do that by
+> > slightly changing the new approach into:
+> >
+> >         bool major = (ret & VM_FAULT_MAJOR) || (flags & FAULT_FLAG_TRIED);
+> >
+> >         if (major)
+> >                 current->maj_flt++;
+> >         else
+> >                 current->min_flt++;
+> >
+> >         if (!regs)
+> >                 return ret;
+> >
+> >         if (major)
+> >                 perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1, regs, address);
+> >         else
+> >                 perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1, regs, address);
 > 
-> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
-> Acked-by: Guo Ren <guoren@kernel.org>
-> ---
+> Ack, I think this is the right thing to do.
 > 
-> v1: add Acked-by: Guo Ren <guoren@kernel.org>
+> No normal situation will ever notice the difference, with remote
+> accesses being as rare and specialized as they are. But being able to
+> remote the otherwise unused 'tsk' parameter sounds like the right
+> thing to do too.
 > 
->  Documentation/devicetree/bindings/gpio/mediatek,mt7621-gpio.txt | 2 +-
->  .../devicetree/bindings/interrupt-controller/csky,mpintc.txt    | 2 +-
->  Documentation/devicetree/bindings/timer/csky,mptimer.txt        | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+> It might be worth adding a comment about why.
 > 
+> Also, honestly, how about we remove the 'major' variable entirely, and
+> instead make the code be something like
+> 
+>         unsigned long *flt;
+>         int event_type;
+>         ...
+> 
+>         /* Major fault */
+>         if ((ret & VM_FAULT_MAJOR) || (flags & FAULT_FLAG_TRIED)) {
+>                 flt = &current->maj_flt;
+>                 event_type = PERF_COUNT_SW_PAGE_FAULTS_MAJ;
+>         } else {
+>                 flt = &current->min_flt;
+>                 event_type = PERF_COUNT_SW_PAGE_FAULTS_MIN;
+>         }
+>         *flt++;
+>         if (regs)
+>                 perf_sw_event(event_type, 1, regs, address);
+> 
+> instead. Less source code duplication, and I bet it improves code
+> generation too.
 
-Applied, thanks!
+Will do.  Thanks!
+
+-- 
+Peter Xu
+

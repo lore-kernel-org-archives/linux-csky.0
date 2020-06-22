@@ -1,134 +1,438 @@
-Return-Path: <SRS0=z+7L=AB=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=dvP8=AD=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F46AC433E0
-	for <linux-csky@archiver.kernel.org>; Sat, 20 Jun 2020 16:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D31AC433DF
+	for <linux-csky@archiver.kernel.org>; Mon, 22 Jun 2020 23:47:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E118923D6A
-	for <linux-csky@archiver.kernel.org>; Sat, 20 Jun 2020 16:08:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HRVCcChd"
+	by mail.kernel.org (Postfix) with ESMTP id 65DBB207BC
+	for <linux-csky@archiver.kernel.org>; Mon, 22 Jun 2020 23:47:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbgFTQId (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sat, 20 Jun 2020 12:08:33 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:32394 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725880AbgFTQIc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 20 Jun 2020 12:08:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592669311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uAGWGHZX+NRKxPhaQCrHlyIVKqgbsc6xDoomuBD05Hw=;
-        b=HRVCcChduwqCMPn//fe8n8VzggZ0W8IgYjdkVScXl3X1/W5nqiDc2IYGPRsJzUt0dN0GAw
-        mE/AGExA5yWkg2xaJ/YH/1ghph1VlWZ8c5qLrUaj9rDAtugTa4BCyaeURbKFpjLnxuE4bj
-        x0HgIQiNrfcA7KYozxCtUwkHWpBNK9A=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-445-PwGPBsQtNbW2pmtZXjN8yQ-1; Sat, 20 Jun 2020 12:08:29 -0400
-X-MC-Unique: PwGPBsQtNbW2pmtZXjN8yQ-1
-Received: by mail-qt1-f199.google.com with SMTP id u26so9527262qtj.21
-        for <linux-csky@vger.kernel.org>; Sat, 20 Jun 2020 09:08:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uAGWGHZX+NRKxPhaQCrHlyIVKqgbsc6xDoomuBD05Hw=;
-        b=Yr/QVIDEN+mJ7sJ4bAcBYjUVOt5TY9Vb3cz0A7fMv/YTNBG3Ek/GV/BOo78s1arSgY
-         5ir8zwyonwRRTiuZdTco8L7fc2KHBRCF9VyVuMFThDhrknm7B8ISM427+sqtolLXx/5e
-         Mu6dBtHTZmdelkrIz0e9Ykb8/0M6n834+sk6DpDph9OgGWvPyMc6cKHmnl0A9ANULo+s
-         7JdEEWDFnXP8cjDXo+pCXZrXH5KJD9pOd1ccSMWzreNcEORbOAR6IsTrTM96Kbzya/Ln
-         A3MC8PCDHSLLjSCDC0jKHmF1BBycrMEAyvSSSURzS2fk0Wp+KRflF9nVgMinJLTClacs
-         Dqvw==
-X-Gm-Message-State: AOAM533JAnSakMxS+ind1Ofn0YHCj74xNERT/bwRqGJM+2jLORkRmagp
-        KNusmm45ASWspFPIpFTp1QRVtx1srupAFRpWSzg5vp5jGohH68MZ/GDsq6oUeojFgAVL6AA3K2Y
-        HOYH6i/ajlas7AAi5W0MQIA==
-X-Received: by 2002:ac8:2af4:: with SMTP id c49mr7855098qta.42.1592669308735;
-        Sat, 20 Jun 2020 09:08:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzhW6m+v5NAydxoWwY4YCydn/fcpsNSqMLAgkBrIBmXw9vSkjNqmzWLGoF9/VukK2HQYENUBg==
-X-Received: by 2002:ac8:2af4:: with SMTP id c49mr7855067qta.42.1592669308443;
-        Sat, 20 Jun 2020 09:08:28 -0700 (PDT)
-Received: from xz-x1 ([2607:9880:19c0:32::2])
-        by smtp.gmail.com with ESMTPSA id 195sm9432761qkg.74.2020.06.20.09.08.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 09:08:27 -0700 (PDT)
-Date:   Sat, 20 Jun 2020 12:08:25 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-csky@vger.kernel.org
-Subject: Re: [PATCH 06/26] mm/csky: Use general page fault accounting
-Message-ID: <20200620160825.GC6414@xz-x1>
-References: <20200619160538.8641-1-peterx@redhat.com>
- <20200619160538.8641-7-peterx@redhat.com>
- <CAJF2gTS+6UwSAbHk9236g2FOhyYniKZ-W3DcKJuSYMF13qHZxQ@mail.gmail.com>
+        id S1731307AbgFVXqw (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 22 Jun 2020 19:46:52 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54760 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730641AbgFVXqK (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 22 Jun 2020 19:46:10 -0400
+Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jnW8a-0005DO-VF; Mon, 22 Jun 2020 23:46:05 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: [PATCH 03/17] sparc: share process creation helpers between sparc and sparc64
+Date:   Tue, 23 Jun 2020 01:43:12 +0200
+Message-Id: <20200622234326.906346-4-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200622234326.906346-1-christian.brauner@ubuntu.com>
+References: <20200622234326.906346-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTS+6UwSAbHk9236g2FOhyYniKZ-W3DcKJuSYMF13qHZxQ@mail.gmail.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 09:44:31AM +0800, Guo Ren wrote:
-> On Sat, Jun 20, 2020 at 12:05 AM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > Use the general page fault accounting by passing regs into handle_mm_fault().
-> > It naturally solve the issue of multiple page fault accounting when page fault
-> > retry happened.
-> >
-> > CC: Guo Ren <guoren@kernel.org>
-> > CC: linux-csky@vger.kernel.org
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  arch/csky/mm/fault.c | 12 +-----------
-> >  1 file changed, 1 insertion(+), 11 deletions(-)
-> >
-> > diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-> > index b14f97d3cb15..a3e0aa3ebb79 100644
-> > --- a/arch/csky/mm/fault.c
-> > +++ b/arch/csky/mm/fault.c
-> > @@ -151,7 +151,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
-> >          * the fault.
-> >          */
-> >         fault = handle_mm_fault(vma, address, write ? FAULT_FLAG_WRITE : 0,
-> > -                               NULL);
-> > +                               regs);
-> what's your kernel version ? （4th arg exsist ?）
->         /*
->          * If for any reason at all we couldn't handle the fault,
->          * make sure we exit gracefully rather than endlessly redo
->          * the fault.
->          */
->         fault = handle_mm_fault(vma, address, write ? FAULT_FLAG_WRITE : 0);
->         if (unlikely(fault & VM_FAULT_ERROR)) {
+As promised in the previous patch, this moves the process creation
+helpers into a common process.c file that is shared between sparc and
+sparc64. It allows us to get rid of quite a bit custom assembler and the
+to remove the separe 32bit specific sparc_do_fork() call.
 
-Hi, Guo,
+One thing to note, is that when clone() was called with a separate stack
+for the child the assembler would align it. But copy_thread() has always
+been doing that too so that line wasn't needed and can thus simply be
+removed.
 
-Sorry to be unclear.  This patch is based on patch 1 in the same series:
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Acked-by: David S. Miller <davem@davemloft.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Link: https://lore.kernel.org/r/20200512171527.570109-3-christian.brauner@ubuntu.com
+---
+ arch/sparc/kernel/Makefile     |   1 +
+ arch/sparc/kernel/entry.S      |  29 +++------
+ arch/sparc/kernel/kernel.h     |  11 ++--
+ arch/sparc/kernel/process.c    | 110 +++++++++++++++++++++++++++++++++
+ arch/sparc/kernel/process_32.c |  27 --------
+ arch/sparc/kernel/process_64.c |  94 ----------------------------
+ 6 files changed, 123 insertions(+), 149 deletions(-)
+ create mode 100644 arch/sparc/kernel/process.c
 
-https://lore.kernel.org/lkml/20200619160538.8641-2-peterx@redhat.com/
-
-Thanks,
-
+diff --git a/arch/sparc/kernel/Makefile b/arch/sparc/kernel/Makefile
+index 97c0e19263d1..d3a0e072ebe8 100644
+--- a/arch/sparc/kernel/Makefile
++++ b/arch/sparc/kernel/Makefile
+@@ -33,6 +33,7 @@ obj-y                   += irq_$(BITS).o
+ obj-$(CONFIG_SPARC32)   += sun4m_irq.o sun4d_irq.o
+ 
+ obj-y                   += process_$(BITS).o
++obj-y                   += process.o
+ obj-y                   += signal_$(BITS).o
+ obj-y                   += sigutil_$(BITS).o
+ obj-$(CONFIG_SPARC32)   += ioport.o
+diff --git a/arch/sparc/kernel/entry.S b/arch/sparc/kernel/entry.S
+index f636acf3312f..d58940280f8d 100644
+--- a/arch/sparc/kernel/entry.S
++++ b/arch/sparc/kernel/entry.S
+@@ -869,14 +869,11 @@ flush_patch_two:
+ 	ld	[%curptr + TI_TASK], %o4
+ 	rd	%psr, %g4
+ 	WRITE_PAUSE
+-	mov	SIGCHLD, %o0			! arg0:	clone flags
+ 	rd	%wim, %g5
+ 	WRITE_PAUSE
+-	mov	%fp, %o1			! arg1:	usp
+ 	std	%g4, [%o4 + AOFF_task_thread + AOFF_thread_fork_kpsr]
+-	add	%sp, STACKFRAME_SZ, %o2		! arg2:	pt_regs ptr
+-	mov	0, %o3
+-	call	sparc_do_fork
++	add	%sp, STACKFRAME_SZ, %o0
++	call	sparc_fork
+ 	 mov	%l5, %o7
+ 
+ 	/* Whee, kernel threads! */
+@@ -888,19 +885,11 @@ flush_patch_three:
+ 	ld	[%curptr + TI_TASK], %o4
+ 	rd	%psr, %g4
+ 	WRITE_PAUSE
+-
+-	/* arg0,1: flags,usp  -- loaded already */
+-	cmp	%o1, 0x0			! Is new_usp NULL?
+ 	rd	%wim, %g5
+ 	WRITE_PAUSE
+-	be,a	1f
+-	 mov	%fp, %o1			! yes, use callers usp
+-	andn	%o1, 7, %o1			! no, align to 8 bytes
+-1:
+ 	std	%g4, [%o4 + AOFF_task_thread + AOFF_thread_fork_kpsr]
+-	add	%sp, STACKFRAME_SZ, %o2		! arg2:	pt_regs ptr
+-	mov	0, %o3
+-	call	sparc_do_fork
++	add	%sp, STACKFRAME_SZ, %o0
++	call	sparc_clone
+ 	 mov	%l5, %o7
+ 
+ 	/* Whee, real vfork! */
+@@ -914,13 +903,9 @@ flush_patch_four:
+ 	rd	%wim, %g5
+ 	WRITE_PAUSE
+ 	std	%g4, [%o4 + AOFF_task_thread + AOFF_thread_fork_kpsr]
+-	sethi	%hi(0x4000 | 0x0100 | SIGCHLD), %o0
+-	mov	%fp, %o1
+-	or	%o0, %lo(0x4000 | 0x0100 | SIGCHLD), %o0
+-	sethi	%hi(sparc_do_fork), %l1
+-	mov	0, %o3
+-	jmpl	%l1 + %lo(sparc_do_fork), %g0
+-	 add	%sp, STACKFRAME_SZ, %o2
++	sethi	%hi(sparc_vfork), %l1
++	jmpl	%l1 + %lo(sparc_vfork), %g0
++	 add	%sp, STACKFRAME_SZ, %o0
+ 
+         .align  4
+ linux_sparc_ni_syscall:
+diff --git a/arch/sparc/kernel/kernel.h b/arch/sparc/kernel/kernel.h
+index f6f498ba3198..9cd09a3ef35f 100644
+--- a/arch/sparc/kernel/kernel.h
++++ b/arch/sparc/kernel/kernel.h
+@@ -14,6 +14,11 @@ extern const char *sparc_pmu_type;
+ extern unsigned int fsr_storage;
+ extern int ncpus_probed;
+ 
++/* process{_32,_64}.c */
++asmlinkage long sparc_clone(struct pt_regs *regs);
++asmlinkage long sparc_fork(struct pt_regs *regs);
++asmlinkage long sparc_vfork(struct pt_regs *regs);
++
+ #ifdef CONFIG_SPARC64
+ /* setup_64.c */
+ struct seq_file;
+@@ -153,12 +158,6 @@ void floppy_hardint(void);
+ extern unsigned long sun4m_cpu_startup;
+ extern unsigned long sun4d_cpu_startup;
+ 
+-/* process_32.c */
+-asmlinkage int sparc_do_fork(unsigned long clone_flags,
+-                             unsigned long stack_start,
+-                             struct pt_regs *regs,
+-                             unsigned long stack_size);
+-
+ /* signal_32.c */
+ asmlinkage void do_sigreturn(struct pt_regs *regs);
+ asmlinkage void do_rt_sigreturn(struct pt_regs *regs);
+diff --git a/arch/sparc/kernel/process.c b/arch/sparc/kernel/process.c
+new file mode 100644
+index 000000000000..8bbe62d77b77
+--- /dev/null
++++ b/arch/sparc/kernel/process.c
+@@ -0,0 +1,110 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * This file handles the architecture independent parts of process handling..
++ */
++
++#include <linux/compat.h>
++#include <linux/errno.h>
++#include <linux/kernel.h>
++#include <linux/ptrace.h>
++#include <linux/sched.h>
++#include <linux/sched/task.h>
++#include <linux/sched/task_stack.h>
++#include <linux/signal.h>
++
++#include "kernel.h"
++
++asmlinkage long sparc_fork(struct pt_regs *regs)
++{
++	unsigned long orig_i1 = regs->u_regs[UREG_I1];
++	long ret;
++	struct kernel_clone_args args = {
++		.exit_signal	= SIGCHLD,
++		/* Reuse the parent's stack for the child. */
++		.stack		= regs->u_regs[UREG_FP],
++	};
++
++	ret = _do_fork(&args);
++
++	/* If we get an error and potentially restart the system
++	 * call, we're screwed because copy_thread_tls() clobbered
++	 * the parent's %o1.  So detect that case and restore it
++	 * here.
++	 */
++	if ((unsigned long)ret >= -ERESTART_RESTARTBLOCK)
++		regs->u_regs[UREG_I1] = orig_i1;
++
++	return ret;
++}
++
++asmlinkage long sparc_vfork(struct pt_regs *regs)
++{
++	unsigned long orig_i1 = regs->u_regs[UREG_I1];
++	long ret;
++
++	struct kernel_clone_args args = {
++		.flags		= CLONE_VFORK | CLONE_VM,
++		.exit_signal	= SIGCHLD,
++		/* Reuse the parent's stack for the child. */
++		.stack		= regs->u_regs[UREG_FP],
++	};
++
++	ret = _do_fork(&args);
++
++	/* If we get an error and potentially restart the system
++	 * call, we're screwed because copy_thread_tls() clobbered
++	 * the parent's %o1.  So detect that case and restore it
++	 * here.
++	 */
++	if ((unsigned long)ret >= -ERESTART_RESTARTBLOCK)
++		regs->u_regs[UREG_I1] = orig_i1;
++
++	return ret;
++}
++
++asmlinkage long sparc_clone(struct pt_regs *regs)
++{
++	unsigned long orig_i1 = regs->u_regs[UREG_I1];
++	unsigned int flags = lower_32_bits(regs->u_regs[UREG_I0]);
++	long ret;
++
++	struct kernel_clone_args args = {
++		.flags		= (flags & ~CSIGNAL),
++		.exit_signal	= (flags & CSIGNAL),
++		.tls		= regs->u_regs[UREG_I3],
++	};
++
++#ifdef CONFIG_COMPAT
++	if (test_thread_flag(TIF_32BIT)) {
++		args.pidfd	= compat_ptr(regs->u_regs[UREG_I2]);
++		args.child_tid	= compat_ptr(regs->u_regs[UREG_I4]);
++		args.parent_tid	= compat_ptr(regs->u_regs[UREG_I2]);
++	} else
++#endif
++	{
++		args.pidfd	= (int __user *)regs->u_regs[UREG_I2];
++		args.child_tid	= (int __user *)regs->u_regs[UREG_I4];
++		args.parent_tid	= (int __user *)regs->u_regs[UREG_I2];
++	}
++
++	/* Did userspace give setup a separate stack for the child or are we
++	 * reusing the parent's?
++	 */
++	if (regs->u_regs[UREG_I1])
++		args.stack = regs->u_regs[UREG_I1];
++	else
++		args.stack = regs->u_regs[UREG_FP];
++
++	ret = _do_fork(&args);
++
++	/* If we get an error and potentially restart the system
++	 * call, we're screwed because copy_thread_tls() clobbered
++	 * the parent's %o1.  So detect that case and restore it
++	 * here.
++	 */
++	if ((unsigned long)ret >= -ERESTART_RESTARTBLOCK)
++		regs->u_regs[UREG_I1] = orig_i1;
++
++	return ret;
++}
+diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_32.c
+index 13cb5638fab8..229a10bab74a 100644
+--- a/arch/sparc/kernel/process_32.c
++++ b/arch/sparc/kernel/process_32.c
+@@ -257,33 +257,6 @@ clone_stackframe(struct sparc_stackf __user *dst,
+ 	return sp;
+ }
+ 
+-asmlinkage int sparc_do_fork(unsigned long clone_flags,
+-                             unsigned long stack_start,
+-                             struct pt_regs *regs,
+-                             unsigned long stack_size)
+-{
+-	unsigned long parent_tid_ptr, child_tid_ptr;
+-	unsigned long orig_i1 = regs->u_regs[UREG_I1];
+-	long ret;
+-
+-	parent_tid_ptr = regs->u_regs[UREG_I2];
+-	child_tid_ptr = regs->u_regs[UREG_I4];
+-
+-	ret = do_fork(clone_flags, stack_start, stack_size,
+-		      (int __user *) parent_tid_ptr,
+-		      (int __user *) child_tid_ptr);
+-
+-	/* If we get an error and potentially restart the system
+-	 * call, we're screwed because copy_thread() clobbered
+-	 * the parent's %o1.  So detect that case and restore it
+-	 * here.
+-	 */
+-	if ((unsigned long)ret >= -ERESTART_RESTARTBLOCK)
+-		regs->u_regs[UREG_I1] = orig_i1;
+-
+-	return ret;
+-}
+-
+ /* Copy a Sparc thread.  The fork() return value conventions
+  * under SunOS are nothing short of bletcherous:
+  * Parent -->  %o0 == childs  pid, %o1 == 0
+diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
+index 8c400fca4e9f..278bf287c4be 100644
+--- a/arch/sparc/kernel/process_64.c
++++ b/arch/sparc/kernel/process_64.c
+@@ -572,100 +572,6 @@ void fault_in_user_windows(struct pt_regs *regs)
+ 	force_sig(SIGSEGV);
+ }
+ 
+-asmlinkage long sparc_fork(struct pt_regs *regs)
+-{
+-	unsigned long orig_i1 = regs->u_regs[UREG_I1];
+-	long ret;
+-	struct kernel_clone_args args = {
+-		.exit_signal	= SIGCHLD,
+-		/* Reuse the parent's stack for the child. */
+-		.stack		= regs->u_regs[UREG_FP],
+-	};
+-
+-	ret = _do_fork(&args);
+-
+-	/* If we get an error and potentially restart the system
+-	 * call, we're screwed because copy_thread_tls() clobbered
+-	 * the parent's %o1.  So detect that case and restore it
+-	 * here.
+-	 */
+-	if ((unsigned long)ret >= -ERESTART_RESTARTBLOCK)
+-		regs->u_regs[UREG_I1] = orig_i1;
+-
+-	return ret;
+-}
+-
+-asmlinkage long sparc_vfork(struct pt_regs *regs)
+-{
+-	unsigned long orig_i1 = regs->u_regs[UREG_I1];
+-	long ret;
+-
+-	struct kernel_clone_args args = {
+-		.flags		= CLONE_VFORK | CLONE_VM,
+-		.exit_signal	= SIGCHLD,
+-		/* Reuse the parent's stack for the child. */
+-		.stack		= regs->u_regs[UREG_FP],
+-	};
+-
+-	ret = _do_fork(&args);
+-
+-	/* If we get an error and potentially restart the system
+-	 * call, we're screwed because copy_thread_tls() clobbered
+-	 * the parent's %o1.  So detect that case and restore it
+-	 * here.
+-	 */
+-	if ((unsigned long)ret >= -ERESTART_RESTARTBLOCK)
+-		regs->u_regs[UREG_I1] = orig_i1;
+-
+-	return ret;
+-}
+-
+-asmlinkage long sparc_clone(struct pt_regs *regs)
+-{
+-	unsigned long orig_i1 = regs->u_regs[UREG_I1];
+-	unsigned int flags = lower_32_bits(regs->u_regs[UREG_I0]);
+-	long ret;
+-
+-	struct kernel_clone_args args = {
+-		.flags		= (flags & ~CSIGNAL),
+-		.exit_signal	= (flags & CSIGNAL),
+-		.tls		= regs->u_regs[UREG_I3],
+-	};
+-
+-#ifdef CONFIG_COMPAT
+-	if (test_thread_flag(TIF_32BIT)) {
+-		args.pidfd	= compat_ptr(regs->u_regs[UREG_I2]);
+-		args.child_tid	= compat_ptr(regs->u_regs[UREG_I4]);
+-		args.parent_tid	= compat_ptr(regs->u_regs[UREG_I2]);
+-	} else
+-#endif
+-	{
+-		args.pidfd	= (int __user *)regs->u_regs[UREG_I2];
+-		args.child_tid	= (int __user *)regs->u_regs[UREG_I4];
+-		args.parent_tid	= (int __user *)regs->u_regs[UREG_I2];
+-	}
+-
+-	/* Did userspace setup a separate stack for the child or are we
+-	 * copying the parent's?
+-	 */
+-	if (regs->u_regs[UREG_I1])
+-		args.stack = regs->u_regs[UREG_I1];
+-	else
+-		args.stack = regs->u_regs[UREG_FP];
+-
+-	ret = _do_fork(&args);
+-
+-	/* If we get an error and potentially restart the system
+-	 * call, we're screwed because copy_thread_tls() clobbered
+-	 * the parent's %o1.  So detect that case and restore it
+-	 * here.
+-	 */
+-	if ((unsigned long)ret >= -ERESTART_RESTARTBLOCK)
+-		regs->u_regs[UREG_I1] = orig_i1;
+-
+-	return ret;
+-}
+-
+ /* Copy a Sparc thread.  The fork() return value conventions
+  * under SunOS are nothing short of bletcherous:
+  * Parent -->  %o0 == childs  pid, %o1 == 0
 -- 
-Peter Xu
+2.27.0
 

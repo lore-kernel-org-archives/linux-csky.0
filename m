@@ -2,100 +2,133 @@ Return-Path: <SRS0=kxT1=AE=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1822C433DF
-	for <linux-csky@archiver.kernel.org>; Tue, 23 Jun 2020 08:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82F99C433E0
+	for <linux-csky@archiver.kernel.org>; Tue, 23 Jun 2020 12:56:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B83220791
-	for <linux-csky@archiver.kernel.org>; Tue, 23 Jun 2020 08:52:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E7322072E
+	for <linux-csky@archiver.kernel.org>; Tue, 23 Jun 2020 12:56:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1592916966;
+	bh=hLBY3T7nrxUU7besxQDrdAZvKz6an4ijUXrWT9hqieo=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=x3cePIHmM8NnZSxDfhkH1w//3HwE4KHF9gSHBhYm40q3p6jGpJGs50N+kITniBUVg
+	 63J/PxqfHT1LZ3ydyW4b1QXSJNVPU0PCCDdTeqCSmlHvW2sgZk81TtbKbwFdrQkW0y
+	 IPzzF4/4FcATBZuBdD5T6vFBbceyFuEuxQrqKg/s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732058AbgFWIwv (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 23 Jun 2020 04:52:51 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:41232 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731805AbgFWIwW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 23 Jun 2020 04:52:22 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv2uFwvFecLBIAA--.12S4;
-        Tue, 23 Jun 2020 16:51:23 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     Guo Ren <guoren@kernel.org>, Baruch Siach <baruch@tkos.co.il>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH 2/7] irqchip/loongson-htpic: Remove redundant kfree operation
-Date:   Tue, 23 Jun 2020 16:51:11 +0800
-Message-Id: <1592902276-3969-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1592902276-3969-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1592902276-3969-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxv2uFwvFecLBIAA--.12S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr15XrW5ZrW3AF15Kr4xtFb_yoW3twb_Cr
-        WIqr9rJFW0gr1rC3y7ur47ZrySkw4kWF1kuF4aya4ft347tw1rAry7Ar4fJF47Wa1SkFn8
-        WFW7ZrykAw1xGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbDxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-        0Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-        xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
-        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-        Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJw
-        CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUeMKuUUUU
-        U
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1732542AbgFWM4G (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 23 Jun 2020 08:56:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37036 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729504AbgFWM4F (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 23 Jun 2020 08:56:05 -0400
+Received: from localhost.localdomain (unknown [42.120.72.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C54420724;
+        Tue, 23 Jun 2020 12:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592916965;
+        bh=hLBY3T7nrxUU7besxQDrdAZvKz6an4ijUXrWT9hqieo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FkUV2lrppMP14u/EH08RKBaTNoka8k4N1nEzoFZpc56U22RmrLGmRwQtwv+tZcXAa
+         wISHX/wzw55JmEsp2LPhGJ09alvmEUpnM11s5bj/JTa4viprkAjaOPw1pWTfSSoO+1
+         QN7znxAjOg9UvDXFR4jUrsRo2Zd82k/pNzHvS3zg=
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, Guo Ren <guoren@linux.alibaba.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Alan Kao <alankao@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>
+Subject: [PATCH] riscv: Fixup __vdso_gettimeofday broke dynamic ftrace
+Date:   Tue, 23 Jun 2020 12:54:58 +0000
+Message-Id: <1592916898-63693-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-In the function htpic_of_init(), when kzalloc htpic fails, it should
-return -ENOMEM directly, no need to execute "goto" to kfree.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+For linux-5.8-rc1, enable ftrace of riscv will cause boot panic:
+
+[    2.388980] Run /sbin/init as init process
+[    2.529938] init[39]: unhandled signal 4 code 0x1 at 0x0000003ff449e000
+[    2.531078] CPU: 0 PID: 39 Comm: init Not tainted 5.8.0-rc1-dirty #13
+[    2.532719] epc: 0000003ff449e000 ra : 0000003ff449e954 sp : 0000003fffedb900
+[    2.534005]  gp : 00000000000e8528 tp : 0000003ff449d800 t0 : 000000000000001e
+[    2.534965]  t1 : 000000000000000a t2 : 0000003fffedb89e s0 : 0000003fffedb920
+[    2.536279]  s1 : 0000003fffedb940 a0 : 0000003ff43d4b2c a1 : 0000000000000000
+[    2.537334]  a2 : 0000000000000001 a3 : 0000000000000000 a4 : fffffffffbad8000
+[    2.538466]  a5 : 0000003ff449e93a a6 : 0000000000000000 a7 : 0000000000000000
+[    2.539511]  s2 : 0000000000000000 s3 : 0000003ff448412c s4 : 0000000000000010
+[    2.541260]  s5 : 0000000000000016 s6 : 00000000000d0a30 s7 : 0000003fffedba70
+[    2.542152]  s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000003fffedb960
+[    2.543335]  s11: 0000000000000000 t3 : 0000000000000000 t4 : 0000003fffedb8a0
+[    2.544471]  t5 : 0000000000000000 t6 : 0000000000000000
+[    2.545730] status: 0000000000004020 badaddr: 00000000464c457f cause: 0000000000000002
+[    2.549867] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000004
+[    2.551267] CPU: 0 PID: 1 Comm: init Not tainted 5.8.0-rc1-dirty #13
+[    2.552061] Call Trace:
+[    2.552626] [<ffffffe00020374a>] walk_stackframe+0x0/0xc4
+[    2.553486] [<ffffffe0002039f4>] show_stack+0x40/0x4c
+[    2.553995] [<ffffffe00054a6ae>] dump_stack+0x7a/0x98
+[    2.554615] [<ffffffe00020b9b8>] panic+0x114/0x2f4
+[    2.555395] [<ffffffe00020ebd6>] do_exit+0x89c/0x8c2
+[    2.555949] [<ffffffe00020f930>] do_group_exit+0x3a/0x90
+[    2.556715] [<ffffffe000219e08>] get_signal+0xe2/0x6e6
+[    2.557388] [<ffffffe000202d72>] do_notify_resume+0x6a/0x37a
+[    2.558089] [<ffffffe000201c16>] ret_from_exception+0x0/0xc
+
+"ra:0x3ff449e954" is the return address of "call _mcount" in the
+prologue of __vdso_gettimeofday(). Without proper relocate, pc jmp
+to 0x0000003ff449e000 (vdso map base) with a illegal instruction
+trap.
+
+The solution comes from arch/arm64/kernel/vdso/Makefile:
+
+CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS)
+
+ - CC_FLAGS_SCS is ShadowCallStack feature in Clang and only
+   implemented for arm64, no use for riscv.
+
+The bug comes from the following commit:
+
+ad5d1122b82f ("riscv: use vDSO common flow to reduce the latency of the time-related functions")
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Vincent Chen <vincent.chen@sifive.com>
+Cc: Atish Patra <atish.patra@wdc.com>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Cc: Alan Kao <alankao@andestech.com>
+Cc: Greentime Hu <green.hu@gmail.com>
 ---
- drivers/irqchip/irq-loongson-htpic.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ arch/riscv/kernel/vdso/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/irqchip/irq-loongson-htpic.c b/drivers/irqchip/irq-loongson-htpic.c
-index dd018c2..63f7280 100644
---- a/drivers/irqchip/irq-loongson-htpic.c
-+++ b/drivers/irqchip/irq-loongson-htpic.c
-@@ -93,10 +93,8 @@ int __init htpic_of_init(struct device_node *node, struct device_node *parent)
- 	}
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 38ba55b..3079935 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -27,6 +27,9 @@ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
+ obj-y += vdso.o vdso-syms.o
+ CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
  
- 	htpic = kzalloc(sizeof(*htpic), GFP_KERNEL);
--	if (!htpic) {
--		err = -ENOMEM;
--		goto out_free;
--	}
-+	if (!htpic)
-+		return -ENOMEM;
++# Disable -pg to prevent insert call site
++CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os
++
+ # Disable gcov profiling for VDSO code
+ GCOV_PROFILE := n
  
- 	htpic->base = of_iomap(node, 0);
- 	if (!htpic->base) {
 -- 
-2.1.0
+2.7.4
 

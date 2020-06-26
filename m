@@ -1,116 +1,129 @@
-Return-Path: <SRS0=r3zH=AF=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=YRbO=AH=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7984C433E2
-	for <linux-csky@archiver.kernel.org>; Wed, 24 Jun 2020 09:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DA4C433E1
+	for <linux-csky@archiver.kernel.org>; Fri, 26 Jun 2020 22:31:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC4C820857
-	for <linux-csky@archiver.kernel.org>; Wed, 24 Jun 2020 09:24:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8752D214F1
+	for <linux-csky@archiver.kernel.org>; Fri, 26 Jun 2020 22:31:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DGRwBAFM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389077AbgFXJYx (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 24 Jun 2020 05:24:53 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34264 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728637AbgFXJYx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 24 Jun 2020 05:24:53 -0400
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn97KG_NesDFJAA--.736S3;
-        Wed, 24 Jun 2020 17:24:29 +0800 (CST)
-Subject: Re: [PATCH 1/7] irqchip: Fix potential resource leaks
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-References: <1592902276-3969-1-git-send-email-yangtiezhu@loongson.cn>
- <1592902276-3969-2-git-send-email-yangtiezhu@loongson.cn>
- <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Kukjin Kim <kgene@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <678f8927-3560-e55b-956f-3e197c7e3244@loongson.cn>
-Date:   Wed, 24 Jun 2020 17:24:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726107AbgFZWbr (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 26 Jun 2020 18:31:47 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:47575 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726079AbgFZWbq (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 26 Jun 2020 18:31:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593210704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nYKuiXa6JqSlFakb02F9N/z/khfKW7nv0ZKU3o10xCg=;
+        b=DGRwBAFMqF1mh4XxnaJxgSdEs59EzNZwXLGDCK7lTocadtKFahvOt5yGSQOvuvRsEgS9NU
+        VOcmrBeG7bi5Vm7U7EbyyAHnaWJZbj5yP2OwyUN6rlDkYZiJlaVXXcPa1PSgjexdeBqLs7
+        R0nObCU0frbH22xcdKaA1aQku9+sfvE=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-193-W7mn9QtgPCq66l941G0r5A-1; Fri, 26 Jun 2020 18:31:42 -0400
+X-MC-Unique: W7mn9QtgPCq66l941G0r5A-1
+Received: by mail-qv1-f72.google.com with SMTP id g13so7385905qvp.5
+        for <linux-csky@vger.kernel.org>; Fri, 26 Jun 2020 15:31:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nYKuiXa6JqSlFakb02F9N/z/khfKW7nv0ZKU3o10xCg=;
+        b=sw6JajNCudec+UHs4FZSEc2enrOzPJ9IsMe9ZhTigH/wDvzzMVdYfnpV39cV0HS34q
+         nxn1EJBglb9ssF+8zzO5O7MQ9Bb+3QtNrynSqdQAwn9CvijUVi3ARBSV3404qGHYviOw
+         JhIekHE5vCfe8iq46egiJn9cG+jPkfCp3JM4rDMtLVx4JchR2yvhwbYN2Phv5BZBWchj
+         OmAAOaav/Tll1iDxa8wBjTLfRQ2C7oYedH4F3NP06nA6NV6tipDKcsjbXvlv+nI8IYvd
+         QBxe/oCa0/LnkZoccrJG4FinqAJ8Wp9W0Au8mOnMVXhSTkuzm7Du0BRVBCvNxnRE9RLj
+         9Jbw==
+X-Gm-Message-State: AOAM532t3kpuqaT9iNllcxAuqoJPbTeiNpzRbI7FgFieX79F003h8cmf
+        cIshzBwrf0g/LWze+9U06mWVyeIMZTKEgidI0hGvpx11pQQaGCKi8SKZPJAEu/2E8CjgSgjJdem
+        0Liyu4orESW3jV5VI3JB73w==
+X-Received: by 2002:ac8:27bd:: with SMTP id w58mr5311364qtw.348.1593210701799;
+        Fri, 26 Jun 2020 15:31:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxSMdcnN8S0Vm53+A1zYZUxGb86xhlZEgD0Ug2gSVVAidxyTpcuF0guaWkh6epy+fd5/SNVlw==
+X-Received: by 2002:ac8:27bd:: with SMTP id w58mr5311342qtw.348.1593210701587;
+        Fri, 26 Jun 2020 15:31:41 -0700 (PDT)
+Received: from xz-x1.redhat.com ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id f203sm9903311qke.135.2020.06.26.15.31.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jun 2020 15:31:40 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Will Deacon <will@kernel.org>, peterx@redhat.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Subject: [PATCH 06/26] mm/csky: Use general page fault accounting
+Date:   Fri, 26 Jun 2020 18:31:10 -0400
+Message-Id: <20200626223130.199227-7-peterx@redhat.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200626223130.199227-1-peterx@redhat.com>
+References: <20200626223130.199227-1-peterx@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn97KG_NesDFJAA--.736S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF4UtF18Zr1UKw1fGw4fAFb_yoW8XF4kpF
-        4UJ39IvrWrCFW2kr43Cr1jyFy5Jwn3tay7K3yxA3sxXr98W3srGF4UA34kXrn7GryfGw12
-        9F4rXa45G3W5CFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB214x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2z280aV
-        CY1x0267AKxVW0oVCq3bIYCTnIWIevJa73UjIFyTuYvjfUOqXHDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 06/24/2020 05:15 PM, Krzysztof Kozlowski wrote:
-> On Tue, 23 Jun 2020 at 10:51, Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->> There exists some potential resource leaks in the error path, fix them.
-> This should be split per driver and per bug (although mostly in driver
-> it's just one bug). Otherwise it is difficult to review, backport and
-> revert.
+Use the general page fault accounting by passing regs into handle_mm_fault().
+It naturally solve the issue of multiple page fault accounting when page fault
+retry happened.
 
-Thanks for your suggestion, I have split it into a patch series [1],
-I will resend it some days later due to git send-email always failed.
+CC: Guo Ren <guoren@kernel.org>
+CC: linux-csky@vger.kernel.org
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ arch/csky/mm/fault.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-[1] https://lore.kernel.org/patchwork/cover/1263192/
-
->
-> Best regards,
-> Krzysztof
->
->
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>   drivers/irqchip/irq-ath79-misc.c      |  3 +++
->>   drivers/irqchip/irq-csky-apb-intc.c   |  3 +++
->>   drivers/irqchip/irq-csky-mpintc.c     | 26 ++++++++++++++++++++------
->>   drivers/irqchip/irq-davinci-aintc.c   | 17 +++++++++++++----
->>   drivers/irqchip/irq-davinci-cp-intc.c | 17 ++++++++++++++---
->>   drivers/irqchip/irq-digicolor.c       |  4 ++++
->>   drivers/irqchip/irq-dw-apb-ictl.c     | 11 ++++++++---
->>   drivers/irqchip/irq-loongson-htvec.c  |  5 ++++-
->>   drivers/irqchip/irq-ls1x.c            |  4 +++-
->>   drivers/irqchip/irq-mscc-ocelot.c     |  6 ++++--
->>   drivers/irqchip/irq-nvic.c            |  2 ++
->>   drivers/irqchip/irq-omap-intc.c       |  4 +++-
->>   drivers/irqchip/irq-riscv-intc.c      |  1 +
->>   drivers/irqchip/irq-s3c24xx.c         | 20 +++++++++++++++-----
->>   drivers/irqchip/irq-xilinx-intc.c     |  1 +
->>   15 files changed, 98 insertions(+), 26 deletions(-)
+diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+index b14f97d3cb15..a3e0aa3ebb79 100644
+--- a/arch/csky/mm/fault.c
++++ b/arch/csky/mm/fault.c
+@@ -151,7 +151,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 	 * the fault.
+ 	 */
+ 	fault = handle_mm_fault(vma, address, write ? FAULT_FLAG_WRITE : 0,
+-				NULL);
++				regs);
+ 	if (unlikely(fault & VM_FAULT_ERROR)) {
+ 		if (fault & VM_FAULT_OOM)
+ 			goto out_of_memory;
+@@ -161,16 +161,6 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 			goto bad_area;
+ 		BUG();
+ 	}
+-	if (fault & VM_FAULT_MAJOR) {
+-		tsk->maj_flt++;
+-		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1, regs,
+-			      address);
+-	} else {
+-		tsk->min_flt++;
+-		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1, regs,
+-			      address);
+-	}
+-
+ 	up_read(&mm->mmap_sem);
+ 	return;
+ 
+-- 
+2.26.2
 

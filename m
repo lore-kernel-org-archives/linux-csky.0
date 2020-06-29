@@ -1,150 +1,112 @@
-Return-Path: <SRS0=g9X1=AJ=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=5HgZ=AK=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 613D7C433DF
-	for <linux-csky@archiver.kernel.org>; Sun, 28 Jun 2020 16:25:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7068C433E4
+	for <linux-csky@archiver.kernel.org>; Mon, 29 Jun 2020 18:45:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D5B320773
-	for <linux-csky@archiver.kernel.org>; Sun, 28 Jun 2020 16:25:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9F81204EC
+	for <linux-csky@archiver.kernel.org>; Mon, 29 Jun 2020 18:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593361530;
-	bh=4MsHQYCfwDNcgoFMDxuBklP42iO6H/Lxo4tZHOVpT+g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=zLpBTUkaxIXWdmBQX9iRsBqHF9fBMpVmtK4Gq5ZguyNeK7S+9kvWHOyPOmWnXxEln
-	 ZkUh4w6nDl9rKIyBcCDMx5dDMfVRi29zo6jhuKqm6tggLV+eMaaMa9eoXr7yGT/WpQ
-	 jHrX61EeXrs/ozOxAW6//k8W9y4VPNLT25Fxtcm0=
+	s=default; t=1593456334;
+	bh=O/nZ0BxK4nESVxMtlEZ3aR9HUzEjAJ3vpNzo90oK+Gw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=yEosoy0j3pWuG1O6zYb7Ve6IU6mgBWEJmNvy17uuqltRS6dJU7VUe1TaQ6rBOjc1S
+	 OSBmps+K76HZwRr9jmGm3NfqNHa7xoH43RHAVLCxVvEPA5sef/uFThU1OTmstF2UMs
+	 iS0MO+P8G2p+O1G+D2irc+4w3X2DxS714tk9N95o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726143AbgF1QZa (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 28 Jun 2020 12:25:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38968 "EHLO mail.kernel.org"
+        id S1729152AbgF2SpQ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 29 Jun 2020 14:45:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbgF1QZ3 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 28 Jun 2020 12:25:29 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        id S1729264AbgF2SpP (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 29 Jun 2020 14:45:15 -0400
+Received: from kernel.org (unknown [87.71.40.38])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA64420771;
-        Sun, 28 Jun 2020 16:25:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E93025581;
+        Mon, 29 Jun 2020 15:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593361529;
-        bh=4MsHQYCfwDNcgoFMDxuBklP42iO6H/Lxo4tZHOVpT+g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y3OerUbSLeNsgby2H3gQ4ClZuu9Zc3iA1DveyUjBNkbUmzJjyjMVL6Vb326AxTmc+
-         d1F44707pI8ZM34pAusrVj+gcJP9Yco0Ubr0359g2vTm8O/xdQkr6AzJo1+9hh6/GA
-         b87a/tUXaPeXFae/mUxAQbck2dPswuPgYMtjP/74=
-Date:   Mon, 29 Jun 2020 01:25:24 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     guoren@kernel.org
-Cc:     greentime.hu@sifive.com, palmerdabbelt@google.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        paul.walmsley@sifive.com, anup@brainfault.org,
-        linux-csky@vger.kernel.org, zong.li@sifive.com,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V2] riscv: Fixup compile error BUILD_BUG_ON failed
-Message-Id: <20200629012524.c941a5f18aa7f312d325f714@kernel.org>
-In-Reply-To: <1593360457-23827-1-git-send-email-guoren@kernel.org>
-References: <1593360457-23827-1-git-send-email-guoren@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        s=default; t=1593446372;
+        bh=O/nZ0BxK4nESVxMtlEZ3aR9HUzEjAJ3vpNzo90oK+Gw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ve2Rt8tVmffLLnlIRt4m0+FLkplbTh12wsmkxiiXh2shMIztHBj9/nk/f9S/ai5jU
+         3BFQpw5Dz/XZFCZs/y8ymsBDt+3vvNo/l/kVYqcYBemM5Bac+QbcUhusbQGI9QlPev
+         vYsxGXmlFAgYBNiTAVuThytC5RkEIP2ptiiEd7Jg=
+Date:   Mon, 29 Jun 2020 18:59:20 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Joerg Roedel <joro@8bytes.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH 4/8] asm-generic: pgalloc: provide generic
+ pmd_alloc_one() and pmd_free_one()
+Message-ID: <20200629155920.GD1492837@kernel.org>
+References: <20200627143453.31835-1-rppt@kernel.org>
+ <20200627143453.31835-5-rppt@kernel.org>
+ <20200627190304.GG25039@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200627190304.GG25039@casper.infradead.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, 28 Jun 2020 16:07:37 +0000
-guoren@kernel.org wrote:
+On Sat, Jun 27, 2020 at 08:03:04PM +0100, Matthew Wilcox wrote:
+> On Sat, Jun 27, 2020 at 05:34:49PM +0300, Mike Rapoport wrote:
+> > More elaborate versions on arm64 and x86 account memory for the user page
+> > tables and call to pgtable_pmd_page_ctor() as the part of PMD page
+> > initialization.
+> > 
+> > Move the arm64 version to include/asm-generic/pgalloc.h and use the generic
+> > version on several architectures.
+> > 
+> > The pgtable_pmd_page_ctor() is a NOP when ARCH_ENABLE_SPLIT_PMD_PTLOCK is
+> > not enabled, so there is no functional change for most architectures except
+> > of the addition of __GFP_ACCOUNT for allocation of user page tables.
+> 
+> Thanks for including this line; it reminded me that we're not setting
+> the PageTable flag on the page, nor accounting it to the zone page stats.
+> Hope you don't mind me tagging a patch to do that on as 9/8.
 
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Unfortunately, the current code couldn't be compiled:
-> 
->   CC      arch/riscv/kernel/patch.o
-> In file included from ./include/linux/kernel.h:11,
->                  from ./include/linux/list.h:9,
->                  from ./include/linux/preempt.h:11,
->                  from ./include/linux/spinlock.h:51,
->                  from arch/riscv/kernel/patch.c:6:
-> In function ‘fix_to_virt’,
->     inlined from ‘patch_map’ at arch/riscv/kernel/patch.c:37:17:
-> ./include/linux/compiler.h:392:38: error: call to ‘__compiletime_assert_205’ declared with attribute error: BUILD_BUG_ON failed: idx >= __end_of_fixed_addresses
->   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->                                       ^
-> ./include/linux/compiler.h:373:4: note: in definition of macro ‘__compiletime_assert’
->     prefix ## suffix();    \
->     ^~~~~~
-> ./include/linux/compiler.h:392:2: note: in expansion of macro ‘_compiletime_assert’
->   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->   ^~~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
->  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                      ^~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:50:2: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
->   BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
->   ^~~~~~~~~~~~~~~~
-> ./include/asm-generic/fixmap.h:32:2: note: in expansion of macro ‘BUILD_BUG_ON’
->   BUILD_BUG_ON(idx >= __end_of_fixed_addresses);
->   ^~~~~~~~~~~~
-> 
-> Because fix_to_virt(, idx) needs a const value, not a dynamic variable of
-> reg-a0 or BUILD_BUG_ON failed with "idx >= __end_of_fixed_addresses".
+We also never set PageTable flag for early page tables and for the page
+tables allocated directly with get_free_page(), e.g PTI, KASAN.
 
-Looks good to me :)
-
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thanks!
-
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Zong Li <zong.li@sifive.com>
-> ---
-> Changelog V2:
->  - Use __always_inline as same as fix_to_virt
->  - Use const "const unsigned int" for 2th param
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> ---
->  arch/riscv/kernel/patch.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> index d4a64df..3179a4e 100644
-> --- a/arch/riscv/kernel/patch.c
-> +++ b/arch/riscv/kernel/patch.c
-> @@ -20,7 +20,12 @@ struct patch_insn {
->  };
->  
->  #ifdef CONFIG_MMU
-> -static void *patch_map(void *addr, int fixmap)
-> +/*
-> + * The fix_to_virt(, idx) needs a const value (not a dynamic variable of
-> + * reg-a0) or BUILD_BUG_ON failed with "idx >= __end_of_fixed_addresses".
-> + * So use '__always_inline' and 'const unsigned int fixmap' here.
-> + */
-> +static __always_inline void *patch_map(void *addr, const unsigned int fixmap)
->  {
->  	uintptr_t uintaddr = (uintptr_t) addr;
->  	struct page *page;
-> @@ -37,7 +42,6 @@ static void *patch_map(void *addr, int fixmap)
->  	return (void *)set_fixmap_offset(fixmap, page_to_phys(page) +
->  					 (uintaddr & ~PAGE_MASK));
->  }
-> -NOKPROBE_SYMBOL(patch_map);
->  
->  static void patch_unmap(int fixmap)
->  {
-> -- 
-> 2.7.4
-> 
-
+> We could also do with a pud_page_[cd]tor and maybe even p4d/pgd versions.
+> But that brings me to the next question -- could/should some of this
+> be moved over to asm-generic/pgalloc.h?  The ctor/dtor aren't called
+> from anywhere else, and there's value to reducing the total amount of
+> code in mm.h, but then there's also value to keeping all the ifdef
+> ARCH_ENABLE_SPLIT_PMD_PTLOCK code together too.  So I'm a bit torn.
+> What do you think?
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Sincerely yours,
+Mike.

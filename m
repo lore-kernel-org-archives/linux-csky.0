@@ -2,159 +2,119 @@ Return-Path: <SRS0=+YDi=AU=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D6BBC433DF
-	for <linux-csky@archiver.kernel.org>; Thu,  9 Jul 2020 07:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 828ECC433E0
+	for <linux-csky@archiver.kernel.org>; Thu,  9 Jul 2020 07:59:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F0252078D
-	for <linux-csky@archiver.kernel.org>; Thu,  9 Jul 2020 07:29:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C20920720
+	for <linux-csky@archiver.kernel.org>; Thu,  9 Jul 2020 07:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594279772;
-	bh=V9g8SE10fROyxVg2xxAPC4nQBmidhZEFaboABYn9Htk=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=SljLxKkeSBt+/q6IbuCuJYvRdjYrZYNP5gPh48DWeP+zlbkv9sxXsJOlwM4YAcD+9
-	 na+G7Np1y17IbJL+KPkf0+X3QMQv28NkoZm3b7tT3SY19fxJ37v+/wPcbgi1+fwvgg
-	 kOccEfVsiLRhNuThjaN1ChcdY02ecDDJ8H03Enp0=
+	s=default; t=1594281591;
+	bh=n8KuoxvesWiAIY+opfod/4XWjPg+flAzBwzo6WbZ1nU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=CYgZjSuEX7sbdiq8/hJptgUVU2Gd+BilJiLEJg5NGdfKt57wk765HCtQXpYGsQyKF
+	 cbWWl9HCj+SVZwTstX5RHAtRnRluZkS9sTrMxsmhlktMStWHtqJM3Gd++tQKw/8mkP
+	 K3n3SCbEbJkilSfxGgsTYcqf1DFTxOplW3H7Ujls=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbgGIH3P (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 9 Jul 2020 03:29:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42540 "EHLO mail.kernel.org"
+        id S1726122AbgGIH7v (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 9 Jul 2020 03:59:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55424 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726506AbgGIH3N (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 9 Jul 2020 03:29:13 -0400
-Received: from localhost.localdomain (unknown [42.120.72.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1726118AbgGIH7u (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 9 Jul 2020 03:59:50 -0400
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 80B5D2074A;
-        Thu,  9 Jul 2020 07:29:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE07C2073A;
+        Thu,  9 Jul 2020 07:59:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594279751;
-        bh=V9g8SE10fROyxVg2xxAPC4nQBmidhZEFaboABYn9Htk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HYqakm73YTt3Ru7/XNbqXC5fUrM78k3XcqblzC/fAdEF44bKcaRgRlmPOV2aOHWWO
-         Cmkf4rz4O4mQEIfAWxR4F+dSbPFtRAwbOe/iY6flTAMG8yybHCFYmb5ivXMEPpzk/Q
-         3TtUAZKz3srf2utcx6F2AfdVcUdgAhfOE+i/oGfo=
-From:   guoren@kernel.org
-To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        me@packi.ch, bjorn.topel@gmail.com, atish.patra@wdc.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, guoren@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Greentime Hu <green.hu@gmail.com>
-Subject: [PATCH v2 1/2] riscv: Add STACKPROTECTOR supported
-Date:   Thu,  9 Jul 2020 07:28:16 +0000
-Message-Id: <1594279697-72511-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        s=default; t=1594281590;
+        bh=n8KuoxvesWiAIY+opfod/4XWjPg+flAzBwzo6WbZ1nU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZtCT+Ofj8X751NtW4t93j95+HisHO+Zg6Cayf2kjUr3HAhz7wQB5t2WMZkwMra5mX
+         hOgOPsCmW1ujWjt8/3MKy7jH/DdJ6ZraVCcoovUUOJKhzwSnCmyGXZxlItqdRbnrDw
+         +k+UuTbdwNDMJy+TQRgWE/r2k4cA5YSmy9Cfd3WQ=
+Received: by mail-lj1-f176.google.com with SMTP id e4so1339982ljn.4;
+        Thu, 09 Jul 2020 00:59:49 -0700 (PDT)
+X-Gm-Message-State: AOAM532yX1AP50yZLGWv0OeyQff+KQY4i0JgVN88GHwcVpMrI3b8rrtR
+        +x5oLrcAEhvt05zAUDcBcIHVwG0R/QqhRZqCJ28=
+X-Google-Smtp-Source: ABdhPJyYE8JVjLzbw3nJJvf2cbSZOzBgUbCeBR8sdnHEUjqpORlM6Sa6qf1SVXghITca69v+n3jBtWTcX/1A1ezqC1A=
+X-Received: by 2002:a2e:959a:: with SMTP id w26mr4755601ljh.79.1594281588092;
+ Thu, 09 Jul 2020 00:59:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1594269511-13340-1-git-send-email-guoren@kernel.org> <5c7e9eb0-d811-2e08-87c4-12de9b869b79@ghiti.fr>
+In-Reply-To: <5c7e9eb0-d811-2e08-87c4-12de9b869b79@ghiti.fr>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 9 Jul 2020 15:59:36 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQnE-J25Jr=qmTqoTopOY9+kHh5ULkUOWvN5SmkZPOOAg@mail.gmail.com>
+Message-ID: <CAJF2gTQnE-J25Jr=qmTqoTopOY9+kHh5ULkUOWvN5SmkZPOOAg@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Enable ELF-ASLR for riscv
+To:     Alex Ghiti <alex@ghiti.fr>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Greentime Hu <green.hu@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, Jul 9, 2020 at 1:32 PM Alex Ghiti <alex@ghiti.fr> wrote:
+>
+> Hi Guo,
+>
+> Le 7/9/20 =C3=A0 12:38 AM, guoren@kernel.org a =C3=A9crit :
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Let riscv enable randomizes the stack, heap and binary images of
+> > ELF binaries. Seems it's ok at all after qemu & chip test and
+> > there is no founded side effect.
+> >
+> > So just simply select ARCH_HAS_ELF_RANDOMIZE :)
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Zong Li <zong.li@sifive.com>
+> > Cc: Greentime Hu <green.hu@gmail.com>
+> > ---
+> >   arch/riscv/Kconfig | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 91bfc6c..eed6647 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -20,6 +20,7 @@ config RISCV
+> >       select ARCH_HAS_GIGANTIC_PAGE
+> >       select ARCH_HAS_MMIOWB
+> >       select ARCH_HAS_PTE_SPECIAL
+> > +     select ARCH_HAS_ELF_RANDOMIZE
+> >       select ARCH_HAS_SET_DIRECT_MAP
+> >       select ARCH_HAS_SET_MEMORY
+> >       select ARCH_HAS_STRICT_KERNEL_RWX if MMU
+> >
+>
+> Actually it is already the case: ARCH_HAS_ELF_RANDOMIZE is already
+> selected by ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT.
+Oops :P, Thx for correcting, abandon the patch.
 
-The -fstack-protector & -fstack-protector-strong features are from
-gcc. The patch only add basic kernel support to stack-protector
-feature and some arch could have its own solution such as
-ARM64_PTR_AUTH.
+--=20
+Best Regards
+ Guo Ren
 
-After enabling STACKPROTECTOR and STACKPROTECTOR_STRONG, the .text
-size is expanded from  0x7de066 to 0x81fb32 (only 5%) to add canary
-checking code.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Björn Töpel <bjorn.topel@gmail.com>
-Cc: Greentime Hu <green.hu@gmail.com>
-Cc: Atish Patra <atish.patra@wdc.com>
----
- arch/riscv/Kconfig                      |  1 +
- arch/riscv/include/asm/stackprotector.h | 33 +++++++++++++++++++++++++++++++++
- arch/riscv/kernel/process.c             |  6 ++++++
- 3 files changed, 40 insertions(+)
- create mode 100644 arch/riscv/include/asm/stackprotector.h
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index f927a91..4b0e308 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -63,6 +63,7 @@ config RISCV
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
-+	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select IRQ_DOMAIN
- 	select MODULES_USE_ELF_RELA if MODULES
-diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
-new file mode 100644
-index 00000000..8e1ef2c
---- /dev/null
-+++ b/arch/riscv/include/asm/stackprotector.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_RISCV_STACKPROTECTOR_H
-+#define _ASM_RISCV_STACKPROTECTOR_H
-+
-+#include <linux/random.h>
-+#include <linux/version.h>
-+#include <asm/timex.h>
-+
-+extern unsigned long __stack_chk_guard;
-+
-+/*
-+ * Initialize the stackprotector canary value.
-+ *
-+ * NOTE: this must only be called from functions that never return,
-+ * and it must always be inlined.
-+ */
-+static __always_inline void boot_init_stack_canary(void)
-+{
-+	unsigned long canary;
-+	unsigned long tsc;
-+
-+	/* Try to get a semi random initial value. */
-+	get_random_bytes(&canary, sizeof(canary));
-+	tsc = get_cycles();
-+	canary += tsc + (tsc << 32UL);
-+	canary ^= LINUX_VERSION_CODE;
-+	canary &= CANARY_MASK;
-+
-+	current->stack_canary = canary;
-+	__stack_chk_guard = current->stack_canary;
-+}
-+#endif /* _ASM_RISCV_STACKPROTECTOR_H */
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 824d117..6548929 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -24,6 +24,12 @@
- 
- register unsigned long gp_in_global __asm__("gp");
- 
-+#ifdef CONFIG_STACKPROTECTOR
-+#include <linux/stackprotector.h>
-+unsigned long __stack_chk_guard __read_mostly;
-+EXPORT_SYMBOL(__stack_chk_guard);
-+#endif
-+
- extern asmlinkage void ret_from_fork(void);
- extern asmlinkage void ret_from_kernel_thread(void);
- 
--- 
-2.7.4
-
+ML: https://lore.kernel.org/linux-csky/

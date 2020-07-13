@@ -2,225 +2,226 @@ Return-Path: <SRS0=IToM=AY=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97897C433DF
-	for <linux-csky@archiver.kernel.org>; Mon, 13 Jul 2020 23:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0042C433E0
+	for <linux-csky@archiver.kernel.org>; Mon, 13 Jul 2020 23:47:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E8DB2145D
-	for <linux-csky@archiver.kernel.org>; Mon, 13 Jul 2020 23:39:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7478C21473
+	for <linux-csky@archiver.kernel.org>; Mon, 13 Jul 2020 23:47:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594683588;
-	bh=Vqf01DncIE5Y4/nHfHNC63MvPZBQw5slk8yytRbgiMg=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=F5zxY0n8387YgQZV82tm46+h/yGiNin/eJM6zbowU2RP19+lcJuH2Rrugygd+CWWj
-	 i7ocmGi55EnGWzdujLT8JHuK8fAHG2xdQbCN6iRDoJn/MNEsMMGBuuULmHiRKqUJs7
-	 LOTxORFGHyDFMeH+/NZfdOwCO+BMiMrYp2AbLq+A=
+	s=default; t=1594684055;
+	bh=M+fPqr3keD0MLuA1DPbRUZHfZtD8rh06mB1ZvF5p1Nc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=stYjlU8CF2KAJcX28B7Ts9lWJta/q44742jAeQYhIn+rWNaPeHb16Zr8c03xlTqFW
+	 M2W1pAr/U9mSgV100DDRWvhGlPKSUwm2LPESeHSvNHWnDTJAL9TUtjk4kVGKcbqq3O
+	 aazBh8/+b+ZpHzJ5mv9x6o1SFYUyFAihRXh1STQs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbgGMXjs (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 13 Jul 2020 19:39:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51414 "EHLO mail.kernel.org"
+        id S1726432AbgGMXrf (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 13 Jul 2020 19:47:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726339AbgGMXjr (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 13 Jul 2020 19:39:47 -0400
-Received: from localhost.localdomain (unknown [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1726356AbgGMXrf (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 13 Jul 2020 19:47:35 -0400
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E72FB2137B;
-        Mon, 13 Jul 2020 23:39:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8A6F21548;
+        Mon, 13 Jul 2020 23:47:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594683586;
-        bh=Vqf01DncIE5Y4/nHfHNC63MvPZBQw5slk8yytRbgiMg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mWYoD/XXgWMDTyzvDn96p9cITKPx24HfVkxPotigZKn34Y+GxsIJDKX6IiBt20eIB
-         ijFFvJOFm7/2lqiwbep/ec/HfblhE6BDKQSz+MdjnGHNEWSuLzKZjwhA7fN4/+MCfS
-         5MIPonfQg+XezFs89VEBwqygcjETQc7WNWgE9+XY=
-From:   guoren@kernel.org
-To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        mhiramat@kernel.org, oleg@redhat.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        anup@brainfault.org, linux-csky@vger.kernel.org,
-        greentime.hu@sifive.com, zong.li@sifive.com, guoren@kernel.org,
-        me@packi.ch, bjorn.topel@gmail.com,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH v3 0/7] riscv: Add k/uprobe supported
-Date:   Mon, 13 Jul 2020 23:39:15 +0000
-Message-Id: <1594683562-68149-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        s=default; t=1594684054;
+        bh=M+fPqr3keD0MLuA1DPbRUZHfZtD8rh06mB1ZvF5p1Nc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sdRO0XmKhq/n+Tn/m2Rs0MZTOgPoOC4cyiKY8VUlASf6LjIOYFq5OuLl1xoF3IuzY
+         f24j6469FmK7dJ4vG3lRAaxZDI00lPhYHIE+JtodejdMV9mddXh0Ohbdp0uvyCgIcG
+         SQDQVxKdRpc0CT8bckg3srG9A4pG8T7neAjqQX44=
+Received: by mail-lj1-f173.google.com with SMTP id q7so20285107ljm.1;
+        Mon, 13 Jul 2020 16:47:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532mftrmZRwhGWRBFUmh8asTrKi8beRgzXr/U5XIfZARtxyNRXWy
+        dmXNi+FLpVb4v8ogBa+w31JRP6hfLkzf6YBAwaA=
+X-Google-Smtp-Source: ABdhPJzYF4F2WFkO5qBgcY0yowt20vpBCIxfZIh7tILdXiXuqCt9AuLvb9Bms1PmNGo9LdllpTFgiRflTuufR9LXll0=
+X-Received: by 2002:a05:651c:2da:: with SMTP id f26mr847407ljo.377.1594684051850;
+ Mon, 13 Jul 2020 16:47:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1594261154-69745-1-git-send-email-guoren@kernel.org>
+ <1594261154-69745-7-git-send-email-guoren@kernel.org> <20200710225017.5ce329485e911f99e17cd483@kernel.org>
+ <CAJF2gTSfFY6qf7gZ9t80P-3cACWi3oEe4X8ek+_1nQZZT3Uk5w@mail.gmail.com> <20200712223748.9cb00fdf7938fbf7353c11cc@kernel.org>
+In-Reply-To: <20200712223748.9cb00fdf7938fbf7353c11cc@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 14 Jul 2020 07:47:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQcRYHPmyM_T9g2rYRDN2DPedO0+s5X-MOiEzaFX+xxmA@mail.gmail.com>
+Message-ID: <CAJF2gTQcRYHPmyM_T9g2rYRDN2DPedO0+s5X-MOiEzaFX+xxmA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] riscv: Add KPROBES_ON_FTRACE supported
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>, penberg@kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi Masami,
 
-The patchset includes kprobe/uprobe support and some related fixups.
-Patrick provides HAVE_REGS_AND_STACK_ACCESS_API support and some
-kprobe's code. The framework of k/uprobe is from csky but also refers
-to other arches'. kprobes on ftrace is also supported in the patchset.
+On Sun, Jul 12, 2020 at 9:37 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> On Sat, 11 Jul 2020 09:32:01 +0800
+> Guo Ren <guoren@kernel.org> wrote:
+>
+> > Thx Masami,
+> >
+> > On Fri, Jul 10, 2020 at 9:50 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >
+> > > Hi Guo,
+> > >
+> > > On Thu,  9 Jul 2020 02:19:14 +0000
+> > > guoren@kernel.org wrote:
+> > >
+> > > > +/* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> > > > +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> > > > +                        struct ftrace_ops *ops, struct pt_regs *regs)
+> > > > +{
+> > > > +     struct kprobe *p;
+> > > > +     struct kprobe_ctlblk *kcb;
+> > > > +
+> > > > +     p = get_kprobe((kprobe_opcode_t *)ip);
+> > > > +     if (unlikely(!p) || kprobe_disabled(p))
+> > > > +             return;
+> > > > +
+> > > > +     kcb = get_kprobe_ctlblk();
+> > > > +     if (kprobe_running()) {
+> > > > +             kprobes_inc_nmissed_count(p);
+> > > > +     } else {
+> > > > +             /*
+> > > > +              * The regs->epc hasn't been saved by SAVE_ALL in mcount-dyn.S
+> > > > +              * So no need to resume it, just for kprobe handler.
+> > > > +              */
+> > > > +             instruction_pointer_set(regs, ip);
+> > > > +             __this_cpu_write(current_kprobe, p);
+> > > > +             kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> > > > +             if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> > > > +                     /*
+> > > > +                      * Emulate singlestep (and also recover regs->pc)
+> > > > +                      * as if there is a nop
+> > > > +                      */
+> > > > +                     instruction_pointer_set(regs,
+> > > > +                             (unsigned long)p->addr + MCOUNT_INSN_SIZE);
+> > > > +                     if (unlikely(p->post_handler)) {
+> > > > +                             kcb->kprobe_status = KPROBE_HIT_SSDONE;
+> > > > +                             p->post_handler(p, regs, 0);
+> > > > +                     }
+> > >
+> > > Hmm, don't you need restoring the previous instruction pointer here?
+> > look at  riscv mcount-dyn.S SAVE_ALL function, sp frame lay out like this:
+> > -----------------------
+> > | return address |
+> > -----------------------
+> > | frame pointer   |
+> > -----------------------
+> > | pt_regs x1-x31|
+> > -----------------------
+> > It's not a complete pt_regs for the handler, so modifing regs->ip is no use.
+>
+> Yes, that is same on x86. But ftrace regs_caller on x86-64 modifies the
+> return address on the stack by regs->ip.
+>
+> See arch/x86/kernel/ftrace_64.S:
+>
+> -----
+> SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
+>         call ftrace_stub
+>
+>         /* Copy flags back to SS, to restore them */
+>         movq EFLAGS(%rsp), %rax
+>         movq %rax, MCOUNT_REG_SIZE(%rsp)
+>
+>         /* Handlers can change the RIP */
+>         movq RIP(%rsp), %rax
+>         movq %rax, MCOUNT_REG_SIZE+8(%rsp)
+> -----
+Yes, and in save_mcount_regs, it prepare the origin pt_regs RIP.
 
-There is no single step exception in riscv ISA, only single-step
-facility for jtag. See riscv-Privileged spec:
+         /* Move RIP to its proper location */
+        movq MCOUNT_REG_SIZE+\added(%rsp), %rdi
+        movq %rdi, RIP(%rsp)
 
-Interrupt Exception Code-Description
-1 0 Reserved
-1 1 Supervisor software interrupt
-1 2–4 Reserved
-1 5 Supervisor timer interrupt
-1 6–8 Reserved
-1 9 Supervisor external interrupt
-1 10–15 Reserved
-1 ≥16 Available for platform use
-0 0 Instruction address misaligned
-0 1 Instruction access fault
-0 2 Illegal instruction
-0 3 Breakpoint
-0 4 Load address misaligned
-0 5 Load access fault
-0 6 Store/AMO address misaligned
-0 7 Store/AMO access fault
-0 8 Environment call from U-mode
-0 9 Environment call from S-mode
-0 10–11 Reserved
-0 12 Instruction page fault
-0 13 Load page fault
-0 14 Reserved
-0 15 Store/AMO page fault
-0 16–23 Reserved
-0 24–31 Available for custom use
-0 32–47 Reserved
-0 48–63 Available for custom use
-0 ≥64 Reserved
+I've fixed up riscv's: [1]
+[1]: https://lore.kernel.org/linux-riscv/1594683562-68149-4-git-send-email-guoren@kernel.org/T/#u
 
-No single step!
+>
+> The last part update the return address on the stack.
+>
+> > > If you don't support modifying the instruction pointer in the handler,
+> > We can modify ip like this if necessary:
+> > *(unsigned long *)((unsigned long)regs + sizeof(struct pt_regs) + 8) = xxx;
+> >
+> > > it must not be compatible with kprobes.
+> > Why, can you show related codes? thank you very much.
+>
+> The "Changing Execution Path" section in the Documentation/kprobes.txt said
+>
+> -----
+> Since kprobes can probe into a running kernel code, it can change the
+> register set, including instruction pointer.
+> -----
+Got it, thx for correct me.
 
-Other arches use hardware single-step exception for k/uprobe,  eg:
- - powerpc: regs->msr |= MSR_SINGLESTEP
- - arm/arm64: PSTATE.D for enabling software step exceptions
- - s390: Set PER control regs, turns on single step for the given address
- - x86: regs->flags |= X86_EFLAGS_TF
- - csky: of course use hw single step :)
+>
+> As you can see, this is the expected behavior on kprobes.
+> Since user will not know the kprobes is working on a breakpoint or
+> ftrace, we have to support this behavior transparently. So, could you
+> enable this feature at first on ftrace@RISCV?
+Ditto
 
-All the above arches use a hardware single-step exception
-mechanism to execute the instruction that was replaced with a probe
-breakpoint. So utilize ebreak to simulate.
+>
+> >
+> > >
+> > > Now BPF function override and function error injection depends on
+> > > this behevior, so could you consider to support it in the "ftrace"
+> > > implementation at first? (And if it is enabled, you can enable the
+> > > livepatch on RISCV too)
+> > Great message!
+> >
+> > But can you show me codes that bpf and err-jnject using the behavior? Thx
+>
+> In kernel/fail_function.c
+Nice tip, thx. And I've tested err-jnject: [2]
+[2]: https://lore.kernel.org/linux-riscv/1594683562-68149-4-git-send-email-guoren@kernel.org/T/#md66e4e58f3463c1369e11ab9e5d646343f7d250d
 
-Some pc related instructions couldn't be executed out of line and some
-system/fence instructions couldn't be a trace site at all. So we give
-out a reject list and simulate list in decode-insn.c.
+>
+> -----
+> static int fei_kprobe_handler(struct kprobe *kp, struct pt_regs *regs)
+> {
+>         struct fei_attr *attr = container_of(kp, struct fei_attr, kp);
+>
+>         if (should_fail(&fei_fault_attr, 1)) {
+>                 regs_set_return_value(regs, attr->retval);
+>                 override_function_with_return(regs);
+>                 return 1;
+>         }
+>
+>         return 0;
+> }
+> -----
+>
+> And follow the code related to CONFIG_BPF_KPROBE_OVERRIDE in
+> kernel/trace/bpf_trace.c. (doing similar thing, but fail_function.c
+> is simpler.)
+Nice tip, thx
 
-You could use uprobe to test simulate code like this:
+--
+Best Regards
+ Guo Ren
 
- echo 'p:enter_current_state_one /hello:0x6e4 a0=%a0 a1=%a1' >> /sys/kernel/debug/tracing/uprobe_events
- echo 1 > /sys/kernel/debug/tracing/events/uprobes/enable
- /hello
- ^C
- cat /sys/kernel/debug/tracing/trace
- tracer: nop
-
- entries-in-buffer/entries-written: 1/1   #P:1
-
-                              _-----=> irqs-off
-                             / _----=> need-resched
-                            | / _---=> hardirq/softirq
-                            || / _--=> preempt-depth
-                            ||| /     delay
-           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
-              | |       |   ||||       |         |
-          hello-94    [000] d...    55.404242: enter_current_state_one: (0x106e4) a0=0x1 a1=0x3fffa8ada8
-
-Be care /hello:0x6e4 is the file offset in elf and it relate to 0x106e4
-in memory and hello is your target elf program.
-
-Try kprobe like this:
-
- echo 'p:myprobe _do_fork dfd=%a0 filename=%a1 flags=%a2 mode=+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
- echo 'r:myretprobe _do_fork $retval' >> /sys/kernel/debug/tracing/kprobe_event
-
- echo 1 >/sys/kernel/debug/tracing/events/kprobes/enable
- cat /sys/kernel/debug/tracing/trace
- tracer: nop
-
- entries-in-buffer/entries-written: 2/2   #P:1
-
-                              _-----=> irqs-off
-                             / _----=> need-resched
-                            | / _---=> hardirq/softirq
-                            || / _--=> preempt-depth
-                            ||| /     delay
-           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
-              | |       |   ||||       |         |
-             sh-92    [000] .n..   131.804230: myprobe: (_do_fork+0x0/0x2e6) dfd=0xffffffe03929fdf8 filename=0x0 flags=0x101000 mode=0x1200000ffffffe0
-             sh-92    [000] d...   131.806607: myretprobe: (__do_sys_clone+0x70/0x82 <- _do_fork) arg1=0x5f
- cat /sys/kernel/debug/tracing/trace
-
-Changlog v3:
- - Add upport for function error injection
- - Fixup kprobes handler couldn't change pc
-
-Changlog v2:
- - Add Reviewed-by, Tested-by, Acked-by, thx for all of you
- - Add kprobes on ftrace feature
- - Use __always_inline as same as fix_to_virt for fixup
-   BUILD_BUG_ON
- - Use const "const unsigned int" for 2th param for fixup
-   BUILD_BUG_ON
-
-Guo Ren (6):
-  riscv: Fixup compile error BUILD_BUG_ON failed
-  riscv: Fixup kprobes handler couldn't change pc
-  riscv: Add kprobes supported
-  riscv: Add uprobes supported
-  riscv: Add KPROBES_ON_FTRACE supported
-  riscv: Add support for function error injection
-
-Patrick Stählin (1):
-  RISC-V: Implement ptrace regs and stack API
-
- arch/riscv/Kconfig                            |   8 +
- arch/riscv/include/asm/kprobes.h              |  40 +++
- arch/riscv/include/asm/probes.h               |  24 ++
- arch/riscv/include/asm/processor.h            |   1 +
- arch/riscv/include/asm/ptrace.h               |  35 ++
- arch/riscv/include/asm/thread_info.h          |   4 +-
- arch/riscv/include/asm/uprobes.h              |  40 +++
- arch/riscv/kernel/Makefile                    |   1 +
- arch/riscv/kernel/mcount-dyn.S                |   3 +-
- arch/riscv/kernel/patch.c                     |   8 +-
- arch/riscv/kernel/probes/Makefile             |   6 +
- arch/riscv/kernel/probes/decode-insn.c        |  48 +++
- arch/riscv/kernel/probes/decode-insn.h        |  18 +
- arch/riscv/kernel/probes/ftrace.c             |  52 +++
- arch/riscv/kernel/probes/kprobes.c            | 471 ++++++++++++++++++++++++++
- arch/riscv/kernel/probes/kprobes_trampoline.S |  93 +++++
- arch/riscv/kernel/probes/simulate-insn.c      |  85 +++++
- arch/riscv/kernel/probes/simulate-insn.h      |  47 +++
- arch/riscv/kernel/probes/uprobes.c            | 186 ++++++++++
- arch/riscv/kernel/ptrace.c                    |  99 ++++++
- arch/riscv/kernel/signal.c                    |   3 +
- arch/riscv/kernel/traps.c                     |  19 ++
- arch/riscv/lib/Makefile                       |   2 +
- arch/riscv/lib/error-inject.c                 |  10 +
- arch/riscv/mm/fault.c                         |  11 +
- 25 files changed, 1310 insertions(+), 4 deletions(-)
- create mode 100644 arch/riscv/include/asm/probes.h
- create mode 100644 arch/riscv/include/asm/uprobes.h
- create mode 100644 arch/riscv/kernel/probes/Makefile
- create mode 100644 arch/riscv/kernel/probes/decode-insn.c
- create mode 100644 arch/riscv/kernel/probes/decode-insn.h
- create mode 100644 arch/riscv/kernel/probes/ftrace.c
- create mode 100644 arch/riscv/kernel/probes/kprobes.c
- create mode 100644 arch/riscv/kernel/probes/kprobes_trampoline.S
- create mode 100644 arch/riscv/kernel/probes/simulate-insn.c
- create mode 100644 arch/riscv/kernel/probes/simulate-insn.h
- create mode 100644 arch/riscv/kernel/probes/uprobes.c
- create mode 100644 arch/riscv/lib/error-inject.c
-
--- 
-2.7.4
-
+ML: https://lore.kernel.org/linux-csky/

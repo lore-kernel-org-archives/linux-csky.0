@@ -1,208 +1,112 @@
-Return-Path: <SRS0=Chy6=BC=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=D9Lz=BH=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9A29C433E1
-	for <linux-csky@archiver.kernel.org>; Thu, 23 Jul 2020 16:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB50C433F8
+	for <linux-csky@archiver.kernel.org>; Tue, 28 Jul 2020 03:34:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A653820771
-	for <linux-csky@archiver.kernel.org>; Thu, 23 Jul 2020 16:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595520709;
-	bh=UwNbjNnkRhPtN3M1FcHhf18EPEdkbGS8hia36IkGCMU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=cjCGpEp96VlGGVU16/N4b8KsfkjL1PSdmBsR0K4YEucE49oHwySs/n6mPFQgmhzeQ
-	 9AyXvd2vNedpQaqgRBhRCpgmdyhXk4chbND/QTMeelV/RTgNFY6Vn1CDZDgRBI5HJo
-	 nXLwmBah4Qnqnebf8bFQQM30uzFZy14LGwgQ6QXY=
+	by mail.kernel.org (Postfix) with ESMTP id 8B279206D4
+	for <linux-csky@archiver.kernel.org>; Tue, 28 Jul 2020 03:34:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vc3Euyrt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbgGWQLt (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 23 Jul 2020 12:11:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38966 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726621AbgGWQLt (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 23 Jul 2020 12:11:49 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E0EC20714;
-        Thu, 23 Jul 2020 16:11:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595520708;
-        bh=UwNbjNnkRhPtN3M1FcHhf18EPEdkbGS8hia36IkGCMU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KTAu2n/tep3Ope7nKjpIkD+hDh2cBrQhD+vCOEIs3a+CvHULRCInnNBPVRtiJjVFz
-         y2b0cdYj8JDxlEzZaYRf3gdCEFZ2VHlj9ynUF6u0mFAZJRGgFPQzDsuL1mPD6bhOB6
-         bQrPjm1rSyM1gVdo1QEcqD83BrODAPLuHymSTkTU=
-Date:   Fri, 24 Jul 2020 01:11:43 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>, linux-csky@vger.kernel.org,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        Patrick =?UTF-8?B?U3TDpGhsaW4=?= <me@packi.ch>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Pekka Enberg <penberg@kernel.org>
-Subject: Re: [PATCH v3 6/7] riscv: Add KPROBES_ON_FTRACE supported
-Message-Id: <20200724011143.a2dd2e231411e46edde2e8c4@kernel.org>
-In-Reply-To: <CAJF2gTR4319vMy9hStLeR3+42WG4opnsZTaGdN__Bm23VCHjBg@mail.gmail.com>
-References: <1594683562-68149-1-git-send-email-guoren@kernel.org>
-        <1594683562-68149-7-git-send-email-guoren@kernel.org>
-        <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
-        <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
-        <20200721222701.3074315f6a9f6c42c5963f40@kernel.org>
-        <CAJF2gTR4319vMy9hStLeR3+42WG4opnsZTaGdN__Bm23VCHjBg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        id S1727098AbgG1Den (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 27 Jul 2020 23:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727060AbgG1Dem (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 27 Jul 2020 23:34:42 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E58AC061794;
+        Mon, 27 Jul 2020 20:34:42 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id u185so10190283pfu.1;
+        Mon, 27 Jul 2020 20:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0CJ5pLUNj5CNYiJwzkvMW2lqb7Q/oa/023gCjAl7Yjo=;
+        b=Vc3EuyrtZlTxBVYXaWLv4HsOBpE/JC48K5IOkbUrzdd1iuoTif1YkuuIkaxDOly59V
+         141KydHb6s1o11WJolYISeqKXd2TVmTgB1OoU24xAQjETivwJWCCcP6XWhJyZMSOuuGO
+         X0hG6b+9gV5qqgl4Wk1CE3lZiTQTT3EaSLFgG1X61P/T5J2Ea3kuYyygTDlgyQt3gGLD
+         7v2q4qyUeCNBQMAfSEU0mSO0W0WP+OpjeuM6szp63gXLI/iyCNVH/zNuF+xIXRv9IRN5
+         G20TbqJ2sxbepnQI1zVm4PTwSO/LWJd3QhIv9TEwC21BtlZ2F5UZzxHAvXW2tlx1s0On
+         BPgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0CJ5pLUNj5CNYiJwzkvMW2lqb7Q/oa/023gCjAl7Yjo=;
+        b=GLQNDdxI6Rr5azx+dD8Uv5RubQUDhEpnWxuJXcwEzbN7DHot8Rsnp/dbyu/eLhIgqA
+         Pe716RoeXFhtuxKxYOultYE9uhlY/dcUw+UUrPcwkxa+KVjFBj1MD2a6Ty88GksNCa+Z
+         hUOnPPUrFcAGdCiINY8OJ3CqKCFbI+cimEMzCbIKB4vZ1t8hrzOp5cL9ffov8sMa0RRq
+         CLiS91UNnDD3Rv2yOuqhYFQBgF4ji8bVyo/M6hNQV/XKGgFn6Im2O+yR6flUBdQnlN4e
+         Se0Ow8zoAQbPZbwI9JbfmXiw4dGefRlUgvTOUp628BLRq/pNVrdaS13R9e9xMFRARRy2
+         jXqA==
+X-Gm-Message-State: AOAM530AGBNlRld9rZXxFXbF/2gZ8+Du7ye8iDvZjlnQPZsmlXBKOedf
+        /tZZVmmoYQaYysYn0imkh2hH+Koq
+X-Google-Smtp-Source: ABdhPJwlYuThuwrcQ4rOZSpcW7L1u70L9KCqBU3RF2TC1IQonzCv4DT+AGzLtfUsDAICSgXhJXLo/A==
+X-Received: by 2002:a05:6a00:224f:: with SMTP id i15mr23996525pfu.241.1595907281973;
+        Mon, 27 Jul 2020 20:34:41 -0700 (PDT)
+Received: from bobo.ozlabs.ibm.com (110-174-173-27.tpgi.com.au. [110.174.173.27])
+        by smtp.gmail.com with ESMTPSA id r4sm998707pji.37.2020.07.27.20.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 20:34:41 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-arch@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Subject: [PATCH 06/24] csky: use asm-generic/mmu_context.h for no-op implementations
+Date:   Tue, 28 Jul 2020 13:33:47 +1000
+Message-Id: <20200728033405.78469-7-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200728033405.78469-1-npiggin@gmail.com>
+References: <20200728033405.78469-1-npiggin@gmail.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, 22 Jul 2020 21:31:20 +0800
-Guo Ren <guoren@kernel.org> wrote:
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ arch/csky/include/asm/mmu_context.h | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-> Hi Masami,
-> 
-> Current riscv ftrace_caller utilize fp(s0) - 8 in stack to get ra of
-> function, eg:
-> foo:
->    2bb0:       7119                    addi    sp,sp,-128
->     2bb2:       f8a2                    sd      s0,112(sp)
->     2bb4:       fc86                    sd      ra,120(sp)
-> ...
->     2bc4:       0100                    addi    s0,sp,128
-> ...
-> 0000000000002bca <.LVL828>:
->     2bca:       00000097                auipc   ra,0x0
->     2bce:       000080e7                jalr    ra # 2bca <.LVL828> //_mcount
-> 
-> So just put two nops before prologue of function isn't enough, because
-> riscv don't like arm64 which could use x9-x18 reserved regs to pass
-> ra(x30).
->     | mov       x9, x30
->     | bl        <ftrace-entry>
-> If the benefit is just making a kprobe on function symbol address to
-> prevent disassembling, I'll delay this feature.
-
-I recommend that. This feature has to involve ftrace and gcc, so
-it is better to split it from this series.
-
-> 
-> 
-> I also have a look at HAVE_FENTRY & HAVE_NOP_MCOUNT. Seems it just
-> avoid using scripts/recordmcount.pl script and directly generate nops
-> for _mcount.
-
-Right.
-
-> It's different from -fpatchable-function-entry=2 which generating nops
-> before function prologue in arm64, isn't it?
-
-Yes, fentry is for x86, but -fpatchable-function-entry=2 is making a
-placeholder with nop at the entry of the functions for direct patching.
-
-Thank you,
-
-> 
-> On Tue, Jul 21, 2020 at 9:27 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Wed, 15 Jul 2020 00:24:54 +0800
-> > Guo Ren <guoren@kernel.org> wrote:
-> >
-> > > Thx Masami,
-> > >
-> > > On Tue, Jul 14, 2020 at 7:38 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > >
-> > > > On Mon, 13 Jul 2020 23:39:21 +0000
-> > > > guoren@kernel.org wrote:
-> > > >
-> > > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > > >
-> > > > > This patch adds support for kprobes on ftrace call sites to avoids
-> > > > > much of the overhead with regular kprobes. Try it with simple
-> > > > > steps:
-> > > > >
-> > > > > 1. Get _do_fork ftrace call site.
-> > > > > Dump of assembler code for function _do_fork:
-> > > > >    0xffffffe00020af64 <+0>:     addi    sp,sp,-128
-> > > > >    0xffffffe00020af66 <+2>:     sd      s0,112(sp)
-> > > > >    0xffffffe00020af68 <+4>:     sd      ra,120(sp)
-> > > > >    0xffffffe00020af6a <+6>:     addi    s0,sp,128
-> > > > >    0xffffffe00020af6c <+8>:     sd      s1,104(sp)
-> > > > >    0xffffffe00020af6e <+10>:    sd      s2,96(sp)
-> > > > >    0xffffffe00020af70 <+12>:    sd      s3,88(sp)
-> > > > >    0xffffffe00020af72 <+14>:    sd      s4,80(sp)
-> > > > >    0xffffffe00020af74 <+16>:    sd      s5,72(sp)
-> > > > >    0xffffffe00020af76 <+18>:    sd      s6,64(sp)
-> > > > >    0xffffffe00020af78 <+20>:    sd      s7,56(sp)
-> > > > >    0xffffffe00020af7a <+22>:    mv      s4,a0
-> > > > >    0xffffffe00020af7c <+24>:    mv      a0,ra
-> > > > >    0xffffffe00020af7e <+26>:    nop   <<<<<<<< here!
-> > > > >    0xffffffe00020af82 <+30>:    nop
-> > > > >    0xffffffe00020af86 <+34>:    ld      s3,0(s4)
-> > > > >
-> > > > > 2. Set _do_fork+26 as the kprobe.
-> > > > >   echo 'p:myprobe _do_fork+26 dfd=%a0 filename=%a1 flags=%a2 mode=+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
-> > > > >   echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
-> > > > >   cat /sys/kernel/debug/tracing/trace
-> > > > >   tracer: nop
-> > > > >
-> > > > >   entries-in-buffer/entries-written: 3/3   #P:1
-> > > > >
-> > > > >                                _-----=> irqs-off
-> > > > >                               / _----=> need-resched
-> > > > >                              | / _---=> hardirq/softirq
-> > > > >                              || / _--=> preempt-depth
-> > > > >                              ||| /     delay
-> > > > >             TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
-> > > > >                | |       |   ||||       |         |
-> > > > >               sh-87    [000] ....   551.557031: myprobe: (_do_fork+0x1a/0x2e6) dfd=0xffffffe00020af7e filename=0xffffffe00020b34e flags=0xffffffe00101e7c0 mode=0x20af86ffffffe0
-> > > > >
-> > > > >   cat /sys/kernel/debug/kprobes/list
-> > > > > ffffffe00020af7e  k  _do_fork+0x1a    [FTRACE]
-> > > > >                                        ^^^^^^
-> > > >
-> > > > Hmm, this seems fentry is not supported on RISC-V yet. But anyway,
-> > > > it will be useful for users (if they can find the offset).
-> > >
-> > > Seems only x86 & ⬆️90 use fentry，can you elaborate more about fentry's
-> > > benefit and how the user could set kprobe on ftrace call site without
-> > > disassemble?
-> >
-> > On x86, the fentry replaces the mcount with just one call instruction, without
-> > saving any arguments. This means all probes which are puts on the address of
-> > target symbol, are automatically using ftrace. IOW, all probes on _do_fork+0
-> > will use ftrace. We don't need any disassembling.
-> >
-> > I think if RISC-V already support "-fpatchable-function-entry=2" option on
-> > GCC, you can easily enable it as same as arm64. See https://lkml.org/lkml/2019/6/18/648
-> >
-> > Thank you,
-> >
-> > --
-> > Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
-
-
+diff --git a/arch/csky/include/asm/mmu_context.h b/arch/csky/include/asm/mmu_context.h
+index abdf1f1cb6ec..b227d29393a8 100644
+--- a/arch/csky/include/asm/mmu_context.h
++++ b/arch/csky/include/asm/mmu_context.h
+@@ -24,11 +24,6 @@
+ #define cpu_asid(mm)		(atomic64_read(&mm->context.asid) & ASID_MASK)
+ 
+ #define init_new_context(tsk,mm)	({ atomic64_set(&(mm)->context.asid, 0); 0; })
+-#define activate_mm(prev,next)		switch_mm(prev, next, current)
+-
+-#define destroy_context(mm)		do {} while (0)
+-#define enter_lazy_tlb(mm, tsk)		do {} while (0)
+-#define deactivate_mm(tsk, mm)		do {} while (0)
+ 
+ void check_and_switch_context(struct mm_struct *mm, unsigned int cpu);
+ 
+@@ -46,4 +41,7 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 
+ 	flush_icache_deferred(next);
+ }
++
++#include <asm-generic/mmu_context.h>
++
+ #endif /* __ASM_CSKY_MMU_CONTEXT_H */
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.23.0
+

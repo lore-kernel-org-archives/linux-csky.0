@@ -1,120 +1,106 @@
-Return-Path: <SRS0=d6jX=CX=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=Y/AH=CY=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CFD4C43461
-	for <linux-csky@archiver.kernel.org>; Mon, 14 Sep 2020 10:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 761E5C43461
+	for <linux-csky@archiver.kernel.org>; Tue, 15 Sep 2020 08:43:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93BBC2076C
-	for <linux-csky@archiver.kernel.org>; Mon, 14 Sep 2020 10:40:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="cIcaToVt"
+	by mail.kernel.org (Postfix) with ESMTP id 4332820771
+	for <linux-csky@archiver.kernel.org>; Tue, 15 Sep 2020 08:43:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbgINKjo (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 14 Sep 2020 06:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726449AbgINKjM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Sep 2020 06:39:12 -0400
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAC1C06174A;
-        Mon, 14 Sep 2020 03:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=wlDIRDEfQWNob552Fwn5LzRLZbzE03QEuC1qTEAINRc=; b=cIcaToVtgQV2EaIpn+9phQNfAf
-        Xs+f1cwrLc7phMf80weTR9ISZSPzE0C4tpCZGbLV9An2Wpy9k9xjPSTziIN0UUSUxmthKj+TEGh4p
-        JbrqNbMH5QnBvF8CCeIrt60XCHtye5EmobBMb3Fa1C64YZmeqCiisQHwknK9JDku02Hgu9b4R+SFt
-        gbez+4TVMC+cQ9azI90zA50Vx4zry07F8glQ9yhqeF99KoxAi6N8Kyb7iCxi91my2VTfFzLOgwqiN
-        SRKyU8CB5XZQ+MLWdfiJN3XRDUaXASQYhMY4wEHq1lufzoESIDrombnpb7FKjZ21PrndsJ/3Csbga
-        hkmubpXA==;
-Received: from [2a01:e35:2fdd:a4e1:fe91:fc89:bc43:b814] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1kHlsb-0001fB-Oz; Mon, 14 Sep 2020 12:38:37 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.94)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1kHlsa-00Cx5R-Sz; Mon, 14 Sep 2020 12:38:36 +0200
-Date:   Mon, 14 Sep 2020 12:38:36 +0200
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Nick Hu <nickhu@andestech.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org
-Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-Message-ID: <20200914103836.GB2705@aurel32.net>
-Mail-Followup-To: Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Nick Hu <nickhu@andestech.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org
-References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
- <1593266228-61125-2-git-send-email-guoren@kernel.org>
- <20200911204512.GA2705@aurel32.net>
- <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
+        id S1726185AbgIOIni (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 15 Sep 2020 04:43:38 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12263 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726087AbgIOInh (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 15 Sep 2020 04:43:37 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 45AAE387E0E933AA5B0E;
+        Tue, 15 Sep 2020 16:43:35 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.177.253) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 15 Sep 2020 16:43:30 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Haoyu Lv <lvhaoyu@huawei.com>, Libin <huawei.libin@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Jianguo Chen" <chenjianguo3@huawei.com>
+Subject: [PATCH v4 0/4] irqchip: dw-apb-ictl: support hierarchy irq domain
+Date:   Tue, 15 Sep 2020 16:43:01 +0800
+Message-ID: <20200915084305.3085-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
-User-Agent: Mutt/1.14.6 (2020-07-11)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.177.253]
+X-CFilter-Loop: Reflected
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 2020-09-12 10:39, Guo Ren wrote:
-> It's come from mm/usercopy.c
-> /* Is this address range in the kernel text area? */
-> static inline void check_kernel_text_object(const unsigned long ptr,
->                                             unsigned long n, bool to_user)
-> {
->         unsigned long textlow = (unsigned long)_stext;
->         unsigned long texthigh = (unsigned long)_etext;
->         unsigned long textlow_linear, texthigh_linear;
-> 
->         if (overlaps(ptr, n, textlow, texthigh))
->                 usercopy_abort("kernel text", NULL, to_user, ptr - textlow, n);
-> 
-> The __init_text/data areas will be freed after bootup, so I think it should be:
-> -        unsigned long textlow = (unsigned long)_stext;
-> +        unsigned long textlow = (unsigned long)_text;
-> 
-> That means _stext should include init_text/data and _text is only for freeable.
+v3 --> v4:
+1. remove "gc->chip_types[0].chip.irq_eoi = irq_gc_noop;", the "chip.irq_eoi" hook
+   is not needed by handle_level_irq(). Thanks for Marc Zyngier's review.
+2. Add a new patch: define an empty function set_handle_irq() if !GENERIC_IRQ_MULTI_HANDLER
+   to avoid compilation error on arch/arc system.
 
-I have no idea if it is the right thing to do or not, but I can confirm
-this fixes the issue.
+v2 --> v3:
+1. change (1 << hwirq) to BIT(hwirq).
+2. change __exception_irq_entry to __irq_entry, so we can "#include <linux/interrupt.h>"
+   instead of "#include <asm/exception.h>". Ohterwise, an compilation error will be
+   reported on arch/csky.
+   drivers/irqchip/irq-dw-apb-ictl.c:20:10: fatal error: asm/exception.h: No such file or directory
+3. use "if (!parent || (np == parent))" to determine whether it is primary interrupt controller.
+4. make the primary interrupt controller case also use function handle_level_irq(), I used 
+   handle_fasteoi_irq() as flow_handler before.
+5. Other minor changes are not detailed.
 
-How should we proceed to get that fixed in time for 5.9? For the older
-branches where it has been backported (so far 5.7 and 5.8), should we
-just get that commit reverted instead?
+v1 --> v2:
+According to Marc Zyngier's suggestion, discard adding an independent SD5203-VIC
+driver, but make the dw-apb-ictl irqchip driver to support hierarchy irq domain.
+It was originally available only for secondary interrupt controller, now it can
+also be used as primary interrupt controller. The related dt-bindings is updated
+appropriately.
 
-Thanks,
-Aurelien
+Add "Suggested-by: Marc Zyngier <maz@kernel.org>".
+Add "Tested-by: Haoyu Lv <lvhaoyu@huawei.com>".
+
+
+v1:
+The interrupt controller of SD5203 SoC is VIC(vector interrupt controller), it's
+based on Synopsys DesignWare APB interrupt controller (dw_apb_ictl) IP, but it
+can not directly use dw_apb_ictl driver. The main reason is that VIC is used as
+primary interrupt controller and dw_apb_ictl driver worked for secondary
+interrupt controller. So add a new driver: "hisilicon,sd5203-vic".
+
+
+Zhen Lei (4):
+  genirq: define an empty function set_handle_irq() if
+    !GENERIC_IRQ_MULTI_HANDLER
+  irqchip: dw-apb-ictl: prepare for support hierarchy irq domain
+  irqchip: dw-apb-ictl: support hierarchy irq domain
+  dt-bindings: dw-apb-ictl: support hierarchy irq domain
+
+ .../interrupt-controller/snps,dw-apb-ictl.txt      | 14 +++-
+ drivers/irqchip/Kconfig                            |  2 +-
+ drivers/irqchip/irq-dw-apb-ictl.c                  | 83 ++++++++++++++++++----
+ include/linux/irq.h                                |  2 +
+ 4 files changed, 87 insertions(+), 14 deletions(-)
 
 -- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                 http://www.aurel32.net
+1.8.3
+
+

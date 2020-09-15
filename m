@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D21D8C433E2
-	for <linux-csky@archiver.kernel.org>; Tue, 15 Sep 2020 08:44:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CABC1C433E2
+	for <linux-csky@archiver.kernel.org>; Tue, 15 Sep 2020 08:44:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 987A320771
-	for <linux-csky@archiver.kernel.org>; Tue, 15 Sep 2020 08:44:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 996AF20771
+	for <linux-csky@archiver.kernel.org>; Tue, 15 Sep 2020 08:44:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbgIOInw (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 15 Sep 2020 04:43:52 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:56580 "EHLO huawei.com"
+        id S1726411AbgIOIns (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 15 Sep 2020 04:43:48 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:56550 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726401AbgIOInt (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 15 Sep 2020 04:43:49 -0400
+        id S1726403AbgIOInp (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 15 Sep 2020 04:43:45 -0400
 Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 6725E6BE1B6002694F14;
+        by Forcepoint Email with ESMTP id 5EE56B2ACE696567120D;
         Tue, 15 Sep 2020 16:43:40 +0800 (CST)
 Received: from thunder-town.china.huawei.com (10.174.177.253) by
  DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 15 Sep 2020 16:43:31 +0800
+ 14.3.487.0; Tue, 15 Sep 2020 16:43:32 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
@@ -38,9 +38,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Haoyu Lv <lvhaoyu@huawei.com>, Libin <huawei.libin@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         "Jianguo Chen" <chenjianguo3@huawei.com>
-Subject: [PATCH v4 2/4] irqchip: dw-apb-ictl: prepare for support hierarchy irq domain
-Date:   Tue, 15 Sep 2020 16:43:03 +0800
-Message-ID: <20200915084305.3085-3-thunder.leizhen@huawei.com>
+Subject: [PATCH v4 4/4] dt-bindings: dw-apb-ictl: support hierarchy irq domain
+Date:   Tue, 15 Sep 2020 16:43:05 +0800
+Message-ID: <20200915084305.3085-5-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20200915084305.3085-1-thunder.leizhen@huawei.com>
 References: <20200915084305.3085-1-thunder.leizhen@huawei.com>
@@ -54,83 +54,56 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Rename some functions and variables in advance, to make the next patch
-looks more clear. The details are as follows:
-1. rename dw_apb_ictl_handler() to dw_apb_ictl_handle_irq_cascaded().
-2. change (1 << hwirq) to BIT(hwirq).
-
-In function dw_apb_ictl_init():
-1. rename local variable irq to parent_irq.
-2. add "const struct irq_domain_ops *domain_ops = &irq_generic_chip_ops",
-   then replace &irq_generic_chip_ops in other places with domain_ops.
-
-No functional change.
+Add support to use dw-apb-ictl as primary interrupt controller.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-Tested-by: Haoyu Lv <lvhaoyu@huawei.com>
 ---
- drivers/irqchip/irq-dw-apb-ictl.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ .../bindings/interrupt-controller/snps,dw-apb-ictl.txt     | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-dw-apb-ictl.c b/drivers/irqchip/irq-dw-apb-ictl.c
-index e4550e9c810ba94..5458004242e9d20 100644
---- a/drivers/irqchip/irq-dw-apb-ictl.c
-+++ b/drivers/irqchip/irq-dw-apb-ictl.c
-@@ -26,7 +26,7 @@
- #define APB_INT_FINALSTATUS_H	0x34
- #define APB_INT_BASE_OFFSET	0x04
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/snps,dw-apb-ictl.txt b/Documentation/devicetree/bindings/interrupt-controller/snps,dw-apb-ictl.txt
+index 086ff08322db94f..2db59df9408f4c6 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/snps,dw-apb-ictl.txt
++++ b/Documentation/devicetree/bindings/interrupt-controller/snps,dw-apb-ictl.txt
+@@ -2,7 +2,8 @@ Synopsys DesignWare APB interrupt controller (dw_apb_ictl)
  
--static void dw_apb_ictl_handler(struct irq_desc *desc)
-+static void dw_apb_ictl_handle_irq_cascaded(struct irq_desc *desc)
- {
- 	struct irq_domain *d = irq_desc_get_handler_data(desc);
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
-@@ -43,7 +43,7 @@ static void dw_apb_ictl_handler(struct irq_desc *desc)
- 			u32 virq = irq_find_mapping(d, gc->irq_base + hwirq);
+ Synopsys DesignWare provides interrupt controller IP for APB known as
+ dw_apb_ictl. The IP is used as secondary interrupt controller in some SoCs with
+-APB bus, e.g. Marvell Armada 1500.
++APB bus, e.g. Marvell Armada 1500. It can also be used as primary interrupt
++controller in some SoCs, e.g. Hisilicon SD5203.
  
- 			generic_handle_irq(virq);
--			stat &= ~(1 << hwirq);
-+			stat &= ~BIT(hwirq);
- 		}
- 	}
+ Required properties:
+ - compatible: shall be "snps,dw-apb-ictl"
+@@ -10,6 +11,8 @@ Required properties:
+   region starting with ENABLE_LOW register
+ - interrupt-controller: identifies the node as an interrupt controller
+ - #interrupt-cells: number of cells to encode an interrupt-specifier, shall be 1
++
++Additional required property when it's used as secondary interrupt controller:
+ - interrupts: interrupt reference to primary interrupt controller
  
-@@ -73,12 +73,13 @@ static int __init dw_apb_ictl_init(struct device_node *np,
- 	struct irq_domain *domain;
- 	struct irq_chip_generic *gc;
- 	void __iomem *iobase;
--	int ret, nrirqs, irq, i;
-+	int ret, nrirqs, parent_irq, i;
- 	u32 reg;
-+	const struct irq_domain_ops *domain_ops = &irq_generic_chip_ops;
+ The interrupt sources map to the corresponding bits in the interrupt
+@@ -21,6 +24,7 @@ registers, i.e.
+ - (optional) fast interrupts start at 64.
  
- 	/* Map the parent interrupt for the chained handler */
--	irq = irq_of_parse_and_map(np, 0);
--	if (irq <= 0) {
-+	parent_irq = irq_of_parse_and_map(np, 0);
-+	if (parent_irq <= 0) {
- 		pr_err("%pOF: unable to parse irq\n", np);
- 		return -EINVAL;
- 	}
-@@ -120,8 +121,7 @@ static int __init dw_apb_ictl_init(struct device_node *np,
- 	else
- 		nrirqs = fls(readl_relaxed(iobase + APB_INT_ENABLE_L));
- 
--	domain = irq_domain_add_linear(np, nrirqs,
--				       &irq_generic_chip_ops, NULL);
-+	domain = irq_domain_add_linear(np, nrirqs, domain_ops, NULL);
- 	if (!domain) {
- 		pr_err("%pOF: unable to add irq domain\n", np);
- 		ret = -ENOMEM;
-@@ -146,7 +146,8 @@ static int __init dw_apb_ictl_init(struct device_node *np,
- 		gc->chip_types[0].chip.irq_resume = dw_apb_ictl_resume;
- 	}
- 
--	irq_set_chained_handler_and_data(irq, dw_apb_ictl_handler, domain);
-+	irq_set_chained_handler_and_data(parent_irq,
-+				dw_apb_ictl_handle_irq_cascaded, domain);
- 
- 	return 0;
- 
+ Example:
++	/* dw_apb_ictl is used as secondary interrupt controller */
+ 	aic: interrupt-controller@3000 {
+ 		compatible = "snps,dw-apb-ictl";
+ 		reg = <0x3000 0xc00>;
+@@ -29,3 +33,11 @@ Example:
+ 		interrupt-parent = <&gic>;
+ 		interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
++
++	/* dw_apb_ictl is used as primary interrupt controller */
++	vic: interrupt-controller@10130000 {
++		compatible = "snps,dw-apb-ictl";
++		reg = <0x10130000 0x1000>;
++		interrupt-controller;
++		#interrupt-cells = <1>;
++	};
 -- 
 1.8.3
 

@@ -1,135 +1,313 @@
-Return-Path: <SRS0=GsFV=DG=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=DUD5=DJ=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1FC4C4727C
-	for <linux-csky@archiver.kernel.org>; Tue, 29 Sep 2020 22:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3455CC35257
+	for <linux-csky@archiver.kernel.org>; Fri,  2 Oct 2020 20:24:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2986C20789
-	for <linux-csky@archiver.kernel.org>; Tue, 29 Sep 2020 22:12:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1A1E206FA
+	for <linux-csky@archiver.kernel.org>; Fri,  2 Oct 2020 20:24:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b="cgZF4707"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WwtcoX7n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbgI2WMq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 29 Sep 2020 18:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
+        id S1725765AbgJBUYk (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 2 Oct 2020 16:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728142AbgI2WMq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 29 Sep 2020 18:12:46 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A59FC0613D0
-        for <linux-csky@vger.kernel.org>; Tue, 29 Sep 2020 15:12:46 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id q4so6518606ils.4
-        for <linux-csky@vger.kernel.org>; Tue, 29 Sep 2020 15:12:46 -0700 (PDT)
+        with ESMTP id S1725497AbgJBUYk (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Oct 2020 16:24:40 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4ADC0613D0;
+        Fri,  2 Oct 2020 13:24:38 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id s12so3084162wrw.11;
+        Fri, 02 Oct 2020 13:24:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q5rZuNG2apCosJKlhEHrUGVcJLAmcdJlisM6/km9BsY=;
-        b=cgZF4707763NhXAo5cgeyeXCGk4m/CVAb7kaXk4vjMegAl8/fDo48iXC3wAUXrpLo/
-         d0eCel9G0LE/2b2V/x86mkuBTo2Zgkav5jnCQHadVPKZnNXTS7c0B0erhS4BnfBuzpVi
-         iXJ8CoMvszXAqjCfeDoDZgokej+dF0hmA46QY=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cfd+HSOs2aYoH4xk+wPWxWI0w6RvzQ0BinW11qn5T+s=;
+        b=WwtcoX7n015idBD4AzKxXzD43eUPEcP4lJ38PgGgJW1Ass0Vv30yGKHP67twX0meU2
+         AINSc8MIu3dr5QHtj2ldMuTN3kXN7XdS1/7qVL9r8MRmQiqvwW5Xh0WjaKRmOwjrKKeg
+         oK2aKGoVCA3ElsM4ioE0Rblt4OU7uQZar45uh72tZzkkg0ZuAs2aycPpXNxlQ3N8f6Lo
+         mvD/dE8l/SxSIDcJ3SQDO5Y+/clr3NcfOysEFSdCmFagycMd1vuJvwk0PYtpFVKdA0Or
+         f3zuNek0SS8ETpfxpAtVLk2NTYh0lxzCfjSYOXbT/9qbROLX82m/OEddckMepmDUDmaw
+         Yclw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q5rZuNG2apCosJKlhEHrUGVcJLAmcdJlisM6/km9BsY=;
-        b=JiC4xkyDrPAhMNHTat36lFUClcSFM3o/3JRPydLxVqdV1sYbjQGpl8K5h0/oQL3/0Q
-         jAFwP5i6MYYRrEuzd2pyJflEyiHhF08JtyAIwMh6uDB/x/sxTvpY+p/k06N+YfWx4C3K
-         QTF6FocpdANV3tlViogm85Ql3IwXMnziQnavkZyRfsPYa9k8MKTN0hbIr7qg73JXVA9V
-         2RVRSZg5qUx5uTH9F+begCxeschEk4ToQ7SuLQ1Pcr1q0ILKxW0kt1GusPJNQXMoazJD
-         Sujm+MelI4E9SV0mBFHHW1v8P//2T6O9THasw9IOVWcoo5ImN2IG93uiN6TqRXyf1zVX
-         zzBg==
-X-Gm-Message-State: AOAM531I58P31cg+/KaoIerFpmgW1K6TFyn64ZhXKvZOhFnFQmhSZTaX
-        QG1vbw2QlhHjPGjkTvp7jcP4zqsTsEZh2y7VtJj4
-X-Google-Smtp-Source: ABdhPJysY6J9rnXYsfREUHOiC+nMpH1IVzBdA0+w4kYMeCgHlOEXszC/A0gVNL0FPQVDY10Pdw33hk4VxU6+gWT07Og=
-X-Received: by 2002:a92:9ac7:: with SMTP id c68mr4818119ill.126.1601417565143;
- Tue, 29 Sep 2020 15:12:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cfd+HSOs2aYoH4xk+wPWxWI0w6RvzQ0BinW11qn5T+s=;
+        b=T1s4C2ku9o/i52jMWAuRRV8e+T1pslQmPk3HDJPsdko/YXi8XSVMhLJYDQ16clZIqP
+         HLJcdlvvhf2MYibWbOmlgTWKUs/mHc50/iOUsn2Sxv9OcX9N2TWjJTDFnw/xsNXWvn8S
+         WfAyBKotYoCbDmBCHjnwymmSEfBadzn2o9nGkmZSV4fQ+dgHmRD1h3v0cvwxUfq3dVBt
+         lndYB/LN3i7N38pnIRFfHk8/3qWeYgQWjEDeh0oRQu9uynve+TMtrAa0czbZtdm+pZM+
+         pLLmTD3io3h8vyggFj5kNXzfdw04Scri0v0rPaSqkK6tds5pSgbw9nNzVIvQRtq7Q1sd
+         5pzg==
+X-Gm-Message-State: AOAM5310O8yhbpJULIfaIQUScrSYuSm4GE7d1fUjtY4l/nxuqCBQ7G5r
+        wOexSbSteWWIlavmieclbNU=
+X-Google-Smtp-Source: ABdhPJzeGjHVzCOjvPYM7aEE6oppe38S/WC1ZsrcdNYbczdCIsbBK4Wkl74z8gRQCPx+lG6V3w5lGA==
+X-Received: by 2002:a5d:4fcc:: with SMTP id h12mr4849687wrw.199.1601670277032;
+        Fri, 02 Oct 2020 13:24:37 -0700 (PDT)
+Received: from dell5510.suse.de ([62.201.25.198])
+        by smtp.gmail.com with ESMTPSA id o16sm2805015wrp.52.2020.10.02.13.24.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 13:24:35 -0700 (PDT)
+From:   Petr Vorel <petr.vorel@gmail.com>
+To:     ltp@lists.linux.it
+Cc:     Petr Vorel <petr.vorel@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Ofer Levi <oferle@nvidia.com>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        "Maciej W . Rozycki" <macro@linux-mips.org>,
+        linux-mips@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
+Subject: [PATCH 1/1] cacheflush01: Rewrite into new API
+Date:   Fri,  2 Oct 2020 22:24:16 +0200
+Message-Id: <20201002202416.28972-1-petr.vorel@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <1593266228-61125-1-git-send-email-guoren@kernel.org> <1593266228-61125-3-git-send-email-guoren@kernel.org>
-In-Reply-To: <1593266228-61125-3-git-send-email-guoren@kernel.org>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 29 Sep 2020 15:12:33 -0700
-Message-ID: <CAOnJCUJ-Jdk2GCgvrHVCxVoekysFKZyDWWmSFjmKaJOEcczQSQ@mail.gmail.com>
-Subject: Re: [PATCH V2 2/3] riscv: Fixup lockdep_assert_held with wrong param cpu_running
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, tycho@tycho.ws,
-        Nick Hu <nickhu@andestech.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Jun 27, 2020 at 6:58 AM <guoren@kernel.org> wrote:
->
-> From: Zong Li <zong.li@sifive.com>
->
-> The cpu_running is not a lock-class, it lacks the dep_map member in
-> completion. It causes the error as follow:
->
-> arch/riscv/kernel/smpboot.c: In function '__cpu_up':
-> ./include/linux/lockdep.h:364:52: error: 'struct completion' has no member named 'dep_map'
->   364 | #define lockdep_is_held(lock)  lock_is_held(&(lock)->dep_map)
->       |                                                    ^~
-> ./include/asm-generic/bug.h:113:25: note: in definition of macro 'WARN_ON'
->   113 |  int __ret_warn_on = !!(condition);    \
->       |                         ^~~~~~~~~
-> ./include/linux/lockdep.h:390:27: note: in expansion of macro 'lockdep_is_held'
->   390 |   WARN_ON(debug_locks && !lockdep_is_held(l)); \
->       |                           ^~~~~~~~~~~~~~~
-> arch/riscv/kernel/smpboot.c:118:2: note: in expansion of macro 'lockdep_assert_held'
->   118 |  lockdep_assert_held(&cpu_running);
->
-> There are a lot of archs which use cpu_running in smpboot.c (arm,
-> arm64, openrisc, xtensa, s390, x86, mips), but none of them try
-> lockdep_assert_held(&cpu_running.wait.lock). So Just remove it.
->
-> Signed-off-by: Zong Li <zong.li@sifive.com>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> ---
->  arch/riscv/kernel/smpboot.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-> index 4e99227..defc4e1 100644
-> --- a/arch/riscv/kernel/smpboot.c
-> +++ b/arch/riscv/kernel/smpboot.c
-> @@ -121,7 +121,6 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
->
->         ret = start_secondary_cpu(cpu, tidle);
->         if (!ret) {
-> -               lockdep_assert_held(&cpu_running);
->                 wait_for_completion_timeout(&cpu_running,
->                                             msecs_to_jiffies(1000));
->
-> --
-> 2.7.4
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+This syscall is currently (v5.9) supported on these architectures:
+arc, csky, mips, m68k, nds32, sh
 
-Thanks for catching this.
+constants are missing for m68k, not sure if the testcase is valid for it.
+Untested.
 
-Reviewed-by: Atish Patra <atish.patra@wdc.com>
+Test for __LTP__NR_INVALID_SYSCALL saves adding autotools check for
+<asm/cachectl.h>.
 
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Hi,
+
+FYI: I was going to ask for removal of this test, but all these archs are
+still supported. This test compiles on all archs now, but I haven't run
+it (I don't have access to none of these archs, not sure if LTP is even
+tested on these archs).
+
+Kind regards,
+Petr
+
+ .../kernel/syscalls/cacheflush/cacheflush01.c | 173 ++++--------------
+ 1 file changed, 40 insertions(+), 133 deletions(-)
+
+diff --git a/testcases/kernel/syscalls/cacheflush/cacheflush01.c b/testcases/kernel/syscalls/cacheflush/cacheflush01.c
+index 29cf2014a..85125f2ee 100644
+--- a/testcases/kernel/syscalls/cacheflush/cacheflush01.c
++++ b/testcases/kernel/syscalls/cacheflush/cacheflush01.c
+@@ -1,157 +1,64 @@
+-/******************************************************************************/
+-/* Copyright (c) Maxin John <maxin.john@gmail.com>, 2009                      */
+-/* LKML Reference: http://lkml.org/lkml/2009/4/9/203                          */
+-/* This program is free software;  you can redistribute it and/or modify      */
+-/* it under the terms of the GNU General Public License as published by       */
+-/* the Free Software Foundation; either version 2 of the License, or          */
+-/* (at your option) any later version.                                        */
+-/*                                                                            */
+-/* This program is distributed in the hope that it will be useful,            */
+-/* but WITHOUT ANY WARRANTY;  without even the implied warranty of            */
+-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See                  */
+-/* the GNU General Public License for more details.                           */
+-/*                                                                            */
+-/* You should have received a copy of the GNU General Public License          */
+-/* along with this program;  if not, write to the Free Software               */
+-/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
+-/*                                                                            */
+-/******************************************************************************/
+-/******************************************************************************/
+-/*                                                                            */
+-/* File:        cacheflush01.c                                                */
+-/*                                                                            */
+-/* Description: The cacheflush_check() syscall                     	      */
+-/*		Tests EINVAL error of cacheflush system call.		      */
+-/* 		Its expected behaviour is cacheflush() should return -EINVAL  */
+-/*		when cache parameter is not one of ICACHE, DCACHE, or BCACHE. */
+-/*                                                                            */
+-/* Usage:  <for command-line>                                                 */
+-/* cacheflush01 [-c n] [-e][-i n] [-I x] [-p x] [-t]                          */
+-/*      where,  -c n : Run n copies concurrently.                             */
+-/*              -e   : Turn on errno logging.                                 */
+-/*              -i n : Execute test n times.                                  */
+-/*              -I x : Execute test for x seconds.                            */
+-/*              -P x : Pause for x seconds between iterations.                */
+-/*              -t   : Turn on syscall timing.                                */
+-/*                                                                            */
+-/* Total Tests: 1                                                             */
+-/*                                                                            */
+-/* Test Name:   cacheflush01                                                  */
+-/******************************************************************************/
++// SPDX-License-Identifier: GPL-2.0-or-later
+ 
+-#include <unistd.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <errno.h>
+-
+-#include "test.h"
++#include "tst_test.h"
+ #include "lapi/syscalls.h"
+ 
+ #if __NR_cacheflush != __LTP__NR_INVALID_SYSCALL
++
+ #include <asm/cachectl.h>
+-#else
++
++/*
++ * m68k does not have these constants
++ */
++
+ #ifndef   ICACHE
+-#define   ICACHE   (1<<0)	/* flush instruction cache        */
++# define   ICACHE   (1<<0)
+ #endif
++
+ #ifndef   DCACHE
+-#define   DCACHE   (1<<1)	/* writeback and flush data cache */
++# define   DCACHE   (1<<1)
+ #endif
++
+ #ifndef   BCACHE
+-#define   BCACHE   (ICACHE|DCACHE)	/* flush both caches              */
+-#endif
++# define   BCACHE   (ICACHE|DCACHE)
+ #endif
+ 
+-char *TCID = "cacheflush01";
+-int TST_TOTAL = 1;
++#define CACHE_DESC(x) .cache = x, .desc = #x
+ 
+-/* Extern Global Functions */
+-/******************************************************************************/
+-/*                                                                            */
+-/* Function:    cleanup                                                       */
+-/*                                                                            */
+-/* Description: Performs all one time clean up for this test on successful    */
+-/*              completion,  premature exit or  failure. Closes all temporary */
+-/*              files, removes all temporary directories exits the test with  */
+-/*              appropriate return code by calling tst_exit() function.       */
+-/*                                                                            */
+-/* Input:       None.                                                         */
+-/*                                                                            */
+-/* Output:      None.                                                         */
+-/*                                                                            */
+-/* Return:      On failure - Exits calling tst_exit(). Non '0' return code.   */
+-/*              On success - Exits calling tst_exit(). With '0' return code.  */
+-/*                                                                            */
+-/******************************************************************************/
+-void cleanup(void)
+-{
++static struct test_case_t {
++	int cache;
++	const char *desc;
++} test_cases[] = {
++	{ CACHE_DESC(ICACHE) },
++	{ CACHE_DESC(DCACHE) },
++	{ CACHE_DESC(BCACHE) },
++};
+ 
+-	tst_rmdir();
+-}
++static char *addr;
+ 
+-/* Local  Functions */
+-/******************************************************************************/
+-/*                                                                            */
+-/* Function:    setup                                                         */
+-/*                                                                            */
+-/* Description: Performs all one time setup for this test. This function is   */
+-/*              typically used to capture signals, create temporary dirs      */
+-/*              and temporary files that may be used in the course of this    */
+-/*              test.                                                         */
+-/*                                                                            */
+-/* Input:       None.                                                         */
+-/*                                                                            */
+-/* Output:      None.                                                         */
+-/*                                                                            */
+-/* Return:      On failure - Exits by calling cleanup().                      */
+-/*              On success - returns 0.                                       */
+-/*                                                                            */
+-/******************************************************************************/
+-void setup(void)
++static void setup(void)
+ {
+-	/* Capture signals if any */
+-	/* Create temporary directories */
+-	TEST_PAUSE;
+-	tst_tmpdir();
++	addr = SAFE_MALLOC(getpagesize());
+ }
+ 
+-int main(int ac, char **av)
++static void test_cacheflush(unsigned int i)
+ {
++	struct test_case_t *tc = &test_cases[i];
+ 
+-	char *addr = NULL;
+-
+-	tst_parse_opts(ac, av, NULL, NULL);
+-
+-	setup();
+-
+-	tst_count = 0;
+-	/* Create some user address range */
+-	addr = malloc(getpagesize());
+-	if (addr == NULL) {
+-		tst_brkm(TFAIL | TTERRNO, cleanup, "malloc failed");
+-	}
+-
+-	/* Invokes cacheflush() with proper parameters */
+-	TEST(ltp_syscall(__NR_cacheflush, addr, getpagesize(), ICACHE));
+-	if (TEST_RETURN == 0) {
+-		tst_resm(TPASS, "passed with no errno");
+-	} else {
+-		tst_resm(TFAIL, "failed with unexpected errno");
+-	}
+-
+-	TEST(ltp_syscall(__NR_cacheflush, addr, getpagesize(), DCACHE));
+-	if (TEST_RETURN == 0) {
+-		tst_resm(TPASS, "passed with no errno");
++	TEST(tst_syscall(__NR_cacheflush, addr, getpagesize(), tc->cache));
++	if (TST_RET == 0) {
++		tst_res(TPASS, "%s passed", tc->desc);
+ 	} else {
+-		tst_resm(TFAIL, "failed with unexpected errno");
++		tst_res(TFAIL | TTERRNO, "%s failed", tc->desc);
+ 	}
++}
+ 
+-	TEST(ltp_syscall(__NR_cacheflush, addr, getpagesize(), BCACHE));
+-	if (TEST_RETURN == 0) {
+-		tst_resm(TPASS, "passed with no errno");
+-	} else {
+-		tst_resm(TFAIL, "failed with unexpected errno");
+-	}
++static struct tst_test test = {
++	.setup = setup,
++	.test = test_cacheflush,
++	.tcnt = ARRAY_SIZE(test_cases),
++};
+ 
+-	cleanup();
+-	tst_exit();
+-}
++#else
++	TST_TEST_TCONF("system doesn't support cacheflush()");
++#endif
 -- 
-Regards,
-Atish
+2.28.0
+

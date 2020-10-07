@@ -1,298 +1,101 @@
-Return-Path: <SRS0=71PM=DN=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=GDOd=DO=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF93C4363D
-	for <linux-csky@archiver.kernel.org>; Tue,  6 Oct 2020 20:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F0D6C4363D
+	for <linux-csky@archiver.kernel.org>; Wed,  7 Oct 2020 11:14:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A8AA620870
-	for <linux-csky@archiver.kernel.org>; Tue,  6 Oct 2020 20:39:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD84B20B1F
+	for <linux-csky@archiver.kernel.org>; Wed,  7 Oct 2020 11:14:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b="ZS2TGe3M"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K1/QCDET"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbgJFUjE (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 6 Oct 2020 16:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727336AbgJFUjE (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 6 Oct 2020 16:39:04 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054C4C061755
-        for <linux-csky@vger.kernel.org>; Tue,  6 Oct 2020 13:39:04 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id k25so14523331ioh.7
-        for <linux-csky@vger.kernel.org>; Tue, 06 Oct 2020 13:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aP26k3iPNr1VpqvkggYcdxciq5A3h6k+A8ZkkiVk+vE=;
-        b=ZS2TGe3M6BM2pCGvzZsvuQhQScVUluOJsnRH1r5i7A7P6n2UP7siMbluTKbkh4+efU
-         UbqSZZ+fZQFwAS4BzVTQ+ar++o7dmdlQJ22yy7Dy/lTn9yWkfYz7e1qZyE9eKgBE3HSs
-         q2vSZxGTu1hN+p8wF+jDAJ+KtO9L8yLq2iLt8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aP26k3iPNr1VpqvkggYcdxciq5A3h6k+A8ZkkiVk+vE=;
-        b=aHhSPwngC3czO22hm5M+75im/JsRJ3tdn6hqJFxag59LnmWs/u6uzvez3qRXgw/w/G
-         CSdTxPyHHx6QAFtVl/mUHFg+ZpClEC1tugAW0tYDgvc1NVYR0slhBqwPFnc2HuDitqaH
-         MXBvif0Gtq5pMtVXOKI18VvdqKDb7UpgM6hju9xNqOKwxUuXtVkJhIDdpY746aiip/LZ
-         QOpzSusvpav2fcgmuTUexh9dWyTWR9Xob51CpDIv8CylvD0q1RYBMece3ls/XQFTxusv
-         bJ9BQckyAMcoSTW4WV9tk9m4/SruzGCu860R6tJ98B/7avkyzl+i7QYxZT02apk9rXqN
-         e5Tg==
-X-Gm-Message-State: AOAM531k79i/tVE7aHv4zOakgt9niBshKSKEdQlJ8F2XrIuV+4iKd114
-        EKR7wIi1jFJZJ1nAfGuHc2fLZ+zeX2HRzcOhMdq3
-X-Google-Smtp-Source: ABdhPJw+FN3XoT0rxMl6Ve49NN7RdklCAzgoNyZ08hcLaNGIRm+nAoOXgbR9257x0DX6r58+AhI1DeDfnRtTGG/ffQA=
-X-Received: by 2002:a5d:9842:: with SMTP id p2mr2700429ios.113.1602016743286;
- Tue, 06 Oct 2020 13:39:03 -0700 (PDT)
+        id S1727328AbgJGLOo (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 7 Oct 2020 07:14:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42056 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727278AbgJGLOo (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 7 Oct 2020 07:14:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602069283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fau/zTN83bMY5VjH/VZJytUEBBQcb23cQqp/EXNoJ6M=;
+        b=K1/QCDET82+bLznZ3YI+48gN+h/6BGxAq7e1mzBVKbGrTqV3hCDCNuhKClpyPoNU4YiRHs
+        3QGQ350S4jYK+fqh7aDxzyV3O88d2IGQxzLxYt7wXuXvbEAp40Y9VRN9cu8MMEIdkgLtuE
+        zeSblGocZyFzBotMtr1dDYQ5smd3VcU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-61-DnkgxBYcOVqodkmnnM_rFA-1; Wed, 07 Oct 2020 07:14:39 -0400
+X-MC-Unique: DnkgxBYcOVqodkmnnM_rFA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A55441015EC4;
+        Wed,  7 Oct 2020 11:14:36 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 524F35D9DD;
+        Wed,  7 Oct 2020 11:14:36 +0000 (UTC)
+Received: from zmail17.collab.prod.int.phx2.redhat.com (zmail17.collab.prod.int.phx2.redhat.com [10.5.83.19])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id 59CB8181A869;
+        Wed,  7 Oct 2020 11:14:35 +0000 (UTC)
+Date:   Wed, 7 Oct 2020 07:14:35 -0400 (EDT)
+From:   Jan Stancek <jstancek@redhat.com>
+To:     Petr Vorel <petr.vorel@gmail.com>
+Cc:     ltp@lists.linux.it, Ofer Levi <oferle@nvidia.com>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-sh@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Guo Ren <guoren@kernel.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Maciej W . Rozycki" <macro@linux-mips.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vincent Chen <deanbo422@gmail.com>
+Message-ID: <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
+In-Reply-To: <20201002202416.28972-1-petr.vorel@gmail.com>
+References: <20201002202416.28972-1-petr.vorel@gmail.com>
+Subject: Re: [LTP] [PATCH 1/1] cacheflush01: Rewrite into new API
 MIME-Version: 1.0
-References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
- <1593266228-61125-2-git-send-email-guoren@kernel.org> <20200911204512.GA2705@aurel32.net>
- <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
- <20200914103836.GB2705@aurel32.net> <87lfgzeidk.fsf@igel.home>
- <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com>
- <CAOnJCUJhb2K89pRETbfTJ=5jHQhWfyfrOUu8zOE77j+id6OpSA@mail.gmail.com> <CAJF2gTRc-RUBiQ=ZE7BT8tABHu3=Bcmuc+ADyBLZ7r7fozwahg@mail.gmail.com>
-In-Reply-To: <CAJF2gTRc-RUBiQ=ZE7BT8tABHu3=Bcmuc+ADyBLZ7r7fozwahg@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 6 Oct 2020 13:38:52 -0700
-Message-ID: <CAOnJCUKi-bzEvYWw3BxBbGe6ODHEzdjTWsfrmS54qEk1i1Kr8Q@mail.gmail.com>
-Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Andreas Schwab <schwab@linux-m68k.org>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nick Hu <nickhu@andestech.com>,
-        Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Zong Li <zong.li@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.40.208.2, 10.4.195.10]
+Thread-Topic: cacheflush01: Rewrite into new API
+Thread-Index: tKyuN72r4BqhTqMg7nWcjHRm2QuUYg==
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 9:46 AM Guo Ren <guoren@kernel.org> wrote:
->
-> On Tue, Oct 6, 2020 at 3:14 AM Atish Patra <atishp@atishpatra.org> wrote:
-> >
-> > On Thu, Sep 24, 2020 at 9:19 AM Guo Ren <guoren@kernel.org> wrote:
-> > >
-> > > How about this, revert the commit and don't free INIT_DATA_SECTION. I
-> > > think the solution is safe enough, but wast a little memory.
-> > >
-> > > diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-> > > index f3586e3..34d00d9 100644
-> > > --- a/arch/riscv/kernel/vmlinux.lds.S
-> > > +++ b/arch/riscv/kernel/vmlinux.lds.S
-> > > @@ -22,13 +22,11 @@ SECTIONS
-> > >         /* Beginning of code and text segment */
-> > >         . = LOAD_OFFSET;
-> > >         _start = .;
-> > > -       _stext = .;
-> > >         HEAD_TEXT_SECTION
-> > >         . = ALIGN(PAGE_SIZE);
-> > >
-> > >         __init_begin = .;
-> > >         INIT_TEXT_SECTION(PAGE_SIZE)
-> > > -       INIT_DATA_SECTION(16)
-> > >         . = ALIGN(8);
-> > >         __soc_early_init_table : {
-> > >                 __soc_early_init_table_start = .;
-> > > @@ -55,6 +53,7 @@ SECTIONS
-> > >         . = ALIGN(SECTION_ALIGN);
-> > >         .text : {
-> > >                 _text = .;
-> > > +               _stext = .;
-> > >                 TEXT_TEXT
-> > >                 SCHED_TEXT
-> > >                 CPUIDLE_TEXT
-> > > @@ -67,6 +66,8 @@ SECTIONS
-> > >                 _etext = .;
-> > >         }
-> > >
-> > > +       INIT_DATA_SECTION(16)
-> > > +
-> >
-> > I think you need to move EXIT_DATA as well. Currently, we have init
-> > data & text in one section.
-> It's not related to this issue. There is two check code problem:
-
-Yes. But we shouldn't move only INIT_DATA_SECTION out of __init section
-while leaving percpu & exit data in the __init section. Here is what I
-have in mind.
-
-diff --git a/arch/riscv/kernel/vmlinux.lds.S
-b/arch/riscv/kernel/vmlinux.lds.S
-index 9795359cb9da..4432cef8184e 100644
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -26,13 +26,11 @@ SECTIONS
-        /* Beginning of code and text segment */
-        . = LOAD_OFFSET;
-        _start = .;
-        _start = .;
--       _stext = .;
-        HEAD_TEXT_SECTION
-        . = ALIGN(PAGE_SIZE);
-
-        __init_begin = .;
-        INIT_TEXT_SECTION(PAGE_SIZE)
--       INIT_DATA_SECTION(16)
-        . = ALIGN(8);
-        __soc_early_init_table : {
-                __soc_early_init_table_start = .;
-@@ -49,16 +47,13 @@ SECTIONS
-        {
-                EXIT_TEXT
-        }
--       .exit.data :
--       {
--               EXIT_DATA
--       }
--       PERCPU_SECTION(L1_CACHE_BYTES)
-+
-        __init_end = .;
-
-        . = ALIGN(SECTION_ALIGN);
-        .text : {
-                _text = .;
-+               _stext = .;
-                TEXT_TEXT
-                SCHED_TEXT
-                CPUIDLE_TEXT
-@@ -77,6 +72,17 @@ SECTIONS
- #endif
-
-        /* Start of data section */
-+       __init_data_begin = .;
-+       INIT_DATA_SECTION(16)
-+       .exit.data :
-+       {
-+               EXIT_DATA
-+       }
-+
-+       PERCPU_SECTION(L1_CACHE_BYTES)
-+
-+       __init_data_end = .;
-+
-
-As you correctly pointed out, this wastes around ~200K init memory
-that is wasted.
-That is not an ideal solution.
-
-The other alternative is to move __init_text section after _text as
-well similar to other architectures. But that won't work
-for RISC-V as we jump from _start to __start_kernel(in __init section)
-in head.S.  A JAL instruction can't be fit because
-__start_kernel is now too far. We can't replace JAL with a JALR
-because that would require an additional
-instruction and violates image header format.
-
-Any other ideas to solve this problem without wasting memory ?
-
->  1.     static int static_obj(const void *obj)
->     {
->             unsigned long start = (unsigned long) &_stext,
->                           end   = (unsigned long) &_end,
->                           addr  = (unsigned long) obj;
->
->             /*
->              * static variable?
->              */
->             if ((addr >= start) && (addr < end))
->                     return 1;
->
->  2.     /* Is this address range in the kernel text area? */
->     static inline void check_kernel_text_object(const unsigned long ptr,
->                                                 unsigned long n, bool to_user)
->     {
->             unsigned long textlow = (unsigned long)_stext;
->             unsigned long texthigh = (unsigned long)_etext;
->             unsigned long textlow_linear, texthigh_linear;
->
->             if (overlaps(ptr, n, textlow, texthigh))
->                     usercopy_abort("kernel text", NULL, to_user, ptr -
-> textlow, n);
->
-> The patch of commit: a0fa4027dc911 (riscv: Fixup static_obj() fail) broke 2th.
->
-> > In general it is better idea to separate those similar to ARM64.
-> > Additionally, ARM64 applies different mapping for init data & text
-> > as the init data section is marked as non-executable[1]
-> Yes, it's safer to protect init text & init data, but it's should be
-> another patch.
->
-
-Yes. I will send the patch based on this fix.
-
-> >
-> > However, we don't modify any permission for any init sections. Should
-> > we do that as well ?
-> Agree, we should do that.
->
-> >
-> > [1] https://patchwork.kernel.org/patch/9572869/
-> >
-> > >         /* Start of data section */
-> > >         _sdata = .;
-> > >         RO_DATA(SECTION_ALIGN)
-> > >
-> > > On Thu, Sep 24, 2020 at 3:36 PM Andreas Schwab <schwab@linux-m68k.org> wrote:
-> > > >
-> > > > On Sep 14 2020, Aurelien Jarno wrote:
-> > > >
-> > > > > How should we proceed to get that fixed in time for 5.9? For the older
-> > > > > branches where it has been backported (so far 5.7 and 5.8), should we
-> > > > > just get that commit reverted instead?
-> > > >
-> > > > Can this please be resolved ASAP?
-> > > >
-> > > > Andreas.
-> > > >
-> > > > --
-> > > > Andreas Schwab, schwab@linux-m68k.org
-> > > > GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-> > > > "And now for something completely different."
-> > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
-> > >
-> > > ML: https://lore.kernel.org/linux-csky/
-> > >
-> > > _______________________________________________
-> > > linux-riscv mailing list
-> > > linux-riscv@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
->
->
->
-> --
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
 
 
+----- Original Message -----
+> This syscall is currently (v5.9) supported on these architectures:
+> arc, csky, mips, m68k, nds32, sh
+> 
+> constants are missing for m68k, not sure if the testcase is valid for it.
+> Untested.
+> 
+> Test for __LTP__NR_INVALID_SYSCALL saves adding autotools check for
+> <asm/cachectl.h>.
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Hi,
+> 
+> FYI: I was going to ask for removal of this test, but all these archs are
+> still supported. This test compiles on all archs now, but I haven't run
+> it (I don't have access to none of these archs, not sure if LTP is even
+> tested on these archs).
 
--- 
-Regards,
-Atish
+I haven't tested it too, but rewrite looks good.
+
+Acked-by: Jan Stancek <jstancek@redhat.com>
+

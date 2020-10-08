@@ -1,359 +1,114 @@
-Return-Path: <SRS0=GDOd=DO=vger.kernel.org=linux-csky-owner@kernel.org>
+Return-Path: <SRS0=m85J=DP=vger.kernel.org=linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DEF2C41604
-	for <linux-csky@archiver.kernel.org>; Wed,  7 Oct 2020 14:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0809C433DF
+	for <linux-csky@archiver.kernel.org>; Thu,  8 Oct 2020 20:04:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29C6E21531
-	for <linux-csky@archiver.kernel.org>; Wed,  7 Oct 2020 14:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602081943;
-	bh=HqHWoEb0KM+2Iv1t78qbp26pS5O6oD/T7GrrvprJ3Ls=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=Q7g+f93bnMBblrFo1yEcqXvpy3zumTgFzdKGTaoDGP50g9nOTt1Dg1ff2ZnfN5RS7
-	 ad0FbOdIuTB12kaDWHVWmhLnGw8sIcCqcvim/JvqKe18jkUZTqBZ4m8ddeLbqOowxj
-	 FqN9wFF89twkMuKq2+SQKn+zqakTccUHPgYKNXEs=
+	by mail.kernel.org (Postfix) with ESMTP id 4133D22226
+	for <linux-csky@archiver.kernel.org>; Thu,  8 Oct 2020 20:04:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="soGxHYxn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728679AbgJGOpm (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 7 Oct 2020 10:45:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728674AbgJGOpm (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 7 Oct 2020 10:45:42 -0400
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E310A2176B;
-        Wed,  7 Oct 2020 14:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602081941;
-        bh=HqHWoEb0KM+2Iv1t78qbp26pS5O6oD/T7GrrvprJ3Ls=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Kztaml6Cz72XpOSd+pf8PAok5QQ7VX456uJ6Ycdyz3w1hJjfEbHRI+xiszhbgGJzm
-         E77z0vT5POzt6mTx7K+FhuplGiIfFbLaVUlHslxTYJK6RRQKf6eoZCRJMoKqjMliKV
-         d+26T+SdKnbfnukuxOImHq4fXZfj982V0dRbgyJQ=
-Received: by mail-lf1-f47.google.com with SMTP id b22so2555528lfs.13;
-        Wed, 07 Oct 2020 07:45:40 -0700 (PDT)
-X-Gm-Message-State: AOAM530XbLeokdQllgxZPjLY9Oh+G5DungdqID5UtWgnucOUtd9v1WBm
-        bR+x2p/QV9ZyJRMFhqy0P3Lqrcr7oTFdwxU/Ats=
-X-Google-Smtp-Source: ABdhPJyFrX7LvRQmTVje0bCmurpdxswldnNK6zrOwIjljf3kA88E42dK7RkSl+E3U0ZrG56ef4D/d7WypwZFHj1BvOY=
-X-Received: by 2002:ac2:4d10:: with SMTP id r16mr1003603lfi.58.1602081939013;
- Wed, 07 Oct 2020 07:45:39 -0700 (PDT)
+        id S1729908AbgJHUEM (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 8 Oct 2020 16:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729877AbgJHUEL (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 8 Oct 2020 16:04:11 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5454FC0613D2;
+        Thu,  8 Oct 2020 13:04:10 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id e23so655163wme.2;
+        Thu, 08 Oct 2020 13:04:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0cpv+tP36ues9zKZvc23gnyV9b7gmZPPP3bWOFay3Z8=;
+        b=soGxHYxnlKP7l3roOE54jwTEMNQqPWr0nj6Hc9h7KhV5a8ASVFMdI1r+dyLbrtgIlV
+         TIdIKxQRLCjI9QAsxQOxc9AHdwu5H5MieylLqbVx15tm0HWBhRKahOO9STQ4r/ARFp+h
+         ag8HAY9rWc6BN+2zEcR6FUdQGjvyCdNf+e4zF7CfRfjQgx/nKr9oj2Lybgq7pNxViRIi
+         URASZFHORPGZxpo8hBuB4alXjoaIhNJqxtu820Z8PwM9/JpM+Y4bxcXu/IKgbPSPefd4
+         G3oQaPWFeqzD9PjBz9F9pBE735mtlMp6IYhU/ubBRRI9qww7GMVCbY7y8MURqzuej0rc
+         GynA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=0cpv+tP36ues9zKZvc23gnyV9b7gmZPPP3bWOFay3Z8=;
+        b=SjQ6PFuUbI6yIRkzqHbXAVu60nGqvB15d3dcrUi6s0YLsSa5Lu440bRaVmp5Pub4D/
+         TY7UkNtXYFnfZz5po7TICv79Q363w0cWvewtb7av20OLYO46EbP+/6Rc6kFTAf4jpCsa
+         Y9sl9dLz/Yi0q/w6N1Mea2Tpgp4nkH74T0MMrBe8UdznM52jU1jjtUUA8mCgwftO2b42
+         LLGSpxJdnC9WvPRmol3FY4vfeFQ+X/6mua/QbuIyBH/rtoq1OzVomzcpAgRLPxJ/mTbR
+         kx+Fk58AFJ5sw/G2EKXIMNkYw4ARSEbkY93Z/tQlJxrUIBXc5qmVM7HnWsYAoGuBgYM7
+         XfSg==
+X-Gm-Message-State: AOAM532A0ZCOtrH9qA+avRifr4v9QP8s5QWyyq+I3U7hJqoh7R2ya7F8
+        qyMa+6opGCz9woATL+4mfmg=
+X-Google-Smtp-Source: ABdhPJzbefUFsnEexYnumCuenoA3EWX1ObnpD7vhR0ttyC6Vq9tiw4N7i5bJAYFbq933cEFleHu87Q==
+X-Received: by 2002:a1c:4904:: with SMTP id w4mr9841419wma.99.1602187449021;
+        Thu, 08 Oct 2020 13:04:09 -0700 (PDT)
+Received: from dell5510 ([62.201.25.198])
+        by smtp.gmail.com with ESMTPSA id v2sm9103715wme.19.2020.10.08.13.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2020 13:04:08 -0700 (PDT)
+Date:   Thu, 8 Oct 2020 22:04:06 +0200
+From:   Petr Vorel <petr.vorel@gmail.com>
+To:     Jan Stancek <jstancek@redhat.com>
+Cc:     ltp@lists.linux.it, Ofer Levi <oferle@nvidia.com>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-sh@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Guo Ren <guoren@kernel.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Maciej W . Rozycki" <macro@linux-mips.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vincent Chen <deanbo422@gmail.com>
+Subject: Re: [LTP] [PATCH 1/1] cacheflush01: Rewrite into new API
+Message-ID: <20201008200406.GA18136@dell5510>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+References: <20201002202416.28972-1-petr.vorel@gmail.com>
+ <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
 MIME-Version: 1.0
-References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
- <1593266228-61125-2-git-send-email-guoren@kernel.org> <20200911204512.GA2705@aurel32.net>
- <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
- <20200914103836.GB2705@aurel32.net> <87lfgzeidk.fsf@igel.home>
- <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com>
- <CAOnJCUJhb2K89pRETbfTJ=5jHQhWfyfrOUu8zOE77j+id6OpSA@mail.gmail.com>
- <CAJF2gTRc-RUBiQ=ZE7BT8tABHu3=Bcmuc+ADyBLZ7r7fozwahg@mail.gmail.com> <CAOnJCUKi-bzEvYWw3BxBbGe6ODHEzdjTWsfrmS54qEk1i1Kr8Q@mail.gmail.com>
-In-Reply-To: <CAOnJCUKi-bzEvYWw3BxBbGe6ODHEzdjTWsfrmS54qEk1i1Kr8Q@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Oct 2020 22:45:27 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRGZKU8aW+D1U6JWh55bdNVxXZmktMz69b25Ng0RUd-Mg@mail.gmail.com>
-Message-ID: <CAJF2gTRGZKU8aW+D1U6JWh55bdNVxXZmktMz69b25Ng0RUd-Mg@mail.gmail.com>
-Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Andreas Schwab <schwab@linux-m68k.org>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nick Hu <nickhu@andestech.com>,
-        Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Zong Li <zong.li@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Oct 7, 2020 at 4:39 AM Atish Patra <atishp@atishpatra.org> wrote:
->
-> On Tue, Oct 6, 2020 at 9:46 AM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > On Tue, Oct 6, 2020 at 3:14 AM Atish Patra <atishp@atishpatra.org> wrote:
-> > >
-> > > On Thu, Sep 24, 2020 at 9:19 AM Guo Ren <guoren@kernel.org> wrote:
-> > > >
-> > > > How about this, revert the commit and don't free INIT_DATA_SECTION. I
-> > > > think the solution is safe enough, but wast a little memory.
-> > > >
-> > > > diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-> > > > index f3586e3..34d00d9 100644
-> > > > --- a/arch/riscv/kernel/vmlinux.lds.S
-> > > > +++ b/arch/riscv/kernel/vmlinux.lds.S
-> > > > @@ -22,13 +22,11 @@ SECTIONS
-> > > >         /* Beginning of code and text segment */
-> > > >         . = LOAD_OFFSET;
-> > > >         _start = .;
-> > > > -       _stext = .;
-> > > >         HEAD_TEXT_SECTION
-> > > >         . = ALIGN(PAGE_SIZE);
-> > > >
-> > > >         __init_begin = .;
-> > > >         INIT_TEXT_SECTION(PAGE_SIZE)
-> > > > -       INIT_DATA_SECTION(16)
-> > > >         . = ALIGN(8);
-> > > >         __soc_early_init_table : {
-> > > >                 __soc_early_init_table_start = .;
-> > > > @@ -55,6 +53,7 @@ SECTIONS
-> > > >         . = ALIGN(SECTION_ALIGN);
-> > > >         .text : {
-> > > >                 _text = .;
-> > > > +               _stext = .;
-> > > >                 TEXT_TEXT
-> > > >                 SCHED_TEXT
-> > > >                 CPUIDLE_TEXT
-> > > > @@ -67,6 +66,8 @@ SECTIONS
-> > > >                 _etext = .;
-> > > >         }
-> > > >
-> > > > +       INIT_DATA_SECTION(16)
-> > > > +
-> > >
-> > > I think you need to move EXIT_DATA as well. Currently, we have init
-> > > data & text in one section.
-> > It's not related to this issue. There is two check code problem:
->
-> Yes. But we shouldn't move only INIT_DATA_SECTION out of __init section
-> while leaving percpu & exit data in the __init section. Here is what I
-> have in mind.
->
-> diff --git a/arch/riscv/kernel/vmlinux.lds.S
-> b/arch/riscv/kernel/vmlinux.lds.S
-> index 9795359cb9da..4432cef8184e 100644
-> --- a/arch/riscv/kernel/vmlinux.lds.S
-> +++ b/arch/riscv/kernel/vmlinux.lds.S
-> @@ -26,13 +26,11 @@ SECTIONS
->         /* Beginning of code and text segment */
->         . = LOAD_OFFSET;
->         _start = .;
->         _start = .;
-> -       _stext = .;
->         HEAD_TEXT_SECTION
->         . = ALIGN(PAGE_SIZE);
->
->         __init_begin = .;
->         INIT_TEXT_SECTION(PAGE_SIZE)
-> -       INIT_DATA_SECTION(16)
->         . = ALIGN(8);
->         __soc_early_init_table : {
->                 __soc_early_init_table_start = .;
-> @@ -49,16 +47,13 @@ SECTIONS
->         {
->                 EXIT_TEXT
->         }
-> -       .exit.data :
-> -       {
-> -               EXIT_DATA
-> -       }
-> -       PERCPU_SECTION(L1_CACHE_BYTES)
-> +
->         __init_end = .;
->
->         . = ALIGN(SECTION_ALIGN);
->         .text : {
->                 _text = .;
-> +               _stext = .;
->                 TEXT_TEXT
->                 SCHED_TEXT
->                 CPUIDLE_TEXT
-> @@ -77,6 +72,17 @@ SECTIONS
->  #endif
->
->         /* Start of data section */
-> +       __init_data_begin = .;
-> +       INIT_DATA_SECTION(16)
-> +       .exit.data :
-> +       {
-> +               EXIT_DATA
-> +       }
-> +
-> +       PERCPU_SECTION(L1_CACHE_BYTES)
-> +
-> +       __init_data_end = .;
-> +
->
-> As you correctly pointed out, this wastes around ~200K init memory
-> that is wasted.
-> That is not an ideal solution.
->
-> The other alternative is to move __init_text section after _text as
-> well similar to other architectures. But that won't work
-> for RISC-V as we jump from _start to __start_kernel(in __init section)
-> in head.S.  A JAL instruction can't be fit because
-> __start_kernel is now too far. We can't replace JAL with a JALR
-> because that would require an additional
-> instruction and violates image header format.
->
-> Any other ideas to solve this problem without wasting memory ?
-How about:
+Hi Jan,
 
-diff --git a/arch/riscv/include/asm/sections.h
-b/arch/riscv/include/asm/sections.h
-new file mode 100644
-index 00000000..2317b9e
---- /dev/null
-+++ b/arch/riscv/include/asm/sections.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef _ASM_RISCV_SECTIONS_H
-+#define _ASM_RISCV_SECTIONS_H
-+
-+#define arch_is_kernel_data arch_is_kernel_data
-+
-+#include <asm-generic/sections.h>
-+
-+extern bool init_mem_is_free;
-+
-+static inline int arch_is_kernel_data(unsigned long addr)
-+{
-+       if (init_mem_is_free)
-+               return 0;
-+
-+       return addr >= (unsigned long)__init_begin &&
-+               addr < (unsigned long)__init_end;
-+}
-+#endif /* _ASM_RISCV_SECTIONS_H */
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 2c6dd32..9ebd5eb4 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -17,6 +17,7 @@
- #include <linux/sched/task.h>
- #include <linux/swiotlb.h>
- #include <linux/smp.h>
-+#include <linux/poison.h>
+> ----- Original Message -----
+> > This syscall is currently (v5.9) supported on these architectures:
+> > arc, csky, mips, m68k, nds32, sh
 
- #include <asm/cpu_ops.h>
- #include <asm/setup.h>
-@@ -112,3 +113,11 @@ static int __init topology_init(void)
-        return 0;
- }
- subsys_initcall(topology_init);
-+
-+bool init_mem_is_free = false;
-+
-+void free_initmem(void)
-+{
-+       free_initmem_default(POISON_FREE_INITMEM);
-+       init_mem_is_free = true;
-+}
+> > constants are missing for m68k, not sure if the testcase is valid for it.
+> > Untested.
 
->
-> >  1.     static int static_obj(const void *obj)
-> >     {
-> >             unsigned long start = (unsigned long) &_stext,
-> >                           end   = (unsigned long) &_end,
-> >                           addr  = (unsigned long) obj;
-> >
-> >             /*
-> >              * static variable?
-> >              */
-> >             if ((addr >= start) && (addr < end))
-> >                     return 1;
-> >
-> >  2.     /* Is this address range in the kernel text area? */
-> >     static inline void check_kernel_text_object(const unsigned long ptr,
-> >                                                 unsigned long n, bool to_user)
-> >     {
-> >             unsigned long textlow = (unsigned long)_stext;
-> >             unsigned long texthigh = (unsigned long)_etext;
-> >             unsigned long textlow_linear, texthigh_linear;
-> >
-> >             if (overlaps(ptr, n, textlow, texthigh))
-> >                     usercopy_abort("kernel text", NULL, to_user, ptr -
-> > textlow, n);
-> >
-> > The patch of commit: a0fa4027dc911 (riscv: Fixup static_obj() fail) broke 2th.
-> >
-> > > In general it is better idea to separate those similar to ARM64.
-> > > Additionally, ARM64 applies different mapping for init data & text
-> > > as the init data section is marked as non-executable[1]
-> > Yes, it's safer to protect init text & init data, but it's should be
-> > another patch.
-> >
->
-> Yes. I will send the patch based on this fix.
->
-> > >
-> > > However, we don't modify any permission for any init sections. Should
-> > > we do that as well ?
-> > Agree, we should do that.
-> >
-> > >
-> > > [1] https://patchwork.kernel.org/patch/9572869/
-> > >
-> > > >         /* Start of data section */
-> > > >         _sdata = .;
-> > > >         RO_DATA(SECTION_ALIGN)
-> > > >
-> > > > On Thu, Sep 24, 2020 at 3:36 PM Andreas Schwab <schwab@linux-m68k.org> wrote:
-> > > > >
-> > > > > On Sep 14 2020, Aurelien Jarno wrote:
-> > > > >
-> > > > > > How should we proceed to get that fixed in time for 5.9? For the older
-> > > > > > branches where it has been backported (so far 5.7 and 5.8), should we
-> > > > > > just get that commit reverted instead?
-> > > > >
-> > > > > Can this please be resolved ASAP?
-> > > > >
-> > > > > Andreas.
-> > > > >
-> > > > > --
-> > > > > Andreas Schwab, schwab@linux-m68k.org
-> > > > > GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-> > > > > "And now for something completely different."
-> > > >
-> > > >
-> > > >
-> > > > --
-> > > > Best Regards
-> > > >  Guo Ren
-> > > >
-> > > > ML: https://lore.kernel.org/linux-csky/
-> > > >
-> > > > _______________________________________________
-> > > > linux-riscv mailing list
-> > > > linux-riscv@lists.infradead.org
-> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> > >
-> > >
-> > >
-> > > --
-> > > Regards,
-> > > Atish
-> >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
-> >
-> > ML: https://lore.kernel.org/linux-csky/
->
->
->
-> --
-> Regards,
-> Atish
+> > Test for __LTP__NR_INVALID_SYSCALL saves adding autotools check for
+> > <asm/cachectl.h>.
 
+> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> > ---
+> > Hi,
 
+> > FYI: I was going to ask for removal of this test, but all these archs are
+> > still supported. This test compiles on all archs now, but I haven't run
+> > it (I don't have access to none of these archs, not sure if LTP is even
+> > tested on these archs).
 
--- 
-Best Regards
- Guo Ren
+> I haven't tested it too, but rewrite looks good.
 
-ML: https://lore.kernel.org/linux-csky/
+> Acked-by: Jan Stancek <jstancek@redhat.com>
+
+Thanks for your review, merged.
+
+Kind regards,
+Petr

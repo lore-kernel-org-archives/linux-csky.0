@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A333C2D0A3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44595C5517A
 	for <linux-csky@archiver.kernel.org>; Thu, 29 Oct 2020 22:32:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A64D92076B
+	by mail.kernel.org (Postfix) with ESMTP id E457D20782
 	for <linux-csky@archiver.kernel.org>; Thu, 29 Oct 2020 22:32:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FpvHwJm6";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="02FwbJXl"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d5x1VtEr";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="B0bLlLwU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725933AbgJ2Wch (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        id S1725948AbgJ2Wch (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
         Thu, 29 Oct 2020 18:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbgJ2Wcf (ORCPT
+        with ESMTP id S1725786AbgJ2Wcf (ORCPT
         <rfc822;linux-csky@vger.kernel.org>); Thu, 29 Oct 2020 18:32:35 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACB5C0613CF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EFDC0613D3;
         Thu, 29 Oct 2020 15:32:14 -0700 (PDT)
-Message-Id: <20201029222650.648971542@linutronix.de>
+Message-Id: <20201029222651.017620801@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604010729;
+        s=2020; t=1604010733;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=KaNIP+gHbCxEiFjMUXsw2ll/YULzf8E240MXoq9IavQ=;
-        b=FpvHwJm6pm9/uI4al2h2FOCNdJpqPqZtax3Dclwt8IA/Oh5Ponv2lMvh1GZE/kMxwHRMcZ
-        5Pj/25hwyvseGa2stRrQ6hWDY3/J9EfoBCubT4NV9cRLaJkPnkbul6TYsf2UE/bjO6nYqy
-        MP3NqSdxEeVXzr2dPAJp2eN+544XjjCZzvysUGJFSV0DJ4F1x7pAoj62zoQgnVkHmJBzJv
-        2aMoaV1jf69bT21PfPJ2XWc/VjbaCiFGLIpd8e3CUva0mbOXWUXlSMVPOsqCdikb0DRuKV
-        GDHVG9u29UKonL0Qkb43DnDsJff/u2qboH5QLh+1dzup/h2AbZ3PDpxH1nrUVw==
+        bh=YUFkSS0SmKHrjVK9j7zp61zNdE1EMunOZsr2rqRATRM=;
+        b=d5x1VtErKO/SwINiIYdH5+pnxVwgzyB1LHLe+fwpXvVhdll/nQiQpygU63zGz3pI9NqhA8
+        s0n+UaIAmNYLm0T/jIRm+RoTlwacvln97Vtg1t+75oD0QY8PHyvQoKYHAk52x6KpW63vSX
+        L+Az8H+xKwQL+EpvTjAW2hVvvmZLhS0Rwyn+zC6IaRMB7hMlH8Z23gurzwkH1Fx2gloUEI
+        Hav0p6oUh6prkkKxle052/P3XO8o3kawNDApL0D3ONfj8tgak12TkPQ4XNRq/g6DImKti4
+        IelA613GfJp9yKxXnyBsyFFWhhO8nAj+U2XqulWCXq7fRW+alAtHAfBE9cW44g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604010729;
+        s=2020e; t=1604010733;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=KaNIP+gHbCxEiFjMUXsw2ll/YULzf8E240MXoq9IavQ=;
-        b=02FwbJXl3OAIrXjRtBQ0DicQZ2DyF6HHvJuRKCFGyMrTUHOwJHXKipX4ubGORyuMMUanCP
-        7rAr7hNu3+xpCHBw==
-Date:   Thu, 29 Oct 2020 23:18:07 +0100
+        bh=YUFkSS0SmKHrjVK9j7zp61zNdE1EMunOZsr2rqRATRM=;
+        b=B0bLlLwUxJvxzt9I7LtpElLoJDN40JibSmVNy5zRJDRt4enTzB8YsoT8EKdo1hSNxxxW6c
+        0fXPrqIrLb/i8TAg==
+Date:   Thu, 29 Oct 2020 23:18:10 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     linux-arch@vger.kernel.org,
@@ -58,7 +58,7 @@ Cc:     linux-arch@vger.kernel.org,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Christoph Hellwig <hch@lst.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, Ingo Molnar <mingo@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
@@ -66,7 +66,7 @@ Cc:     linux-arch@vger.kernel.org,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
         linux-snps-arc@lists.infradead.org,
         Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -84,7 +84,7 @@ Cc:     linux-arch@vger.kernel.org,
         sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org
-Subject: [patch V2 01/18] sched: Make migrate_disable/enable() independent of RT
+Subject: [patch V2 04/18] x86/mm/highmem: Use generic kmap atomic implementation
 References: <20201029221806.189523375@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -93,173 +93,283 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Now that the scheduler can deal with migrate disable properly, there is no
-real compelling reason to make it only available for RT.
-
-There are quite some code pathes which needlessly disable preemption in
-order to prevent migration and some constructs like kmap_atomic() enforce
-it implicitly.
-
-Making it available independent of RT allows to provide a preemptible
-variant of kmap_atomic() and makes the code more consistent in general.
-
-FIXME: Rework the comment in preempt.h
+Convert X86 to the generic kmap atomic implementation and make the
+iomap_atomic() naming convention consistent while at it.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: x86@kernel.org
 ---
- include/linux/preempt.h |   38 +++-----------------------------------
- include/linux/sched.h   |    2 +-
- kernel/sched/core.c     |   12 ++----------
- kernel/sched/sched.h    |    2 +-
- lib/smp_processor_id.c  |    2 +-
- 5 files changed, 8 insertions(+), 48 deletions(-)
+ arch/x86/Kconfig               |    3 +-
+ arch/x86/include/asm/fixmap.h  |    1 
+ arch/x86/include/asm/highmem.h |   12 ++++++--
+ arch/x86/include/asm/iomap.h   |   18 ++++++------
+ arch/x86/mm/highmem_32.c       |   59 -----------------------------------------
+ arch/x86/mm/init_32.c          |   15 ----------
+ arch/x86/mm/iomap_32.c         |   59 +++--------------------------------------
+ include/linux/io-mapping.h     |    2 -
+ 8 files changed, 27 insertions(+), 142 deletions(-)
 
---- a/include/linux/preempt.h
-+++ b/include/linux/preempt.h
-@@ -322,7 +322,7 @@ static inline void preempt_notifier_init
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -14,10 +14,11 @@ config X86_32
+ 	select ARCH_WANT_IPC_PARSE_VERSION
+ 	select CLKSRC_I8253
+ 	select CLONE_BACKWARDS
++	select GENERIC_VDSO_32
+ 	select HAVE_DEBUG_STACKOVERFLOW
++	select KMAP_LOCAL
+ 	select MODULES_USE_ELF_REL
+ 	select OLD_SIGACTION
+-	select GENERIC_VDSO_32
  
- #endif
+ config X86_64
+ 	def_bool y
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -151,7 +151,6 @@ extern void reserve_top_address(unsigned
  
--#if defined(CONFIG_SMP) && defined(CONFIG_PREEMPT_RT)
-+#ifdef CONFIG_SMP
+ extern int fixmaps_set;
  
- /*
-  * Migrate-Disable and why it is undesired.
-@@ -382,43 +382,11 @@ static inline void preempt_notifier_init
- extern void migrate_disable(void);
- extern void migrate_enable(void);
+-extern pte_t *kmap_pte;
+ extern pte_t *pkmap_page_table;
  
--#elif defined(CONFIG_PREEMPT_RT)
-+#else
+ void __native_set_fixmap(enum fixed_addresses idx, pte_t pte);
+--- a/arch/x86/include/asm/highmem.h
++++ b/arch/x86/include/asm/highmem.h
+@@ -58,11 +58,17 @@ extern unsigned long highstart_pfn, high
+ #define PKMAP_NR(virt)  ((virt-PKMAP_BASE) >> PAGE_SHIFT)
+ #define PKMAP_ADDR(nr)  (PKMAP_BASE + ((nr) << PAGE_SHIFT))
  
- static inline void migrate_disable(void) { }
- static inline void migrate_enable(void) { }
- 
--#else /* !CONFIG_PREEMPT_RT */
+-void *kmap_atomic_pfn(unsigned long pfn);
+-void *kmap_atomic_prot_pfn(unsigned long pfn, pgprot_t prot);
 -
--/**
-- * migrate_disable - Prevent migration of the current task
-- *
-- * Maps to preempt_disable() which also disables preemption. Use
-- * migrate_disable() to annotate that the intent is to prevent migration,
-- * but not necessarily preemption.
-- *
-- * Can be invoked nested like preempt_disable() and needs the corresponding
-- * number of migrate_enable() invocations.
-- */
--static __always_inline void migrate_disable(void)
+ #define flush_cache_kmaps()	do { } while (0)
+ 
++#define	arch_kmap_local_post_map(vaddr, pteval)		\
++	arch_flush_lazy_mmu_mode()
++
++#define	arch_kmap_local_post_unmap(vaddr)		\
++	do {						\
++		flush_tlb_one_kernel((vaddr));		\
++		arch_flush_lazy_mmu_mode();		\
++	} while (0)
++
+ extern void add_highpages_with_active_regions(int nid, unsigned long start_pfn,
+ 					unsigned long end_pfn);
+ 
+--- a/arch/x86/include/asm/iomap.h
++++ b/arch/x86/include/asm/iomap.h
+@@ -9,19 +9,21 @@
+ #include <linux/fs.h>
+ #include <linux/mm.h>
+ #include <linux/uaccess.h>
++#include <linux/highmem.h>
+ #include <asm/cacheflush.h>
+ #include <asm/tlbflush.h>
+ 
+-void __iomem *
+-iomap_atomic_prot_pfn(unsigned long pfn, pgprot_t prot);
++void __iomem *iomap_atomic_pfn_prot(unsigned long pfn, pgprot_t prot);
+ 
+-void
+-iounmap_atomic(void __iomem *kvaddr);
++static inline void iounmap_atomic(void __iomem *vaddr)
++{
++	kunmap_local_indexed((void __force *)vaddr);
++	pagefault_enable();
++	preempt_enable();
++}
+ 
+-int
+-iomap_create_wc(resource_size_t base, unsigned long size, pgprot_t *prot);
++int iomap_create_wc(resource_size_t base, unsigned long size, pgprot_t *prot);
+ 
+-void
+-iomap_free(resource_size_t base, unsigned long size);
++void iomap_free(resource_size_t base, unsigned long size);
+ 
+ #endif /* _ASM_X86_IOMAP_H */
+--- a/arch/x86/mm/highmem_32.c
++++ b/arch/x86/mm/highmem_32.c
+@@ -4,65 +4,6 @@
+ #include <linux/swap.h> /* for totalram_pages */
+ #include <linux/memblock.h>
+ 
+-void *kmap_atomic_high_prot(struct page *page, pgprot_t prot)
 -{
+-	unsigned long vaddr;
+-	int idx, type;
+-
+-	type = kmap_atomic_idx_push();
+-	idx = type + KM_TYPE_NR*smp_processor_id();
+-	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
+-	BUG_ON(!pte_none(*(kmap_pte-idx)));
+-	set_pte(kmap_pte-idx, mk_pte(page, prot));
+-	arch_flush_lazy_mmu_mode();
+-
+-	return (void *)vaddr;
+-}
+-EXPORT_SYMBOL(kmap_atomic_high_prot);
+-
+-/*
+- * This is the same as kmap_atomic() but can map memory that doesn't
+- * have a struct page associated with it.
+- */
+-void *kmap_atomic_pfn(unsigned long pfn)
+-{
+-	return kmap_atomic_prot_pfn(pfn, kmap_prot);
+-}
+-EXPORT_SYMBOL_GPL(kmap_atomic_pfn);
+-
+-void kunmap_atomic_high(void *kvaddr)
+-{
+-	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
+-
+-	if (vaddr >= __fix_to_virt(FIX_KMAP_END) &&
+-	    vaddr <= __fix_to_virt(FIX_KMAP_BEGIN)) {
+-		int idx, type;
+-
+-		type = kmap_atomic_idx();
+-		idx = type + KM_TYPE_NR * smp_processor_id();
+-
+-#ifdef CONFIG_DEBUG_HIGHMEM
+-		WARN_ON_ONCE(vaddr != __fix_to_virt(FIX_KMAP_BEGIN + idx));
+-#endif
+-		/*
+-		 * Force other mappings to Oops if they'll try to access this
+-		 * pte without first remap it.  Keeping stale mappings around
+-		 * is a bad idea also, in case the page changes cacheability
+-		 * attributes or becomes a protected page in a hypervisor.
+-		 */
+-		kpte_clear_flush(kmap_pte-idx, vaddr);
+-		kmap_atomic_idx_pop();
+-		arch_flush_lazy_mmu_mode();
+-	}
+-#ifdef CONFIG_DEBUG_HIGHMEM
+-	else {
+-		BUG_ON(vaddr < PAGE_OFFSET);
+-		BUG_ON(vaddr >= (unsigned long)high_memory);
+-	}
+-#endif
+-}
+-EXPORT_SYMBOL(kunmap_atomic_high);
+-
+ void __init set_highmem_pages_init(void)
+ {
+ 	struct zone *zone;
+--- a/arch/x86/mm/init_32.c
++++ b/arch/x86/mm/init_32.c
+@@ -394,19 +394,6 @@ kernel_physical_mapping_init(unsigned lo
+ 	return last_map_addr;
+ }
+ 
+-pte_t *kmap_pte;
+-
+-static void __init kmap_init(void)
+-{
+-	unsigned long kmap_vstart;
+-
+-	/*
+-	 * Cache the first kmap pte:
+-	 */
+-	kmap_vstart = __fix_to_virt(FIX_KMAP_BEGIN);
+-	kmap_pte = virt_to_kpte(kmap_vstart);
+-}
+-
+ #ifdef CONFIG_HIGHMEM
+ static void __init permanent_kmaps_init(pgd_t *pgd_base)
+ {
+@@ -712,8 +699,6 @@ void __init paging_init(void)
+ 
+ 	__flush_tlb_all();
+ 
+-	kmap_init();
+-
+ 	/*
+ 	 * NOTE: at this point the bootmem allocator is fully available.
+ 	 */
+--- a/arch/x86/mm/iomap_32.c
++++ b/arch/x86/mm/iomap_32.c
+@@ -44,28 +44,7 @@ void iomap_free(resource_size_t base, un
+ }
+ EXPORT_SYMBOL_GPL(iomap_free);
+ 
+-void *kmap_atomic_prot_pfn(unsigned long pfn, pgprot_t prot)
+-{
+-	unsigned long vaddr;
+-	int idx, type;
+-
 -	preempt_disable();
+-	pagefault_disable();
+-
+-	type = kmap_atomic_idx_push();
+-	idx = type + KM_TYPE_NR * smp_processor_id();
+-	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
+-	set_pte(kmap_pte - idx, pfn_pte(pfn, prot));
+-	arch_flush_lazy_mmu_mode();
+-
+-	return (void *)vaddr;
 -}
 -
--/**
-- * migrate_enable - Allow migration of the current task
-- *
-- * Counterpart to migrate_disable().
-- *
-- * As migrate_disable() can be invoked nested, only the outermost invocation
-- * reenables migration.
-- *
-- * Currently mapped to preempt_enable().
+-/*
+- * Map 'pfn' using protections 'prot'
 - */
--static __always_inline void migrate_enable(void)
--{
--	preempt_enable();
+-void __iomem *
+-iomap_atomic_prot_pfn(unsigned long pfn, pgprot_t prot)
++void __iomem *iomap_atomic_pfn_prot(unsigned long pfn, pgprot_t prot)
+ {
+ 	/*
+ 	 * For non-PAT systems, translate non-WB request to UC- just in
+@@ -81,36 +60,8 @@ iomap_atomic_prot_pfn(unsigned long pfn,
+ 	/* Filter out unsupported __PAGE_KERNEL* bits: */
+ 	pgprot_val(prot) &= __default_kernel_pte_mask;
+ 
+-	return (void __force __iomem *) kmap_atomic_prot_pfn(pfn, prot);
 -}
+-EXPORT_SYMBOL_GPL(iomap_atomic_prot_pfn);
 -
--#endif /* CONFIG_SMP && CONFIG_PREEMPT_RT */
-+#endif /* CONFIG_SMP */
- 
- #endif /* __LINUX_PREEMPT_H */
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -715,7 +715,7 @@ struct task_struct {
- 	const cpumask_t			*cpus_ptr;
- 	cpumask_t			cpus_mask;
- 	void				*migration_pending;
--#if defined(CONFIG_SMP) && defined(CONFIG_PREEMPT_RT)
-+#ifdef CONFIG_SMP
- 	unsigned short			migration_disabled;
- #endif
- 	unsigned short			migration_flags;
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1696,8 +1696,6 @@ void check_preempt_curr(struct rq *rq, s
- 
- #ifdef CONFIG_SMP
- 
--#ifdef CONFIG_PREEMPT_RT
+-void
+-iounmap_atomic(void __iomem *kvaddr)
+-{
+-	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
 -
- static void
- __do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask, u32 flags);
- 
-@@ -1772,8 +1770,6 @@ static inline bool rq_has_pinned_tasks(s
- 	return rq->nr_pinned;
- }
- 
+-	if (vaddr >= __fix_to_virt(FIX_KMAP_END) &&
+-	    vaddr <= __fix_to_virt(FIX_KMAP_BEGIN)) {
+-		int idx, type;
+-
+-		type = kmap_atomic_idx();
+-		idx = type + KM_TYPE_NR * smp_processor_id();
+-
+-#ifdef CONFIG_DEBUG_HIGHMEM
+-		WARN_ON_ONCE(vaddr != __fix_to_virt(FIX_KMAP_BEGIN + idx));
 -#endif
+-		/*
+-		 * Force other mappings to Oops if they'll try to access this
+-		 * pte without first remap it.  Keeping stale mappings around
+-		 * is a bad idea also, in case the page changes cacheability
+-		 * attributes or becomes a protected page in a hypervisor.
+-		 */
+-		kpte_clear_flush(kmap_pte-idx, vaddr);
+-		kmap_atomic_idx_pop();
+-	}
 -
- /*
-  * Per-CPU kthreads are allowed to run on !active && online CPUs, see
-  * __set_cpus_allowed_ptr() and select_fallback_rq().
-@@ -2841,7 +2837,7 @@ void sched_set_stop_task(int cpu, struct
- 	}
+-	pagefault_enable();
+-	preempt_enable();
++	preempt_disable();
++	pagefault_disable();
++	return (void __force __iomem *)__kmap_local_pfn_prot(pfn, prot);
+ }
+-EXPORT_SYMBOL_GPL(iounmap_atomic);
++EXPORT_SYMBOL_GPL(iomap_atomic_pfn_prot);
+--- a/include/linux/io-mapping.h
++++ b/include/linux/io-mapping.h
+@@ -69,7 +69,7 @@ io_mapping_map_atomic_wc(struct io_mappi
+ 
+ 	BUG_ON(offset >= mapping->size);
+ 	phys_addr = mapping->base + offset;
+-	return iomap_atomic_prot_pfn(PHYS_PFN(phys_addr), mapping->prot);
++	return iomap_atomic_pfn_prot(PHYS_PFN(phys_addr), mapping->prot);
  }
  
--#else
-+#else /* CONFIG_SMP */
- 
- static inline int __set_cpus_allowed_ptr(struct task_struct *p,
- 					 const struct cpumask *new_mask,
-@@ -2850,10 +2846,6 @@ static inline int __set_cpus_allowed_ptr
- 	return set_cpus_allowed_ptr(p, new_mask);
- }
- 
--#endif /* CONFIG_SMP */
--
--#if !defined(CONFIG_SMP) || !defined(CONFIG_PREEMPT_RT)
--
- static inline void migrate_disable_switch(struct rq *rq, struct task_struct *p) { }
- 
- static inline bool rq_has_pinned_tasks(struct rq *rq)
-@@ -2861,7 +2853,7 @@ static inline bool rq_has_pinned_tasks(s
- 	return false;
- }
- 
--#endif
-+#endif /* !CONFIG_SMP */
- 
- static void
- ttwu_stat(struct task_struct *p, int cpu, int wake_flags)
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1056,7 +1056,7 @@ struct rq {
- 	struct cpuidle_state	*idle_state;
- #endif
- 
--#if defined(CONFIG_PREEMPT_RT) && defined(CONFIG_SMP)
-+#if CONFIG_SMP
- 	unsigned int		nr_pinned;
- #endif
- 	unsigned int		push_busy;
---- a/lib/smp_processor_id.c
-+++ b/lib/smp_processor_id.c
-@@ -26,7 +26,7 @@ unsigned int check_preemption_disabled(c
- 	if (current->nr_cpus_allowed == 1)
- 		goto out;
- 
--#if defined(CONFIG_SMP) && defined(CONFIG_PREEMPT_RT)
-+#ifdef CONFIG_SMP
- 	if (current->migration_disabled)
- 		goto out;
- #endif
+ static inline void
 

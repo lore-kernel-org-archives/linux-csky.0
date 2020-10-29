@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED393C55179
-	for <linux-csky@archiver.kernel.org>; Thu, 29 Oct 2020 22:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31166C2D0A3
+	for <linux-csky@archiver.kernel.org>; Thu, 29 Oct 2020 22:33:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD5E92076B
-	for <linux-csky@archiver.kernel.org>; Thu, 29 Oct 2020 22:33:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBF5A2076B
+	for <linux-csky@archiver.kernel.org>; Thu, 29 Oct 2020 22:33:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UmrmyK4O";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HxpVD2rY"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Spd0rKrV";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZieSIkPq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgJ2WdK (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 29 Oct 2020 18:33:10 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:37344 "EHLO
+        id S1726152AbgJ2WdJ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 29 Oct 2020 18:33:09 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:36784 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbgJ2Wch (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 29 Oct 2020 18:32:37 -0400
-Message-Id: <20201029222651.695446198@linutronix.de>
+        with ESMTP id S1725780AbgJ2Wci (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 29 Oct 2020 18:32:38 -0400
+Message-Id: <20201029222650.910901973@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604010742;
+        s=2020; t=1604010732;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=mKqToMCt4TK857L6pxHu/gEBeaTgg/I0tChqKCuxQX4=;
-        b=UmrmyK4OiYktirQTA7UPVpOuNJymPsdcFHoBTqnXV9fJJb1k9GhyerYmkkw6v1FwOK7Lkz
-        4x4mNiTbwKg5XZwyKoq/Fq/JZ9UZ0JmihPnq0kgM/l9myx6jlrloa9+qlrvH0E2IILOMmC
-        azN6aJk3sfuSUjUjr2/AsPYOwAqbXnNKjPh5PdAvsV4A4C05v8RCUhZuD0Ntmlxx3ysFgQ
-        BZrlbNRbVJFUI5O0NQLP/p+jcklvUVwb+VDp4aa3GQ3POyZoXr7nIQg1P3mWQ/HIXLu6jH
-        COkPfToQ9Rvl0nOPi0H1A0kcb8D8omgt9o+h745K16paCYz0CD3yjsB+QlfWaQ==
+        bh=0XIt0OG9v8n7AQWOk83zwx5cp0WK011IAZjG+scyfH4=;
+        b=Spd0rKrVk5mEYc0dyTJ4iz+KcEIAt2OhrseiQcrt1t+X4bg1UccUo17ILUwR0E0cLm7whX
+        sVUPsbNN+EiPEQ+AUFccwTs1C66JI38RWhB/b/Zl/VJwZpX/UjkoicHVZ3rakjR2gAUZjZ
+        U1nTxsSsGfg9fJ4bBHcyGDw20lGzWiYqrRVXq00gGU9BNEXhi2a3Kzf4T17xi/gY3/8psy
+        mjs51YEttlDICb5SbZ4kolv+JfcoDR4fMb+oUdLtW60zseOhaXFmIuJOyySm0ygg5e8SSJ
+        3bfHRXyurkul3vA0395FiZlvN+QvgPrb+JOi+uTghsinWNVdnTtpsF6dpaM7ag==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604010742;
+        s=2020e; t=1604010732;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=mKqToMCt4TK857L6pxHu/gEBeaTgg/I0tChqKCuxQX4=;
-        b=HxpVD2rY7MqmhvHwPuXswIG/rzdtissHt/T3LPe1/rTXCiyfxOrWzI7fQMiVzATIzNobbU
-        5pcryDtXkN5Hm+Dg==
-Date:   Thu, 29 Oct 2020 23:18:17 +0100
+        bh=0XIt0OG9v8n7AQWOk83zwx5cp0WK011IAZjG+scyfH4=;
+        b=ZieSIkPqQ9T6Zn/Y+kRu7RVGaPV5thY3g3ejT/d6bLIns9xrZbjcZ7j4HxTIAoRF4tEwVz
+        xc/ieNRL3cMbBFBA==
+Date:   Thu, 29 Oct 2020 23:18:09 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     linux-arch@vger.kernel.org,
@@ -55,17 +55,14 @@ Cc:     linux-arch@vger.kernel.org,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Christoph Hellwig <hch@lst.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Ingo Molnar <mingo@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
         linux-snps-arc@lists.infradead.org,
         Russell King <linux@armlinux.org.uk>,
@@ -76,11 +73,15 @@ Cc:     linux-arch@vger.kernel.org,
         linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
         "David S. Miller" <davem@davemloft.net>,
         sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org
-Subject: [patch V2 11/18] powerpc/mm/highmem: Switch to generic kmap atomic
+Subject: [patch V2 03/18] highmem: Provide generic variant of kmap_atomic*
 References: <20201029221806.189523375@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -89,154 +90,294 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-No reason having the same code in every architecture
+The kmap_atomic* interfaces in all architectures are pretty much the same
+except for post map operations (flush) and pre- and post unmap operations.
+
+Provide a generic variant for that.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org
 ---
- arch/powerpc/Kconfig               |    1 
- arch/powerpc/include/asm/highmem.h |    6 ++-
- arch/powerpc/mm/Makefile           |    1 
- arch/powerpc/mm/highmem.c          |   67 -------------------------------------
- arch/powerpc/mm/mem.c              |    7 ---
- 5 files changed, 6 insertions(+), 76 deletions(-)
+V2: Address review comments from Christoph (style and EXPORT variant)
+---
+ include/linux/highmem.h |   79 ++++++++++++++++++++++++++------
+ mm/Kconfig              |    3 +
+ mm/highmem.c            |  118 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 183 insertions(+), 17 deletions(-)
 
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -409,6 +409,7 @@ menu "Kernel options"
- config HIGHMEM
- 	bool "High memory support"
- 	depends on PPC32
-+        select KMAP_LOCAL
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -31,9 +31,16 @@ static inline void invalidate_kernel_vma
  
- source "kernel/Kconfig.hz"
+ #include <asm/kmap_types.h>
  
---- a/arch/powerpc/include/asm/highmem.h
-+++ b/arch/powerpc/include/asm/highmem.h
-@@ -29,7 +29,6 @@
- #include <asm/page.h>
- #include <asm/fixmap.h>
- 
--extern pte_t *kmap_pte;
- extern pte_t *pkmap_page_table;
- 
- /*
-@@ -60,6 +59,11 @@ extern pte_t *pkmap_page_table;
- 
- #define flush_cache_kmaps()	flush_cache_all()
- 
-+#define arch_kmap_local_post_map(vaddr, pteval)	\
-+	local_flush_tlb_page(NULL, vaddr)
-+#define arch_kmap_local_post_unmap(vaddr)	\
-+	local_flush_tlb_page(NULL, vaddr)
++/*
++ * Outside of CONFIG_HIGHMEM to support X86 32bit iomap_atomic() cruft.
++ */
++#ifdef CONFIG_KMAP_LOCAL
++void *__kmap_local_pfn_prot(unsigned long pfn, pgprot_t prot);
++void *__kmap_local_page_prot(struct page *page, pgprot_t prot);
++void kunmap_local_indexed(void *vaddr);
++#endif
 +
- #endif /* __KERNEL__ */
+ #ifdef CONFIG_HIGHMEM
+-extern void *kmap_atomic_high_prot(struct page *page, pgprot_t prot);
+-extern void kunmap_atomic_high(void *kvaddr);
+ #include <asm/highmem.h>
  
- #endif /* _ASM_HIGHMEM_H */
---- a/arch/powerpc/mm/Makefile
-+++ b/arch/powerpc/mm/Makefile
-@@ -16,7 +16,6 @@ obj-$(CONFIG_NEED_MULTIPLE_NODES) += num
- obj-$(CONFIG_PPC_MM_SLICES)	+= slice.o
- obj-$(CONFIG_HUGETLB_PAGE)	+= hugetlbpage.o
- obj-$(CONFIG_NOT_COHERENT_CACHE) += dma-noncoherent.o
--obj-$(CONFIG_HIGHMEM)		+= highmem.o
- obj-$(CONFIG_PPC_COPRO_BASE)	+= copro_fault.o
- obj-$(CONFIG_PPC_PTDUMP)	+= ptdump/
- obj-$(CONFIG_KASAN)		+= kasan/
---- a/arch/powerpc/mm/highmem.c
-+++ /dev/null
-@@ -1,67 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * highmem.c: virtual kernel memory mappings for high memory
-- *
-- * PowerPC version, stolen from the i386 version.
-- *
-- * Used in CONFIG_HIGHMEM systems for memory pages which
-- * are not addressable by direct kernel virtual addresses.
-- *
-- * Copyright (C) 1999 Gerhard Wichert, Siemens AG
-- *		      Gerhard.Wichert@pdb.siemens.de
-- *
-- *
-- * Redesigned the x86 32-bit VM architecture to deal with
-- * up to 16 Terrabyte physical memory. With current x86 CPUs
-- * we now support up to 64 Gigabytes physical RAM.
-- *
-- * Copyright (C) 1999 Ingo Molnar <mingo@redhat.com>
-- *
-- * Reworked for PowerPC by various contributors. Moved from
-- * highmem.h by Benjamin Herrenschmidt (c) 2009 IBM Corp.
-- */
--
--#include <linux/highmem.h>
--#include <linux/module.h>
--
--void *kmap_atomic_high_prot(struct page *page, pgprot_t prot)
--{
--	unsigned long vaddr;
--	int idx, type;
--
--	type = kmap_atomic_idx_push();
--	idx = type + KM_TYPE_NR*smp_processor_id();
--	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
--	WARN_ON(IS_ENABLED(CONFIG_DEBUG_HIGHMEM) && !pte_none(*(kmap_pte - idx)));
--	__set_pte_at(&init_mm, vaddr, kmap_pte-idx, mk_pte(page, prot), 1);
--	local_flush_tlb_page(NULL, vaddr);
--
--	return (void*) vaddr;
--}
--EXPORT_SYMBOL(kmap_atomic_high_prot);
--
--void kunmap_atomic_high(void *kvaddr)
--{
--	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
--
--	if (vaddr < __fix_to_virt(FIX_KMAP_END))
--		return;
--
--	if (IS_ENABLED(CONFIG_DEBUG_HIGHMEM)) {
--		int type = kmap_atomic_idx();
--		unsigned int idx;
--
--		idx = type + KM_TYPE_NR * smp_processor_id();
--		WARN_ON(vaddr != __fix_to_virt(FIX_KMAP_BEGIN + idx));
--
--		/*
--		 * force other mappings to Oops if they'll try to access
--		 * this pte without first remap it
--		 */
--		pte_clear(&init_mm, vaddr, kmap_pte-idx);
--		local_flush_tlb_page(NULL, vaddr);
--	}
--
--	kmap_atomic_idx_pop();
--}
--EXPORT_SYMBOL(kunmap_atomic_high);
---- a/arch/powerpc/mm/mem.c
-+++ b/arch/powerpc/mm/mem.c
-@@ -61,11 +61,6 @@
- unsigned long long memory_limit;
- bool init_mem_is_free;
- 
--#ifdef CONFIG_HIGHMEM
--pte_t *kmap_pte;
--EXPORT_SYMBOL(kmap_pte);
--#endif
--
- pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
- 			      unsigned long size, pgprot_t vma_prot)
+ #ifndef ARCH_HAS_KMAP_FLUSH_TLB
+@@ -81,6 +88,11 @@ static inline void kunmap(struct page *p
+  * be used in IRQ contexts, so in some (very limited) cases we need
+  * it.
+  */
++
++#ifndef CONFIG_KMAP_LOCAL
++void *kmap_atomic_high_prot(struct page *page, pgprot_t prot);
++void kunmap_atomic_high(void *kvaddr);
++
+ static inline void *kmap_atomic_prot(struct page *page, pgprot_t prot)
  {
-@@ -235,8 +230,6 @@ void __init paging_init(void)
+ 	preempt_disable();
+@@ -89,7 +101,38 @@ static inline void *kmap_atomic_prot(str
+ 		return page_address(page);
+ 	return kmap_atomic_high_prot(page, prot);
+ }
+-#define kmap_atomic(page)	kmap_atomic_prot(page, kmap_prot)
++
++static inline void __kunmap_atomic(void *vaddr)
++{
++	kunmap_atomic_high(vaddr);
++}
++#else /* !CONFIG_KMAP_LOCAL */
++
++static inline void *kmap_atomic_prot(struct page *page, pgprot_t prot)
++{
++	preempt_disable();
++	pagefault_disable();
++	return __kmap_local_page_prot(page, prot);
++}
++
++static inline void *kmap_atomic_pfn(unsigned long pfn)
++{
++	preempt_disable();
++	pagefault_disable();
++	return __kmap_local_pfn_prot(pfn, kmap_prot);
++}
++
++static inline void __kunmap_atomic(void *addr)
++{
++	kunmap_local_indexed(addr);
++}
++
++#endif /* CONFIG_KMAP_LOCAL */
++
++static inline void *kmap_atomic(struct page *page)
++{
++	return kmap_atomic_prot(page, kmap_prot);
++}
  
- 	map_kernel_page(PKMAP_BASE, 0, __pgprot(0));	/* XXX gross */
- 	pkmap_page_table = virt_to_kpte(PKMAP_BASE);
+ /* declarations for linux/mm/highmem.c */
+ unsigned int nr_free_highpages(void);
+@@ -157,21 +200,28 @@ static inline void *kmap_atomic(struct p
+ 	pagefault_disable();
+ 	return page_address(page);
+ }
+-#define kmap_atomic_prot(page, prot)	kmap_atomic(page)
+ 
+-static inline void kunmap_atomic_high(void *addr)
++static inline void *kmap_atomic_prot(struct page *page, pgprot_t prot)
++{
++	return kmap_atomic(page);
++}
++
++static inline void *kmap_atomic_pfn(unsigned long pfn)
++{
++	return kmap_atomic(pfn_to_page(pfn));
++}
++
++static inline void __kunmap_atomic(void *addr)
+ {
+ 	/*
+ 	 * Mostly nothing to do in the CONFIG_HIGHMEM=n case as kunmap_atomic()
+-	 * handles re-enabling faults + preemption
++	 * handles re-enabling faults and preemption
+ 	 */
+ #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+ 	kunmap_flush_on_unmap(addr);
+ #endif
+ }
+ 
+-#define kmap_atomic_pfn(pfn)	kmap_atomic(pfn_to_page(pfn))
 -
--	kmap_pte = virt_to_kpte(__fix_to_virt(FIX_KMAP_BEGIN));
- #endif /* CONFIG_HIGHMEM */
+ #define kmap_flush_unused()	do {} while(0)
  
- 	printk(KERN_DEBUG "Top of RAM: 0x%llx, Total RAM: 0x%llx\n",
+ #endif /* CONFIG_HIGHMEM */
+@@ -213,15 +263,14 @@ static inline void kmap_atomic_idx_pop(v
+  * Prevent people trying to call kunmap_atomic() as if it were kunmap()
+  * kunmap_atomic() should get the return value of kmap_atomic, not the page.
+  */
+-#define kunmap_atomic(addr)                                     \
+-do {                                                            \
+-	BUILD_BUG_ON(__same_type((addr), struct page *));       \
+-	kunmap_atomic_high(addr);                                  \
+-	pagefault_enable();                                     \
+-	preempt_enable();                                       \
++#define kunmap_atomic(__addr)					\
++do {								\
++	BUILD_BUG_ON(__same_type((__addr), struct page *));	\
++	__kunmap_atomic(__addr);				\
++	pagefault_enable();					\
++	preempt_enable();					\
+ } while (0)
+ 
+-
+ /* when CONFIG_HIGHMEM is not set these will be plain clear/copy_page */
+ #ifndef clear_user_highpage
+ static inline void clear_user_highpage(struct page *page, unsigned long vaddr)
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -872,4 +872,7 @@ config ARCH_HAS_HUGEPD
+ config MAPPING_DIRTY_HELPERS
+         bool
+ 
++config KMAP_LOCAL
++	bool
++
+ endmenu
+--- a/mm/highmem.c
++++ b/mm/highmem.c
+@@ -30,6 +30,7 @@
+ #include <linux/kgdb.h>
+ #include <asm/tlbflush.h>
+ #include <linux/vmalloc.h>
++#include <asm/fixmap.h>
+ 
+ #if defined(CONFIG_HIGHMEM) || defined(CONFIG_X86_32)
+ DEFINE_PER_CPU(int, __kmap_atomic_idx);
+@@ -365,9 +366,122 @@ void kunmap_high(struct page *page)
+ 	if (need_wakeup)
+ 		wake_up(pkmap_map_wait);
+ }
+-
+ EXPORT_SYMBOL(kunmap_high);
+-#endif	/* CONFIG_HIGHMEM */
++#endif /* CONFIG_HIGHMEM */
++
++#ifdef CONFIG_KMAP_LOCAL
++#ifndef arch_kmap_local_post_map
++# define arch_kmap_local_post_map(vaddr, pteval)	do { } while (0)
++#endif
++
++#ifndef arch_kmap_local_pre_unmap
++# define arch_kmap_local_pre_unmap(vaddr)		do { } while (0)
++#endif
++
++#ifndef arch_kmap_local_post_unmap
++# define arch_kmap_local_post_unmap(vaddr)		do { } while (0)
++#endif
++
++#ifndef arch_kmap_local_map_idx
++#define arch_kmap_local_map_idx(type, pfn)	kmap_local_calc_idx(type)
++#endif
++
++#ifndef arch_kmap_local_unmap_idx
++#define arch_kmap_local_unmap_idx(type, vaddr)	kmap_local_calc_idx(type)
++#endif
++
++#ifndef arch_kmap_local_high_get
++static inline void *arch_kmap_local_high_get(struct page *page)
++{
++	return NULL;
++}
++#endif
++
++/* Unmap a local mapping which was obtained by kmap_high_get() */
++static inline void kmap_high_unmap_local(unsigned long vaddr)
++{
++#ifdef ARCH_NEEDS_KMAP_HIGH_GET
++	if (vaddr >= PKMAP_ADDR(0) && vaddr < PKMAP_ADDR(LAST_PKMAP))
++		kunmap_high(pte_page(pkmap_page_table[PKMAP_NR(vaddr)]));
++#endif
++}
++
++static inline int kmap_local_calc_idx(int type)
++{
++	return type + KM_TYPE_NR * smp_processor_id();
++}
++
++static pte_t *__kmap_pte;
++
++static pte_t *kmap_get_pte(void)
++{
++	if (!__kmap_pte)
++		__kmap_pte = virt_to_kpte(__fix_to_virt(FIX_KMAP_BEGIN));
++	return __kmap_pte;
++}
++
++void *__kmap_local_pfn_prot(unsigned long pfn, pgprot_t prot)
++{
++	pte_t pteval, *kmap_pte = kmap_get_pte();
++	unsigned long vaddr;
++	int idx;
++
++	preempt_disable();
++	idx = arch_kmap_local_map_idx(kmap_atomic_idx_push(), pfn);
++	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
++	BUG_ON(!pte_none(*(kmap_pte - idx)));
++	pteval = pfn_pte(pfn, prot);
++	set_pte_at(&init_mm, vaddr, kmap_pte - idx, pteval);
++	arch_kmap_local_post_map(vaddr, pteval);
++	preempt_enable();
++
++	return (void *)vaddr;
++}
++EXPORT_SYMBOL_GPL(__kmap_local_pfn_prot);
++
++void *__kmap_local_page_prot(struct page *page, pgprot_t prot)
++{
++	void *kmap;
++
++	if (!PageHighMem(page))
++		return page_address(page);
++
++	/* Try kmap_high_get() if architecture has it enabled */
++	kmap = arch_kmap_local_high_get(page);
++	if (kmap)
++		return kmap;
++
++	return __kmap_local_pfn_prot(page_to_pfn(page), prot);
++}
++EXPORT_SYMBOL(__kmap_local_page_prot);
++
++void kunmap_local_indexed(void *vaddr)
++{
++	unsigned long addr = (unsigned long) vaddr & PAGE_MASK;
++	pte_t *kmap_pte = kmap_get_pte();
++	int idx;
++
++	if (addr < __fix_to_virt(FIX_KMAP_END) ||
++	    addr > __fix_to_virt(FIX_KMAP_BEGIN)) {
++		WARN_ON_ONCE(addr < PAGE_OFFSET);
++
++		/* Handle mappings which were obtained by kmap_high_get() */
++		kmap_high_unmap_local(addr);
++		return;
++	}
++
++	preempt_disable();
++	idx = arch_kmap_local_unmap_idx(kmap_atomic_idx(), addr);
++	WARN_ON_ONCE(addr != __fix_to_virt(FIX_KMAP_BEGIN + idx));
++
++	arch_kmap_local_pre_unmap(addr);
++	pte_clear(&init_mm, addr, kmap_pte - idx);
++	arch_kmap_local_post_unmap(addr);
++	kmap_atomic_idx_pop();
++	preempt_enable();
++}
++EXPORT_SYMBOL(kunmap_local_indexed);
++#endif
+ 
+ #if defined(HASHED_PAGE_VIRTUAL)
+ 
 

@@ -7,42 +7,45 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A9C7C64E7B
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Nov 2020 10:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11242C8303F
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Nov 2020 10:34:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20F982242C
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Nov 2020 10:34:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B184723A32
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Nov 2020 10:34:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EFq00YaC";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MNJFQ16T"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CbL3Y16w";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hhhL61gt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728523AbgKCKeG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 3 Nov 2020 05:34:06 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:39508 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728495AbgKCKeC (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Nov 2020 05:34:02 -0500
-Message-Id: <20201103095859.335366302@linutronix.de>
+        id S1728583AbgKCKeR (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 3 Nov 2020 05:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728573AbgKCKeP (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Nov 2020 05:34:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B278C0613D1;
+        Tue,  3 Nov 2020 02:34:15 -0800 (PST)
+Message-Id: <20201103095900.158813457@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604399636;
+        s=2020; t=1604399646;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=A9fIQi2MIxDLlGKHATeOlK6WSHzl9bMxA6Vy6WK4kFg=;
-        b=EFq00YaC2cfZ3tRBXG1AYeQj6Sgd3q/sRky5nMpbjN5ek1aWLKVPUv+JvoHWa6vjJFl3Ww
-        awzO+FzbND5FKjPGN7gNTnp5Mb1tq9qO15q652V8S0pc9Ce+oaGECW/jZPsmCvsiKGY+B3
-        KwlcTL/aSMXp1KJx2nFOb6gxG+DhM4n5p7kt5iTVZXpFOkBEw1cbStLJ+/3gWYcjPH26QY
-        Sbv7PLzlBaetuHp8ai5dMyYUIWrRveb5P6ybl5UfTZhOpH3MacNEiFaKtx28E2gAmPiYft
-        OZoB88IwwamuMjukOjyOm6rKIPayv2itPmrCw7QTvAcv81mGKSLdYHUqSDcl3Q==
+        bh=A3FdHqqNuzF3z/0IJSCiyvv2QQDa0OsdbIUscR1rN/Q=;
+        b=CbL3Y16wN6Gajan1nj7ps96OPG9BmodvmR/VEgx06OqRdVnAc4JL2ROw1stv2fuDfdhXM1
+        yRzijYwfPVRvltDjKGnHR6VjZzWVoRXgPucVsbELwvKgPQsjeB8MO6xujS8lCyHO+QPIbc
+        l70SdADlxhuX52p21CETAQ3pXyMmBRCjKY3Y27fwgVtJcjaKp+BdXp7tJC/xVKGFCcmrSW
+        Kysif/mqEWplBPh4qzpGWeQ8pFlbQm5jW9dH2LtLqy6T5CUZJLO8/HsjDQQxZXjYb9ZVgl
+        wmLVbisoiZbFZ6LFG1V/ckikDRYvSoUjRpb0zH1FLtKOWoYjuJT6Y1F7eRjQEQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604399636;
+        s=2020e; t=1604399646;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=A9fIQi2MIxDLlGKHATeOlK6WSHzl9bMxA6Vy6WK4kFg=;
-        b=MNJFQ16TWMWokWTa10gHMVVbsQOpiB2QfbpOViNefBGxmMK6yL/K8NxBWEF2+7F4dQI9lX
-        SBoVS11NJaJ9FoCQ==
-Date:   Tue, 03 Nov 2020 10:27:39 +0100
+        bh=A3FdHqqNuzF3z/0IJSCiyvv2QQDa0OsdbIUscR1rN/Q=;
+        b=hhhL61gt4eZR+5oETxVHDeHnePeDhy+0iHSjMSnUXyu3ziVCTIHP8r/EVeKLVoK9a4ypk1
+        G1zWBtQ+uggszwDA==
+Date:   Tue, 03 Nov 2020 10:27:47 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
@@ -50,6 +53,10 @@ Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
         Paul McKenney <paulmck@kernel.org>,
         Christoph Hellwig <hch@lst.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Benjamin LaHaise <bcrl@kvack.org>,
@@ -81,21 +88,18 @@ Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
+        Huang Rui <ray.huang@amd.com>,
         VMware Graphics <linux-graphics-maintainer@vmware.com>,
         Roland Scheidegger <sroland@vmware.com>,
         Dave Airlie <airlied@redhat.com>,
         Gerd Hoffmann <kraxel@redhat.com>,
         virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        nouveau@lists.freedesktop.org,
+        spice-devel@lists.freedesktop.org,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         intel-gfx@lists.freedesktop.org
-Subject: [patch V3 27/37] x86/crashdump/32: Simplify copy_oldmem_page()
+Subject: [patch V3 35/37] drm/nouveau/device: Replace io_mapping_map_atomic_wc()
 References: <20201103092712.714480842@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -104,93 +108,47 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Replace kmap_atomic_pfn() with kmap_local_pfn() which is preemptible and
-can take page faults.
+Neither fbmem_peek() nor fbmem_poke() require to disable pagefaults and
+preemption as a side effect of io_mapping_map_atomic_wc().
 
-Remove the indirection of the dump page and the related cruft which is not
-longer required.
+Use io_mapping_map_local_wc() instead.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org
+Cc: nouveau@lists.freedesktop.org
 ---
 V3: New patch
 ---
- arch/x86/kernel/crash_dump_32.c |   48 ++++++++--------------------------------
- 1 file changed, 10 insertions(+), 38 deletions(-)
+ drivers/gpu/drm/nouveau/nvkm/subdev/devinit/fbmem.h |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/arch/x86/kernel/crash_dump_32.c
-+++ b/arch/x86/kernel/crash_dump_32.c
-@@ -13,8 +13,6 @@
- 
- #include <linux/uaccess.h>
- 
--static void *kdump_buf_page;
--
- static inline bool is_crashed_pfn_valid(unsigned long pfn)
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/fbmem.h
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/fbmem.h
+@@ -60,19 +60,19 @@ fbmem_fini(struct io_mapping *fb)
+ static inline u32
+ fbmem_peek(struct io_mapping *fb, u32 off)
  {
- #ifndef CONFIG_X86_PAE
-@@ -41,15 +39,11 @@ static inline bool is_crashed_pfn_valid(
-  * @userbuf: if set, @buf is in user address space, use copy_to_user(),
-  *	otherwise @buf is in kernel address space, use memcpy().
-  *
-- * Copy a page from "oldmem". For this page, there is no pte mapped
-- * in the current kernel. We stitch up a pte, similar to kmap_atomic.
-- *
-- * Calling copy_to_user() in atomic context is not desirable. Hence first
-- * copying the data to a pre-allocated kernel page and then copying to user
-- * space in non-atomic context.
-+ * Copy a page from "oldmem". For this page, there might be no pte mapped
-+ * in the current kernel.
-  */
--ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
--                               size_t csize, unsigned long offset, int userbuf)
-+ssize_t copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
-+			 unsigned long offset, int userbuf)
- {
- 	void  *vaddr;
- 
-@@ -59,38 +53,16 @@ ssize_t copy_oldmem_page(unsigned long p
- 	if (!is_crashed_pfn_valid(pfn))
- 		return -EFAULT;
- 
--	vaddr = kmap_atomic_pfn(pfn);
-+	vaddr = kmap_local_pfn(pfn);
- 
- 	if (!userbuf) {
--		memcpy(buf, (vaddr + offset), csize);
--		kunmap_atomic(vaddr);
-+		memcpy(buf, vaddr + offset, csize);
- 	} else {
--		if (!kdump_buf_page) {
--			printk(KERN_WARNING "Kdump: Kdump buffer page not"
--				" allocated\n");
--			kunmap_atomic(vaddr);
--			return -EFAULT;
--		}
--		copy_page(kdump_buf_page, vaddr);
--		kunmap_atomic(vaddr);
--		if (copy_to_user(buf, (kdump_buf_page + offset), csize))
--			return -EFAULT;
-+		if (copy_to_user(buf, vaddr + offset, csize))
-+			csize = -EFAULT;
- 	}
- 
--	return csize;
--}
-+	kunmap_local(vaddr);
- 
--static int __init kdump_buf_page_init(void)
--{
--	int ret = 0;
--
--	kdump_buf_page = kmalloc(PAGE_SIZE, GFP_KERNEL);
--	if (!kdump_buf_page) {
--		printk(KERN_WARNING "Kdump: Failed to allocate kdump buffer"
--			 " page\n");
--		ret = -ENOMEM;
--	}
--
--	return ret;
-+	return csize;
+-	u8 __iomem *p = io_mapping_map_atomic_wc(fb, off & PAGE_MASK);
++	u8 __iomem *p = io_mapping_map_local_wc(fb, off & PAGE_MASK);
+ 	u32 val = ioread32(p + (off & ~PAGE_MASK));
+-	io_mapping_unmap_atomic(p);
++	io_mapping_unmap_local(p);
+ 	return val;
  }
--arch_initcall(kdump_buf_page_init);
+ 
+ static inline void
+ fbmem_poke(struct io_mapping *fb, u32 off, u32 val)
+ {
+-	u8 __iomem *p = io_mapping_map_atomic_wc(fb, off & PAGE_MASK);
++	u8 __iomem *p = io_mapping_map_local_wc(fb, off & PAGE_MASK);
+ 	iowrite32(val, p + (off & ~PAGE_MASK));
+ 	wmb();
+-	io_mapping_unmap_atomic(p);
++	io_mapping_unmap_local(p);
+ }
+ 
+ static inline bool
 

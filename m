@@ -2,131 +2,131 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44DEFC6379F
-	for <linux-csky@archiver.kernel.org>; Tue, 17 Nov 2020 21:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 599E9C2D0E4
+	for <linux-csky@archiver.kernel.org>; Mon, 23 Nov 2020 21:31:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBD75246A5
-	for <linux-csky@archiver.kernel.org>; Tue, 17 Nov 2020 21:13:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E09C9206FB
+	for <linux-csky@archiver.kernel.org>; Mon, 23 Nov 2020 21:31:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MWHmfYIY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WCtRjf9M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbgKQVN2 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 17 Nov 2020 16:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S1730657AbgKWVbI (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 23 Nov 2020 16:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727990AbgKQVN0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 17 Nov 2020 16:13:26 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2BFC061A04
-        for <linux-csky@vger.kernel.org>; Tue, 17 Nov 2020 13:13:26 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id w20so1244441pjh.1
-        for <linux-csky@vger.kernel.org>; Tue, 17 Nov 2020 13:13:26 -0800 (PST)
+        with ESMTP id S1728161AbgKWVbI (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 23 Nov 2020 16:31:08 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C08BC0613CF;
+        Mon, 23 Nov 2020 13:31:08 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id a65so884709wme.1;
+        Mon, 23 Nov 2020 13:31:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cUL+9SvzrRzllFEAM5OhpKctCqgJfj/sR/XV7GWar0I=;
-        b=MWHmfYIY9ch9OvmV2riVcHnEmRpuPVUXqLW0gkD2sszZU8xssgw1NP5X1ShxEm8HJa
-         0hsVkK3fKE20KdO6VmXkfWW+cgXtGbCsjVnNFMstYf+pK2L5LTkbrAxCuUfBB/WpAjAt
-         75tDLdzwv7U0UzXqesHtuAuhick5Z8a/RrA2E=
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=UqQWOz+44E9c9KnrAg8GfsTSqMpBn4kp20E2/CWG8c4=;
+        b=WCtRjf9Mg+dHi+uFX/T/CyUIR7oGCUEzVfbsqpLXpu2HjM5dnxivnAahC+x1BkT8sN
+         gA5kWE4rLvsPlxFxWOQK+E/XLfUn4to+G8391sgVsI+KLkLBy51MKVvVmYg3SW/i77zP
+         xsXrQIsd0ASfdzxVcGIAH7bcOrXFO9l//7rcqhAElIPb4/3Gw4wwFfnmd8RKKWe6ly3q
+         0D9rjito1LgSyGFt0QVx6+AjIicCafbn9e0iY7kkttQDlAdxDuEQtOEmSseaxJzsDX0n
+         srSFo68SA/EdBIGTO8cHtw95UHLKVupiVfOZCEolwqMJmXsaGWI/NuMQUQKZHX/AhI8x
+         SjCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cUL+9SvzrRzllFEAM5OhpKctCqgJfj/sR/XV7GWar0I=;
-        b=hBF5HLZje+BCBUsMH7KAEMbk6JlJGOixN6xHjoIfMmyP6OQGq1emJlqOla6HQ6a0Fl
-         P3/ABcoMiez5JPqHDWjO38v6f+/V66cYURX9q3xtStx9qVtVLU1MGw502yy3VlpFev2l
-         Hgi+Z/7kNy2xvpVsOoZ61+vEY2PBDO51+/EGKj2x2pTQcTc3liFDmijf0CDyBU5945jc
-         Rg2yNm1UXyttjZI0XGBwQwnG3/Kk3/GVtBUPTBjAytstUsj2X9Lb4kzowImNzC3Vqem9
-         CQEz4ms84Y7dV9mmQf6gXITLEFH1nhuKSazdc/J+aWgvzsMd8SqVzrOm15d5D+6LcWb7
-         uYZw==
-X-Gm-Message-State: AOAM531eMgZQzc2N5JSIaiWc2isQa+gFTIYMPPuCMK5XqXgbijwS2QHQ
-        SPrpod6WI4peUoWeSl8lFD4Ugw==
-X-Google-Smtp-Source: ABdhPJylohww9dg1GYyIbVMq/Nw8ytFEu6RVmpEehQbjLtvam+DWoalMEAMP5jppFr2nQ0E9S6IUIA==
-X-Received: by 2002:a17:90b:80f:: with SMTP id bk15mr934491pjb.119.1605647606216;
-        Tue, 17 Nov 2020 13:13:26 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d18sm19469582pgm.68.2020.11.17.13.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2020 13:13:25 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     containers@lists.linux-foundation.org,
-        YiFei Zhu <zhuyifei1999@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        linux-riscv@lists.infradead.org,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        linux-sh@vger.kernel.org, Hubertus Franke <frankeh@us.ibm.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Tianyin Xu <tyxu@illinois.edu>, linux-parisc@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        linux-csky@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        linux-kernel@vger.kernel.org, Will Drewry <wad@chromium.org>,
-        linux-s390@vger.kernel.org,
-        Valentin Rothberg <vrothber@redhat.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH seccomp v2 0/8] seccomp: add bitmap cache support on remaining arches and report cache in procfs
-Date:   Tue, 17 Nov 2020 13:11:13 -0800
-Message-Id: <160564746555.1001899.9792418917631139658.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1605101222.git.yifeifz2@illinois.edu>
-References: <cover.1605101222.git.yifeifz2@illinois.edu>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=UqQWOz+44E9c9KnrAg8GfsTSqMpBn4kp20E2/CWG8c4=;
+        b=BlAwNQqV7CC3paZBeJ01FDlvwqf+wx5UENQy36r433ho+TB3ouiMX65YSheTOuopSW
+         1sYbjnnDh82I4dubr2klJuufw93g20LEF4QQ2/DsCAp5zhp6rgmETxvJ3Os8Ka/odyKg
+         f1mF5HkOl2ndj/0lcgCpLTnkkQB2SLGyjQOqXpJUao9LUHE6avVYh2d86Ns6LLMNYFVp
+         eZvjjImg3LsIoC5eMTR7uOsq+NVYc3J9r1tYiSW2p1cN1BQYupHyjLXLUFotdbaOIRls
+         mDBkpbmdMot/VXRHajh0gZ5I2ej0Ax1/kM0s08/K5Qu6HQv1UrcWxk56/oAwlPtYjVJh
+         X5Cw==
+X-Gm-Message-State: AOAM532POgSF+5kPRkpcWkISB4mtSE54AMpv5hsA/+KfLiC+lF1zoD74
+        h0uQVlua6k5TgVba6sdvCg7N+H48E0fvWw==
+X-Google-Smtp-Source: ABdhPJyjhsqb0+CYPzx6IG5RO6ZbOKws3sITN/xisfZ5ZeFZJH22+waeyFXrOxmPZpANa/PIQxEWtw==
+X-Received: by 2002:a1c:6043:: with SMTP id u64mr855453wmb.166.1606167066915;
+        Mon, 23 Nov 2020 13:31:06 -0800 (PST)
+Received: from [192.168.1.143] ([170.253.51.130])
+        by smtp.gmail.com with ESMTPSA id w17sm21606289wru.82.2020.11.23.13.31.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2020 13:31:06 -0800 (PST)
+To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Cc:     linux-man <linux-man@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Subject: set_thread_area.2: csky architecture undocumented
+Message-ID: <014e670b-2a11-3deb-4e7e-bfe9defd8597@gmail.com>
+Date:   Mon, 23 Nov 2020 22:31:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, 11 Nov 2020 07:33:46 -0600, YiFei Zhu wrote:
-> This patch series enables bitmap cache for the remaining arches with
-> SECCOMP_FILTER, other than MIPS.
-> 
-> I was unable to find any of the arches having subarch-specific NR_syscalls
-> macros, so generic NR_syscalls is used. SH's syscall_get_arch seems to
-> only have the 32-bit subarch implementation. I'm not sure if this is
-> expected.
-> 
-> [...]
+Hi Michael,
 
-Applied to for-next/seccomp, thanks!
+SYNOPSIS
+       #include <linux/unistd.h>
 
-I made a small tweak to the last patch to add more details to the per-ARCH
-help text, and to drop the needless "depends on SECCOMP" (which "depends
-on SECCOMP_FILTER" was already present).
+       #if defined __i386__ || defined __x86_64__
+       # include <asm/ldt.h>
 
-I successfully build-tested on parisc, powerpc, riscv, s390, and
-sh. xtensa doesn't build using the existing Debian cross-compiler, and
-I can't make csky with clang work, but they look correct. *cross fingers*
+       int get_thread_area(struct user_desc *u_info);
+       int set_thread_area(struct user_desc *u_info);
 
-[1/8] csky: Enable seccomp architecture tracking
-      https://git.kernel.org/kees/c/ee7ce951028f
-[2/8] parisc: Enable seccomp architecture tracking
-      https://git.kernel.org/kees/c/7f049cc068a3
-[3/8] powerpc: Enable seccomp architecture tracking
-      https://git.kernel.org/kees/c/95f8ae2624a0
-[4/8] riscv: Enable seccomp architecture tracking
-      https://git.kernel.org/kees/c/8f9f0f44a37b
-[5/8] s390: Enable seccomp architecture tracking
-      https://git.kernel.org/kees/c/5897106c6902
-[6/8] sh: Enable seccomp architecture tracking
-      https://git.kernel.org/kees/c/75186111c257
-[7/8] xtensa: Enable seccomp architecture tracking
-      https://git.kernel.org/kees/c/4f408bc643aa
-[8/8] seccomp/cache: Report cache data through /proc/pid/seccomp_cache
-      https://git.kernel.org/kees/c/49a6968cc78f
+       #elif defined __m68k__
 
--- 
-Kees Cook
+       int get_thread_area(void);
+       int set_thread_area(unsigned long tp);
 
+       #elif defined __mips__
+
+       int set_thread_area(unsigned long addr);
+
+       #endif
+
+       Note: There are no glibc wrappers for these system  calls;  see
+       NOTES.
+
+
+$ grep -rn 'SYSCALL_DEFINE.*et_thread_area'
+arch/csky/kernel/syscall.c:6:
+SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
+arch/mips/kernel/syscall.c:86:
+SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
+arch/x86/kernel/tls.c:191:
+SYSCALL_DEFINE1(set_thread_area, struct user_desc __user *, u_info)
+arch/x86/kernel/tls.c:243:
+SYSCALL_DEFINE1(get_thread_area, struct user_desc __user *, u_info)
+arch/x86/um/tls_32.c:277:
+SYSCALL_DEFINE1(set_thread_area, struct user_desc __user *, user_desc)
+arch/x86/um/tls_32.c:325:
+SYSCALL_DEFINE1(get_thread_area, struct user_desc __user *, user_desc)
+
+
+See kernel commit 4859bfca11c7d63d55175bcd85a75d6cee4b7184
+
+
+I'd change
+-      #elif defined __mips__
++      #elif defined(__mips__ || __csky__)
+
+and then change the rest of the text to add csky when appropriate.
+Am I correct?
+
+Thanks,
+
+Alex

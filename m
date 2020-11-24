@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5493C64E75
-	for <linux-csky@archiver.kernel.org>; Tue, 24 Nov 2020 13:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06C56C64E7B
+	for <linux-csky@archiver.kernel.org>; Tue, 24 Nov 2020 13:46:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F0212083E
+	by mail.kernel.org (Postfix) with ESMTP id C328C20872
 	for <linux-csky@archiver.kernel.org>; Tue, 24 Nov 2020 13:46:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="1iUcbfV4"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="OWeVcruD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388565AbgKXNpI (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 24 Nov 2020 08:45:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43314 "EHLO mail.kernel.org"
+        id S2388613AbgKXNp3 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 24 Nov 2020 08:45:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43632 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388563AbgKXNpF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 24 Nov 2020 08:45:05 -0500
+        id S2388593AbgKXNp2 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 24 Nov 2020 08:45:28 -0500
 Received: from localhost.localdomain (unknown [42.120.72.69])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DA03F2067D;
-        Tue, 24 Nov 2020 13:44:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C06C2087D;
+        Tue, 24 Nov 2020 13:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606225504;
-        bh=LemYfSoLF+U2R4PPrq4UpblySoUjDJiNIGRdRoINvRw=;
+        s=default; t=1606225526;
+        bh=levK7wUVTU/CP5ZuAopBIMCjvkEhOFNbIvK0MW6TTKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1iUcbfV4nZXIE8Drim85JLvqc6s6LMIsxUfvsT5qPY1LoRlgO9CRAs8CmVWmn8InS
-         7EUFR/G7VhEwesMMOO+MrKEqPBUOewAGRqkGcF7NmztTACwH7ZNz8a2wfLC6zvxLqb
-         UohwFFAI1DOd7uIOFHs4aLMVlRYKd6VUXBczNNNs=
+        b=OWeVcruDOlUtIfI0n7ZzMU2zPgvQdLwAOfe98mOnNadTtB3A8/V+xCqiryPqyrw92
+         kxi5lbehXyS1u7FIu9nPfJi6IoNbfFNIj82JJFRbhVxB1BTxIl9A7VVw7Cv2ydJtub
+         f3UcNt6X9jLcrcqcNtAVm3sllMbhaDFiKNsbk1wE=
 From:   guoren@kernel.org
 To:     peterz@infradead.org, arnd@arndb.de, palmerdabbelt@google.com,
         paul.walmsley@sifive.com, anup@brainfault.org
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-csky@vger.kernel.org, guoren@kernel.org,
         Guo Ren <guoren@linux.alibaba.com>,
-        Michael Clark <michaeljclark@mac.com>
-Subject: [PATCH 2/5] riscv: Add QUEUED_SPINLOCKS & QUEUED_RWLOCKS supported
-Date:   Tue, 24 Nov 2020 13:43:54 +0000
-Message-Id: <1606225437-22948-2-git-send-email-guoren@kernel.org>
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH 5/5] csky: Optimize atomic operations with correct barrier usage
+Date:   Tue, 24 Nov 2020 13:43:57 +0000
+Message-Id: <1606225437-22948-5-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1606225437-22948-1-git-send-email-guoren@kernel.org>
 References: <1606225437-22948-1-git-send-email-guoren@kernel.org>
@@ -52,285 +52,470 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-riscv only support lr.wd/s(c).w(d) with word(double word) size &
-align access. There are not lr.h/sc.h instructions. But qspinlock.c
-need xchg with short type variable:
+The implementation of csky atomic operations in the past was very
+rough. Frankly speaking, the implementation is wrong and limits
+hardware performance. Optimize the performance of atomic, spinlock,
+cmpxchg more fine-grained by increasing acquire/release memory
+barriers. Here are the details of the modification:
 
-xchg_tail -> xchg_releaxed(&lock->tail, ...
+ - Add acquire/release barrier for cmpxchg.h.
+ - Remove custom atomic.h implementations.
 
-typedef struct qspinlock {
-        union {
-                atomic_t val;
-
-                /*
-                 * By using the whole 2nd least significant byte for the
-                 * pending bit, we can allow better optimization of the lock
-                 * acquisition for the pending bit holder.
-                 */
-                struct {
-                        u8      locked;
-                        u8      pending;
-                };
-                struct {
-                        u16     locked_pending;
-                        u16     tail; /* half word*/
-                };
-        };
-} arch_spinlock_t;
-
-So we add short emulation in xchg with word length and it only
-solve qspinlock's requirement.
-
-Michael have sent qspinlock before, ref to Link below.
-
-Link: https://lore.kernel.org/linux-riscv/20190211043829.30096-1-michaeljclark@mac.com/
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Michael Clark <michaeljclark@mac.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/riscv/Kconfig                      |   2 +
- arch/riscv/include/asm/Kbuild           |   3 +
- arch/riscv/include/asm/cmpxchg.h        |  36 +++++++++
- arch/riscv/include/asm/spinlock.h       | 126 +-------------------------------
- arch/riscv/include/asm/spinlock_types.h |  15 +---
- 5 files changed, 46 insertions(+), 136 deletions(-)
+ arch/csky/include/asm/atomic.h  | 203 +---------------------------------------
+ arch/csky/include/asm/barrier.h |  64 ++++++++++---
+ arch/csky/include/asm/cmpxchg.h |  85 ++++++++++++++---
+ 3 files changed, 128 insertions(+), 224 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 2d61c4c..d757ba4 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -36,6 +36,8 @@ config RISCV
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-+	select ARCH_USE_QUEUED_RWLOCKS
-+	select ARCH_USE_QUEUED_SPINLOCKS
- 	select CLONE_BACKWARDS
- 	select CLINT_TIMER if !MMU
- 	select COMMON_CLK
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 59dd7be..6f5f438 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -6,3 +6,6 @@ generic-y += kvm_para.h
- generic-y += local64.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-+generic-y += mcs_spinlock.h
-+generic-y += qrwlock.h
-+generic-y += qspinlock.h
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 5609185..e178700 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -16,7 +16,43 @@
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(new) __new = (new);					\
- 	__typeof__(*(ptr)) __ret;					\
-+	register unsigned long __rc, tmp, align, addr;			\
- 	switch (size) {							\
-+	case 2:								\
-+		align = ((unsigned long) __ptr & 0x3);			\
-+		addr = ((unsigned long) __ptr & ~0x3);			\
-+		if (align) {						\
-+		__asm__ __volatile__ (					\
-+			"0:	lr.w %0, 0(%z4)\n"			\
-+			"	move %1, %0\n"				\
-+			"	slli %1, %1, 16\n"			\
-+			"	srli %1, %1, 16\n"			\
-+			"	move %2, %z3\n"				\
-+			"	slli %2, %2, 16\n"			\
-+			"	or   %1, %2, %1\n"			\
-+			"	sc.w %2, %1, 0(%z4)\n"			\
-+			"	bnez %2, 0b\n"				\
-+			"	srli %0, %0, 16\n"			\
-+			: "=&r" (__ret), "=&r" (tmp), "=&r" (__rc)	\
-+			: "rJ" (__new), "rJ"(addr)			\
-+			: "memory");					\
-+		} else {						\
-+		__asm__ __volatile__ (					\
-+			"0:	lr.w %0, (%z4)\n"			\
-+			"	move %1, %0\n"				\
-+			"	srli %1, %1, 16\n"			\
-+			"	slli %1, %1, 16\n"			\
-+			"	move %2, %z3\n"				\
-+			"	or   %1, %2, %1\n"			\
-+			"	sc.w %2, %1, 0(%z4)\n"			\
-+			"	bnez %2, 0b\n"				\
-+			"	slli %0, %0, 16\n"			\
-+			"	srli %0, %0, 16\n"			\
-+			: "=&r" (__ret), "=&r" (tmp), "=&r" (__rc)	\
-+			: "rJ" (__new), "rJ"(addr)			\
-+			: "memory");					\
-+		}							\
-+		break;							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"	amoswap.w %0, %2, %1\n"			\
-diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-index f4f7fa1..b8deb3a 100644
---- a/arch/riscv/include/asm/spinlock.h
-+++ b/arch/riscv/include/asm/spinlock.h
-@@ -7,129 +7,7 @@
- #ifndef _ASM_RISCV_SPINLOCK_H
- #define _ASM_RISCV_SPINLOCK_H
+diff --git a/arch/csky/include/asm/atomic.h b/arch/csky/include/asm/atomic.h
+index e369d73..c699c41 100644
+--- a/arch/csky/include/asm/atomic.h
++++ b/arch/csky/include/asm/atomic.h
+@@ -3,209 +3,10 @@
+ #ifndef __ASM_CSKY_ATOMIC_H
+ #define __ASM_CSKY_ATOMIC_H
  
--#include <linux/kernel.h>
--#include <asm/current.h>
--#include <asm/fence.h>
+-#include <linux/version.h>
+-#include <asm/cmpxchg.h>
+ #include <asm/barrier.h>
+ 
+-#ifdef CONFIG_CPU_HAS_LDSTEX
 -
--/*
-- * Simple spin lock operations.  These provide no fairness guarantees.
-- */
--
--/* FIXME: Replace this with a ticket lock, like MIPS. */
--
--#define arch_spin_is_locked(x)	(READ_ONCE((x)->lock) != 0)
--
--static inline void arch_spin_unlock(arch_spinlock_t *lock)
+-#define __atomic_add_unless __atomic_add_unless
+-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
 -{
--	smp_store_release(&lock->lock, 0);
--}
+-	unsigned long tmp, ret;
 -
--static inline int arch_spin_trylock(arch_spinlock_t *lock)
--{
--	int tmp = 1, busy;
+-	smp_mb();
 -
--	__asm__ __volatile__ (
--		"	amoswap.w %0, %2, %1\n"
--		RISCV_ACQUIRE_BARRIER
--		: "=r" (busy), "+A" (lock->lock)
--		: "r" (tmp)
+-	asm volatile (
+-	"1:	ldex.w		%0, (%3) \n"
+-	"	mov		%1, %0   \n"
+-	"	cmpne		%0, %4   \n"
+-	"	bf		2f	 \n"
+-	"	add		%0, %2   \n"
+-	"	stex.w		%0, (%3) \n"
+-	"	bez		%0, 1b   \n"
+-	"2:				 \n"
+-		: "=&r" (tmp), "=&r" (ret)
+-		: "r" (a), "r"(&v->counter), "r"(u)
 -		: "memory");
 -
--	return !busy;
+-	if (ret != u)
+-		smp_mb();
+-
+-	return ret;
 -}
 -
--static inline void arch_spin_lock(arch_spinlock_t *lock)
--{
--	while (1) {
--		if (arch_spin_is_locked(lock))
--			continue;
--
--		if (arch_spin_trylock(lock))
--			break;
--	}
+-#define ATOMIC_OP(op, c_op)						\
+-static inline void atomic_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp;						\
+-									\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%2) \n"				\
+-	"	" #op "		%0, %1   \n"				\
+-	"	stex.w		%0, (%2) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp)						\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
 -}
 -
--/***********************************************************/
--
--static inline void arch_read_lock(arch_rwlock_t *lock)
--{
--	int tmp;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bltz	%1, 1b\n"
--		"	addi	%1, %1, 1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		: "+A" (lock->lock), "=&r" (tmp)
--		:: "memory");
+-#define ATOMIC_OP_RETURN(op, c_op)					\
+-static inline int atomic_##op##_return(int i, atomic_t *v)		\
+-{									\
+-	unsigned long tmp, ret;						\
+-									\
+-	smp_mb();							\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%3) \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	stex.w		%0, (%3) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-	smp_mb();							\
+-									\
+-	return ret;							\
 -}
 -
--static inline void arch_write_lock(arch_rwlock_t *lock)
--{
--	int tmp;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bnez	%1, 1b\n"
--		"	li	%1, -1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		: "+A" (lock->lock), "=&r" (tmp)
--		:: "memory");
+-#define ATOMIC_FETCH_OP(op, c_op)					\
+-static inline int atomic_fetch_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, ret;						\
+-									\
+-	smp_mb();							\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stex.w		%0, (%3) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-	smp_mb();							\
+-									\
+-	return ret;							\
 -}
 -
--static inline int arch_read_trylock(arch_rwlock_t *lock)
+-#else /* CONFIG_CPU_HAS_LDSTEX */
+-
+-#include <linux/irqflags.h>
+-
+-#define __atomic_add_unless __atomic_add_unless
+-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
 -{
--	int busy;
+-	unsigned long tmp, ret, flags;
 -
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bltz	%1, 1f\n"
--		"	addi	%1, %1, 1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		"1:\n"
--		: "+A" (lock->lock), "=&r" (busy)
--		:: "memory");
+-	raw_local_irq_save(flags);
 -
--	return !busy;
--}
--
--static inline int arch_write_trylock(arch_rwlock_t *lock)
--{
--	int busy;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bnez	%1, 1f\n"
--		"	li	%1, -1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		"1:\n"
--		: "+A" (lock->lock), "=&r" (busy)
--		:: "memory");
--
--	return !busy;
--}
--
--static inline void arch_read_unlock(arch_rwlock_t *lock)
--{
--	__asm__ __volatile__(
--		RISCV_RELEASE_BARRIER
--		"	amoadd.w x0, %1, %0\n"
--		: "+A" (lock->lock)
--		: "r" (-1)
+-	asm volatile (
+-	"	ldw		%0, (%3) \n"
+-	"	mov		%1, %0   \n"
+-	"	cmpne		%0, %4   \n"
+-	"	bf		2f	 \n"
+-	"	add		%0, %2   \n"
+-	"	stw		%0, (%3) \n"
+-	"2:				 \n"
+-		: "=&r" (tmp), "=&r" (ret)
+-		: "r" (a), "r"(&v->counter), "r"(u)
 -		: "memory");
+-
+-	raw_local_irq_restore(flags);
+-
+-	return ret;
 -}
 -
--static inline void arch_write_unlock(arch_rwlock_t *lock)
--{
--	smp_store_release(&lock->lock, 0);
+-#define ATOMIC_OP(op, c_op)						\
+-static inline void atomic_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%2) \n"				\
+-	"	" #op "		%0, %1   \n"				\
+-	"	stw		%0, (%2) \n"				\
+-		: "=&r" (tmp)						\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
 -}
-+#include <asm/qrwlock.h>
-+#include <asm/qspinlock.h>
+-
+-#define ATOMIC_OP_RETURN(op, c_op)					\
+-static inline int atomic_##op##_return(int i, atomic_t *v)		\
+-{									\
+-	unsigned long tmp, ret, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%3) \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stw		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-									\
+-	return ret;							\
+-}
+-
+-#define ATOMIC_FETCH_OP(op, c_op)					\
+-static inline int atomic_fetch_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, ret, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stw		%0, (%3) \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-									\
+-	return ret;							\
+-}
+-
+-#endif /* CONFIG_CPU_HAS_LDSTEX */
+-
+-#define atomic_add_return atomic_add_return
+-ATOMIC_OP_RETURN(add, +)
+-#define atomic_sub_return atomic_sub_return
+-ATOMIC_OP_RETURN(sub, -)
+-
+-#define atomic_fetch_add atomic_fetch_add
+-ATOMIC_FETCH_OP(add, +)
+-#define atomic_fetch_sub atomic_fetch_sub
+-ATOMIC_FETCH_OP(sub, -)
+-#define atomic_fetch_and atomic_fetch_and
+-ATOMIC_FETCH_OP(and, &)
+-#define atomic_fetch_or atomic_fetch_or
+-ATOMIC_FETCH_OP(or, |)
+-#define atomic_fetch_xor atomic_fetch_xor
+-ATOMIC_FETCH_OP(xor, ^)
+-
+-#define atomic_and atomic_and
+-ATOMIC_OP(and, &)
+-#define atomic_or atomic_or
+-ATOMIC_OP(or, |)
+-#define atomic_xor atomic_xor
+-ATOMIC_OP(xor, ^)
+-
+-#undef ATOMIC_FETCH_OP
+-#undef ATOMIC_OP_RETURN
+-#undef ATOMIC_OP
++#define __atomic_acquire_fence() __smp_acquire_fence()
++#define __atomic_release_fence() __smp_release_fence()
  
- #endif /* _ASM_RISCV_SPINLOCK_H */
-diff --git a/arch/riscv/include/asm/spinlock_types.h b/arch/riscv/include/asm/spinlock_types.h
-index f398e76..d033a97 100644
---- a/arch/riscv/include/asm/spinlock_types.h
-+++ b/arch/riscv/include/asm/spinlock_types.h
-@@ -6,20 +6,11 @@
- #ifndef _ASM_RISCV_SPINLOCK_TYPES_H
- #define _ASM_RISCV_SPINLOCK_TYPES_H
+ #include <asm-generic/atomic.h>
  
--#ifndef __LINUX_SPINLOCK_TYPES_H
-+#if !defined(__LINUX_SPINLOCK_TYPES_H) && !defined(_ASM_RISCV_SPINLOCK_H)
- # error "please don't include this file directly"
+diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
+index a430e7f..6f8269b 100644
+--- a/arch/csky/include/asm/barrier.h
++++ b/arch/csky/include/asm/barrier.h
+@@ -16,24 +16,64 @@
+  * sync.i:      inherit from sync, but also flush cpu pipeline
+  * sync.is:     the same with sync.i + sync.s
+  *
+- * bar.brwarw:  ordering barrier for all load/store instructions before it
+- * bar.brwarws: ordering barrier for all load/store instructions before it
+- *						and shareable to other cores
+- * bar.brar:    ordering barrier for all load       instructions before it
+- * bar.brars:   ordering barrier for all load       instructions before it
+- *						and shareable to other cores
+- * bar.bwaw:    ordering barrier for all store      instructions before it
+- * bar.bwaws:   ordering barrier for all store      instructions before it
+- *						and shareable to other cores
++ *
++ * bar.brwarws: ordering barrier for all load/store instructions
++ *              before/after it and share to other harts
++ *
++ * |31|30 26|25 21|20 16|15  10|9   5|4           0|
++ *  1  10000 s0000 00000 100001	00001 0 bw br aw ar
++ *
++ * b: before
++ * a: after
++ * r: read
++ * w: write
++ * s: share to other harts
++ *
++ * Here are all combinations:
++ *
++ * bar.brws
++ * bar.brs
++ * bar.bws
++ * bar.arws
++ * bar.ars
++ * bar.aws
++ * bar.brwarws
++ * bar.brarws
++ * bar.bwarws
++ * bar.brwars
++ * bar.brwaws
++ * bar.brars
++ * bar.bwaws
+  */
+ 
+ #ifdef CONFIG_CPU_HAS_CACHEV2
+ #define mb()		asm volatile ("sync.s\n":::"memory")
+ 
+ #ifdef CONFIG_SMP
+-#define __smp_mb()	asm volatile ("bar.brwarws\n":::"memory")
+-#define __smp_rmb()	asm volatile ("bar.brars\n":::"memory")
+-#define __smp_wmb()	asm volatile ("bar.bwaws\n":::"memory")
++
++#define __bar_brws()	asm volatile (".long 0x842cc200\n":::"memory")
++#define __bar_brs()	asm volatile (".long 0x8424c200\n":::"memory")
++#define __bar_bws()	asm volatile (".long 0x8428c200\n":::"memory")
++#define __bar_arws()	asm volatile (".long 0x8423c200\n":::"memory")
++#define __bar_ars()	asm volatile (".long 0x8421c200\n":::"memory")
++#define __bar_aws()	asm volatile (".long 0x8422c200\n":::"memory")
++#define __bar_brwarws()	asm volatile (".long 0x842fc200\n":::"memory")
++#define __bar_brarws()	asm volatile (".long 0x8427c200\n":::"memory")
++#define __bar_bwarws()	asm volatile (".long 0x842bc200\n":::"memory")
++#define __bar_brwars()	asm volatile (".long 0x842dc200\n":::"memory")
++#define __bar_brwaws()	asm volatile (".long 0x842ec200\n":::"memory")
++#define __bar_brars()	asm volatile (".long 0x8425c200\n":::"memory")
++#define __bar_brars()	asm volatile (".long 0x8425c200\n":::"memory")
++#define __bar_bwaws()	asm volatile (".long 0x842ac200\n":::"memory")
++
++#define __smp_mb()	__bar_brwarws()
++#define __smp_rmb()	__bar_brars()
++#define __smp_wmb()	__bar_bwaws()
++
++#define ACQUIRE_FENCE		".long 0x8427c200\n"
++#define __smp_acquire_fence()	__bar_brarws()
++#define __smp_release_fence()	__bar_brwaws()
++
+ #endif /* CONFIG_SMP */
+ 
+ #define sync_is()	asm volatile ("sync.is\n":::"memory")
+diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
+index ca03e90..3030608 100644
+--- a/arch/csky/include/asm/cmpxchg.h
++++ b/arch/csky/include/asm/cmpxchg.h
+@@ -8,7 +8,7 @@
+ 
+ extern void __bad_xchg(void);
+ 
+-#define __xchg(new, ptr, size)					\
++#define __xchg_relaxed(new, ptr, size)				\
+ ({								\
+ 	__typeof__(ptr) __ptr = (ptr);				\
+ 	__typeof__(new) __new = (new);				\
+@@ -18,7 +18,6 @@ extern void __bad_xchg(void);
+ 	case 2:							\
+ 		align = ((unsigned long) __ptr & 0x3);		\
+ 		addr = ((unsigned long) __ptr & ~0x3);		\
+-		smp_mb();					\
+ 		if (align) {					\
+ 		asm volatile (					\
+ 		"1:	ldex.w		%0, (%4) \n"		\
+@@ -50,10 +49,8 @@ extern void __bad_xchg(void);
+ 			: "r" (__new), "r"(addr)		\
+ 			:);					\
+ 		}						\
+-		smp_mb();					\
+ 		break;						\
+ 	case 4:							\
+-		smp_mb();					\
+ 		asm volatile (					\
+ 		"1:	ldex.w		%0, (%3) \n"		\
+ 		"	mov		%1, %2   \n"		\
+@@ -62,7 +59,6 @@ extern void __bad_xchg(void);
+ 			: "=&r" (__ret), "=&r" (tmp)		\
+ 			: "r" (__new), "r"(__ptr)		\
+ 			:);					\
+-		smp_mb();					\
+ 		break;						\
+ 	default:						\
+ 		__bad_xchg();					\
+@@ -70,9 +66,32 @@ extern void __bad_xchg(void);
+ 	__ret;							\
+ })
+ 
+-#define xchg(ptr, x)	(__xchg((x), (ptr), sizeof(*(ptr))))
++#define xchg_relaxed(ptr, x)					\
++({								\
++	__xchg_relaxed((x), (ptr), sizeof(*(ptr)));		\
++})
++
++#define xchg_acquire(ptr, x)					\
++({								\
++	__typeof__(*(ptr)) __ret;				\
++	__ret = xchg_relaxed(ptr, x);				\
++	__smp_acquire_fence();					\
++	__ret;							\
++})
++
++#define xchg_release(ptr, x)					\
++({								\
++	__smp_release_fence();					\
++	xchg_relaxed(ptr, x);					\
++})
++
++#define xchg(ptr, x)						\
++({								\
++	__smp_release_fence();					\
++	xchg_acquire(ptr, x);					\
++})
+ 
+-#define __cmpxchg(ptr, old, new, size)				\
++#define __cmpxchg_relaxed(ptr, old, new, size)			\
+ ({								\
+ 	__typeof__(ptr) __ptr = (ptr);				\
+ 	__typeof__(new) __new = (new);				\
+@@ -81,7 +100,6 @@ extern void __bad_xchg(void);
+ 	__typeof__(*(ptr)) __ret = 0;				\
+ 	switch (size) {						\
+ 	case 4:							\
+-		smp_mb();					\
+ 		asm volatile (					\
+ 		"1:	ldex.w		%0, (%3) \n"		\
+ 		"	cmpne		%0, %4   \n"		\
+@@ -93,7 +111,6 @@ extern void __bad_xchg(void);
+ 			: "=&r" (__ret), "=&r" (__tmp)		\
+ 			: "r" (__new), "r"(__ptr), "r"(__old)	\
+ 			:);					\
+-		smp_mb();					\
+ 		break;						\
+ 	default:						\
+ 		__bad_xchg();					\
+@@ -101,8 +118,54 @@ extern void __bad_xchg(void);
+ 	__ret;							\
+ })
+ 
+-#define cmpxchg(ptr, o, n) \
+-	(__cmpxchg((ptr), (o), (n), sizeof(*(ptr))))
++#define cmpxchg_relaxed(ptr, o, n)				\
++	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
++
++#define cmpxchg_release(ptr, o, n)				\
++({								\
++	__smp_release_fence();					\
++	cmpxchg_relaxed(ptr, o, n);				\
++})
++
++#define __cmpxchg_acquire(ptr, old, new, size)			\
++({								\
++	__typeof__(ptr) __ptr = (ptr);				\
++	__typeof__(new) __new = (new);				\
++	__typeof__(new) __tmp;					\
++	__typeof__(old) __old = (old);				\
++	__typeof__(*(ptr)) __ret = 0;				\
++	switch (size) {						\
++	case 4:							\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		"	cmpne		%0, %4   \n"		\
++		"	bt		2f       \n"		\
++		"	mov		%1, %2   \n"		\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++		ACQUIRE_FENCE					\
++		"2:				 \n"		\
++			: "=&r" (__ret), "=&r" (__tmp)		\
++			: "r" (__new), "r"(__ptr), "r"(__old)	\
++			:);					\
++		break;						\
++	default:						\
++		__bad_xchg();					\
++	}							\
++	__ret;							\
++})
++
++#define cmpxchg_acquire(ptr, o, n)				\
++	(__cmpxchg_acquire((ptr), (o), (n), sizeof(*(ptr))))
++
++#define cmpxchg(ptr, o, n)					\
++({								\
++	__typeof__(*(ptr)) __ret;				\
++	__smp_release_fence();					\
++	__ret = cmpxchg_acquire(ptr, o, n);			\
++	__ret;							\
++})
++
+ #else
+ #include <asm-generic/cmpxchg.h>
  #endif
- 
--typedef struct {
--	volatile unsigned int lock;
--} arch_spinlock_t;
--
--#define __ARCH_SPIN_LOCK_UNLOCKED	{ 0 }
--
--typedef struct {
--	volatile unsigned int lock;
--} arch_rwlock_t;
--
--#define __ARCH_RW_LOCK_UNLOCKED		{ 0 }
-+#include <asm-generic/qspinlock_types.h>
-+#include <asm-generic/qrwlock_types.h>
- 
- #endif /* _ASM_RISCV_SPINLOCK_TYPES_H */
 -- 
 2.7.4
 

@@ -2,181 +2,311 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C33C63798
-	for <linux-csky@archiver.kernel.org>; Tue, 24 Nov 2020 12:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15AD3C6379D
+	for <linux-csky@archiver.kernel.org>; Tue, 24 Nov 2020 13:45:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2FB92083E
-	for <linux-csky@archiver.kernel.org>; Tue, 24 Nov 2020 12:07:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1CAD20866
+	for <linux-csky@archiver.kernel.org>; Tue, 24 Nov 2020 13:45:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="cRZrmG9J"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeSbrNGV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729173AbgKXMHW (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 24 Nov 2020 07:07:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47858 "EHLO mail.kernel.org"
+        id S2388603AbgKXNpT (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 24 Nov 2020 08:45:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43554 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729172AbgKXMHW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 24 Nov 2020 07:07:22 -0500
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S2388593AbgKXNpS (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 24 Nov 2020 08:45:18 -0500
+Received: from localhost.localdomain (unknown [42.120.72.69])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E65882083E;
-        Tue, 24 Nov 2020 12:07:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A1E020888;
+        Tue, 24 Nov 2020 13:45:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606219641;
-        bh=rx8W+sC4G+tM3j+KvfVJeDHAi7n5iz4DUaSf+4YMG0E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cRZrmG9JK1S4GuqvmQ1WSh/UGHPZMfb+MiTwGgeah95ugW08GPN7A8GFjSPe+ys4h
-         PZEErrpd1b/F0kztnopn3hViNX9INXaABPOgzab3C1bXOIa6OeEXx0m3d8wXX10xRp
-         em6SIOzF7bDSMrQKIxrT5dHuKO21TsXC8qo93hzM=
-Received: by mail-lf1-f54.google.com with SMTP id t6so12393046lfl.13;
-        Tue, 24 Nov 2020 04:07:20 -0800 (PST)
-X-Gm-Message-State: AOAM531Dm10CyIR0fbufVUDdzv27E9Ld2El6l99cXq3gn9BjEmb0DL3H
-        F8y2JJQnz9qRdU5JWpzqpknz784/r52KVOKrSow=
-X-Google-Smtp-Source: ABdhPJzxn1FfqOIoyLPB8Smgg5MbIytX2ON8eMphwMNwPK+pk4fbdiRUIFIa7LQf9zLcv1Ip5om4doDzvsC4N0mTaSs=
-X-Received: by 2002:a19:fc0f:: with SMTP id a15mr1551270lfi.248.1606219639088;
- Tue, 24 Nov 2020 04:07:19 -0800 (PST)
-MIME-Version: 1.0
-References: <014e670b-2a11-3deb-4e7e-bfe9defd8597@gmail.com> <c669c780-f6e8-bd2a-e6ec-0a5960b7d7d8@gmail.com>
-In-Reply-To: <c669c780-f6e8-bd2a-e6ec-0a5960b7d7d8@gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 24 Nov 2020 20:07:07 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQPai9k6XqqStbvk0waF+tmMQm9PMMZe3T8m6ioAjdTFA@mail.gmail.com>
-Message-ID: <CAJF2gTQPai9k6XqqStbvk0waF+tmMQm9PMMZe3T8m6ioAjdTFA@mail.gmail.com>
-Subject: Re: set_thread_area.2: csky architecture undocumented
-To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Cc:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>,
-        linux-man <linux-man@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+        s=default; t=1606225517;
+        bh=RUSvMWORfq539a0TAZ04lnu9G2BdKaaWBYoxWuQSlSo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GeSbrNGVsY6eoOquzuMJjQ0JMFFagXr4dv+XnASZt9l+xgtyHZnHEwecU61ivi5qd
+         8RVRhlJ95JHo3MEkMlZJ1UI1Po7OZzzaLH3pX8w9xWI6zJ3RmmvxAPEJfVpGeIzJtp
+         zgIXFXqz9FcTKA7H4CKyqNUF8EiTj5sulbdgU35g=
+From:   guoren@kernel.org
+To:     peterz@infradead.org, arnd@arndb.de, palmerdabbelt@google.com,
+        paul.walmsley@sifive.com, anup@brainfault.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH 4/5] csky: Add QUEUED_SPINLOCKS supported
+Date:   Tue, 24 Nov 2020 13:43:56 +0000
+Message-Id: <1606225437-22948-4-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1606225437-22948-1-git-send-email-guoren@kernel.org>
+References: <1606225437-22948-1-git-send-email-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx Michael & Alejandro,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Yes, the man page has no csky's.
+Abiv2 only support ldex.w/stex.w with word(double word) size &
+align access. There are not short type instructions. But qspinlock.c
+need xchg with short type variable:
 
-C-SKY have abiv1 and abiv2
-For abiv1: There is no register for tls saving, We use trap 3 to got
-tls and use set_thread_area to init ti->tp_value.
-For abiv2: The r31 is the tls register. We could directly read r31 to
-got r31 and use set_thread_area to init reg->tls value.
+xchg_tail -> xchg_releaxed(&lock->tail, ...
 
-In glibc:
-# ifdef __CSKYABIV2__
-/* Define r31 as thread pointer register.  */
-#  define READ_THREAD_POINTER() \
-        mov r0, r31;
-# else
-#  define READ_THREAD_POINTER() \
-        trap 3;
-# endif
+typedef struct qspinlock {
+        union {
+                atomic_t val;
 
-/* Code to initially initialize the thread pointer.  This might need
-   special attention since 'errno' is not yet available and if the
-   operation can cause a failure 'errno' must not be touched.  */
-# define TLS_INIT_TP(tcbp) \
-  ({ INTERNAL_SYSCALL_DECL (err);                                       \
-     long result_var;                                                   \
-     result_var = INTERNAL_SYSCALL (set_thread_area, err, 1,            \
-                    (char *) (tcbp) + TLS_TCB_OFFSET);                  \
-     INTERNAL_SYSCALL_ERROR_P (result_var, err)                         \
-       ? "unknown error" : NULL; })
+                /*
+                 * By using the whole 2nd least significant byte for the
+                 * pending bit, we can allow better optimization of the lock
+                 * acquisition for the pending bit holder.
+                 */
+                struct {
+                        u8      locked;
+                        u8      pending;
+                };
+                struct {
+                        u16     locked_pending;
+                        u16     tail; /* half word*/
+                };
+        };
+} arch_spinlock_t;
 
-In kernel:
-SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
-{
-        struct thread_info *ti = task_thread_info(current);
-        struct pt_regs *reg = current_pt_regs();
+So we add short emulation in xchg with word length and it only
+solve qspinlock's requirement.
 
-        reg->tls = addr;
-        ti->tp_value = addr;
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/csky/Kconfig                      |  1 +
+ arch/csky/include/asm/Kbuild           |  2 +
+ arch/csky/include/asm/cmpxchg.h        | 43 ++++++++++++++++--
+ arch/csky/include/asm/spinlock.h       | 82 +---------------------------------
+ arch/csky/include/asm/spinlock_types.h | 18 +-------
+ 5 files changed, 46 insertions(+), 100 deletions(-)
 
-        return 0;
-}
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 14ee229..ac02b17 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -8,6 +8,7 @@ config CSKY
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
++	select ARCH_USE_QUEUED_SPINLOCKS
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+ 	select COMMON_CLK
+diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+index 64876e59..f814d46 100644
+--- a/arch/csky/include/asm/Kbuild
++++ b/arch/csky/include/asm/Kbuild
+@@ -3,7 +3,9 @@ generic-y += asm-offsets.h
+ generic-y += gpio.h
+ generic-y += kvm_para.h
+ generic-y += local64.h
++generic-y += mcs_spinlock.h
+ generic-y += qrwlock.h
++generic-y += qspinlock.h
+ generic-y += seccomp.h
+ generic-y += user.h
+ generic-y += vmlinux.lds.h
+diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
+index 8922453..ca03e90 100644
+--- a/arch/csky/include/asm/cmpxchg.h
++++ b/arch/csky/include/asm/cmpxchg.h
+@@ -12,9 +12,46 @@ extern void __bad_xchg(void);
+ ({								\
+ 	__typeof__(ptr) __ptr = (ptr);				\
+ 	__typeof__(new) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;				\
+-	unsigned long tmp;					\
++	__typeof__(*(ptr)) __ret = 0;				\
++	unsigned long tmp, tmp2, align, addr;			\
+ 	switch (size) {						\
++	case 2:							\
++		align = ((unsigned long) __ptr & 0x3);		\
++		addr = ((unsigned long) __ptr & ~0x3);		\
++		smp_mb();					\
++		if (align) {					\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%4) \n"		\
++		"	mov		%1, %0   \n"		\
++		"	lsli		%1, 16   \n"		\
++		"	lsri		%1, 16   \n"		\
++		"	mov		%2, %3   \n"		\
++		"	lsli		%2, 16   \n"		\
++		"	or		%1, %2   \n"		\
++		"	stex.w		%1, (%4) \n"		\
++		"	bez		%1, 1b   \n"		\
++		"	lsri		%0, 16   \n"		\
++			: "=&r" (__ret), "=&r" (tmp),		\
++			  "=&r" (tmp2)				\
++			: "r" (__new), "r"(addr)		\
++			:);					\
++		} else {					\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		"	mov		%1, %0   \n"		\
++		"	lsri		%1, 16   \n"		\
++		"	lsli		%1, 16   \n"		\
++		"	or		%1, %2   \n"		\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++		"	lsli		%0, 16   \n"		\
++		"	lsri		%0, 16   \n"		\
++			: "=&r" (__ret), "=&r" (tmp)		\
++			: "r" (__new), "r"(addr)		\
++			:);					\
++		}						\
++		smp_mb();					\
++		break;						\
+ 	case 4:							\
+ 		smp_mb();					\
+ 		asm volatile (					\
+@@ -41,7 +78,7 @@ extern void __bad_xchg(void);
+ 	__typeof__(new) __new = (new);				\
+ 	__typeof__(new) __tmp;					\
+ 	__typeof__(old) __old = (old);				\
+-	__typeof__(*(ptr)) __ret;				\
++	__typeof__(*(ptr)) __ret = 0;				\
+ 	switch (size) {						\
+ 	case 4:							\
+ 		smp_mb();					\
+diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
+index 9feb0fd..6d21bdb 100644
+--- a/arch/csky/include/asm/spinlock.h
++++ b/arch/csky/include/asm/spinlock.h
+@@ -3,88 +3,8 @@
+ #ifndef __ASM_CSKY_SPINLOCK_H
+ #define __ASM_CSKY_SPINLOCK_H
+ 
+-#include <linux/spinlock_types.h>
+-#include <asm/barrier.h>
+-
+-/*
+- * Ticket-based spin-locking.
+- */
+-static inline void arch_spin_lock(arch_spinlock_t *lock)
+-{
+-	arch_spinlock_t lockval;
+-	u32 ticket_next = 1 << TICKET_NEXT;
+-	u32 *p = &lock->lock;
+-	u32 tmp;
+-
+-	asm volatile (
+-		"1:	ldex.w		%0, (%2) \n"
+-		"	mov		%1, %0	 \n"
+-		"	add		%0, %3	 \n"
+-		"	stex.w		%0, (%2) \n"
+-		"	bez		%0, 1b   \n"
+-		: "=&r" (tmp), "=&r" (lockval)
+-		: "r"(p), "r"(ticket_next)
+-		: "cc");
+-
+-	while (lockval.tickets.next != lockval.tickets.owner)
+-		lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
+-
+-	smp_mb();
+-}
+-
+-static inline int arch_spin_trylock(arch_spinlock_t *lock)
+-{
+-	u32 tmp, contended, res;
+-	u32 ticket_next = 1 << TICKET_NEXT;
+-	u32 *p = &lock->lock;
+-
+-	do {
+-		asm volatile (
+-		"	ldex.w		%0, (%3)   \n"
+-		"	movi		%2, 1	   \n"
+-		"	rotli		%1, %0, 16 \n"
+-		"	cmpne		%1, %0     \n"
+-		"	bt		1f         \n"
+-		"	movi		%2, 0	   \n"
+-		"	add		%0, %0, %4 \n"
+-		"	stex.w		%0, (%3)   \n"
+-		"1:				   \n"
+-		: "=&r" (res), "=&r" (tmp), "=&r" (contended)
+-		: "r"(p), "r"(ticket_next)
+-		: "cc");
+-	} while (!res);
+-
+-	if (!contended)
+-		smp_mb();
+-
+-	return !contended;
+-}
+-
+-static inline void arch_spin_unlock(arch_spinlock_t *lock)
+-{
+-	smp_mb();
+-	WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
+-}
+-
+-static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+-{
+-	return lock.tickets.owner == lock.tickets.next;
+-}
+-
+-static inline int arch_spin_is_locked(arch_spinlock_t *lock)
+-{
+-	return !arch_spin_value_unlocked(READ_ONCE(*lock));
+-}
+-
+-static inline int arch_spin_is_contended(arch_spinlock_t *lock)
+-{
+-	struct __raw_tickets tickets = READ_ONCE(lock->tickets);
+-
+-	return (tickets.next - tickets.owner) > 1;
+-}
+-#define arch_spin_is_contended	arch_spin_is_contended
+-
+ #include <asm/qrwlock.h>
++#include <asm/qspinlock.h>
+ 
+ /* See include/linux/spinlock.h */
+ #define smp_mb__after_spinlock()	smp_mb()
+diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
+index 8ff0f6f..82f5fd5 100644
+--- a/arch/csky/include/asm/spinlock_types.h
++++ b/arch/csky/include/asm/spinlock_types.h
+@@ -3,25 +3,11 @@
+ #ifndef __ASM_CSKY_SPINLOCK_TYPES_H
+ #define __ASM_CSKY_SPINLOCK_TYPES_H
+ 
+-#ifndef __LINUX_SPINLOCK_TYPES_H
++#if !defined(__LINUX_SPINLOCK_TYPES_H) && !defined(__ASM_CSKY_SPINLOCK_H)
+ # error "please don't include this file directly"
+ #endif
+ 
+-#define TICKET_NEXT	16
+-
+-typedef struct {
+-	union {
+-		u32 lock;
+-		struct __raw_tickets {
+-			/* little endian */
+-			u16 owner;
+-			u16 next;
+-		} tickets;
+-	};
+-} arch_spinlock_t;
+-
+-#define __ARCH_SPIN_LOCK_UNLOCKED	{ { 0 } }
+-
++#include <asm-generic/qspinlock_types.h>
+ #include <asm-generic/qrwlock_types.h>
+ 
+ #endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
+-- 
+2.7.4
 
-Any comments are welcome :)
-
-
-On Tue, Nov 24, 2020 at 5:51 PM Michael Kerrisk (man-pages)
-<mtk.manpages@gmail.com> wrote:
->
-> Hi Alex,
->
-> On 11/23/20 10:31 PM, Alejandro Colomar (man-pages) wrote:
-> > Hi Michael,
-> >
-> > SYNOPSIS
-> >        #include <linux/unistd.h>
-> >
-> >        #if defined __i386__ || defined __x86_64__
-> >        # include <asm/ldt.h>
-> >
-> >        int get_thread_area(struct user_desc *u_info);
-> >        int set_thread_area(struct user_desc *u_info);
-> >
-> >        #elif defined __m68k__
-> >
-> >        int get_thread_area(void);
-> >        int set_thread_area(unsigned long tp);
-> >
-> >        #elif defined __mips__
-> >
-> >        int set_thread_area(unsigned long addr);
-> >
-> >        #endif
-> >
-> >        Note: There are no glibc wrappers for these system  calls;  see
-> >        NOTES.
-> >
-> >
-> > $ grep -rn 'SYSCALL_DEFINE.*et_thread_area'
-> > arch/csky/kernel/syscall.c:6:
-> > SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
-> > arch/mips/kernel/syscall.c:86:
-> > SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
-> > arch/x86/kernel/tls.c:191:
-> > SYSCALL_DEFINE1(set_thread_area, struct user_desc __user *, u_info)
-> > arch/x86/kernel/tls.c:243:
-> > SYSCALL_DEFINE1(get_thread_area, struct user_desc __user *, u_info)
-> > arch/x86/um/tls_32.c:277:
-> > SYSCALL_DEFINE1(set_thread_area, struct user_desc __user *, user_desc)
-> > arch/x86/um/tls_32.c:325:
-> > SYSCALL_DEFINE1(get_thread_area, struct user_desc __user *, user_desc)
-> >
-> >
-> > See kernel commit 4859bfca11c7d63d55175bcd85a75d6cee4b7184
-> >
-> >
-> > I'd change
-> > -      #elif defined __mips__
-> > +      #elif defined(__mips__ || __csky__)
-> >
-> > and then change the rest of the text to add csky when appropriate.
-> > Am I correct?
->
-> AFAICT, you are correct. I think the reason that csky is missing is
-> that the architecture was added after this manual pages was added.
->
-> Thanks,
->
-> Michael
->
->
-> --
-> Michael Kerrisk
-> Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-> Linux/UNIX System Programming Training: http://man7.org/training/
-
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

@@ -2,159 +2,188 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63F27C2BB9A
-	for <linux-csky@archiver.kernel.org>; Mon, 14 Dec 2020 14:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 276EAC4361B
+	for <linux-csky@archiver.kernel.org>; Tue, 15 Dec 2020 06:10:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 252C32253D
-	for <linux-csky@archiver.kernel.org>; Mon, 14 Dec 2020 14:40:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9EDA20798
+	for <linux-csky@archiver.kernel.org>; Tue, 15 Dec 2020 06:10:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408091AbgLNOjz (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 14 Dec 2020 09:39:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407660AbgLNOjt (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Dec 2020 09:39:49 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553A6C0613D6;
-        Mon, 14 Dec 2020 06:39:09 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id r7so16648529wrc.5;
-        Mon, 14 Dec 2020 06:39:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y23uQOHXl8QZ5RIklxR/5d33ikY1eJDu8wcPOna5oh4=;
-        b=L6tz25Dmbm6QTy/RsOTHj5HcD+iVVZXZ9pDv1dXNiPIUjzgZ3vz2s9Jsi8bDGn8OW4
-         2YkyF5rU/HLezWAyBNB6QMCNBG8/HuvpFBX+rz8/VdKBKS5VVt39sWNvga9Q53e7R733
-         0LpK5/rJTUMvJbs3pGlBAzAEqdZmaZgEuaPJc728JO42MKOphAv+uSg7af7zvgoz34P6
-         6UG1aBiBYuu3bKLd+DJXPJTECQWb62n2d9EnSPdqZB5T6BJbifDwfjKDSUo7qDamU66o
-         8VdH2J+YpEYeDoeN7/bocXWlfCox28B/i9OkKwLvgulGEKd96SGHbVV8l6K6rduduooi
-         +7BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y23uQOHXl8QZ5RIklxR/5d33ikY1eJDu8wcPOna5oh4=;
-        b=aHLw8pxdgu0JXPC+gp31XKSnRdQOaGeu0TqiMDeR7tDzNGAswzIGBrpW4bWVgCVSu+
-         d0Uqxm2vdozJaw8vVpe1xhSRjMswzDFsbfgki6vrr6sakAWSHnbYRnJk7D3KWr4SISif
-         /Fu05TuITOi/kyGMbyDp70KpOERrl6PnFYKVWHQCYG/NlTZWpV07Fby9ZzvbhZik2D1B
-         xu1PPUpKcas262R0e89+IoBmOWy0B+XtPul7vMN6XzMSXmi4iTZwlAnTP7kOaNEKMETQ
-         gPn7ov1YoDKKwEf8RaHqMQiJdM0mlHu/bmcNuwVERxOeQmc3mZtRrwmeafLLNsQMj+Ot
-         a2qw==
-X-Gm-Message-State: AOAM530OohmJo4+UzEc7Cfi2YsGzkSKqVvjCVaPCoiWXqmRdKuWwuToy
-        mI9EdzoqfkwfOoNaH1m5GeI=
-X-Google-Smtp-Source: ABdhPJw6FLJ01Z+XyCZT/YG7W+WiJ6p1Di+54cDzlWLY2Y7+ZsEyURKbqB2sn9ipAH3YjqEV1gr5gw==
-X-Received: by 2002:a05:6000:185:: with SMTP id p5mr28298483wrx.403.1607956748086;
-        Mon, 14 Dec 2020 06:39:08 -0800 (PST)
-Received: from debian.vlc ([170.253.51.130])
-        by smtp.gmail.com with ESMTPSA id w18sm12481539wrn.2.2020.12.14.06.39.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 06:39:07 -0800 (PST)
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-To:     Michael Kerrisk <mtk.manpages@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        linux-man@vger.kernel.org
-Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>, libc-alpha@sourceware.org
-Subject: [PATCH] cacheflush.2: Document Architecture-specific variants
-Date:   Mon, 14 Dec 2020 15:38:53 +0100
-Message-Id: <20201214143852.16565-1-alx.manpages@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        id S1725890AbgLOGJ6 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 15 Dec 2020 01:09:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47962 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725535AbgLOGJ6 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 15 Dec 2020 01:09:58 -0500
+X-Gm-Message-State: AOAM530pUftn/EoSEYzmtrJzjxfIfmrw2YmPe+0zNmZVC8x4ecSn6r3p
+        uF+igu+3kAZMhyBbZhu4eGZAXXd2ENXBmw19h+0=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608012557;
+        bh=eM1iO62Y+OABfsmTbsKqTvjKPUgGID9OYipCgGIAT+k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=S36pMsUlhsZjpVADM5DMLS5Xa+oX4t4tX1PtMtg5YGUzJ7dM8qQ/K+2qedPxpeC1b
+         /OFcxxOHGjv8NZvYOaJaq/nmDAZX2WghI6loHuKR4X8HidnNcguXmj9T2EDAppQPuH
+         GKDjw3/3FaCi1fQcnrxds6LxT4MRLGPYsfKvJ4TCsIZ4VvSfOH0Ld5J8jIu3ABMXs4
+         h4E3uo+Frd9G+sJE3xkTAoOF/iW/MPqQLdaY3Z2in2YdLSRXa+V1nfPB6yzFTHASAu
+         P8zlCwXVOG0YW/Vq8eRHi1o+XxLdwvxtjOorWKlB5Cs+rPj1Qp+lA2wdqL5fAi1t/y
+         FILTfGFyc5eAw==
+X-Google-Smtp-Source: ABdhPJyCs/wn6V3CXZjp6FzMHp+77chg0XMZ9jFKivN81ulq6TJSCfI6QCX8XlMHeQSzem6E4veUA20MQNX6nlCaAIs=
+X-Received: by 2002:a19:804c:: with SMTP id b73mr12099365lfd.231.1608012555072;
+ Mon, 14 Dec 2020 22:09:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190307091514.2489338-1-arnd@arndb.de> <X9S28TcEXd2zghzp@elver.google.com>
+ <87czzeg5ep.fsf@nanos.tec.linutronix.de> <CAK8P3a0LWjNgwm605TM4dKCsn078X7NC3sEfdBSgcMNEocQ5iA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0LWjNgwm605TM4dKCsn078X7NC3sEfdBSgcMNEocQ5iA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 15 Dec 2020 14:09:03 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRLEbBfZJ7Y6UNOMq-cwG5OYRW=+8Pfauz6v6R8ntBjYA@mail.gmail.com>
+Message-ID: <CAJF2gTRLEbBfZJ7Y6UNOMq-cwG5OYRW=+8Pfauz6v6R8ntBjYA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] futex: mark futex_detect_cmpxchg() as 'noinline'
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
----
+Hi Arnd,
 
-Hi Michael,
+On Mon, Dec 14, 2020 at 9:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> On Sat, Dec 12, 2020 at 9:01 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >
+> > On Sat, Dec 12 2020 at 13:26, Marco Elver wrote:
+> > > On Thu, Mar 07, 2019 at 10:14AM +0100, Arnd Bergmann wrote:
+> > >> -static void __init futex_detect_cmpxchg(void)
+> > >> +static noinline void futex_detect_cmpxchg(void)
+> > >>  {
+> > >>  #ifndef CONFIG_HAVE_FUTEX_CMPXCHG
+> > >>      u32 curval;
+> > >
+> > > What ever happened to this patch?
+> >
+> > It obviously fell through the cracks.
+> >
+> > > I'm seeing this again with the attached config + next-20201211 (for
+> > > testing https://bugs.llvm.org/show_bug.cgi?id=48492). Had to apply this
+> > > patch to build the kernel.
+> >
+> > What really bothers me is to remove the __init from a function which is
+> > clearly only used during init. And looking deeper it's simply a hack.
+> >
+> > This function is only needed when an architecture has to runtime
+> > discover whether the CPU supports it or not. ARM has unconditional
+> > support for this, so the obvious thing to do is the below.
+> >
+>
+> Ah perfect, that is clearly the right solution here.
+>
+> > --- a/arch/arm/Kconfig
+> > +++ b/arch/arm/Kconfig
+> > @@ -86,6 +86,7 @@ config ARM
+> >         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+> >         select HAVE_FUNCTION_GRAPH_TRACER if !THUMB2_KERNEL && !CC_IS_CLANG
+> >         select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+> > +       select HAVE_FUTEX_CMPXCHG if FUTEX
+> >         select HAVE_GCC_PLUGINS
+> >         select HAVE_HW_BREAKPOINT if PERF_EVENTS && (CPU_V6 || CPU_V6K || CPU_V7)
+> >         select HAVE_IDE if PCI || ISA || PCMCIA
+>
+> I had a look at what other architectures always implement
+> futex_atomic_cmpxchg_inatomic() or can use the asm-generic non-SMP version,
+> and I found that it's pretty much all of them, the odd ones being just sparc32
+> and csky, which use asm-generic/futex.h but do have an SMP option,
+> as well as xtensa
+>
+> I would guess that for csky, this is a mistake, as the architecture is fairly
+> new and should be able to implement it. Not sure about sparc32.
 
-Please apply this patch after
-'[PATCH v5] cacheflush.2: Document __builtin___clear_cache() as a more
- portable alternative'.
+The c610, c807, c810 don't support SMP, so futex_cmpxchg_enabled = 1
+with asm-generic's implementation.
+For c860, there is no HAVE_FUTEX_CMPXCHG and cmpxchg_inatomic/inuser
+implementation, so futex_cmpxchg_enabled = 0.
 
-Thanks,
+Thx for point it out, we'll implement cmpxchg_inatomic/inuser for C860
+and still use asm-generic for non-smp CPUs:
 
-Alex
-
- man2/cacheflush.2 | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
-
-diff --git a/man2/cacheflush.2 b/man2/cacheflush.2
-index fc35f1a0b..0761b429a 100644
---- a/man2/cacheflush.2
-+++ b/man2/cacheflush.2
-@@ -31,6 +31,10 @@ cacheflush \- flush contents of instruction and/or data cache
- .PP
- .BI "int cacheflush(char *" addr ", int "nbytes ", int "cache );
- .fi
-+.PP
-+.IR Note :
-+On some architectures,
-+there is no glibc wrapper for this system call; see NOTES.
- .SH DESCRIPTION
- .BR cacheflush ()
- flushes the contents of the indicated cache(s) for the
-@@ -87,6 +91,44 @@ but nowadays, Linux provides a
- .BR cacheflush ()
- system call on some other architectures, but with different arguments.
- .SH NOTES
-+.SS Architecture-specific variants
-+Glibc provides a wrapper for this system call,
-+with the prototype shown in SYNOPSIS,
-+for the following architectures:
-+ARC, CSKY, MIPS, and NIOS2.
-+.PP
-+On some other architectures,
-+Linux provides this system call, with different arguments:
-+.TP
-+M68K:
-+.PP
-+.in +4n
-+.EX
-+.BI "int cacheflush(unsigned long " addr ", int " scope ", int " cache ,
-+.BI "               unsigned long " len );
-+.EE
-+.in
-+.TP
-+SH:
-+.PP
-+.in +4n
-+.EX
-+.BI "int cacheflush(unsigned long " addr ", unsigned long " len ", int " op );
-+.EE
-+.in
-+.TP
-+NDS32:
-+.PP
-+.in +4n
-+.EX
-+.BI "int cacheflush(unsigned int " start ", unsigned int " end ", int " cache );
-+.EE
-+.in
-+.PP
-+On the above architectures,
-+glibc does not provide a wrapper for this system call; call it using
-+.BR syscall (2).
-+.SS GCC alternative
- Unless you need the finer grained control that this system call provides,
- you probably want to use the GCC built-in function
- .BR __builtin___clear_cache (),
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index a2189c0..e968c58 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -49,6 +49,7 @@ config CSKY
+        select HAVE_FUNCTION_TRACER
+        select HAVE_FUNCTION_GRAPH_TRACER
+        select HAVE_FUNCTION_ERROR_INJECTION
++       select HAVE_FUTEX_CMPXCHG if FUTEX && SMP
+        select HAVE_FTRACE_MCOUNT_RECORD
+        select HAVE_KERNEL_GZIP
+        select HAVE_KERNEL_LZO
+diff --git a/arch/csky/include/asm/futex.h b/arch/csky/include/asm/futex.h
+new file mode 100644
+index 00000000..29275e8
+--- /dev/null
++++ b/arch/csky/include/asm/futex.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __ASM_CSKY_FUTEX_H
++#define __ASM_CSKY_FUTEX_H
++
++#ifndef CONFIG_SMP
++#include <asm-generic/futex.h>
++#else
++#include <linux/futex.h>
++#include <linux/uaccess.h>
++#include <linux/errno.h>
++
++static inline int
++arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
++{
++       int oldval = 0, ret = 0;
++
++       if (!access_ok(uaddr, sizeof(u32)))
++               return -EFAULT;
++
++       <...>
++
++       return ret;
++}
++
++static inline int
++futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
++                             u32 oldval, u32 newval)
++{
++       int ret = 0;
++       u32 val;
++       uintptr_t tmp;
++
++       if (!access_ok(uaddr, sizeof(u32)))
++               return -EFAULT;
++
++       <...>
++
++       return ret;
++}
++#endif
++#endif /* __ASM_CSKY_FUTEX_H */
 -- 
-2.29.2
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

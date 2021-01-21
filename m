@@ -4,41 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB74C433E0
-	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:09:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F7E6C433DB
+	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:10:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D46423877
-	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:09:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC18523877
+	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:10:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726682AbhAUHIt (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 21 Jan 2021 02:08:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37002 "EHLO mail.kernel.org"
+        id S1726159AbhAUHIz (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 21 Jan 2021 02:08:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36778 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727067AbhAUHAL (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 02:00:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 59737239ED;
-        Thu, 21 Jan 2021 06:57:39 +0000 (UTC)
+        id S1726769AbhAUG7l (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 01:59:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DAFB239E4;
+        Thu, 21 Jan 2021 06:57:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212261;
-        bh=XovlzmUsIAz9wxP3jozqCwwmw2ckkB7WIL7vTczeqFs=;
+        s=k20201202; t=1611212233;
+        bh=aRLtqF4YbrQ34I9YroLtA3j5T30/Mx9DbP0nQnuPAfo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pktTEqlF+c5hpufKGsAYQCaJxibt3sPuv+ePr3YKUy2qBQPlFj8FBy5wIOjuY7eME
-         PmqNLfGSURlYmIaohZwOWst40aTUp+Yms0O6248kvwBQxq/XnhNHGozAVmW85ZXXTt
-         /TXv0QN6MWmBynZXt/X/EQ8bMlfdhPCwqfvqZiGX2aRcbsoayamsMWjEbaUtlPaxFA
-         sLXmU+HB02VmVJ/gYkLwavQzwiO3tUszuPbNGCNpgrTXmsY8NuITK6HbKDHrUcp3l4
-         Tkhmh1kUINzgYIUJjFCw8GFHTarHRbqLR/G7xvPd+n8LA6WjxURPtOwyptiPaGEt0C
-         dHdLI6/on+w5Q==
+        b=Bn7OfkVCVZiydpcgdtTT/pbYowNWdut5YPGO4NDRSHX4w6mM3v6f7UnlBR31EzNl2
+         IMSQfK18ZsFe6SZHRKpky8qujXd+QFsyuJ/vmNk6FoamO7k7XQgjehbcWxpfFNS4ZK
+         oBK0GyVf4zCy3VvoR83HPbCMGhVamvnwD8kHS4F04sq5caEfeqcyXce4VzKLs5SIUI
+         3TNm0Z8CN+1KGMMpcWs4yflSfTTlcXTixc4v61kaoLtgYy3pcFj82247pfmY8XQxxk
+         Pv3hAt/GDcg6GjDY9dVLCkZozM93CL0V4xb3InN+FibBAUto5gfUmuh3XfNWkOxpL0
+         jASyJfMII28+A==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Menglong Dong <dong.menglong@zte.com.cn>
-Subject: [PATCH 26/29] csky: kprobe: fix code in simulate without 'long'
-Date:   Thu, 21 Jan 2021 14:53:46 +0800
-Message-Id: <20210121065349.3188251-26-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 17/29] csky: Fixup do_page_fault parent irq status
+Date:   Thu, 21 Jan 2021 14:53:37 +0800
+Message-Id: <20210121065349.3188251-17-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
@@ -48,106 +47,42 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The type of 'val' is 'unsigned long' in simulate_blz32, so 'val < 0'
-can't be true.
+We must succeed parent's context irq status in page fault handler.
 
-Cast 'val' to 'long' here to determine branch token or not,
-
-Fixup instructions: bnezad32, bhsz32, bhz32, blsz32, blz32
-
-Link: https://lore.kernel.org/linux-csky/CAJF2gTQjKXR9gpo06WAWG1aquiT87mATiMGorXs6ChxOxoe90Q@mail.gmail.com/T/#t
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Co-developed-by: Menglong Dong <dong.menglong@zte.com.cn>
-Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
 ---
- arch/csky/kernel/probes/simulate-insn.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ arch/csky/kernel/entry.S | 2 +-
+ arch/csky/mm/fault.c     | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/csky/kernel/probes/simulate-insn.c b/arch/csky/kernel/probes/simulate-insn.c
-index 4e464fed52ec..d6e8d092c9b7 100644
---- a/arch/csky/kernel/probes/simulate-insn.c
-+++ b/arch/csky/kernel/probes/simulate-insn.c
-@@ -274,9 +274,9 @@ void __kprobes
- simulate_bnezad32(u32 opcode, long addr, struct pt_regs *regs)
- {
- 	unsigned long tmp = opcode & 0x1f;
--	unsigned long val;
-+	long val;
+diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
+index 185fea477a8d..c1bd7a6b4ab6 100644
+--- a/arch/csky/kernel/entry.S
++++ b/arch/csky/kernel/entry.S
+@@ -42,7 +42,7 @@ ENTRY(csky_pagefault)
+ 	SAVE_ALL 0
+ 	zero_fp
+ 	context_tracking
+-	psrset  ee, ie
++	psrset  ee
+ 	mov     a0, sp
+ 	jbsr    do_page_fault
+ 	jmpi    ret_from_exception
+diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+index 9533bd8d9a6a..cd8c7304c7e9 100644
+--- a/arch/csky/mm/fault.c
++++ b/arch/csky/mm/fault.c
+@@ -143,6 +143,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
+ 		return;
+ 	}
  
--	csky_insn_reg_get_val(regs, tmp, &val);
-+	csky_insn_reg_get_val(regs, tmp, (unsigned long *)&val);
- 
- 	val -= 1;
- 
-@@ -286,7 +286,7 @@ simulate_bnezad32(u32 opcode, long addr, struct pt_regs *regs)
- 	} else
- 		instruction_pointer_set(regs, addr + 4);
- 
--	csky_insn_reg_set_val(regs, tmp, val);
-+	csky_insn_reg_set_val(regs, tmp, (unsigned long)val);
- }
- 
- void __kprobes
-@@ -297,13 +297,11 @@ simulate_bhsz32(u32 opcode, long addr, struct pt_regs *regs)
- 
- 	csky_insn_reg_get_val(regs, tmp, &val);
- 
--	if (val >= 0) {
-+	if ((long) val >= 0) {
- 		instruction_pointer_set(regs,
- 			addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
- 	} else
- 		instruction_pointer_set(regs, addr + 4);
--
--	csky_insn_reg_set_val(regs, tmp, val);
- }
- 
- void __kprobes
-@@ -314,13 +312,11 @@ simulate_bhz32(u32 opcode, long addr, struct pt_regs *regs)
- 
- 	csky_insn_reg_get_val(regs, tmp, &val);
- 
--	if (val > 0) {
-+	if ((long) val > 0) {
- 		instruction_pointer_set(regs,
- 			addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
- 	} else
- 		instruction_pointer_set(regs, addr + 4);
--
--	csky_insn_reg_set_val(regs, tmp, val);
- }
- 
- void __kprobes
-@@ -331,13 +327,11 @@ simulate_blsz32(u32 opcode, long addr, struct pt_regs *regs)
- 
- 	csky_insn_reg_get_val(regs, tmp, &val);
- 
--	if (val <= 0) {
-+	if ((long) val <= 0) {
- 		instruction_pointer_set(regs,
- 			addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
- 	} else
- 		instruction_pointer_set(regs, addr + 4);
--
--	csky_insn_reg_set_val(regs, tmp, val);
- }
- 
- void __kprobes
-@@ -348,13 +342,11 @@ simulate_blz32(u32 opcode, long addr, struct pt_regs *regs)
- 
- 	csky_insn_reg_get_val(regs, tmp, &val);
- 
--	if (val < 0) {
-+	if ((long) val < 0) {
- 		instruction_pointer_set(regs,
- 			addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
- 	} else
- 		instruction_pointer_set(regs, addr + 4);
--
--	csky_insn_reg_set_val(regs, tmp, val);
- }
- 
- void __kprobes
++	/* Enable interrupts if they were enabled in the parent context. */
++	if (likely(regs->sr & BIT(6)))
++		local_irq_enable();
++
+ 	/*
+ 	 * If we're in an interrupt or have no user
+ 	 * context, we must not take the fault..
 -- 
 2.17.1
 

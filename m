@@ -7,37 +7,38 @@ X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 712A6C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C06FC433E6
 	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:00:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 34B4A23788
+	by mail.kernel.org (Postfix) with ESMTP id 55B1223975
 	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:00:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbhAUG7v (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 21 Jan 2021 01:59:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36772 "EHLO mail.kernel.org"
+        id S1727037AbhAUG7y (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 21 Jan 2021 01:59:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36844 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726847AbhAUG7l (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:59:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19262239E7;
-        Thu, 21 Jan 2021 06:57:08 +0000 (UTC)
+        id S1726859AbhAUG7q (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 01:59:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7443B239EF;
+        Thu, 21 Jan 2021 06:57:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212230;
-        bh=+H2zPsLci1bezk2S3JmavBPHLPQUue/AmNZ7OZAGcJQ=;
+        s=k20201202; t=1611212245;
+        bh=+ImL2UR5Wqlq3NTKFXbClIjnQPRXcWNhsbOJ57BukIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s94hz0ctLE03TEDMS4oSergz79QSBeWnA4adayWZ1ry5Zi4nB34tD77GvSoJlG7mK
-         1742CZG9vko3YaJ58A+er4JWgNoclTtCe7ZjNTsv99JExVltr2QYh/g1RO5mgG73pJ
-         pIIzvXTvxVgvG+3yg1kzw9YllolB8A+PU1jg2306qQwK8clx/yXv19uGo5U2j0Ww2F
-         lq6fLVOCFICR9TUBigGUX+3LCH3wkbXx8IU37TmVpOtSLToUD2GmtLML92TgsDAJTw
-         RcGWIFgm6ZU1kANh8WZI+TIFvyEvtArD/5RDPjy0tEkgZP2KSC8AAloL+EKJxQOlUu
-         707IKeZpqK9hA==
+        b=AlT4o4NYdCjcQL1ej7N5a2QKB85hlyQATlg3lxcFx0p1sqVjqTOOY7etvWfGcX5Mg
+         g7M7vkISuImY2yosFHD2js0KLUQAEoKfAoM9dUVVKB38/sq4BfpfZcJGgWlZQL7yHX
+         xpmPGUR+bBZ/2eBIBnNs98VOk/GruGWCcefG/YIt9uem2Hh0s0feHjSMs9Mw8vyHPp
+         1LARxusDq6lyGFCL5Ls8GtjyAzk89obR98NGMqDkgZB+GSzhAa9w261zlqjMeA0M/B
+         Bo9s20uHJvobo8IE1Jd/8iVueFk3M/0FmJWW1y7XZMD0jfztutcfDHkfycj3LEWyTq
+         X3o+XxeasALTA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Zhenzhong Duan <zhenzhong.duan@gmail.com>,
         Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 16/29] csky: Add faulthandler_disabled() check
-Date:   Thu, 21 Jan 2021 14:53:36 +0800
-Message-Id: <20210121065349.3188251-16-guoren@kernel.org>
+Subject: [PATCH 21/29] csky: Fix a size determination in gpr_get()
+Date:   Thu, 21 Jan 2021 14:53:41 +0800
+Message-Id: <20210121065349.3188251-21-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
@@ -45,43 +46,31 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Zhenzhong Duan <zhenzhong.duan@gmail.com>
 
-Similar to other architectures:
-In addition to in_atomic, we also need pagefault_disabled() to
-check.
+"*" is missed  in size determination as we are passing register set
+rather than a pointer.
 
+Fixes: dcad7854fcce ("sky: switch to ->regset_get()")
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@gmail.com>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 ---
- arch/csky/mm/fault.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/csky/kernel/ptrace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index cecca6729b04..9533bd8d9a6a 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -143,12 +143,11 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
- 		return;
- 	}
+diff --git a/arch/csky/kernel/ptrace.c b/arch/csky/kernel/ptrace.c
+index 417b759fab6c..0105ac81b432 100644
+--- a/arch/csky/kernel/ptrace.c
++++ b/arch/csky/kernel/ptrace.c
+@@ -84,7 +84,7 @@ static int gpr_get(struct task_struct *target,
+ 	/* Abiv1 regs->tls is fake and we need sync here. */
+ 	regs->tls = task_thread_info(target)->tp_value;
  
--	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
- 	/*
- 	 * If we're in an interrupt or have no user
- 	 * context, we must not take the fault..
- 	 */
--	if (in_atomic() || !mm)
-+	if (unlikely(faulthandler_disabled() || !mm))
- 		goto bad_area_nosemaphore;
+-	return membuf_write(&to, regs, sizeof(regs));
++	return membuf_write(&to, regs, sizeof(*regs));
+ }
  
- 	if (user_mode(regs))
-@@ -157,6 +156,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
- 	if (is_write(regs))
- 		flags |= FAULT_FLAG_WRITE;
- 
-+	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
- retry:
- 	mmap_read_lock(mm);
- 	vma = find_vma(mm, address);
+ static int gpr_set(struct task_struct *target,
 -- 
 2.17.1
 

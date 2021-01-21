@@ -4,43 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16B3FC433E0
-	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 06:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 712A6C433E0
+	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:00:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE2D423788
-	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 06:58:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34B4A23788
+	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:00:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbhAUG6l (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 21 Jan 2021 01:58:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36428 "EHLO mail.kernel.org"
+        id S1727001AbhAUG7v (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 21 Jan 2021 01:59:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726042AbhAUG5W (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:57:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AEEDE2396F;
-        Thu, 21 Jan 2021 06:56:30 +0000 (UTC)
+        id S1726847AbhAUG7l (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 01:59:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 19262239E7;
+        Thu, 21 Jan 2021 06:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212193;
-        bh=wv9R3YbMmDZpuBvKea9U3IYMvPqDbPWPeoVQyx3W8hg=;
+        s=k20201202; t=1611212230;
+        bh=+H2zPsLci1bezk2S3JmavBPHLPQUue/AmNZ7OZAGcJQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NrN50/yDb1bSJCqsMyNSj5/C8MYnLLAXf7wP3zFVk0M2n7xxTIQDcf7lSTVqes8BK
-         VJcH9y4y9Vm9IRhi0hStF9107kpcD+KSMHDlSSKYBOoQrksxzVnKs37IrhjL1lOZch
-         hPEOx+iXLrfY0Hpuz9xlx2yj76y1nxVCZtDj1d8e0QcPrmidYPc5FR1a7X3IyzO1TX
-         cthOFYW298rpSJ/ltGJLouxp9V9lr0oUSnSy+GTXafX4x9eU3CH1WssAFJ+E65VYQn
-         fUVk9nLp+aBLgAWrxaXl5BE6t5mA6Lvzb071TdaHW1Z43K6zWhTwNMS8fcP+C1Kyin
-         hxWYkQ9l2toVA==
+        b=s94hz0ctLE03TEDMS4oSergz79QSBeWnA4adayWZ1ry5Zi4nB34tD77GvSoJlG7mK
+         1742CZG9vko3YaJ58A+er4JWgNoclTtCe7ZjNTsv99JExVltr2QYh/g1RO5mgG73pJ
+         pIIzvXTvxVgvG+3yg1kzw9YllolB8A+PU1jg2306qQwK8clx/yXv19uGo5U2j0Ww2F
+         lq6fLVOCFICR9TUBigGUX+3LCH3wkbXx8IU37TmVpOtSLToUD2GmtLML92TgsDAJTw
+         RcGWIFgm6ZU1kANh8WZI+TIFvyEvtArD/5RDPjy0tEkgZP2KSC8AAloL+EKJxQOlUu
+         707IKeZpqK9hA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: [PATCH 02/29] csky: Fixup perf probe failed
-Date:   Thu, 21 Jan 2021 14:53:22 +0800
-Message-Id: <20210121065349.3188251-2-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 16/29] csky: Add faulthandler_disabled() check
+Date:   Thu, 21 Jan 2021 14:53:36 +0800
+Message-Id: <20210121065349.3188251-16-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
@@ -50,46 +47,41 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Current perf init will failed with:
-[    1.452433] csky-pmu: probe of soc:pmu failed with error -16
-
-This patch fix it up with adding CPUHP_AP_PERF_CSKY_ONLINE in
-cpuhotplug.h.
+Similar to other architectures:
+In addition to in_atomic, we also need pagefault_disabled() to
+check.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
 ---
- arch/csky/kernel/perf_event.c | 2 +-
- include/linux/cpuhotplug.h    | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/csky/mm/fault.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index 1a29f1157449..55d5a5379483 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -1319,7 +1319,7 @@ int csky_pmu_device_probe(struct platform_device *pdev,
- 		pr_notice("[perf] PMU request irq fail!\n");
+diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+index cecca6729b04..9533bd8d9a6a 100644
+--- a/arch/csky/mm/fault.c
++++ b/arch/csky/mm/fault.c
+@@ -143,12 +143,11 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
+ 		return;
  	}
  
--	ret = cpuhp_setup_state(CPUHP_AP_PERF_ONLINE, "AP_PERF_ONLINE",
-+	ret = cpuhp_setup_state(CPUHP_AP_PERF_CSKY_ONLINE, "AP_PERF_ONLINE",
- 				csky_pmu_starting_cpu,
- 				csky_pmu_dying_cpu);
- 	if (ret) {
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 0042ef362511..d3e26dc81494 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -185,6 +185,7 @@ enum cpuhp_state {
- 	CPUHP_AP_PERF_POWERPC_TRACE_IMC_ONLINE,
- 	CPUHP_AP_PERF_POWERPC_HV_24x7_ONLINE,
- 	CPUHP_AP_PERF_POWERPC_HV_GPCI_ONLINE,
-+	CPUHP_AP_PERF_CSKY_ONLINE,
- 	CPUHP_AP_WATCHDOG_ONLINE,
- 	CPUHP_AP_WORKQUEUE_ONLINE,
- 	CPUHP_AP_RCUTREE_ONLINE,
+-	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ 	/*
+ 	 * If we're in an interrupt or have no user
+ 	 * context, we must not take the fault..
+ 	 */
+-	if (in_atomic() || !mm)
++	if (unlikely(faulthandler_disabled() || !mm))
+ 		goto bad_area_nosemaphore;
+ 
+ 	if (user_mode(regs))
+@@ -157,6 +156,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
+ 	if (is_write(regs))
+ 		flags |= FAULT_FLAG_WRITE;
+ 
++	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ retry:
+ 	mmap_read_lock(mm);
+ 	vma = find_vma(mm, address);
 -- 
 2.17.1
 

@@ -2,226 +2,86 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0322AC433DB
-	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 036E3C433DB
+	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 11:44:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADBED2313E
-	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 07:50:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9B802395A
+	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 11:44:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbhAUHuL (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 21 Jan 2021 02:50:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36772 "EHLO mail.kernel.org"
+        id S1726603AbhAULnq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 21 Jan 2021 06:43:46 -0500
+Received: from foss.arm.com ([217.140.110.172]:33120 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726570AbhAUG6H (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:58:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B27C8235F9;
-        Thu, 21 Jan 2021 06:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212206;
-        bh=1U7yvjmMuzK51PmNewaagHReE48I6+8IeKcDglA4DxI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HN3qfzI2jmDVAzsVy4ucLz7lsp/KEtdOX3ZMJ4sk88qU+eEE4Vw42P1aTfV9iWaVK
-         CW97GgYZKu/cxL0ZwBU5+Zudc4qLcWJT2gXgbGn6QtxaxvCO0L8LJ5YEgKh0rSP5VT
-         8Id7I/wMCN/G/rsynRYns8R7YdcFxdrIWLkffoKh0bcsnYGNP0/+4Ip7449yT9eqSY
-         s8dimmwfShIKiv7KeP+DgBWx6E9wEfC71nTPfJEzQenthpjrqk24/Miu3S5He2YD+w
-         J83CUhkevvx12dzyFdc8zWed99LlPj4YsHEAV24yC6AdLOgbfxfYxa35oZ0NTALJ0u
-         PR7CcE374mU2Q==
-From:   guoren@kernel.org
+        id S1730606AbhAULnX (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 06:43:23 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CBBD11B3;
+        Thu, 21 Jan 2021 03:42:36 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.35.62])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 889553F719;
+        Thu, 21 Jan 2021 03:42:35 -0800 (PST)
+Date:   Thu, 21 Jan 2021 11:42:33 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH 06/29] csky: Fixup futex SMP implementation
-Date:   Thu, 21 Jan 2021 14:53:26 +0800
-Message-Id: <20210121065349.3188251-6-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH 19/29] csky: mm: abort uaccess retries upon fatal signal
+Message-ID: <20210121114233.GC48431@C02TD0UTHF1T.local>
 References: <20210121065349.3188251-1-guoren@kernel.org>
+ <20210121065349.3188251-19-guoren@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121065349.3188251-19-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, Jan 21, 2021 at 02:53:39PM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Pick up the patch from the 'Link' made by Mark Rutland. Keep the
+> same with x86, arm, arm64, arc, sh, power.
+> 
+> Link: https://lore.kernel.org/linux-arm-kernel/1499782763-31418-1-git-send-email-mark.rutland@arm.com/
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> ---
+>  arch/csky/mm/fault.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+> index c7b67976bac4..1482de56f4f7 100644
+> --- a/arch/csky/mm/fault.c
+> +++ b/arch/csky/mm/fault.c
+> @@ -279,8 +279,11 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
+>  	 * signal first. We do not need to release the mmap_lock because it
+>  	 * would already be released in __lock_page_or_retry in mm/filemap.c.
+>  	 */
+> -	if (fault_signal_pending(fault, regs))
+> +	if (fault_signal_pending(fault, regs)) {
+> +		if (!user_mode(regs))
+> +			no_context(regs, addr);
+>  		return;
+> +	}
 
-Arnd said:
-I would guess that for csky, this is a mistake, as the architecture
-is fairly new and should be able to implement it.
+FWIW, this looks right to me -- I assumed you've tested with the
+test-case in the linked email?
 
-Guo reply:
-The c610, c807, c810 don't support SMP, so futex_cmpxchg_enabled = 1
-with asm-generic's implementation.
-For c860, there is no HAVE_FUTEX_CMPXCHG and cmpxchg_inatomic/inuser
-implementation, so futex_cmpxchg_enabled = 0.
+It looks like a number of other architectures are still broken here. :/
 
-Thx for point it out, we'll implement cmpxchg_inatomic/inuser for
-C860 and still use asm-generic for non-smp CPUs.
+I'll go and poke them...
 
-LTP test:
-futex_wait01    1  TPASS  :  futex_wait(): errno=ETIMEDOUT(110): Connection timed out
-futex_wait01    2  TPASS  :  futex_wait(): errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
-futex_wait01    3  TPASS  :  futex_wait(): errno=ETIMEDOUT(110): Connection timed out
-futex_wait01    4  TPASS  :  futex_wait(): errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
-futex_wait02    1  TPASS  :  futex_wait() woken up
-futex_wait03    1  TPASS  :  futex_wait() woken up
-futex_wait04    1  TPASS  :  futex_wait() returned -1: errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Link: https://lore.kernel.org/lkml/CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com/
----
- arch/csky/Kconfig             |   1 +
- arch/csky/include/asm/futex.h | 121 ++++++++++++++++++++++++++++++++++
- 2 files changed, 122 insertions(+)
- create mode 100644 arch/csky/include/asm/futex.h
-
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 21b2ab099c8b..c74a8e2e8549 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -48,6 +48,7 @@ config CSKY
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_ERROR_INJECTION
-+	select HAVE_FUTEX_CMPXCHG if FUTEX && SMP
- 	select HAVE_FTRACE_MCOUNT_RECORD
- 	select HAVE_KERNEL_GZIP
- 	select HAVE_KERNEL_LZO
-diff --git a/arch/csky/include/asm/futex.h b/arch/csky/include/asm/futex.h
-new file mode 100644
-index 000000000000..6cfd312723fa
---- /dev/null
-+++ b/arch/csky/include/asm/futex.h
-@@ -0,0 +1,121 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __ASM_CSKY_FUTEX_H
-+#define __ASM_CSKY_FUTEX_H
-+
-+#ifndef CONFIG_SMP
-+#include <asm-generic/futex.h>
-+#else
-+#include <linux/atomic.h>
-+#include <linux/futex.h>
-+#include <linux/uaccess.h>
-+#include <linux/errno.h>
-+
-+#define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
-+{									\
-+	u32 tmp;							\
-+									\
-+	__atomic_pre_full_fence();					\
-+									\
-+	__asm__ __volatile__ (						\
-+	"1:	ldex.w	%[ov], %[u]			\n"		\
-+	"	"insn"					\n"		\
-+	"2:	stex.w	%[t], %[u]			\n"		\
-+	"	bez	%[t], 1b			\n"		\
-+	"	br	4f				\n"		\
-+	"3:	mov	%[r], %[e]			\n"		\
-+	"4:						\n"		\
-+	"	.section __ex_table,\"a\"		\n"		\
-+	"	.balign 4				\n"		\
-+	"	.long	1b, 3b				\n"		\
-+	"	.long	2b, 3b				\n"		\
-+	"	.previous				\n"		\
-+	: [r] "+r" (ret), [ov] "=&r" (oldval),				\
-+	  [u] "+m" (*uaddr), [t] "=&r" (tmp)				\
-+	: [op] "Jr" (oparg), [e] "jr" (-EFAULT)				\
-+	: "memory");							\
-+									\
-+	__atomic_post_full_fence();					\
-+}
-+
-+static inline int
-+arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
-+{
-+	int oldval = 0, ret = 0;
-+
-+	if (!access_ok(uaddr, sizeof(u32)))
-+		return -EFAULT;
-+
-+	switch (op) {
-+	case FUTEX_OP_SET:
-+		__futex_atomic_op("mov %[t], %[ov]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_ADD:
-+		__futex_atomic_op("add %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_OR:
-+		__futex_atomic_op("or %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_ANDN:
-+		__futex_atomic_op("and %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, ~oparg);
-+		break;
-+	case FUTEX_OP_XOR:
-+		__futex_atomic_op("xor %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	default:
-+		ret = -ENOSYS;
-+	}
-+
-+	if (!ret)
-+		*oval = oldval;
-+
-+	return ret;
-+}
-+
-+
-+
-+static inline int
-+futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
-+			      u32 oldval, u32 newval)
-+{
-+	int ret = 0;
-+	u32 val, tmp;
-+
-+	if (!access_ok(uaddr, sizeof(u32)))
-+		return -EFAULT;
-+
-+	__atomic_pre_full_fence();
-+
-+	__asm__ __volatile__ (
-+	"1:	ldex.w	%[v], %[u]			\n"
-+	"	cmpne	%[v], %[ov]			\n"
-+	"	bt	4f				\n"
-+	"	mov	%[t], %[nv]			\n"
-+	"2:	stex.w	%[t], %[u]			\n"
-+	"	bez	%[t], 1b			\n"
-+	"	br	4f				\n"
-+	"3:	mov	%[r], %[e]			\n"
-+	"4:						\n"
-+	"	.section __ex_table,\"a\"		\n"
-+	"	.balign 4				\n"
-+	"	.long	1b, 3b				\n"
-+	"	.long	2b, 3b				\n"
-+	"	.previous				\n"
-+	: [r] "+r" (ret), [v] "=&r" (val), [u] "+m" (*uaddr),
-+	  [t] "=&r" (tmp)
-+	: [ov] "Jr" (oldval), [nv] "Jr" (newval), [e] "Jr" (-EFAULT)
-+	: "memory");
-+
-+	__atomic_post_full_fence();
-+
-+	*uval = val;
-+	return ret;
-+}
-+
-+#endif /* CONFIG_SMP */
-+#endif /* __ASM_CSKY_FUTEX_H */
--- 
-2.17.1
-
+Thanks,
+Mark.
+  
+>  	if (unlikely((fault & VM_FAULT_RETRY) && (flags & FAULT_FLAG_ALLOW_RETRY))) {
+>  		flags |= FAULT_FLAG_TRIED;
+> -- 
+> 2.17.1
+> 

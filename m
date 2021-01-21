@@ -4,43 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A1AAC433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C6BFC43381
 	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 20:39:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF162239D1
-	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 20:39:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13F5D2389B
+	for <linux-csky@archiver.kernel.org>; Thu, 21 Jan 2021 20:39:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbhAUHsg (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 21 Jan 2021 02:48:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36774 "EHLO mail.kernel.org"
+        id S1726534AbhAUHsb (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 21 Jan 2021 02:48:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36778 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726564AbhAUG6H (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        id S1726578AbhAUG6H (ORCPT <rfc822;linux-csky@vger.kernel.org>);
         Thu, 21 Jan 2021 01:58:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F0D612399C;
-        Thu, 21 Jan 2021 06:56:46 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D75DD23975;
+        Thu, 21 Jan 2021 06:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212209;
-        bh=W4ypOiLl33dIJpn7kvCRTFEgKfvNavmgd789Wd6eLNI=;
+        s=k20201202; t=1611212214;
+        bh=oxrWdVN1jjUNfPNGVTpzLGl9h7s88l7H9ReGOAzQUS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fc1bdyG82WZZNsR4TEhObb1rY5C/F+d19D/AOwQF/2vWusyernnydNkInQn316zGc
-         ycKRb8xzrh1OKsyLlsEadBOlA4YyMV5WAVbenixyGPZ5W28EzL1xBAkfll5NZmzdBE
-         OhSGt6rvVXJjvO3KI9F+WadP4GyUTZdaZR8iG67jOhPKDDrit1VaPUnvwdBNk0vyPU
-         ge+81Wd2qF/Q/kmq5FvQmfGP8dFhHI2CMacs8HouNbRDkukctjQ27/KkYrU8aS52pF
-         bs6L8F9GpvXyhrHq7POFzk9w4uPz9qF8Bs1dRe4SOCqYnD61wQVNwz8NrjFaE6/SJr
-         zvvuNbXulu+Qg==
+        b=kUNd8Qh3ffY2klERX+Q4uvPseISziF58s7BizswGoLg+eVrZTWOjQBPaaHbnr8Ba+
+         gHNvONXO/2OFY2h705ImduKSwJtq5Fqw3otAqW1HX9AlMAqvLh+e7oOFXhhXaAcDAC
+         Tsq7dAs1qZE4g5y+wdb/ejn6vTE0Qyjr2LGEbgP0wHxvddcZ/TGKkO1+cpl30eVDFr
+         bM1lcLR3L0vmf2CWCFC8Xd/XfpUzx2SAggHTmTaT6/xuaAqTRAOKek3zJsHZgExjlb
+         wIar4ZOqR3+51zndtL3WA6RB7/I7/zNNBPMBzpojc+O/c8Wm6LfcCbOOaILOGCA+fW
+         Dmgo8hWyAJ+gg==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH 07/29] csky: Fixup asm/cmpxchg.h with correct ordering barrier
-Date:   Thu, 21 Jan 2021 14:53:27 +0800
-Message-Id: <20210121065349.3188251-7-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 09/29] csky: Fixup PTE global for 2.5:1.5 virtual memory
+Date:   Thu, 21 Jan 2021 14:53:29 +0800
+Message-Id: <20210121065349.3188251-9-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
@@ -50,102 +47,63 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Optimize the performance of cmpxchg by using more fine-grained
-acquire/release barriers.
+Fixup commit c2d1adfa9a24 "csky: Add memory layout 2.5G(user):1.5G
+(kernel)". That patch broke the global bit in PTE.
+
+C-SKY TLB's entry contain two pages:
+vpn, vpn + 1 -> ppn0, ppn1
+
+All PPN's attributes contain global bit and final global is PPN0.G
+& PPN1.G. So we must keep PPN0.G and PPN1.G same in one TLB's
+entry.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Paul E. McKenney <paulmck@kernel.org>
 ---
- arch/csky/include/asm/cmpxchg.h | 27 +++++++++++++++++----------
- 1 file changed, 17 insertions(+), 10 deletions(-)
+ arch/csky/include/asm/pgtable.h | 2 +-
+ arch/csky/mm/init.c             | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
-index 89224530a0ee..dabc8e46ce7b 100644
---- a/arch/csky/include/asm/cmpxchg.h
-+++ b/arch/csky/include/asm/cmpxchg.h
-@@ -3,12 +3,12 @@
- #ifndef __ASM_CSKY_CMPXCHG_H
- #define __ASM_CSKY_CMPXCHG_H
+diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+index 6ec97af0d1ff..2485db84dba8 100644
+--- a/arch/csky/include/asm/pgtable.h
++++ b/arch/csky/include/asm/pgtable.h
+@@ -34,7 +34,7 @@
  
--#ifdef CONFIG_CPU_HAS_LDSTEX
-+#ifdef CONFIG_SMP
- #include <asm/barrier.h>
+ #define pmd_page(pmd)	(pfn_to_page(pmd_phys(pmd) >> PAGE_SHIFT))
+ #define pte_clear(mm, addr, ptep)	set_pte((ptep), \
+-	(((unsigned int) addr & PAGE_OFFSET) ? __pte(_PAGE_GLOBAL) : __pte(0)))
++	(((unsigned int) addr >= PAGE_OFFSET) ? __pte(_PAGE_GLOBAL) : __pte(0)))
+ #define pte_none(pte)		(!(pte_val(pte) & ~_PAGE_GLOBAL))
+ #define pte_present(pte)	(pte_val(pte) & _PAGE_PRESENT)
+ #define pte_pfn(x)	((unsigned long)((x).pte_low >> PAGE_SHIFT))
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index 7742f1441a67..8170d7ce116b 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -30,9 +30,12 @@
+ #include <asm/tlb.h>
+ #include <asm/cacheflush.h>
  
- extern void __bad_xchg(void);
- 
--#define __xchg(new, ptr, size)					\
-+#define __xchg_relaxed(new, ptr, size)				\
- ({								\
- 	__typeof__(ptr) __ptr = (ptr);				\
- 	__typeof__(new) __new = (new);				\
-@@ -16,7 +16,6 @@ extern void __bad_xchg(void);
- 	unsigned long tmp;					\
- 	switch (size) {						\
- 	case 4:							\
--		smp_mb();					\
- 		asm volatile (					\
- 		"1:	ldex.w		%0, (%3) \n"		\
- 		"	mov		%1, %2   \n"		\
-@@ -25,7 +24,6 @@ extern void __bad_xchg(void);
- 			: "=&r" (__ret), "=&r" (tmp)		\
- 			: "r" (__new), "r"(__ptr)		\
- 			:);					\
--		smp_mb();					\
- 		break;						\
- 	default:						\
- 		__bad_xchg();					\
-@@ -33,9 +31,10 @@ extern void __bad_xchg(void);
- 	__ret;							\
- })
- 
--#define xchg(ptr, x)	(__xchg((x), (ptr), sizeof(*(ptr))))
-+#define xchg_relaxed(ptr, x) \
-+		(__xchg_relaxed((x), (ptr), sizeof(*(ptr))))
- 
--#define __cmpxchg(ptr, old, new, size)				\
-+#define __cmpxchg_relaxed(ptr, old, new, size)			\
- ({								\
- 	__typeof__(ptr) __ptr = (ptr);				\
- 	__typeof__(new) __new = (new);				\
-@@ -44,7 +43,6 @@ extern void __bad_xchg(void);
- 	__typeof__(*(ptr)) __ret;				\
- 	switch (size) {						\
- 	case 4:							\
--		smp_mb();					\
- 		asm volatile (					\
- 		"1:	ldex.w		%0, (%3) \n"		\
- 		"	cmpne		%0, %4   \n"		\
-@@ -56,7 +54,6 @@ extern void __bad_xchg(void);
- 			: "=&r" (__ret), "=&r" (__tmp)		\
- 			: "r" (__new), "r"(__ptr), "r"(__old)	\
- 			:);					\
--		smp_mb();					\
- 		break;						\
- 	default:						\
- 		__bad_xchg();					\
-@@ -64,8 +61,18 @@ extern void __bad_xchg(void);
- 	__ret;							\
- })
- 
--#define cmpxchg(ptr, o, n) \
--	(__cmpxchg((ptr), (o), (n), sizeof(*(ptr))))
-+#define cmpxchg_relaxed(ptr, o, n) \
-+	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
++#define PTRS_KERN_TABLE \
++		((PTRS_PER_PGD - USER_PTRS_PER_PGD) * PTRS_PER_PTE)
 +
-+#define cmpxchg(ptr, o, n) 					\
-+({								\
-+	__typeof__(*(ptr)) __ret;				\
-+	__smp_release_fence();					\
-+	__ret = cmpxchg_relaxed(ptr, o, n);			\
-+	__smp_acquire_fence();					\
-+	__ret;							\
-+})
+ pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+ pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
+-pte_t kernel_pte_tables[(PTRS_PER_PGD - USER_PTRS_PER_PGD)*PTRS_PER_PTE] __page_aligned_bss;
++pte_t kernel_pte_tables[PTRS_KERN_TABLE] __page_aligned_bss;
+ 
+ EXPORT_SYMBOL(invalid_pte_table);
+ unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
+@@ -149,6 +152,9 @@ void __init mmu_init(unsigned long min_pfn, unsigned long max_pfn)
+ 		swapper_pg_dir[i].pgd =
+ 			__pa(kernel_pte_tables + (PTRS_PER_PTE * (i - USER_PTRS_PER_PGD)));
+ 
++	for (i = 0; i < PTRS_KERN_TABLE; i++)
++		set_pte(&kernel_pte_tables[i], __pte(_PAGE_GLOBAL));
 +
- #else
- #include <asm-generic/cmpxchg.h>
- #endif
+ 	for (i = min_pfn; i < max_pfn; i++)
+ 		set_pte(&kernel_pte_tables[i - PFN_DOWN(va_pa_offset)], pfn_pte(i, PAGE_KERNEL));
+ 
 -- 
 2.17.1
 

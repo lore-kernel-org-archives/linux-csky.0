@@ -2,118 +2,78 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25B18C433DB
-	for <linux-csky@archiver.kernel.org>; Tue, 26 Jan 2021 23:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0FB8C433DB
+	for <linux-csky@archiver.kernel.org>; Wed, 27 Jan 2021 05:05:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4DA32065E
-	for <linux-csky@archiver.kernel.org>; Tue, 26 Jan 2021 23:07:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 819452068D
+	for <linux-csky@archiver.kernel.org>; Wed, 27 Jan 2021 05:05:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732025AbhAZXHO (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 26 Jan 2021 18:07:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48056 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728624AbhAZS1h (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 26 Jan 2021 13:27:37 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 95C32207A9;
-        Tue, 26 Jan 2021 18:26:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611685617;
-        bh=mS4fwRCoDBpjB2pQf4JgN+vKx0b/jP8+diUiuhUDlNY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jqTSVnzkNI1pw4SkMEPZVenKL5EBNeXDXThSaq/NYS00TyHO6RMN9l7n2hF0qgXsB
-         MmXqklVicSbsEwdjASSGGsnFIcqGoc3+4wA3oU1eMIm1RbXQnqQrFbkfcNGrzavQBO
-         Pg7o3dJEkSvfTwxmmGDd06ceJR8iTDcSRfM0HWj6OIgcnLbC/8Sfh9ObjF6rwaLNg7
-         oMpnRoRgBmyzEpy6dFXw2Bqtr9OBQpV0XP9dj8BgfOKZwkyXxPCzjzo35gsu0bVPdg
-         tdyfLMe3v4qEsQeNzxZfVKe2k0gb6beRA+0RdyW2iee0MqQI8h3DHNvuDy0nNRtSqc
-         8moYTUwV3ciqw==
-Date:   Tue, 26 Jan 2021 20:26:48 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        id S231160AbhA0FFK (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 27 Jan 2021 00:05:10 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:43968 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232788AbhA0DFU (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 26 Jan 2021 22:05:20 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=guoren@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UN09ODa_1611716255;
+Received: from IT-C02Z45M7LVCF.local(mailfrom:guoren@linux.alibaba.com fp:SMTPD_---0UN09ODa_1611716255)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 27 Jan 2021 10:57:36 +0800
+Subject: Re: csky + clangbuiltlinux
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        zixuan.wu@linux.alibaba.com, ren_guo@c-sky.com,
         linux-csky@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>
-Subject: Re: [PATCH v1] csky: use free_initmem_default() in free_initmem()
-Message-ID: <20210126182648.GR6332@kernel.org>
-References: <20210126181420.19223-1-david@redhat.com>
+        clang-built-linux <clang-built-linux@googlegroups.com>
+References: <CAKwvOdnQjm2yMfKLcT-9=iQg68=EskMh3Evrx=3rTAJo3UAnZw@mail.gmail.com>
+From:   Guo Ren <guoren@linux.alibaba.com>
+Message-ID: <d8f70be3-178f-7485-4a28-05108e21ef20@linux.alibaba.com>
+Date:   Wed, 27 Jan 2021 10:57:35 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126181420.19223-1-david@redhat.com>
+In-Reply-To: <CAKwvOdnQjm2yMfKLcT-9=iQg68=EskMh3Evrx=3rTAJo3UAnZw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 07:14:20PM +0100, David Hildenbrand wrote:
-> The existing code is essentially
-> free_initmem_default()->free_reserved_area() without poisoning.
-> 
-> Note that existing code missed to update the managed page count of the
-> zone.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
-> 
-> Not compile tested as documentation on how to get
-> 	https://gitlab.com/c-sky/buildroot
-> running, especially with a custom kernel, is a bit sparse.
+Hi Nick,
 
-You can pick a cross-compiler from here:
+On 2021/1/27 上午5:51, Nick Desaulniers wrote:
 
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
- 
-> ---
->  arch/csky/mm/init.c | 17 +----------------
->  1 file changed, 1 insertion(+), 16 deletions(-)
-> 
-> diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-> index 81e4e5e78f38..894050a8ce09 100644
-> --- a/arch/csky/mm/init.c
-> +++ b/arch/csky/mm/init.c
-> @@ -110,24 +110,9 @@ void __init mem_init(void)
->  	mem_init_print_info(NULL);
->  }
->  
-> -extern char __init_begin[], __init_end[];
-> -
->  void free_initmem(void)
->  {
-> -	unsigned long addr;
-> -
-> -	addr = (unsigned long) &__init_begin;
-> -
-> -	while (addr < (unsigned long) &__init_end) {
-> -		ClearPageReserved(virt_to_page(addr));
-> -		init_page_count(virt_to_page(addr));
-> -		free_page(addr);
-> -		totalram_pages_inc();
-> -		addr += PAGE_SIZE;
-> -	}
-> -
-> -	pr_info("Freeing unused kernel memory: %dk freed\n",
-> -	((unsigned int)&__init_end - (unsigned int)&__init_begin) >> 10);
-> +	free_initmem_default(-1);
->  }
->  
->  void pgd_init(unsigned long *p)
-> -- 
-> 2.29.2
-> 
+> Hello,
+> I was wondering if there's any interest in getting LLVM's csky backend
+> to compile the Linux kernel?  We maintain LLVM support in the kernel,
+> and CI in various places.  It would be neat to see these working well
+> together and actively supported.
 
--- 
-Sincerely yours,
-Mike.
+I'll try to compile kernel with llvm after upstreamed.
+
+https://reviews.llvm.org/D86505 
+<https://reviews.llvm.org/D86505?spm=a2o8d.corp_prod_task_list.0.0.63a76b88jKU2Wg> 
+[finished] https://reviews.llvm.org/D86610 
+<https://reviews.llvm.org/D86610> [finished]
+
+https://reviews.llvm.org/D89180 <https://reviews.llvm.org/D89180> 
+[finished]
+
+https://reviews.llvm.org/D93372 <https://reviews.llvm.org/D93372> 
+[finished]
+
+https://reviews.llvm.org/D88466 <https://reviews.llvm.org/D88466> [finished]
+
+https://reviews.llvm.org/D94007 <https://reviews.llvm.org/D94007> 
+[reviewing] https://reviews.llvm.org/D93798 
+<https://reviews.llvm.org/D93798> [reviewing] 
+https://reviews.llvm.org/D95029 <https://reviews.llvm.org/D95029> 
+[reviewing] https://reviews.llvm.org/D95030 
+<https://reviews.llvm.org/D95030> [reviewing] Best Regards
+
+Guo Ren
+

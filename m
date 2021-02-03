@@ -2,96 +2,76 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75355C433E0
-	for <linux-csky@archiver.kernel.org>; Tue,  2 Feb 2021 11:05:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95986C433DB
+	for <linux-csky@archiver.kernel.org>; Wed,  3 Feb 2021 13:53:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3040364E0F
-	for <linux-csky@archiver.kernel.org>; Tue,  2 Feb 2021 11:05:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47F2464E49
+	for <linux-csky@archiver.kernel.org>; Wed,  3 Feb 2021 13:53:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbhBBLFF (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 2 Feb 2021 06:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbhBBLFD (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 2 Feb 2021 06:05:03 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF65DC061573;
-        Tue,  2 Feb 2021 03:04:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=802YQyw4lVaV4w8imGbhpyRRiN1cRZRaz6c+AUsQRWs=; b=NqhZ+rxVp9Yow+TY9AI2amWfAh
-        JO+yodkACrvGHvFNxEj/vf3efWCjFGugL4mcteq1H824gd9i5ZlDlIrPW8C3nbAfGuOTpze525HTe
-        2xP2W+k+cutQzmlHKYn+anynD+vSanmaYnWGsOsAcw8YJSVWH5TZozhFg2UWFMS8YW0++2p3IQ5Eq
-        gcLmL0kBbcttFhP+QBSlrxY3Qnu8tU9accSON4v8hKPXf6bnFbok+V5lEUQ2ZvGoXqkBFbOLEi6xv
-        daHIBmL7fak+0wyrIcBNV4VTsrE3kotRk/CWyRWq5I/8320h2+GKvo3JbC3LfcvU3up/oiX+YUqqC
-        SyPLOgvA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l6tTd-00F5eu-RB; Tue, 02 Feb 2021 11:04:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4BB84301179;
-        Tue,  2 Feb 2021 12:04:09 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2F66D2B09FDC9; Tue,  2 Feb 2021 12:04:09 +0100 (CET)
-Date:   Tue, 2 Feb 2021 12:04:09 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [RFC 11/20] mm/tlb: remove arch-specific tlb_start/end_vma()
-Message-ID: <YBkxqVrNnWFWmqTo@hirez.programming.kicks-ass.net>
-References: <20210131001132.3368247-1-namit@vmware.com>
- <20210131001132.3368247-12-namit@vmware.com>
- <YBfvh1Imz6RRTUDV@hirez.programming.kicks-ass.net>
- <1612247956.0a1r1yjmm3.astroid@bobo.none>
- <F1C67840-C62F-4583-8593-B621706034F6@vmware.com>
- <YBkb8yKSUKTPJvxk@hirez.programming.kicks-ass.net>
- <9100B8AE-129A-4E13-8F01-7B9C14C98B4C@vmware.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9100B8AE-129A-4E13-8F01-7B9C14C98B4C@vmware.com>
+        id S231817AbhBCNxU (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 3 Feb 2021 08:53:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232516AbhBCNwo (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 3 Feb 2021 08:52:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C67564E50;
+        Wed,  3 Feb 2021 13:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612360302;
+        bh=Ey+JlWCEQQKKbQ7yXT0IyF/tXkhjplLdJYRFLMeSDDM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=X/KMvmQH3zyIjHcIUY0MfuALCPlqdU6Q97E+fjEojbjwIkKz6zOL7V/G9v10BR+Bv
+         LhlqV10rgMYveIOwqXAG3JtStfy7eepbClwEKSl9TyijSEexHvSlTvMIe5fhbz6YmV
+         0hvt9IT+zC+Di6/H9LsRssPMc3iGbp6eRQCRo1a98Q2+QzWAwT8MfS+hPxTsrFcagt
+         60JNFnynywMcvMKqHrkGfaaJYjoO4DibXgEP39jK4UQcP55c+G/J2JEy8DQHDeO5jy
+         b3aJR8oGHZQv5XandpH0hDooAJtNCqw4bsnp3fsii6Her5pXlTtTnVTx8rgtNg8lfm
+         bJ2nW0J8jAcOQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 2/2] drivers/clocksource: Fixup csky,mpintc compile error with CPU_CK610
+Date:   Wed,  3 Feb 2021 21:48:34 +0800
+Message-Id: <20210203134834.2367593-2-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210203134834.2367593-1-guoren@kernel.org>
+References: <20210203134834.2367593-1-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 09:54:36AM +0000, Nadav Amit wrote:
-> > On Feb 2, 2021, at 1:31 AM, Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > On Tue, Feb 02, 2021 at 07:20:55AM +0000, Nadav Amit wrote:
-> >> Arm does not define tlb_end_vma, and consequently it flushes the TLB after
-> >> each VMA. I suspect it is not intentional.
-> > 
-> > ARM is one of those that look at the VM_EXEC bit to explicitly flush
-> > ITLB IIRC, so it has to.
-> 
-> Hmm… I don’t think Arm is doing that. At least arm64 does not use the
-> default tlb_flush(), and it does not seem to consider VM_EXEC (at least in
-> this path):
-> 
+From: Guo Ren <guoren@linux.alibaba.com>
 
-ARM != ARM64. ARM certainly does, but you're right, I don't think ARM64
-does this.
+The timer-mp-csky.c only could support CPU_CK860 and it will
+compile error with CPU_CK610.
 
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+---
+ drivers/clocksource/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 14c7c4712478..f773ecacb5f9 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -663,7 +663,7 @@ config CLINT_TIMER
+ 
+ config CSKY_MP_TIMER
+ 	bool "SMP Timer for the C-SKY platform" if COMPILE_TEST
+-	depends on CSKY
++	depends on CSKY && CPU_CK860
+ 	select TIMER_OF
+ 	help
+ 	  Say yes here to enable C-SKY SMP timer driver used for C-SKY SMP
+-- 
+2.17.1
 

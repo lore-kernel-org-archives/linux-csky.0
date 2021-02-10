@@ -2,155 +2,195 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E1B7C433E0
-	for <linux-csky@archiver.kernel.org>; Wed, 10 Feb 2021 03:05:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D0FFC433E6
+	for <linux-csky@archiver.kernel.org>; Wed, 10 Feb 2021 18:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E73A64E3F
-	for <linux-csky@archiver.kernel.org>; Wed, 10 Feb 2021 03:05:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E588664E0B
+	for <linux-csky@archiver.kernel.org>; Wed, 10 Feb 2021 18:36:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbhBJDFC (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 9 Feb 2021 22:05:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233561AbhBJDE6 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 9 Feb 2021 22:04:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4CA3E64E4E;
-        Wed, 10 Feb 2021 03:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612926235;
-        bh=B9W2ijWUGdA9x4gTDEc2lDSped2NoF8LVJewm3gkuw8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h0cDfyjgMlWyrUEfWBIbxOpTvLfTFGSCBnJ9VTUCfwHzUNcJDYjNM20rgVv2wnpsh
-         /wPCZ5RHFwgUHS8vmCS9FNbbj7BTMXH4nVj2cRKNhmS3VaYdWNFTAdZQTictbXE2+0
-         P5Pk9df3jA9osE1P7GQe6C4SAmYUQxiOlMrCp9SX+clMrZmG9wpnigVd0Xw+kpah+d
-         ROvh+rNuFcjSQXdFAwBl7wyBveTAkW2PwUHiVEK/e7o+oODE2hA5t/RMjD/2VoSwVM
-         gxU5HCLBRdw4fZwM7ZYZBAYLok0NtZFHg7UmlmdYJ4az3uYBHXqtnydyQcofrvSzto
-         xvl84uT0lQZ/w==
-Received: by mail-lf1-f45.google.com with SMTP id u25so709015lfc.2;
-        Tue, 09 Feb 2021 19:03:55 -0800 (PST)
-X-Gm-Message-State: AOAM530nZe5F4+WSVTlghkp/hfHEbaObFYDQzb3PVhYLmEb/ERstbhkL
-        UeJzcipox5QDBaHqvQLibBDkENX+ZF8n5T3nix0=
-X-Google-Smtp-Source: ABdhPJyO1ta6nqIVD3eMTqK+GqKkHPxTe/NlzJejyy2zt13giWb8Y2q82ODJhHVNmHA2pEMZeUtIYoNgUH/M6Opmkg4=
-X-Received: by 2002:a19:f00a:: with SMTP id p10mr551180lfc.355.1612926233485;
- Tue, 09 Feb 2021 19:03:53 -0800 (PST)
+        id S234030AbhBJSgq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 10 Feb 2021 13:36:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59537 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234149AbhBJSen (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 10 Feb 2021 13:34:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612981995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=U/kEUdiVTFSkXdDlFfnN0pNfEfW0SscYP5LvJr9uMD4=;
+        b=R/tfgvZuQ4G37CYzZET2pIZtBvkJ7VLpKg3kEmvqYnS/ufIiuF3FsT5YF+k30ItpFVlbsl
+        0AQ4qKgsb3CtXkE0NsYkFwCtfo+dcHNzGrNCgOp8v17Xx6NG92GbgGCxSyhcrd0T0+WzdS
+        Jsl4DSnCKHyWdMaAUWTdAcS6IeszSnU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-189-7FXvma-PPKic8Esl0H0dDw-1; Wed, 10 Feb 2021 13:33:10 -0500
+X-MC-Unique: 7FXvma-PPKic8Esl0H0dDw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E7678801977;
+        Wed, 10 Feb 2021 18:33:06 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 066025C1BD;
+        Wed, 10 Feb 2021 18:33:01 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Waiman Long <longman@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT
+        (AARCH64 ARCHITECTURE)),
+        linux-mips@vger.kernel.org (open list:MIPS),
+        sparclinux@vger.kernel.org (open list:SPARC + UltraSPARC
+        (sparc/sparc64)),
+        linux-xtensa@linux-xtensa.org (open list:TENSILICA XTENSA PORT (xtensa)),
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES),
+        linux-csky@vger.kernel.org (open list:C-SKY ARCHITECTURE)
+Subject: [PATCH] locking/arch: Move qrwlock.h include after qspinlock.h
+Date:   Wed, 10 Feb 2021 13:33:01 -0500
+Message-Id: <20210210183301.453422-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20210204074609.3553018-1-guoren@kernel.org> <20210204074609.3553018-2-guoren@kernel.org>
- <c36b816b-6d80-9542-45fc-507c5cc302fb@linaro.org> <CAJF2gTSe7GUzPRvk6bK8AfQFp2uxae1Oo0w-ZtrtmcJmMWCqPw@mail.gmail.com>
- <973602b9-83d1-8e22-60bf-cd77d606a126@linaro.org> <CAJF2gTQG-o5MRtdwc8ogJhGLGsj5AWR1ja26wiGU=wrLL8X2Zw@mail.gmail.com>
- <a2f43b21-2e56-040f-b658-ccafa3b5fdc4@linaro.org>
-In-Reply-To: <a2f43b21-2e56-040f-b658-ccafa3b5fdc4@linaro.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 10 Feb 2021 11:03:42 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTP47MZaX4eh5RV-GRABtDpyxjd3C3kH8kyvafjBNGoig@mail.gmail.com>
-Message-ID: <CAJF2gTTP47MZaX4eh5RV-GRABtDpyxjd3C3kH8kyvafjBNGoig@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] drivers/clocksource: Fixup csky,mptimer compile
- error with CPU_CK610
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Daniel,
+include/asm-generic/qrwlock.h was trying to get arch_spin_is_locked via
+asm-generic/qspinlock.h.  However, this does not work because architectures
+might be using queued rwlocks but not queued spinlocks (csky), or because they
+might be defining their own queued_* macros before including asm/qspinlock.h.
 
-On Wed, Feb 10, 2021 at 4:26 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 09/02/2021 17:02, Guo Ren wrote:
-> > Hi Daniel,
-> >
-> > On Sun, Feb 7, 2021 at 5:29 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 07/02/2021 04:31, Guo Ren wrote:
-> >>> Hi Daniel,
-> >>>
-> >>> On Thu, Feb 4, 2021 at 4:48 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> On 04/02/2021 08:46, guoren@kernel.org wrote:
-> >>>>> From: Guo Ren <guoren@linux.alibaba.com>
-> >>>>>
-> >>>>> The timer-mp-csky.c only could support CPU_CK860 and it will
-> >>>>> compile error with CPU_CK610.
-> >>>>>
-> >>>>> It has been selected in arch/csky/Kconfig.
-> >>>>
-> >>>> It would be better if you fix the root cause of the compilation error.
-> >>> The timer-mp-csky.c has used specific instructions which only
-> >>> supported by CK860 and timer-mp-csky.c is only design for CK860.
-> >>
-> >> I guess you are referring to mfcr() ?
-> >>
-> >>> In arch/csky/Konfig we only select it with CK860.
-> >>>         select CSKY_MPINTC if CPU_CK860
-> >>>         select CSKY_MP_TIMER if CPU_CK860
-> >>>
-> >>> So here let's select timer-mp-csky.c in arch/csky/Kconfig, not in
-> >>> drivers/clocksource/Kconfig.
-> >>
-> >> The COMPILE_TEST option is there to let other architecture to compile
-> >> drivers and increase the compilation test coverage.
-> >>
-> >> The proposed change just removes the driver from this coverage.
-> > When we compile the csky arch with C860, it will be selected.
-> >
-> >>
-> >> Ideally, it would be better to keep it with the COMPILE_TEST option, so
-> >> changes impacting all the drivers can be caught before submitting the
-> >> patches.
-> >>
-> >> By just adding
-> >>
-> >> #ifndef mfcr
-> >> #define mfcr(a) 0
-> >> #endif
-> >
-> > 610 couldn't support CSKY_MP_TIMER and it's only for 860. So it's not
-> > a coding skill issue.
->
-> I think there is a misunderstanding.
->
-> When I want to compile on x64 all the timer drivers, I do enable
-> COMPILE_TEST, then the strings appear and the drivers can be selected.
->
-> If the COMPILE_TEST is not enabled, the string does not appear, it is
-> not possible to enable/disable it and the platform must enable it from
-> the aforementioned arch/csky/Konfig.
->
-> Actually, the timer drivers policy is : drivers can not be enabled from
-> the drivers/clocksource/Kconfig, it is up to the platform Kconfig to
-> select them. The exception is when the COMPILE_TEST option is set for
-> testing purpose.
->
-> The timer must compile on any other archs and the stubs for the platform
-> specific calls must be provided.
->
-> Did I miss something with your changes ?
-I think our biggest difference is:
- - You think that CSKY_MPTIMER should not be related to the
-architecture, but can be compiled with any architecture.
- - But I think CSKY_MPTIMER only could to be compiled with CSKY C860.
+To fix this, ensure that asm/spinlock.h always includes qrwlock.h after
+defining arch_spin_is_locked (either directly for csky, or via
+asm/qspinlock.h for other architectures).  The only inclusion elsewhere
+is in kernel/locking/qrwlock.c.  That one is really unnecessary because
+the file is only compiled in SMP configurations (config QUEUED_RWLOCKS
+depends on SMP) and in that case linux/spinlock.h already includes
+asm/qrwlock.h if needed, via asm/spinlock.h.
 
-But from the perspective of easy maintenance, I agree with your
-suggestion. I will adopt in next patch:
-> >> #ifndef mfcr
-> >> #define mfcr(a) 0
-> >> #endif
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Waiman Long <longman@redhat.com>
+Fixes: 26128cb6c7e6 ("locking/rwlocks: Add contention detection for rwlocks")
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+	v1->v2: Fix sparc too.  Add a comment in qrwlock.h itself.
+	Remove unnecessary inclusion in kernel/locking/qrwlock.c
 
-Thx
+ arch/arm64/include/asm/spinlock.h    | 2 +-
+ arch/mips/include/asm/spinlock.h     | 2 +-
+ arch/sparc/include/asm/spinlock_64.h | 2 +-
+ arch/xtensa/include/asm/spinlock.h   | 2 +-
+ include/asm-generic/qrwlock.h        | 3 ++-
+ kernel/locking/qrwlock.c             | 1 -
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/arch/arm64/include/asm/spinlock.h b/arch/arm64/include/asm/spinlock.h
+index 9083d6992603..0525c0b089ed 100644
+--- a/arch/arm64/include/asm/spinlock.h
++++ b/arch/arm64/include/asm/spinlock.h
+@@ -5,8 +5,8 @@
+ #ifndef __ASM_SPINLOCK_H
+ #define __ASM_SPINLOCK_H
+ 
+-#include <asm/qrwlock.h>
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
+ 
+ /* See include/linux/spinlock.h */
+ #define smp_mb__after_spinlock()	smp_mb()
+diff --git a/arch/mips/include/asm/spinlock.h b/arch/mips/include/asm/spinlock.h
+index 8a88eb265516..6ce2117e49f6 100644
+--- a/arch/mips/include/asm/spinlock.h
++++ b/arch/mips/include/asm/spinlock.h
+@@ -10,7 +10,6 @@
+ #define _ASM_SPINLOCK_H
+ 
+ #include <asm/processor.h>
+-#include <asm/qrwlock.h>
+ 
+ #include <asm-generic/qspinlock_types.h>
+ 
+@@ -27,5 +26,6 @@ static inline void queued_spin_unlock(struct qspinlock *lock)
+ }
+ 
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
+ 
+ #endif /* _ASM_SPINLOCK_H */
+diff --git a/arch/sparc/include/asm/spinlock_64.h b/arch/sparc/include/asm/spinlock_64.h
+index 7fc82a233f49..3a9a0b0c7465 100644
+--- a/arch/sparc/include/asm/spinlock_64.h
++++ b/arch/sparc/include/asm/spinlock_64.h
+@@ -11,8 +11,8 @@
+ 
+ #include <asm/processor.h>
+ #include <asm/barrier.h>
+-#include <asm/qrwlock.h>
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
+ 
+ #endif /* !(__ASSEMBLY__) */
+ 
+diff --git a/arch/xtensa/include/asm/spinlock.h b/arch/xtensa/include/asm/spinlock.h
+index 584b0de6f2ca..41c449ece2d8 100644
+--- a/arch/xtensa/include/asm/spinlock.h
++++ b/arch/xtensa/include/asm/spinlock.h
+@@ -12,8 +12,8 @@
+ #define _XTENSA_SPINLOCK_H
+ 
+ #include <asm/barrier.h>
+-#include <asm/qrwlock.h>
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
+ 
+ #define smp_mb__after_spinlock()	smp_mb()
+ 
+diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
+index 0020d3b820a7..7ae0ece07b4e 100644
+--- a/include/asm-generic/qrwlock.h
++++ b/include/asm-generic/qrwlock.h
+@@ -14,7 +14,8 @@
+ #include <asm/processor.h>
+ 
+ #include <asm-generic/qrwlock_types.h>
+-#include <asm-generic/qspinlock.h>
++
++/* Must be included from asm/spinlock.h after defining arch_spin_is_locked.  */
+ 
+ /*
+  * Writer states & reader shift and bias.
+diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
+index fe9ca92faa2a..4786dd271b45 100644
+--- a/kernel/locking/qrwlock.c
++++ b/kernel/locking/qrwlock.c
+@@ -12,7 +12,6 @@
+ #include <linux/percpu.h>
+ #include <linux/hardirq.h>
+ #include <linux/spinlock.h>
+-#include <asm/qrwlock.h>
+ 
+ /**
+  * queued_read_lock_slowpath - acquire read lock of a queue rwlock
+-- 
+2.26.2
 
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

@@ -2,119 +2,92 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7402AC433C1
-	for <linux-csky@archiver.kernel.org>; Sun, 28 Mar 2021 11:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCFE3C433C1
+	for <linux-csky@archiver.kernel.org>; Mon, 29 Mar 2021 07:51:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4047D6196C
-	for <linux-csky@archiver.kernel.org>; Sun, 28 Mar 2021 11:47:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 954F561934
+	for <linux-csky@archiver.kernel.org>; Mon, 29 Mar 2021 07:51:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbhC1Lhd (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 28 Mar 2021 07:37:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41110 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231260AbhC1LhF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 28 Mar 2021 07:37:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E3B96197C;
-        Sun, 28 Mar 2021 11:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616931420;
-        bh=8r+E9jML76H0gCn8zByIpf9ts7froA6i3yzLNHuBvN4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DugdbpT4GDM1HZeaem5soSAi/FHElDFHhmz2xIpsZJUkasWv28ZB3zgK93tR/c1EG
-         Wg6UZIL/32OGSKHjIL7I3TejYIFIJatZ2S0hfZTZhMaw3y2P3h3z4TJdRouH33c2P4
-         a0vFE4t1YxIuiIc5HdVc8iBz2z/pz1daXtvTbooBxBTN2T1IZ64j2pxee2ABx/u+UN
-         R9Tpd5W1OnKdE7r9gQzXgqssvnkZagFrOM0DWS5GTeRlV6XS25xWzL3c0iO1XPbWAb
-         sCLOKxIHwnhTcR+YQphOeEdtMjQrjqZYOIz3pgbUdAYY8+PAy495HKeu1P90Dt67iE
-         cgL/CGET6Tr6g==
-Received: by mail-lf1-f44.google.com with SMTP id q29so14175994lfb.4;
-        Sun, 28 Mar 2021 04:37:00 -0700 (PDT)
-X-Gm-Message-State: AOAM5330m1XrE5OgTu5q3ngejJWzGUDNGl8342twXJp9PSj4WYCmr3oD
-        FYrhOux5BGjkQyDNKef7fm0FBwvqH+4PVjgndZw=
-X-Google-Smtp-Source: ABdhPJyj9o7D6hGhD+tmVxlzoBXg46BNhDKM+Nvrw+oWgxcsNgQKl214mB8IGaefEjDYpDQx2VSVsVg9V+sA7ebVJIA=
-X-Received: by 2002:a19:f501:: with SMTP id j1mr14083138lfb.231.1616931418962;
- Sun, 28 Mar 2021 04:36:58 -0700 (PDT)
+        id S231396AbhC2Hu7 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 29 Mar 2021 03:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230516AbhC2Huv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 29 Mar 2021 03:50:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9725BC061574;
+        Mon, 29 Mar 2021 00:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RmtQjdY4jd7gdJlUZ3DW9jMcByENp8YMhL3jjISCf78=; b=nnsLTgcvgCRg3B8Fc0hgEyHVPa
+        C3nz4ZoUQzUhylNi2HcH7gsoEOw0NP02VuD30ri51IFNz7TdHeT8fI856Z12noRCm6mDLZxDe54GG
+        FcuZUNJLbDaeFENhAjbP8BsnJcQxz0D3Ue2kBv545ZemDljZy0HQZtA+o4hJkFkYyfG0vnwykvY0h
+        UxSf6d+v1U+TfhvAocF63PQOzKYT4rXagudr+KYPJZSJCheIDn2HB6KLENrteYmJE5xFcHxximPDJ
+        7YXs4t4aupq1wyuYM18uogTbiu005muh7DV+DWqh4GYKLgujOwVzYt4diS5ecQ/MkhQ7EDTR8mdUF
+        6CmPI6cQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lQmew-001CUv-Cc; Mon, 29 Mar 2021 07:50:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 836C5305CC3;
+        Mon, 29 Mar 2021 09:50:01 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 62B48207189A5; Mon, 29 Mar 2021 09:50:01 +0200 (CEST)
+Date:   Mon, 29 Mar 2021 09:50:01 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Message-ID: <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org>
 MIME-Version: 1.0
-References: <1616913028-83376-1-git-send-email-guoren@kernel.org>
- <1616913028-83376-5-git-send-email-guoren@kernel.org> <e27af5e0-a462-cb75-6311-1b5a6b4ee4f1@csgroup.eu>
-In-Reply-To: <e27af5e0-a462-cb75-6311-1b5a6b4ee4f1@csgroup.eu>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 28 Mar 2021 19:36:47 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQvPOZ6aWxof66gzOBfia5mAV0=3pxO+QPdW8xpQrz3aA@mail.gmail.com>
-Message-ID: <CAJF2gTQvPOZ6aWxof66gzOBfia5mAV0=3pxO+QPdW8xpQrz3aA@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] powerpc/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, Guo Ren <guoren@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        Paul Mackerras <paulus@samba.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1616868399-82848-4-git-send-email-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Mar 28, 2021 at 7:14 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 28/03/2021 =C3=A0 08:30, guoren@kernel.org a =C3=A9crit :
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > We don't have native hw xchg16 instruction, so let qspinlock
-> > generic code to deal with it.
->
-> We have lharx/sthcx pair on some versions of powerpc.
->
-> See https://patchwork.ozlabs.org/project/linuxppc-dev/patch/2020110703232=
-8.2454582-1-npiggin@gmail.com/
-Got it, thx for the information.
+On Sat, Mar 27, 2021 at 06:06:38PM +0000, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Some architectures don't have sub-word swap atomic instruction,
+> they only have the full word's one.
+> 
+> The sub-word swap only improve the performance when:
+> NR_CPUS < 16K
+>  *  0- 7: locked byte
+>  *     8: pending
+>  *  9-15: not used
+>  * 16-17: tail index
+>  * 18-31: tail cpu (+1)
+> 
+> The 9-15 bits are wasted to use xchg16 in xchg_tail.
+> 
+> Please let architecture select xchg16/xchg32 to implement
+> xchg_tail.
 
->
-> Christophe
->
-> >
-> > Using the full-word atomic xchg instructions implement xchg16 has
-> > the semantic risk for atomic operations.
-> >
-> > This patch cancels the dependency of on qspinlock generic code on
-> > architecture's xchg16.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> > Cc: Paul Mackerras <paulus@samba.org>
-> > ---
-> >   arch/powerpc/Kconfig | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index 386ae12d8523..69ec4ade6521 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -151,6 +151,7 @@ config PPC
-> >       select ARCH_USE_CMPXCHG_LOCKREF         if PPC64
-> >       select ARCH_USE_QUEUED_RWLOCKS          if PPC_QUEUED_SPINLOCKS
-> >       select ARCH_USE_QUEUED_SPINLOCKS        if PPC_QUEUED_SPINLOCKS
-> > +     select ARCH_USE_QUEUED_SPINLOCKS_XCHG32 if PPC_QUEUED_SPINLOCKS
-> >       select ARCH_WANT_IPC_PARSE_VERSION
-> >       select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
-> >       select ARCH_WANT_LD_ORPHAN_WARN
-> >
+So I really don't like this, this pushes complexity into the generic
+code for something that's really not needed.
 
+Lots of RISC already implement sub-word atomics using word ll/sc.
+Obviously they're not sharing code like they should be :/ See for
+example arch/mips/kernel/cmpxchg.c.
 
-
---=20
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Also, I really do think doing ticket locks first is a far more sensible
+step.

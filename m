@@ -2,102 +2,74 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C48C433B4
-	for <linux-csky@archiver.kernel.org>; Thu,  6 May 2021 11:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1E1C433ED
+	for <linux-csky@archiver.kernel.org>; Sun,  9 May 2021 11:15:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3500613CD
-	for <linux-csky@archiver.kernel.org>; Thu,  6 May 2021 11:45:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CED861401
+	for <linux-csky@archiver.kernel.org>; Sun,  9 May 2021 11:15:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbhEFLq4 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 6 May 2021 07:46:56 -0400
-Received: from foss.arm.com ([217.140.110.172]:33622 "EHLO foss.arm.com"
+        id S229658AbhEILQF (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 9 May 2021 07:16:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37264 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229777AbhEFLq4 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 6 May 2021 07:46:56 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE987101E;
-        Thu,  6 May 2021 04:45:57 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.31.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 810253F73B;
-        Thu,  6 May 2021 04:45:55 -0700 (PDT)
-Date:   Thu, 6 May 2021 12:45:42 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Palmer Dabbelt <palmerdabbelt@google.com>
-Cc:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Anup Patel <anup@brainfault.org>
-Subject: Re: [PATCH v3 2/2] riscv: atomic: Using ARCH_ATOMIC in asm/atomic.h
-Message-ID: <20210506114542.GA34537@C02TD0UTHF1T.local>
-References: <1619009626-93453-2-git-send-email-guoren@kernel.org>
- <mhng-7181822d-02c1-4ef4-b1be-83c1034d79ba@palmerdabbelt-glaptop>
- <CAJF2gTRR2SAA_qfxyeRX5MTJDiVNa1aRDTpX7UJfxR3yjC1T9g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTRR2SAA_qfxyeRX5MTJDiVNa1aRDTpX7UJfxR3yjC1T9g@mail.gmail.com>
+        id S229614AbhEILQE (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 9 May 2021 07:16:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2A6A613E5;
+        Sun,  9 May 2021 11:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620558901;
+        bh=dhpv0r+oSYAmFPsd5evBbwf7jZuMlo7Ox0mCiCvxolQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nrs7zKk7p3eRRlNze8Icr/6a/9+J7ewlNh8kbi18Me3K347rkyas8v+mAvArnk2xs
+         B6nQneRUCdY/MTMhsvzggkKmAtdoiU7JofWn4zsx5LJyYvXiffkMNB/FgqyA/nzOqG
+         CQsSxhlzqdLcwLFUskxCKnykWPFQQaF9C2dOUfdL57ouKECo7JyU8jvXrxZC+VjGCC
+         pAmFohjzEcj+Z0u8ulo5Bwz/toicpnqQ8ifcvEFCemJjkcxm2k96mlJmBqp6rMzN3j
+         u0T7qAYpLwDO1CSRF5yQ0qcmmEToeQENq57SyZ1aNCR+NfWQXmoF1VEkx5L7VQ3paH
+         ogqye1ATyBpAA==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: Fixup 610 bootup failed
+Date:   Sun,  9 May 2021 11:14:17 +0000
+Message-Id: <1620558857-22425-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, May 06, 2021 at 05:42:32PM +0800, Guo Ren wrote:
-> Hi Palmer,
-> 
-> On Thu, May 6, 2021 at 2:03 PM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
-> >
-> > On Wed, 21 Apr 2021 05:53:46 PDT (-0700), guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > The linux/atomic-arch-fallback.h has been there for a while, but
-> > > only x86 & arm64 support it. Let's make riscv follow the
-> > > linux/arch/* development trendy and make the codes more readable
-> > > and maintainable.
-> > >
-> > > This patch also cleanup some codes:
-> > >  - Add atomic_andnot_* operation
-> > >  - Using amoswap.w.rl & amoswap.w.aq instructions in xchg
-> > >  - Remove cmpxchg_acquire/release unnecessary optimization
-> >
-> > Thanks.  I haven't gotten the time to review this properly yet, but I
-> > don't really see any issues.  Regardless, it was too late for this merge
-> > window anyway -- these sorts of things are a bit subtle and require a
-> > proper look, right at the end of the cycle things are just a bit too
-> > hectic.
-> >
-> > I'll take a look once things calm down a bit, there's still some fixes
-> > out that I'd like to look at first.
-> >
-> > I'm also only getting patch 2, and your lore link points to a different
-> > patch set.
-> Mark Rutland is preparing a new patchset to let ARCH_ATOMIC become the
-> default for all arch. I'm waiting for his patchset and atop my
-> modification on it.
-> https://lore.kernel.org/linux-riscv/CAJF2gTS9y1QZx-8pu2NW22xs1Gky0y4Hs31Wrn7gZg3FiAq8NA@mail.gmail.com/
-> 
-> So, please abandon the patch, I'll send a new version patchset based
-> on Mark's work.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-For context, the series is basically ready now, but I'm intending to
-rebase it atop v5.13-rc1 before posting (e.g. since s390 just moved to
-ARCH_ATOMIC), and plan to post that early next week.
+Actually, there is only one 610 product is in the market(gx6605s).
 
-If you want an early look, my atomics/arch-atomic branch on kernel.org
-has the WIP (atop v5.12):
+The soc's DRAM base is 0x10000000, so make it default for 610.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=atomics/arch-atomic
-  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git atomics/arch-atomic
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/csky/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-.. and the riscv-specific changes are just renames:
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 8de5b98..4d59d66 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -316,7 +316,9 @@ config FORCE_MAX_ZONEORDER
+ 
+ config DRAM_BASE
+ 	hex "DRAM start addr (the same with memory-section in dts)"
+-	default 0x0
++	default 0x10000000	if (CPU_CK610)
++	default 0x0		if (!CPU_CK610)
++
+ 
+ config HOTPLUG_CPU
+ 	bool "Support for hot-pluggable CPUs"
+-- 
+2.7.4
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=atomics/arch-atomic&id=3f7f7201eb4f4548cfb609019e7110b30ae598fc
-
-Thanks,
-Mark.

@@ -2,100 +2,131 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35B46C48BD1
-	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD82EC48BD1
+	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:52:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F22D61059
-	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:52:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9727D61059
+	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:52:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238328AbhFIKx7 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 9 Jun 2021 06:53:59 -0400
-Received: from mail-pg1-f179.google.com ([209.85.215.179]:36791 "EHLO
-        mail-pg1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238146AbhFIKxs (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 9 Jun 2021 06:53:48 -0400
-Received: by mail-pg1-f179.google.com with SMTP id 27so19128979pgy.3;
-        Wed, 09 Jun 2021 03:51:41 -0700 (PDT)
+        id S238447AbhFIKyH (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 9 Jun 2021 06:54:07 -0400
+Received: from mail-pj1-f52.google.com ([209.85.216.52]:39918 "EHLO
+        mail-pj1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238233AbhFIKxw (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 9 Jun 2021 06:53:52 -0400
+Received: by mail-pj1-f52.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so1148378pjp.4;
+        Wed, 09 Jun 2021 03:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KEaFyO0J3q1vE6ElC6lKcHQeblQJLtnz+8yDeNcuW/E=;
-        b=fyIfO17VfFhzcsDwfbpVqpJPypvqZOeDKBZHpp/VQ3fWAwO37dqzuD4xQymx8fNhfr
-         zOnOeDB7j5lcPJXihCkS+38d/OSED1gde5a8HUNAvmO3r0b5pfuWXG/oWHRE3oEoH6HH
-         RYSHeSFJC1JUGwt+KajRq7d+xBtKwAaUM/R1qdN83I/5QGsKhYQTwyHqdCjSzD0W8WKE
-         5NV6erbc7/MgtodTDY41aCZFYuDX88VzLAQ8i8SQzHQWa6Yj227j88vBsXAZYdTdoVPh
-         jPE9IXcoRr+tNRLdkp2FeyHvO0uxkOb30F6mJUdFTrN8p/RnQc6ROVLKEMUrqZmSR9WY
-         ldww==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8rEuxJKsCrgKYAMD0f1XbwF4Fy6H4vsWs0ouH8e/xgA=;
+        b=HkY1kXquqImBORfXGpjC0WNRTiCM2scB9nvKCdzIr8BQOiwvpUdfuVhYVMQBCghN1q
+         SAaNnhhE3U0ukmjR98uS4Gp+Y6ow6SGGqS0MLiGKP+HM0eG437Kf3esm8AeqB2Edybif
+         m7dI2ijBnphAQoHPt1xFK5jxMalJN4SGe9rdD46nUoqLo1eu40gLoDSDkDMS0Br9I9bn
+         buvW7QT2OaLYgFmy9vR2XqgAqVQGBh1pF2MV1DFJDHPrXt5JuGnCXLLV+WsWipUEn3FO
+         84JXAzNy3VNzTGRXF84JJR0ngBXNsQz6i5A5c35AqFORQNPfyXQdo1tTR+XXsmI2GR5m
+         9vbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KEaFyO0J3q1vE6ElC6lKcHQeblQJLtnz+8yDeNcuW/E=;
-        b=SIUUhD7mCqZKQfGy46zwwytDZEsS3c3E8NZQtiOmMp6pejx00+288Va5Y01JPxsJwl
-         Klguln4216jgciv/6/txd4kaJ8L/LIZvXqZ4oAVoJgvcEGa6BM9Tqul6beaaRAK3kPqV
-         n+1hS0OB3W209rm4SWIMX75rMvURuyHdraeuXKgwuOr9Bj1c0+jtSfhnsJ0E44+g/8oj
-         iXs3m7Z1VfavrCenzb/vCbXfUi+3llfLqPmQ1lwGpXPhy4mk0sGYNF8kILdgZFPyNnkR
-         vAj6LbtrC3Qnbgrw7cvgJHcrX/5KnpjZbhiTiN4B2lv4BC2VPGm08mhDOuQzXWQEwquI
-         C1SA==
-X-Gm-Message-State: AOAM530SwL1lRtJnDkODeQ/XQDO+nH1xraPcMYELSugY4fmkTTfhtRNC
-        U7ScyOq/l3E+RRb0sO9knfgDCqiwtV9Oyg==
-X-Google-Smtp-Source: ABdhPJxwpVXt3HmXcb4pLsiVz5iGLahwilSDaZqnPxARlHbyYJ/0haWlmbhtEzmMF38sG4iwDUhZig==
-X-Received: by 2002:aa7:9613:0:b029:2ec:9eea:cc4c with SMTP id q19-20020aa796130000b02902ec9eeacc4cmr4504307pfg.12.1623235841123;
-        Wed, 09 Jun 2021 03:50:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8rEuxJKsCrgKYAMD0f1XbwF4Fy6H4vsWs0ouH8e/xgA=;
+        b=Z2XypeJVVbZbsZt0nAjZCCDaxSiFGmaYUuzEiip8XBwIFJDSDv866pIRJBNOzmx5xm
+         ID8DQNR5HYazGgnvEcszqgSG8kh5/b9Yc6U7SPf/4qE/EuT9hP5KCyXd/P6m4bqJqGZn
+         wvkFDrfOaP4LLwYpV70cI6xd5Wq/7HJvtxNphj31FzceaqwxaFvDSyMY9tkcfCbMco8E
+         e+j14EnYblkVKAuBjW42tcpDcWhh//OzYiyCGn/nVtXxGtLCg1YwsSOGi0rkbaSXvRRm
+         K6Ghl2S09VKQzPXZffqWRZVmDU7oaC3q81BdUYRVS+YqUIrbauJw67p93fjq67fKrZ26
+         NhyA==
+X-Gm-Message-State: AOAM53315DqRc1ipkcPUxrO699WyhoYG4eIjo8Obi/SI5HKqJxsnB6or
+        /3uUaM19XJWQkBf9StWLq6DmocZecLpSgw==
+X-Google-Smtp-Source: ABdhPJzOhWgEEN4vAtjWsvVxheMmFNVwRKyKkkHpAgdRhgWMo/rV7m7/0R5j28t8ardWC7h/Ttj7ZQ==
+X-Received: by 2002:a17:90b:1d89:: with SMTP id pf9mr9835001pjb.26.1623235858107;
+        Wed, 09 Jun 2021 03:50:58 -0700 (PDT)
 Received: from localhost (122x211x248x161.ap122.ftth.ucom.ne.jp. [122.211.248.161])
-        by smtp.gmail.com with ESMTPSA id u24sm13877940pfm.156.2021.06.09.03.50.39
+        by smtp.gmail.com with ESMTPSA id z185sm14125372pgb.4.2021.06.09.03.50.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 03:50:40 -0700 (PDT)
+        Wed, 09 Jun 2021 03:50:57 -0700 (PDT)
 From:   Punit Agrawal <punitagrawal@gmail.com>
 To:     mhiramat@kernel.org, naveen.n.rao@linux.ibm.com,
         anil.s.keshavamurthy@intel.com, davem@davemloft.net
 Cc:     Punit Agrawal <punitagrawal@gmail.com>,
         linux-kernel@vger.kernel.org, guoren@kernel.org,
         linux-csky@vger.kernel.org
-Subject: [PATCH 0/5] kprobes: Bugfix and improvements
-Date:   Wed,  9 Jun 2021 19:50:14 +0900
-Message-Id: <20210609105019.3626677-1-punitagrawal@gmail.com>
+Subject: [RFC PATCH 2/5] kprobes: Use helper to parse boolean input from userspace
+Date:   Wed,  9 Jun 2021 19:50:16 +0900
+Message-Id: <20210609105019.3626677-3-punitagrawal@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210609105019.3626677-1-punitagrawal@gmail.com>
+References: <20210609105019.3626677-1-punitagrawal@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi,
+The "enabled" file provides a debugfs interface to arm / disarm
+kprobes in the kernel. In order to parse the buffer containing the
+values written from userspace, the callback manually parses the user
+input to convert it to a boolean value.
 
-Recently while staring at kprobes code for an unrelated task, I
-noticed some opportunities for improving the code.
+As taking a string value from userspace and converting it to boolean
+is a common operation, a helper kstrtobool_from_user() is already
+available in the kernel. Update the callback to use the common helper
+to parse the write buffer from userspace.
 
-The first patch fixes a long standing bug in kprobes debug
-functionality. The remaining patches (marked RFC) refactor the code to
-increase code sharing, improve readability and remove redundancy.
+Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
+---
+ kernel/kprobes.c | 28 ++++++----------------------
+ 1 file changed, 6 insertions(+), 22 deletions(-)
 
-All feedback welcome.
-
-Thanks,
-Punit
-
-
-Punit Agrawal (5):
-  kprobes: Do not use local variable when creating debugfs file
-  kprobes: Use helper to parse boolean input from userspace
-  kprobe: Simplify prepare_kprobe() by dropping redundant version
-  csky: ftrace: Drop duplicate implementation of
-    arch_check_ftrace_location()
-  kprobes: Make arch_check_ftrace_location static
-
- arch/csky/kernel/probes/ftrace.c |  7 ----
- include/linux/kprobes.h          |  7 ++--
- kernel/kprobes.c                 | 58 ++++++++++----------------------
- 3 files changed, 23 insertions(+), 49 deletions(-)
-
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index fdb1ea2e963b..1a11d3c411bf 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2777,30 +2777,14 @@ static ssize_t read_enabled_file_bool(struct file *file,
+ static ssize_t write_enabled_file_bool(struct file *file,
+ 	       const char __user *user_buf, size_t count, loff_t *ppos)
+ {
+-	char buf[32];
+-	size_t buf_size;
+-	int ret = 0;
+-
+-	buf_size = min(count, (sizeof(buf)-1));
+-	if (copy_from_user(buf, user_buf, buf_size))
+-		return -EFAULT;
++	bool enable;
++	int ret;
+ 
+-	buf[buf_size] = '\0';
+-	switch (buf[0]) {
+-	case 'y':
+-	case 'Y':
+-	case '1':
+-		ret = arm_all_kprobes();
+-		break;
+-	case 'n':
+-	case 'N':
+-	case '0':
+-		ret = disarm_all_kprobes();
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
++	ret = kstrtobool_from_user(user_buf, count, &enable);
++	if (ret)
++		return ret;
+ 
++	ret = enable ? arm_all_kprobes() : disarm_all_kprobes();
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.30.2
 

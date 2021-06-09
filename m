@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0220C48BCD
-	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3582AC48BD1
+	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:51:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF33460FF4
-	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:51:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FF1D60FF4
+	for <linux-csky@archiver.kernel.org>; Wed,  9 Jun 2021 10:51:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238083AbhFIKxX (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 9 Jun 2021 06:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
+        id S238269AbhFIKxZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 9 Jun 2021 06:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238294AbhFIKw6 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 9 Jun 2021 06:52:58 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E87DC061789;
-        Wed,  9 Jun 2021 03:51:04 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id fy24-20020a17090b0218b029016c5a59021fso1181284pjb.0;
-        Wed, 09 Jun 2021 03:51:04 -0700 (PDT)
+        with ESMTP id S236181AbhFIKxC (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 9 Jun 2021 06:53:02 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3D1C061760;
+        Wed,  9 Jun 2021 03:50:51 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id 11so12304241plk.12;
+        Wed, 09 Jun 2021 03:50:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xMnjRIUH7U+LMaqu23CyFxSMSpd6wBrIg0N0L1+h9xI=;
-        b=CQWJzh2vMfM8dqsbuL8saaK/h/oFNR54r77/rpiHjM849egwn9aXMHW12ubfLKGbMl
-         pmoFuUtPIr8X+UsstCY0qS4PmIDbhR7CTp8nw/749Iuwl+ZB9kAj7PaY0bC9KeLeG3qu
-         V/XK2HUZUHGRHVzPtz+pdaJQIqxZzACgJ8pWpelVMq/4dIH3jxbXuTblM5X3P4M67Y6i
-         ukpevPlAQu5OUOpqFZMYCSPPoPyL/whzW11fGPjEF5B4bD7Iw3yiRN14LlPLDhHWPLlv
-         WhE9zXvaLk9LlGF/K14jPq4nvw05yp37ZbmvCpm3c/kYcdlJNm1GR7RNKsognK/xw7Wt
-         BtpQ==
+        bh=9uhhoFhnqfuRXBw6ejRCmokUFjspHAB30X75CNsh+fk=;
+        b=uOCm30htSg4dyosplWe7ui6YgaX4eGBdYE0IJ6ImKuH1xKLLCYZtw7HlqKB8SW1t20
+         izEpRSZPr95bIaL12tb/GBNzHGWO0dLKr76koshyceJ3HldyWBixXFiTyTlXzlLj7A7W
+         YX2UwPhemNaAkUG+f2pJopRZlSVR26gidbIqVl7X01lSDndUvzUPcJ1p8oKulM5FgtSr
+         pvO8UIeNdsWBvvS87pCRtQgaUYzaDoUvUYBPdIPiSfcBfFt+V7BJgj8GBcMYbXh16YR7
+         6guJPSiFh40qiZo+pnzRpVRmFMIzI6XTJ84WXWjwcOuErJRGs69hK7JgFTH//jtnd6vF
+         CMSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xMnjRIUH7U+LMaqu23CyFxSMSpd6wBrIg0N0L1+h9xI=;
-        b=OAcokV/RaKqueM5oSCLgdrMoLVKUCHHsnrqSPyT7Ivjr2v+lB6wFOTBjeKDH4ssXgS
-         25iQ+um/ZItqLPWy4PeOepuE6RCqGl7bRETrBZ+vPIqfyZzyGS3W9x6SB5kE/RoO07oJ
-         QX7lJUE8mIhLS929TjSg5KYrf00cDVhZJWG5TsBCvmiwV0Ev4CSqfwn2ujLC5VMnj51w
-         iCxcGItys71XfAMBPG0uFY2L5pNXiIWqIBoaPFBnnC5E6NxIJgiasXQpdv6+lqvZtRtv
-         4tJkwVDAPGyE0i0uqx3re0tf4b5SJbtkHVckbl/5aiaOZXwSWxSGl5pFDjJ/7ixnUvoQ
-         GyNg==
-X-Gm-Message-State: AOAM533Dz7qskHLOkIAy1n8WXjlmP7aF2CF8Dl10v0OrLGC8aQOe8bkd
-        +tlJRxwpd9vSuaIDeBatI/I=
-X-Google-Smtp-Source: ABdhPJyb2QKYuRHCjf6sjspPY3Ti9AWx0Hk4FRdUqZw/P5UMIrmj14p3Ofqf4kooWHhJ8ifdHV5TlA==
-X-Received: by 2002:a17:90a:4404:: with SMTP id s4mr10011078pjg.218.1623235863633;
-        Wed, 09 Jun 2021 03:51:03 -0700 (PDT)
+        bh=9uhhoFhnqfuRXBw6ejRCmokUFjspHAB30X75CNsh+fk=;
+        b=TF2LGqz5WpPS0p5s9Nz/O6+jTSV03OnKE/TAt3LVbpESKY5dq4G8WPtRxq+MA4Ntr5
+         0rbfWIyiWvel2UjyF1vFL3xvlA+KANMhPM1uG8kkOf+qqpYNFi0XeuLT1cLrJxvke4Dy
+         I1tBe54dWtxCmjbhfCk9hoAzocOIyDtxrpDC7F4f43NUsaSq05ibWZ1WPj841RS+rF9e
+         +kUGRcogngJ3uax9TRuKdD3XwIBT40MuYAMHyPqpwAa2XLVUKUpEcRn2r58ZK/rSIZ1X
+         aoh6vRgWlIR0T+fPcSlV09ucRYTxblAEpgyE4yGlKm3EkdM8ADTmjXtiFCWB3PF/UB3M
+         no2g==
+X-Gm-Message-State: AOAM530TNdeSxow/arbt+KqFpIe4GVEAM3KBVfYzukohT6TlYfHN/IQz
+        ZSMjbNkui3gO0mODE8czHu5jfw5kUMAKLg==
+X-Google-Smtp-Source: ABdhPJz8boDKVBFz4qOFVqg6LfpTslZ93nb6v7ALMYXyaj0iZpDrzx0OR0FO09TNaziQ4wdn6u11Cg==
+X-Received: by 2002:a17:90a:4e0b:: with SMTP id n11mr31294023pjh.155.1623235851070;
+        Wed, 09 Jun 2021 03:50:51 -0700 (PDT)
 Received: from localhost (122x211x248x161.ap122.ftth.ucom.ne.jp. [122.211.248.161])
-        by smtp.gmail.com with ESMTPSA id g6sm13603667pfq.110.2021.06.09.03.51.02
+        by smtp.gmail.com with ESMTPSA id u14sm18240126pjx.14.2021.06.09.03.50.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 03:51:03 -0700 (PDT)
+        Wed, 09 Jun 2021 03:50:50 -0700 (PDT)
 From:   Punit Agrawal <punitagrawal@gmail.com>
 To:     mhiramat@kernel.org, naveen.n.rao@linux.ibm.com,
         anil.s.keshavamurthy@intel.com, davem@davemloft.net
 Cc:     Punit Agrawal <punitagrawal@gmail.com>,
         linux-kernel@vger.kernel.org, guoren@kernel.org,
         linux-csky@vger.kernel.org
-Subject: [RFC PATCH 3/5] kprobe: Simplify prepare_kprobe() by dropping redundant version
-Date:   Wed,  9 Jun 2021 19:50:17 +0900
-Message-Id: <20210609105019.3626677-4-punitagrawal@gmail.com>
+Subject: [PATCH 1/5] kprobes: Do not use local variable when creating debugfs file
+Date:   Wed,  9 Jun 2021 19:50:15 +0900
+Message-Id: <20210609105019.3626677-2-punitagrawal@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210609105019.3626677-1-punitagrawal@gmail.com>
 References: <20210609105019.3626677-1-punitagrawal@gmail.com>
@@ -74,89 +74,45 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The function prepare_kprobe() is called during kprobe registration and
-is responsible for ensuring any architecture related preparation for
-the kprobe is done before returning.
+debugfs_create_file() takes a pointer argument that can be used during
+file operation callbacks (accessible via i_private in the inode
+structure). An obvious requirement is for the pointer to refer to
+valid memory when used.
 
-One of two versions of prepare_kprobe() is chosen depending on the
-availability of KPROBE_ON_FTRACE in the kernel configuration.
+When creating the debugfs file to dynamically enable / disable
+kprobes, a pointer to local variable is passed to
+debugfs_create_file(); which will go out of scope when the init
+function returns. The reason this hasn't triggered random memory
+corruption is because the pointer is not accessed during the debugfs
+file callbacks.
 
-Simplify the code by dropping the version when KPROBE_ON_FTRACE is not
-selected - instead relying on kprobe_ftrace() to return false when
-KPROBE_ON_FTRACE is not set.
-
-No functional change.
+Fix the incorrect (and unnecessary) usage of local variable during
+debugfs_file_create() by passing NULL instead.
 
 Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
 ---
- include/linux/kprobes.h |  5 +++++
- kernel/kprobes.c        | 23 +++++++++--------------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ kernel/kprobes.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 1883a4a9f16a..771013bab18a 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -362,6 +362,11 @@ static inline void wait_for_kprobe_optimizer(void) { }
- extern void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 				  struct ftrace_ops *ops, struct ftrace_regs *fregs);
- extern int arch_prepare_kprobe_ftrace(struct kprobe *p);
-+#else
-+static inline int arch_prepare_kprobe_ftrace(struct kprobe *p)
-+{
-+	return -EINVAL;
-+}
- #endif
- 
- int arch_check_ftrace_location(struct kprobe *p);
 diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 1a11d3c411bf..54d37d4ab897 100644
+index 745f08fdd7a6..fdb1ea2e963b 100644
 --- a/kernel/kprobes.c
 +++ b/kernel/kprobes.c
-@@ -1022,15 +1022,6 @@ static struct ftrace_ops kprobe_ipmodify_ops __read_mostly = {
- static int kprobe_ipmodify_enabled;
- static int kprobe_ftrace_enabled;
- 
--/* Must ensure p->addr is really on ftrace */
--static int prepare_kprobe(struct kprobe *p)
--{
--	if (!kprobe_ftrace(p))
--		return arch_prepare_kprobe(p);
--
--	return arch_prepare_kprobe_ftrace(p);
--}
--
- /* Caller must lock kprobe_mutex */
- static int __arm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
- 			       int *cnt)
-@@ -1102,11 +1093,6 @@ static int disarm_kprobe_ftrace(struct kprobe *p)
- 		ipmodify ? &kprobe_ipmodify_enabled : &kprobe_ftrace_enabled);
- }
- #else	/* !CONFIG_KPROBES_ON_FTRACE */
--static inline int prepare_kprobe(struct kprobe *p)
--{
--	return arch_prepare_kprobe(p);
--}
--
- static inline int arm_kprobe_ftrace(struct kprobe *p)
+@@ -2816,13 +2816,12 @@ static const struct file_operations fops_kp = {
+ static int __init debugfs_kprobe_init(void)
  {
- 	return -ENODEV;
-@@ -1118,6 +1104,15 @@ static inline int disarm_kprobe_ftrace(struct kprobe *p)
- }
- #endif
+ 	struct dentry *dir;
+-	unsigned int value = 1;
  
-+static int prepare_kprobe(struct kprobe *p)
-+{
-+	/* Must ensure p->addr is really on ftrace */
-+	if (kprobe_ftrace(p))
-+		return arch_prepare_kprobe_ftrace(p);
-+
-+	return arch_prepare_kprobe(p);
-+}
-+
- /* Arm a kprobe with text_mutex */
- static int arm_kprobe(struct kprobe *kp)
- {
+ 	dir = debugfs_create_dir("kprobes", NULL);
+ 
+ 	debugfs_create_file("list", 0400, dir, NULL, &kprobes_fops);
+ 
+-	debugfs_create_file("enabled", 0600, dir, &value, &fops_kp);
++	debugfs_create_file("enabled", 0600, dir, NULL, &fops_kp);
+ 
+ 	debugfs_create_file("blacklist", 0400, dir, NULL,
+ 			    &kprobe_blacklist_fops);
 -- 
 2.30.2
 

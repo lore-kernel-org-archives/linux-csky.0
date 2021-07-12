@@ -2,100 +2,96 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38EAAC07E96
-	for <linux-csky@archiver.kernel.org>; Thu,  8 Jul 2021 08:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF544C07E99
+	for <linux-csky@archiver.kernel.org>; Mon, 12 Jul 2021 06:11:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07CA161CCA
-	for <linux-csky@archiver.kernel.org>; Thu,  8 Jul 2021 08:53:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EDF061026
+	for <linux-csky@archiver.kernel.org>; Mon, 12 Jul 2021 06:11:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbhGHI4R (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 8 Jul 2021 04:56:17 -0400
-Received: from mga04.intel.com ([192.55.52.120]:56562 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231190AbhGHI4R (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 8 Jul 2021 04:56:17 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10038"; a="207645707"
-X-IronPort-AV: E=Sophos;i="5.84,222,1620716400"; 
-   d="scan'208";a="207645707"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 01:53:36 -0700
-X-IronPort-AV: E=Sophos;i="5.84,222,1620716400"; 
-   d="scan'208";a="487473996"
-Received: from lingshan-mobl5.ccr.corp.intel.com (HELO [10.249.171.108]) ([10.249.171.108])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 01:53:28 -0700
-Subject: Re: [PATCH V7 01/18] perf/core: Use static_call to optimize
- perf_guest_info_callbacks
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Zhu Lingshan <lingshan.zhu@intel.com>
-Cc:     pbonzini@redhat.com, bp@alien8.de, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, weijiang.yang@intel.com,
-        kan.liang@linux.intel.com, ak@linux.intel.com,
-        wei.w.wang@intel.com, eranian@google.com, liuxiangdong5@huawei.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        like.xu.linux@gmail.com, Like Xu <like.xu@linux.intel.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        xen-devel@lists.xenproject.org
-References: <20210622094306.8336-1-lingshan.zhu@intel.com>
- <20210622094306.8336-2-lingshan.zhu@intel.com>
- <YN722HIrzc6Z2+oD@hirez.programming.kicks-ass.net>
-From:   Zhu Lingshan <lingshan.zhu@linux.intel.com>
-Message-ID: <82ae3758-6b99-dc43-9515-fabb2b036f3b@linux.intel.com>
-Date:   Thu, 8 Jul 2021 16:53:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S231373AbhGLGNr (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 12 Jul 2021 02:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231351AbhGLGNr (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 12 Jul 2021 02:13:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2D4C0613DD;
+        Sun, 11 Jul 2021 23:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=Myd7IJLJ7heKIz9ETwtcIPphP9GrAs74dKTdw1IlNW0=; b=ukgk67ijHtXQ1PEUlh1WacXdWU
+        WIqEtHEGUD4+e78xBwdDdQ96GHwcDGXZGoKN8p+7q86hvOtOOiHxN3MeKXKst5nZXsCnxOVvoazU/
+        fNRH1LsQFSwgNKmo91nxV6rf73Waco4u5Myk8CuiZco/7k1OMWymTvPMp1oMiDjk5nJyguuWl35YK
+        rTTUQpsDR7CM63pp+JJ59UkU3ymC77BYcTToSPZH4iLbjPc0fsChh2t5T1TgFYBYOeUpvRSe5SMmR
+        Ka/ub8pu+YKXByg5EvKWWlN6GCKOSxnucifSmIQvNhpzSBmXCGvkAumMRr3sCOtBMbh7xWYBGstF+
+        GEZRpeTg==;
+Received: from [2001:4bb8:184:8b7c:bd9:61b8:39ba:d78a] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m2p8O-00GwC0-7C; Mon, 12 Jul 2021 06:09:43 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc:     Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geoff Levand <geoff@infradead.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alex Shi <alexs@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 1/6] mmc: JZ4740: remove the flush_kernel_dcache_page call in jz4740_mmc_read_data
+Date:   Mon, 12 Jul 2021 08:09:23 +0200
+Message-Id: <20210712060928.4161649-2-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210712060928.4161649-1-hch@lst.de>
+References: <20210712060928.4161649-1-hch@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <YN722HIrzc6Z2+oD@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+MIPS now implements flush_kernel_dcache_page (as an alias to
+flush_dcache_page).
 
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/mmc/host/jz4740_mmc.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-On 7/2/2021 7:22 PM, Peter Zijlstra wrote:
-> On Tue, Jun 22, 2021 at 05:42:49PM +0800, Zhu Lingshan wrote:
->> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
->> index 8f71dd72ef95..c71af4cfba9b 100644
->> --- a/arch/x86/events/core.c
->> +++ b/arch/x86/events/core.c
->> @@ -90,6 +90,27 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_pebs_aliases, *x86_pmu.pebs_aliases);
->>    */
->>   DEFINE_STATIC_CALL_RET0(x86_pmu_guest_get_msrs, *x86_pmu.guest_get_msrs);
->>   
->> +DEFINE_STATIC_CALL_RET0(x86_guest_state, *(perf_guest_cbs->state));
->> +DEFINE_STATIC_CALL_RET0(x86_guest_get_ip, *(perf_guest_cbs->get_ip));
->> +DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
->> +
->> +void arch_perf_update_guest_cbs(void)
->> +{
->> +	static_call_update(x86_guest_state, (void *)&__static_call_return0);
->> +	static_call_update(x86_guest_get_ip, (void *)&__static_call_return0);
->> +	static_call_update(x86_guest_handle_intel_pt_intr, (void *)&__static_call_return0);
->> +
->> +	if (perf_guest_cbs && perf_guest_cbs->state)
->> +		static_call_update(x86_guest_state, perf_guest_cbs->state);
->> +
->> +	if (perf_guest_cbs && perf_guest_cbs->get_ip)
->> +		static_call_update(x86_guest_get_ip, perf_guest_cbs->get_ip);
->> +
->> +	if (perf_guest_cbs && perf_guest_cbs->handle_intel_pt_intr)
->> +		static_call_update(x86_guest_handle_intel_pt_intr,
->> +				   perf_guest_cbs->handle_intel_pt_intr);
->> +}
-> Coding style wants { } on that last if().
-will fix these coding style issues in V8
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index 0db17bcc9c16..aa2240c83510 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -578,10 +578,6 @@ static bool jz4740_mmc_read_data(struct jz4740_mmc_host *host,
+ 			}
+ 		}
+ 		data->bytes_xfered += miter->length;
+-
+-		/* This can go away once MIPS implements
+-		 * flush_kernel_dcache_page */
+-		flush_dcache_page(miter->page);
+ 	}
+ 	sg_miter_stop(miter);
+ 
+-- 
+2.30.2
 
-Thanks!

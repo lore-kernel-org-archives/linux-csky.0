@@ -6,27 +6,27 @@ X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45A06C6377A
-	for <linux-csky@archiver.kernel.org>; Thu, 22 Jul 2021 02:38:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 641F4C6377B
+	for <linux-csky@archiver.kernel.org>; Thu, 22 Jul 2021 03:03:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CB2F61222
-	for <linux-csky@archiver.kernel.org>; Thu, 22 Jul 2021 02:38:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47E8A6108B
+	for <linux-csky@archiver.kernel.org>; Thu, 22 Jul 2021 03:03:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbhGVB5g (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 21 Jul 2021 21:57:36 -0400
-Received: from mga03.intel.com ([134.134.136.65]:49574 "EHLO mga03.intel.com"
+        id S230294AbhGVCXT (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 21 Jul 2021 22:23:19 -0400
+Received: from mga07.intel.com ([134.134.136.100]:16804 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230367AbhGVB5e (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 21 Jul 2021 21:57:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10052"; a="211612850"
+        id S230093AbhGVCXT (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 21 Jul 2021 22:23:19 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10052"; a="275374957"
 X-IronPort-AV: E=Sophos;i="5.84,259,1620716400"; 
-   d="scan'208";a="211612850"
+   d="scan'208";a="275374957"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 19:38:09 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 20:03:54 -0700
 X-IronPort-AV: E=Sophos;i="5.84,259,1620716400"; 
-   d="scan'208";a="512014134"
+   d="scan'208";a="512019825"
 Received: from lingshan-mobl5.ccr.corp.intel.com (HELO [10.255.29.38]) ([10.255.29.38])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 19:38:02 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 20:03:46 -0700
 Subject: Re: [PATCH V8 01/18] perf/core: Use static_call to optimize
  perf_guest_info_callbacks
 To:     Like Xu <like.xu.linux@gmail.com>
@@ -49,8 +49,8 @@ References: <20210716085325.10300-1-lingshan.zhu@intel.com>
  <20210716085325.10300-2-lingshan.zhu@intel.com>
  <fd117e37-8063-63a4-43cd-7cb555e5bab5@gmail.com>
 From:   "Zhu, Lingshan" <lingshan.zhu@intel.com>
-Message-ID: <c5fad2b5-2c2f-9b06-6f45-629776a690fa@intel.com>
-Date:   Thu, 22 Jul 2021 10:38:00 +0800
+Message-ID: <e8a7de91-fe48-c570-3cea-a296278a7c8a@intel.com>
+Date:   Thu, 22 Jul 2021 11:03:44 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
@@ -67,9 +67,6 @@ X-Mailing-List: linux-csky@vger.kernel.org
 On 7/21/2021 7:57 PM, Like Xu wrote:
 > On 16/7/2021 4:53 pm, Zhu Lingshan wrote:
 >> +    } else if (xenpmu_data->pmu.r.regs.cpl & 3)
-oh, my typo, will fix in V9
-
-Thanks
 >
 > Lingshan, serious for this version ?
 >
@@ -90,4 +87,4 @@ Thanks
 >
 >> +            state |= PERF_GUEST_USER;
 >>       }
-
+forgot to enable XEN build in .config, V9 fixes this will come soon

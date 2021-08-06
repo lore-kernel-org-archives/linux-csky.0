@@ -2,450 +2,680 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C857C4320E
-	for <linux-csky@archiver.kernel.org>; Thu,  5 Aug 2021 19:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CB2C4338F
+	for <linux-csky@archiver.kernel.org>; Fri,  6 Aug 2021 13:38:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F9C160F01
-	for <linux-csky@archiver.kernel.org>; Thu,  5 Aug 2021 19:03:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 818B16113C
+	for <linux-csky@archiver.kernel.org>; Fri,  6 Aug 2021 13:38:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242028AbhHETED (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 5 Aug 2021 15:04:03 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:53165 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241974AbhHETEC (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 5 Aug 2021 15:04:02 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D3BAC5810B2;
-        Thu,  5 Aug 2021 15:03:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 05 Aug 2021 15:03:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm1; bh=zNZUoCQxGeezK
-        ynu9SXf7RK1yXXzs9UrsyBqx4F2Edk=; b=GtL12AmdeZNPHF6SApyO9wGXfEnlg
-        wNhltluDSQzlmgtvgRRPULzc7FzojizjIvGqjq9l0WTHC8gjjwH0OPxXbGnrnUPm
-        hDSMlGCd6ITo+xRpprv6J4fpF05Dz4iPpq0Q6YTMZ43f9noXHFhoA2ryB+1rwXso
-        0xje1RyI2eOjiHlPqHk7sE8QpdSibrVzoNaw67a4doWQGdf2ABU4s86r8dg5LwQ8
-        me86nda6dU5U9VRMEKgR+dFIaxddHn/vkrx5nqQt5s5YvdWVYAaeSBtnQyqaokgp
-        5PjIXA1zjsCvdR3wQlwKJSjLLc4/gwwwSlV50rFq1ZqkR4cvvw3fC8rqQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:reply-to:subject
-        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=zNZUoCQxGeezKynu9SXf7RK1yXXzs9UrsyBqx4F2Edk=; b=lkUCbjUl
-        PEdQRBtf816Ypmmn3nhNv7Sizw4AzYBiGnl0V9d227YL3157XWzt7AL5QCqGN7cL
-        yqPnZEkLdbcz85N8RdldMN71v2KmRxsPUl7vsMVtamEYXDOPG3U6BvE+pr7+Yru4
-        /FVQdwNbo4Ycp97k//hOBnZ2yca1DgKkAyOxemQjJQPVSeOqcrlkx7j0BGJaFUyS
-        CWPBdaRML51ZDoxDH0rHuU7w62PfIe1ROCUo1cvMbBryWkG7nPr36V8nKMhl2XkD
-        x4NfRrv0ZBtrGiGrKGOyx1ZKcrBy0Yhjm8JPiSOmYop6IZ1wOMqP+pqW7m9ryknq
-        SMva7CVAvywnQA==
-X-ME-Sender: <xms:EDYMYY-DL8P2bcvnLICbJUDwJSM9knPLJLgObnvHJpPeONvY18Y8zA>
-    <xme:EDYMYQuaN103Gqpz6IVwl1J1TfPrOWCIdVik9xAJA4Ej6bJdqSxpwSdpWtrORcNJP
-    zY1qpKdp_dodr_qwg>
-X-ME-Received: <xmr:EDYMYeDQlih2rLrqdgd6jlVePFzv5Z5MhViPFAcjOwbSFYpGFZTVca5ZEJTqPcCHSvsAykOj>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrieelgdduvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
-    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecuvehluhhs
-    thgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnsehsvg
-    hnthdrtghomh
-X-ME-Proxy: <xmx:EDYMYYebQ9uZTltrKTkpcJXLtFJiugbJgfdenr91RlXIpn-tUs0VXA>
-    <xmx:EDYMYdNGPMj1jZn3czxOZ1YHev0_hyrR_EzZOrQpHCpjsp3MQtYpDg>
-    <xmx:EDYMYSlWti7zMr_aZl-0ZjSHN1IURtnEK9-wZbzw1PspP32v-Um2OQ>
-    <xmx:EjYMYVbHX95gn2qpP7YVlS5-XylZg9XCV-qdmTswerMFWoEkCpgRVQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 5 Aug 2021 15:03:43 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Subject: [RFC PATCH 02/15] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
-Date:   Thu,  5 Aug 2021 15:02:40 -0400
-Message-Id: <20210805190253.2795604-3-zi.yan@sent.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210805190253.2795604-1-zi.yan@sent.com>
-References: <20210805190253.2795604-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        id S1344149AbhHFNir (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 6 Aug 2021 09:38:47 -0400
+Received: from mga14.intel.com ([192.55.52.115]:13922 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344105AbhHFNiq (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 6 Aug 2021 09:38:46 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10068"; a="214101433"
+X-IronPort-AV: E=Sophos;i="5.84,300,1620716400"; 
+   d="scan'208";a="214101433"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2021 06:38:26 -0700
+X-IronPort-AV: E=Sophos;i="5.84,300,1620716400"; 
+   d="scan'208";a="523463320"
+Received: from vmm_a4_icx.sh.intel.com (HELO localhost.localdomain) ([10.239.53.245])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2021 06:38:20 -0700
+From:   Zhu Lingshan <lingshan.zhu@intel.com>
+To:     peterz@infradead.org, pbonzini@redhat.com
+Cc:     bp@alien8.de, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        kan.liang@linux.intel.com, ak@linux.intel.com,
+        wei.w.wang@intel.com, eranian@google.com, liuxiangdong5@huawei.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        like.xu.linux@gmail.com, boris.ostrvsky@oracle.com,
+        Like Xu <like.xu@linux.intel.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        xen-devel@lists.xenproject.org,
+        Zhu Lingshan <lingshan.zhu@intel.com>
+Subject: [PATCH V10 01/18] perf/core: Use static_call to optimize perf_guest_info_callbacks
+Date:   Fri,  6 Aug 2021 21:37:45 +0800
+Message-Id: <20210806133802.3528-2-lingshan.zhu@intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210806133802.3528-1-lingshan.zhu@intel.com>
+References: <20210806133802.3528-1-lingshan.zhu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+From: Like Xu <like.xu@linux.intel.com>
 
-This Kconfig option is used by individual arch to set its desired
-MAX_ORDER. Rename it to reflect its actual use.
+For "struct perf_guest_info_callbacks", the two fields "is_in_guest"
+and "is_user_mode" are replaced with a new multiplexed member named
+"state", and the "get_guest_ip" field will be renamed to "get_ip".
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
+For arm64, xen and kvm/x86, the application of DEFINE_STATIC_CALL_RET0
+could make all that perf_guest_cbs stuff suck less. For arm, csky, nds32,
+and riscv, just applied some renamed refactoring.
+
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
 Cc: Guo Ren <guoren@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Ley Foon Tan <ley.foon.tan@intel.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: linux-snps-arc@lists.infradead.org
+Cc: Nick Hu <nickhu@andestech.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-oxnas@groups.io
+Cc: kvmarm@lists.cs.columbia.edu
 Cc: linux-csky@vger.kernel.org
-Cc: linux-ia64@vger.kernel.org
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-sh@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: xen-devel@lists.xenproject.org
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Original-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Like Xu <like.xu@linux.intel.com>
+Signed-off-by: Zhu Lingshan <lingshan.zhu@intel.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrvsky@oracle.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/arc/Kconfig                             | 2 +-
- arch/arm/Kconfig                             | 2 +-
- arch/arm/configs/imx_v6_v7_defconfig         | 2 +-
- arch/arm/configs/milbeaut_m10v_defconfig     | 2 +-
- arch/arm/configs/oxnas_v6_defconfig          | 2 +-
- arch/arm/configs/sama7_defconfig             | 2 +-
- arch/arm64/Kconfig                           | 2 +-
- arch/csky/Kconfig                            | 2 +-
- arch/ia64/Kconfig                            | 2 +-
- arch/ia64/include/asm/sparsemem.h            | 6 +++---
- arch/m68k/Kconfig.cpu                        | 2 +-
- arch/mips/Kconfig                            | 2 +-
- arch/nios2/Kconfig                           | 2 +-
- arch/powerpc/Kconfig                         | 2 +-
- arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
- arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
- arch/sh/configs/ecovec24_defconfig           | 2 +-
- arch/sh/mm/Kconfig                           | 2 +-
- arch/sparc/Kconfig                           | 2 +-
- arch/xtensa/Kconfig                          | 2 +-
- include/linux/mmzone.h                       | 4 ++--
- 21 files changed, 24 insertions(+), 24 deletions(-)
+ arch/arm/kernel/perf_callchain.c   | 16 +++++++-----
+ arch/arm64/kernel/perf_callchain.c | 29 +++++++++++++++++-----
+ arch/arm64/kvm/perf.c              | 22 ++++++++---------
+ arch/csky/kernel/perf_callchain.c  |  4 +--
+ arch/nds32/kernel/perf_event_cpu.c | 16 +++++++-----
+ arch/riscv/kernel/perf_callchain.c |  4 +--
+ arch/x86/events/core.c             | 39 ++++++++++++++++++++++++------
+ arch/x86/events/intel/core.c       |  7 +++---
+ arch/x86/include/asm/kvm_host.h    |  2 +-
+ arch/x86/kvm/pmu.c                 |  2 +-
+ arch/x86/kvm/x86.c                 | 37 +++++++++++++++-------------
+ arch/x86/xen/pmu.c                 | 33 ++++++++++---------------
+ include/linux/perf_event.h         | 12 ++++++---
+ kernel/events/core.c               |  9 +++++++
+ 14 files changed, 144 insertions(+), 88 deletions(-)
 
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index b5bf68e74732..923ea4c31e59 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -583,7 +583,7 @@ config ARC_BUILTIN_DTB_NAME
-=20
- endmenu	 # "ARC Architecture Configuration"
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "12" if ARC_HUGEPAGE_16M
- 	default "11"
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 2fb7012c3246..286854318fe5 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1523,7 +1523,7 @@ config ARM_MODULE_PLTS
- 	  Disabling this is usually safe for small single-platform
- 	  configurations. If unsure, say y.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "12" if SOC_AM33XX
- 	default "9" if SA1111
-diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6=
-_v7_defconfig
-index 079fcd8d1d11..802310d3ebf5 100644
---- a/arch/arm/configs/imx_v6_v7_defconfig
-+++ b/arch/arm/configs/imx_v6_v7_defconfig
-@@ -34,7 +34,7 @@ CONFIG_PCI_IMX6=3Dy
- CONFIG_SMP=3Dy
- CONFIG_ARM_PSCI=3Dy
- CONFIG_HIGHMEM=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D14
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D14
- CONFIG_CMDLINE=3D"noinitrd console=3Dttymxc0,115200"
- CONFIG_KEXEC=3Dy
- CONFIG_CPU_FREQ=3Dy
-diff --git a/arch/arm/configs/milbeaut_m10v_defconfig b/arch/arm/configs/mi=
-lbeaut_m10v_defconfig
-index 7c07f9893a0f..06967243f74d 100644
---- a/arch/arm/configs/milbeaut_m10v_defconfig
-+++ b/arch/arm/configs/milbeaut_m10v_defconfig
-@@ -26,7 +26,7 @@ CONFIG_THUMB2_KERNEL=3Dy
- # CONFIG_THUMB2_AVOID_R_ARM_THM_JUMP11 is not set
- # CONFIG_ARM_PATCH_IDIV is not set
- CONFIG_HIGHMEM=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D12
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D12
- CONFIG_SECCOMP=3Dy
- CONFIG_KEXEC=3Dy
- CONFIG_EFI=3Dy
-diff --git a/arch/arm/configs/oxnas_v6_defconfig b/arch/arm/configs/oxnas_v=
-6_defconfig
-index cae0db6b4eaf..df8462272446 100644
---- a/arch/arm/configs/oxnas_v6_defconfig
-+++ b/arch/arm/configs/oxnas_v6_defconfig
-@@ -17,7 +17,7 @@ CONFIG_MACH_OX820=3Dy
- CONFIG_SMP=3Dy
- CONFIG_NR_CPUS=3D16
- CONFIG_CMA=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D12
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D12
- CONFIG_SECCOMP=3Dy
- CONFIG_ARM_APPENDED_DTB=3Dy
- CONFIG_ARM_ATAG_DTB_COMPAT=3Dy
-diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defc=
-onfig
-index 938aae4bd80b..f8683b87cb27 100644
---- a/arch/arm/configs/sama7_defconfig
-+++ b/arch/arm/configs/sama7_defconfig
-@@ -22,7 +22,7 @@ CONFIG_ATMEL_CLOCKSOURCE_TCB=3Dy
- # CONFIG_CACHE_L2X0 is not set
- # CONFIG_ARM_PATCH_IDIV is not set
- # CONFIG_CPU_SW_DOMAIN_PAN is not set
--CONFIG_FORCE_MAX_ZONEORDER=3D15
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D15
- CONFIG_UACCESS_WITH_MEMCPY=3Dy
- # CONFIG_ATAGS is not set
- CONFIG_CMDLINE=3D"console=3DttyS0,115200 earlyprintk ignore_loglevel"
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b5b13a932561..972d81f6bb2c 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1152,7 +1152,7 @@ config XEN
- 	help
- 	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int
- 	default "14" if ARM64_64K_PAGES
- 	default "12" if ARM64_16K_PAGES
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 2716f6395ba7..0fd2333226b7 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -307,7 +307,7 @@ config HIGHMEM
- 	select KMAP_LOCAL
- 	default y
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "11"
-=20
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index 4993c7ac7ff6..d1bd010ee7a5 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -200,7 +200,7 @@ config IA64_CYCLONE
- 	  Say Y here to enable support for IBM EXA Cyclone time source.
- 	  If you're unsure, answer N.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "MAX_ORDER (11 - 17)"  if !HUGETLB_PAGE
- 	range 11 17  if !HUGETLB_PAGE
- 	default "17" if HUGETLB_PAGE
-diff --git a/arch/ia64/include/asm/sparsemem.h b/arch/ia64/include/asm/spar=
-semem.h
-index 42ed5248fae9..84e8ce387b69 100644
---- a/arch/ia64/include/asm/sparsemem.h
-+++ b/arch/ia64/include/asm/sparsemem.h
-@@ -11,10 +11,10 @@
-=20
- #define SECTION_SIZE_BITS	(30)
- #define MAX_PHYSMEM_BITS	(50)
--#ifdef CONFIG_FORCE_MAX_ZONEORDER
--#if ((CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
-+#ifdef CONFIG_ARCH_FORCE_MAX_ORDER
-+#if ((CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
- #undef SECTION_SIZE_BITS
--#define SECTION_SIZE_BITS (CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT)
-+#define SECTION_SIZE_BITS (CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT)
+diff --git a/arch/arm/kernel/perf_callchain.c b/arch/arm/kernel/perf_callchain.c
+index 3b69a76d341e..1ce30f86d6c7 100644
+--- a/arch/arm/kernel/perf_callchain.c
++++ b/arch/arm/kernel/perf_callchain.c
+@@ -64,7 +64,7 @@ perf_callchain_user(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs
+ {
+ 	struct frame_tail __user *tail;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (perf_guest_cbs && perf_guest_cbs->state()) {
+ 		/* We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -100,7 +100,7 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
+ {
+ 	struct stackframe fr;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (perf_guest_cbs && perf_guest_cbs->state()) {
+ 		/* We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -111,8 +111,8 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
+ 
+ unsigned long perf_instruction_pointer(struct pt_regs *regs)
+ {
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest())
+-		return perf_guest_cbs->get_guest_ip();
++	if (perf_guest_cbs && perf_guest_cbs->state())
++		return perf_guest_cbs->get_ip();
+ 
+ 	return instruction_pointer(regs);
+ }
+@@ -120,9 +120,13 @@ unsigned long perf_instruction_pointer(struct pt_regs *regs)
+ unsigned long perf_misc_flags(struct pt_regs *regs)
+ {
+ 	int misc = 0;
++	unsigned int state = 0;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
+-		if (perf_guest_cbs->is_user_mode())
++	if (perf_guest_cbs)
++		state = perf_guest_cbs->state();
++
++	if (perf_guest_cbs && state) {
++		if (state & PERF_GUEST_USER)
+ 			misc |= PERF_RECORD_MISC_GUEST_USER;
+ 		else
+ 			misc |= PERF_RECORD_MISC_GUEST_KERNEL;
+diff --git a/arch/arm64/kernel/perf_callchain.c b/arch/arm64/kernel/perf_callchain.c
+index 4a72c2727309..1b344e23fd2f 100644
+--- a/arch/arm64/kernel/perf_callchain.c
++++ b/arch/arm64/kernel/perf_callchain.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2015 ARM Limited
+  */
+ #include <linux/perf_event.h>
++#include <linux/static_call.h>
+ #include <linux/uaccess.h>
+ 
+ #include <asm/pointer_auth.h>
+@@ -99,10 +100,25 @@ compat_user_backtrace(struct compat_frame_tail __user *tail,
+ }
+ #endif /* CONFIG_COMPAT */
+ 
++DEFINE_STATIC_CALL_RET0(arm64_guest_state, *(perf_guest_cbs->state));
++DEFINE_STATIC_CALL_RET0(arm64_guest_get_ip, *(perf_guest_cbs->get_ip));
++
++void arch_perf_update_guest_cbs(void)
++{
++	static_call_update(arm64_guest_state, (void *)&__static_call_return0);
++	static_call_update(arm64_guest_get_ip, (void *)&__static_call_return0);
++
++	if (perf_guest_cbs && perf_guest_cbs->state)
++		static_call_update(arm64_guest_state, perf_guest_cbs->state);
++
++	if (perf_guest_cbs && perf_guest_cbs->get_ip)
++		static_call_update(arm64_guest_get_ip, perf_guest_cbs->get_ip);
++}
++
+ void perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+ 			 struct pt_regs *regs)
+ {
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (static_call(arm64_guest_state)()) {
+ 		/* We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -149,7 +165,7 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ {
+ 	struct stackframe frame;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (static_call(arm64_guest_state)()) {
+ 		/* We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -160,8 +176,8 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ 
+ unsigned long perf_instruction_pointer(struct pt_regs *regs)
+ {
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest())
+-		return perf_guest_cbs->get_guest_ip();
++	if (static_call(arm64_guest_state)())
++		return static_call(arm64_guest_get_ip)();
+ 
+ 	return instruction_pointer(regs);
+ }
+@@ -169,9 +185,10 @@ unsigned long perf_instruction_pointer(struct pt_regs *regs)
+ unsigned long perf_misc_flags(struct pt_regs *regs)
+ {
+ 	int misc = 0;
++	unsigned int guest = static_call(arm64_guest_state)();
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
+-		if (perf_guest_cbs->is_user_mode())
++	if (guest) {
++		if (guest & PERF_GUEST_USER)
+ 			misc |= PERF_RECORD_MISC_GUEST_USER;
+ 		else
+ 			misc |= PERF_RECORD_MISC_GUEST_KERNEL;
+diff --git a/arch/arm64/kvm/perf.c b/arch/arm64/kvm/perf.c
+index 151c31fb9860..8a3387e58f42 100644
+--- a/arch/arm64/kvm/perf.c
++++ b/arch/arm64/kvm/perf.c
+@@ -13,21 +13,20 @@
+ 
+ DEFINE_STATIC_KEY_FALSE(kvm_arm_pmu_available);
+ 
+-static int kvm_is_in_guest(void)
+-{
+-        return kvm_get_running_vcpu() != NULL;
+-}
+-
+-static int kvm_is_user_mode(void)
++static unsigned int kvm_guest_state(void)
+ {
+ 	struct kvm_vcpu *vcpu;
++	unsigned int state = 0;
++
++	if (kvm_get_running_vcpu())
++		state |= PERF_GUEST_ACTIVE;
+ 
+ 	vcpu = kvm_get_running_vcpu();
+ 
+-	if (vcpu)
+-		return !vcpu_mode_priv(vcpu);
++	if (vcpu && !vcpu_mode_priv(vcpu))
++		state |= PERF_GUEST_USER;
+ 
+-	return 0;
++	return state;
+ }
+ 
+ static unsigned long kvm_get_guest_ip(void)
+@@ -43,9 +42,8 @@ static unsigned long kvm_get_guest_ip(void)
+ }
+ 
+ static struct perf_guest_info_callbacks kvm_guest_cbs = {
+-	.is_in_guest	= kvm_is_in_guest,
+-	.is_user_mode	= kvm_is_user_mode,
+-	.get_guest_ip	= kvm_get_guest_ip,
++	.state		= kvm_guest_state,
++	.get_ip		= kvm_get_guest_ip,
+ };
+ 
+ int kvm_perf_init(void)
+diff --git a/arch/csky/kernel/perf_callchain.c b/arch/csky/kernel/perf_callchain.c
+index ab55e98ee8f6..3e42239dd1b2 100644
+--- a/arch/csky/kernel/perf_callchain.c
++++ b/arch/csky/kernel/perf_callchain.c
+@@ -89,7 +89,7 @@ void perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+ 	unsigned long fp = 0;
+ 
+ 	/* C-SKY does not support virtualization. */
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest())
++	if (perf_guest_cbs && perf_guest_cbs->state())
+ 		return;
+ 
+ 	fp = regs->regs[4];
+@@ -113,7 +113,7 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ 	struct stackframe fr;
+ 
+ 	/* C-SKY does not support virtualization. */
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (perf_guest_cbs && perf_guest_cbs->state()) {
+ 		pr_warn("C-SKY does not support perf in guest mode!");
+ 		return;
+ 	}
+diff --git a/arch/nds32/kernel/perf_event_cpu.c b/arch/nds32/kernel/perf_event_cpu.c
+index 0ce6f9f307e6..1dc32ba842ce 100644
+--- a/arch/nds32/kernel/perf_event_cpu.c
++++ b/arch/nds32/kernel/perf_event_cpu.c
+@@ -1371,7 +1371,7 @@ perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+ 
+ 	leaf_fp = 0;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (perf_guest_cbs && perf_guest_cbs->state()) {
+ 		/* We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -1481,7 +1481,7 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ {
+ 	struct stackframe fr;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (perf_guest_cbs && perf_guest_cbs->state()) {
+ 		/* We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -1494,8 +1494,8 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ unsigned long perf_instruction_pointer(struct pt_regs *regs)
+ {
+ 	/* However, NDS32 does not support virtualization */
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest())
+-		return perf_guest_cbs->get_guest_ip();
++	if (perf_guest_cbs && perf_guest_cbs->state())
++		return perf_guest_cbs->get_ip();
+ 
+ 	return instruction_pointer(regs);
+ }
+@@ -1503,10 +1503,14 @@ unsigned long perf_instruction_pointer(struct pt_regs *regs)
+ unsigned long perf_misc_flags(struct pt_regs *regs)
+ {
+ 	int misc = 0;
++	unsigned int state = 0;
++
++	if (perf_guest_cbs)
++		state = perf_guest_cbs->state();
+ 
+ 	/* However, NDS32 does not support virtualization */
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
+-		if (perf_guest_cbs->is_user_mode())
++	if (perf_guest_cbs && state) {
++		if (state & PERF_GUEST_USER)
+ 			misc |= PERF_RECORD_MISC_GUEST_USER;
+ 		else
+ 			misc |= PERF_RECORD_MISC_GUEST_KERNEL;
+diff --git a/arch/riscv/kernel/perf_callchain.c b/arch/riscv/kernel/perf_callchain.c
+index 0bb1854dce83..ea63f70cae5d 100644
+--- a/arch/riscv/kernel/perf_callchain.c
++++ b/arch/riscv/kernel/perf_callchain.c
+@@ -59,7 +59,7 @@ void perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+ 	unsigned long fp = 0;
+ 
+ 	/* RISC-V does not support perf in guest mode. */
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest())
++	if (perf_guest_cbs && perf_guest_cbs->state())
+ 		return;
+ 
+ 	fp = regs->s0;
+@@ -79,7 +79,7 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ 			   struct pt_regs *regs)
+ {
+ 	/* RISC-V does not support perf in guest mode. */
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (perf_guest_cbs && perf_guest_cbs->state()) {
+ 		pr_warn("RISC-V does not support perf in guest mode!");
+ 		return;
+ 	}
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index 1eb45139fcc6..9a908631f6cc 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -90,6 +90,28 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_pebs_aliases, *x86_pmu.pebs_aliases);
+  */
+ DEFINE_STATIC_CALL_RET0(x86_pmu_guest_get_msrs, *x86_pmu.guest_get_msrs);
+ 
++DEFINE_STATIC_CALL_RET0(x86_guest_state, *(perf_guest_cbs->state));
++DEFINE_STATIC_CALL_RET0(x86_guest_get_ip, *(perf_guest_cbs->get_ip));
++DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
++
++void arch_perf_update_guest_cbs(void)
++{
++	static_call_update(x86_guest_state, (void *)&__static_call_return0);
++	static_call_update(x86_guest_get_ip, (void *)&__static_call_return0);
++	static_call_update(x86_guest_handle_intel_pt_intr, (void *)&__static_call_return0);
++
++	if (perf_guest_cbs && perf_guest_cbs->state)
++		static_call_update(x86_guest_state, perf_guest_cbs->state);
++
++	if (perf_guest_cbs && perf_guest_cbs->get_ip)
++		static_call_update(x86_guest_get_ip, perf_guest_cbs->get_ip);
++
++	if (perf_guest_cbs && perf_guest_cbs->handle_intel_pt_intr) {
++		static_call_update(x86_guest_handle_intel_pt_intr,
++				   perf_guest_cbs->handle_intel_pt_intr);
++	}
++}
++
+ u64 __read_mostly hw_cache_event_ids
+ 				[PERF_COUNT_HW_CACHE_MAX]
+ 				[PERF_COUNT_HW_CACHE_OP_MAX]
+@@ -2764,7 +2786,7 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
+ 	struct unwind_state state;
+ 	unsigned long addr;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (static_call(x86_guest_state)()) {
+ 		/* TODO: We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -2867,7 +2889,7 @@ perf_callchain_user(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs
+ 	struct stack_frame frame;
+ 	const struct stack_frame __user *fp;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
++	if (static_call(x86_guest_state)()) {
+ 		/* TODO: We don't support guest os callchain now */
+ 		return;
+ 	}
+@@ -2944,18 +2966,21 @@ static unsigned long code_segment_base(struct pt_regs *regs)
+ 
+ unsigned long perf_instruction_pointer(struct pt_regs *regs)
+ {
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest())
+-		return perf_guest_cbs->get_guest_ip();
++	unsigned long ip = static_call(x86_guest_get_ip)();
++
++	if (likely(!ip))
++		ip = regs->ip + code_segment_base(regs);
+ 
+-	return regs->ip + code_segment_base(regs);
++	return ip;
+ }
+ 
+ unsigned long perf_misc_flags(struct pt_regs *regs)
+ {
++	unsigned int guest = static_call(x86_guest_state)();
+ 	int misc = 0;
+ 
+-	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
+-		if (perf_guest_cbs->is_user_mode())
++	if (guest) {
++		if (guest & PERF_GUEST_USER)
+ 			misc |= PERF_RECORD_MISC_GUEST_USER;
+ 		else
+ 			misc |= PERF_RECORD_MISC_GUEST_KERNEL;
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index fca7a6e2242f..fb1bd7a0e1a6 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -2782,6 +2782,8 @@ static void intel_pmu_reset(void)
+ 	local_irq_restore(flags);
+ }
+ 
++DECLARE_STATIC_CALL(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
++
+ static int handle_pmi_common(struct pt_regs *regs, u64 status)
+ {
+ 	struct perf_sample_data data;
+@@ -2852,10 +2854,7 @@ static int handle_pmi_common(struct pt_regs *regs, u64 status)
+ 	 */
+ 	if (__test_and_clear_bit(GLOBAL_STATUS_TRACE_TOPAPMI_BIT, (unsigned long *)&status)) {
+ 		handled++;
+-		if (unlikely(perf_guest_cbs && perf_guest_cbs->is_in_guest() &&
+-			perf_guest_cbs->handle_intel_pt_intr))
+-			perf_guest_cbs->handle_intel_pt_intr();
+-		else
++		if (!static_call(x86_guest_handle_intel_pt_intr)())
+ 			intel_pt_interrupt();
+ 	}
+ 
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 974cbfb1eefe..128e2dd9c944 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1884,7 +1884,7 @@ int kvm_skip_emulated_instruction(struct kvm_vcpu *vcpu);
+ int kvm_complete_insn_gp(struct kvm_vcpu *vcpu, int err);
+ void __kvm_request_immediate_exit(struct kvm_vcpu *vcpu);
+ 
+-int kvm_is_in_guest(void);
++unsigned int kvm_guest_state(void);
+ 
+ void __user *__x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
+ 				     u32 size);
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 827886c12c16..2dcbd1b30004 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -87,7 +87,7 @@ static void kvm_perf_overflow_intr(struct perf_event *perf_event,
+ 		 * woken up. So we should wake it, but this is impossible from
+ 		 * NMI context. Do it from irq work instead.
+ 		 */
+-		if (!kvm_is_in_guest())
++		if (!kvm_guest_state())
+ 			irq_work_queue(&pmc_to_pmu(pmc)->irq_work);
+ 		else
+ 			kvm_make_request(KVM_REQ_PMI, pmc->vcpu);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e5d5c5ed7dd4..efd11702465c 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -8268,44 +8268,47 @@ static void kvm_timer_init(void)
+ DEFINE_PER_CPU(struct kvm_vcpu *, current_vcpu);
+ EXPORT_PER_CPU_SYMBOL_GPL(current_vcpu);
+ 
+-int kvm_is_in_guest(void)
++unsigned int kvm_guest_state(void)
+ {
+-	return __this_cpu_read(current_vcpu) != NULL;
+-}
+-
+-static int kvm_is_user_mode(void)
+-{
+-	int user_mode = 3;
++	struct kvm_vcpu *vcpu = __this_cpu_read(current_vcpu);
++	unsigned int state = 0;
+ 
+-	if (__this_cpu_read(current_vcpu))
+-		user_mode = static_call(kvm_x86_get_cpl)(__this_cpu_read(current_vcpu));
++	if (vcpu) {
++		state |= PERF_GUEST_ACTIVE;
++		if (static_call(kvm_x86_get_cpl)(vcpu))
++			state |= PERF_GUEST_USER;
++	}
+ 
+-	return user_mode != 0;
++	return state;
+ }
+ 
+-static unsigned long kvm_get_guest_ip(void)
++static unsigned long kvm_guest_get_ip(void)
+ {
++	struct kvm_vcpu *vcpu = __this_cpu_read(current_vcpu);
+ 	unsigned long ip = 0;
+ 
+-	if (__this_cpu_read(current_vcpu))
+-		ip = kvm_rip_read(__this_cpu_read(current_vcpu));
++	if (vcpu)
++		ip = kvm_rip_read(vcpu);
+ 
+ 	return ip;
+ }
+ 
+-static void kvm_handle_intel_pt_intr(void)
++static unsigned int kvm_handle_intel_pt_intr(void)
+ {
+ 	struct kvm_vcpu *vcpu = __this_cpu_read(current_vcpu);
+ 
++	if (!vcpu)
++		return 0;
++
+ 	kvm_make_request(KVM_REQ_PMI, vcpu);
+ 	__set_bit(MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI_BIT,
+ 			(unsigned long *)&vcpu->arch.pmu.global_status);
++	return 1;
+ }
+ 
+ static struct perf_guest_info_callbacks kvm_guest_cbs = {
+-	.is_in_guest		= kvm_is_in_guest,
+-	.is_user_mode		= kvm_is_user_mode,
+-	.get_guest_ip		= kvm_get_guest_ip,
++	.state			= kvm_guest_state,
++	.get_ip			= kvm_guest_get_ip,
+ 	.handle_intel_pt_intr	= kvm_handle_intel_pt_intr,
+ };
+ 
+diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
+index e13b0b49fcdf..85c6e6f6f422 100644
+--- a/arch/x86/xen/pmu.c
++++ b/arch/x86/xen/pmu.c
+@@ -413,34 +413,28 @@ int pmu_apic_update(uint32_t val)
+ }
+ 
+ /* perf callbacks */
+-static int xen_is_in_guest(void)
++static unsigned int xen_guest_state(void)
+ {
+ 	const struct xen_pmu_data *xenpmu_data = get_xenpmu_data();
++	unsigned int state = 0;
+ 
+ 	if (!xenpmu_data) {
+ 		pr_warn_once("%s: pmudata not initialized\n", __func__);
+-		return 0;
++		return state;
+ 	}
+ 
+ 	if (!xen_initial_domain() || (xenpmu_data->domain_id >= DOMID_SELF))
+-		return 0;
++		return state;
+ 
+-	return 1;
+-}
++	state |= PERF_GUEST_ACTIVE;
+ 
+-static int xen_is_user_mode(void)
+-{
+-	const struct xen_pmu_data *xenpmu_data = get_xenpmu_data();
++	if (xenpmu_data->pmu.pmu_flags & PMU_SAMPLE_PV) {
++		if (xenpmu_data->pmu.pmu_flags & PMU_SAMPLE_USER)
++			state |= PERF_GUEST_USER;
++	} else if (xenpmu_data->pmu.r.regs.cpl & 3)
++			state |= PERF_GUEST_USER;
+ 
+-	if (!xenpmu_data) {
+-		pr_warn_once("%s: pmudata not initialized\n", __func__);
+-		return 0;
+-	}
+-
+-	if (xenpmu_data->pmu.pmu_flags & PMU_SAMPLE_PV)
+-		return (xenpmu_data->pmu.pmu_flags & PMU_SAMPLE_USER);
+-	else
+-		return !!(xenpmu_data->pmu.r.regs.cpl & 3);
++	return state;
+ }
+ 
+ static unsigned long xen_get_guest_ip(void)
+@@ -456,9 +450,8 @@ static unsigned long xen_get_guest_ip(void)
+ }
+ 
+ static struct perf_guest_info_callbacks xen_guest_cbs = {
+-	.is_in_guest            = xen_is_in_guest,
+-	.is_user_mode           = xen_is_user_mode,
+-	.get_guest_ip           = xen_get_guest_ip,
++	.state                  = xen_guest_state,
++	.get_ip			= xen_get_guest_ip,
+ };
+ 
+ /* Convert registers from Xen's format to Linux' */
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 2d510ad750ed..e823677a214c 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -26,11 +26,13 @@
+ # include <asm/local64.h>
  #endif
- #endif
-=20
-diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-index 29e946394fdb..c39157f3dd87 100644
---- a/arch/m68k/Kconfig.cpu
-+++ b/arch/m68k/Kconfig.cpu
-@@ -408,7 +408,7 @@ config SINGLE_MEMORY_CHUNK
- 	  order" to save memory that could be wasted for unused memory map.
- 	  Say N if not sure.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order" if ADVANCED
- 	depends on !SINGLE_MEMORY_CHUNK
- 	default "11"
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 6dfb27d531dd..0998f671ed7e 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2284,7 +2284,7 @@ config PAGE_SIZE_64KB
-=20
- endchoice
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 14 64 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
- 	default "14" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
-diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-index c24955c81c92..e5c300198e1f 100644
---- a/arch/nios2/Kconfig
-+++ b/arch/nios2/Kconfig
-@@ -50,7 +50,7 @@ menu "Kernel features"
-=20
- source "kernel/Kconfig.hz"
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 9 20
- 	default "11"
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 2e213ec6ec05..5edb48b363c4 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -810,7 +810,7 @@ config DATA_SHIFT
- 	  in that case. If PIN_TLB is selected, it must be aligned to 8M as
- 	  8M pages will be pinned.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 8 9 if PPC64 && PPC_64K_PAGES
- 	default "9" if PPC64 && PPC_64K_PAGES
-diff --git a/arch/powerpc/configs/85xx/ge_imp3a_defconfig b/arch/powerpc/co=
-nfigs/85xx/ge_imp3a_defconfig
-index f29c166998af..e7672c186325 100644
---- a/arch/powerpc/configs/85xx/ge_imp3a_defconfig
-+++ b/arch/powerpc/configs/85xx/ge_imp3a_defconfig
-@@ -30,7 +30,7 @@ CONFIG_PREEMPT=3Dy
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
- CONFIG_BINFMT_MISC=3Dm
- CONFIG_MATH_EMULATION=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D17
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D17
- CONFIG_PCI=3Dy
- CONFIG_PCIEPORTBUS=3Dy
- CONFIG_PCI_MSI=3Dy
-diff --git a/arch/powerpc/configs/fsl-emb-nonhw.config b/arch/powerpc/confi=
-gs/fsl-emb-nonhw.config
-index df37efed0aec..521e7a530888 100644
---- a/arch/powerpc/configs/fsl-emb-nonhw.config
-+++ b/arch/powerpc/configs/fsl-emb-nonhw.config
-@@ -41,7 +41,7 @@ CONFIG_FIXED_PHY=3Dy
- CONFIG_FONT_8x16=3Dy
- CONFIG_FONT_8x8=3Dy
- CONFIG_FONTS=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D13
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D13
- CONFIG_FRAMEBUFFER_CONSOLE=3Dy
- CONFIG_FRAME_WARN=3D1024
- CONFIG_FTL=3Dy
-diff --git a/arch/sh/configs/ecovec24_defconfig b/arch/sh/configs/ecovec24_=
-defconfig
-index 03cb916819fa..4c09ca308d43 100644
---- a/arch/sh/configs/ecovec24_defconfig
-+++ b/arch/sh/configs/ecovec24_defconfig
-@@ -8,7 +8,7 @@ CONFIG_MODULES=3Dy
- CONFIG_MODULE_UNLOAD=3Dy
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_CPU_SUBTYPE_SH7724=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D12
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D12
- CONFIG_MEMORY_SIZE=3D0x10000000
- CONFIG_FLATMEM_MANUAL=3Dy
- CONFIG_SH_ECOVEC=3Dy
-diff --git a/arch/sh/mm/Kconfig b/arch/sh/mm/Kconfig
-index ba569cfb4368..411fdc0901f7 100644
---- a/arch/sh/mm/Kconfig
-+++ b/arch/sh/mm/Kconfig
-@@ -18,7 +18,7 @@ config PAGE_OFFSET
- 	default "0x80000000" if MMU
- 	default "0x00000000"
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 9 64 if PAGE_SIZE_16KB
- 	default "9" if PAGE_SIZE_16KB
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index f0c0f955e169..2206c99612ed 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -273,7 +273,7 @@ config ARCH_SPARSEMEM_ENABLE
- config ARCH_SPARSEMEM_DEFAULT
- 	def_bool y if SPARC64
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "13"
- 	help
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index b843902ad9fd..90784aa68cf8 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -709,7 +709,7 @@ config HIGHMEM
-=20
- 	  If unsure, say Y.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "11"
- 	help
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index c1d914a72489..98e3297b9e09 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -24,10 +24,10 @@
- #include <asm/page.h>
-=20
- /* Free memory management - zoned buddy allocator.  */
--#ifndef CONFIG_FORCE_MAX_ZONEORDER
-+#ifndef CONFIG_ARCH_FORCE_MAX_ORDER
- #define MAX_ORDER 11
- #else
--#define MAX_ORDER CONFIG_FORCE_MAX_ZONEORDER
-+#define MAX_ORDER CONFIG_ARCH_FORCE_MAX_ORDER
- #endif
- #define MAX_ORDER_NR_PAGES (1 << (MAX_ORDER - 1))
-=20
---=20
-2.30.2
+ 
++#define PERF_GUEST_ACTIVE	0x01
++#define PERF_GUEST_USER	0x02
++
+ struct perf_guest_info_callbacks {
+-	int				(*is_in_guest)(void);
+-	int				(*is_user_mode)(void);
+-	unsigned long			(*get_guest_ip)(void);
+-	void				(*handle_intel_pt_intr)(void);
++	unsigned int			(*state)(void);
++	unsigned long			(*get_ip)(void);
++	unsigned int			(*handle_intel_pt_intr)(void);
+ };
+ 
+ #ifdef CONFIG_HAVE_HW_BREAKPOINT
+@@ -1237,6 +1239,8 @@ extern void perf_event_bpf_event(struct bpf_prog *prog,
+ 				 u16 flags);
+ 
+ extern struct perf_guest_info_callbacks *perf_guest_cbs;
++extern void __weak arch_perf_update_guest_cbs(void);
++
+ extern int perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *callbacks);
+ extern int perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *callbacks);
+ 
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 464917096e73..e466fc8176e1 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6489,9 +6489,18 @@ static void perf_pending_event(struct irq_work *entry)
+  */
+ struct perf_guest_info_callbacks *perf_guest_cbs;
+ 
++/* explicitly use __weak to fix duplicate symbol error */
++void __weak arch_perf_update_guest_cbs(void)
++{
++}
++
+ int perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
+ {
++	if (WARN_ON_ONCE(perf_guest_cbs))
++		return -EBUSY;
++
+ 	perf_guest_cbs = cbs;
++	arch_perf_update_guest_cbs();
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(perf_register_guest_info_callbacks);
+-- 
+2.27.0
 

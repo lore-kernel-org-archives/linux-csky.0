@@ -5,63 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F255C43214
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DEACC4320E
 	for <linux-csky@archiver.kernel.org>; Sat, 28 Aug 2021 00:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 275E260FD9
+	by mail.kernel.org (Postfix) with ESMTP id 3FB8B61002
 	for <linux-csky@archiver.kernel.org>; Sat, 28 Aug 2021 00:36:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbhH1Ahk (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 27 Aug 2021 20:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
+        id S232936AbhH1Ahb (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 27 Aug 2021 20:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbhH1Ahe (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Aug 2021 20:37:34 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754D8C0617AD
-        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 17:36:44 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id f14-20020a056214076e00b003773e95910bso1986716qvz.4
-        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 17:36:44 -0700 (PDT)
+        with ESMTP id S232866AbhH1AhZ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Aug 2021 20:37:25 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80691C06129E
+        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 17:36:35 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 83-20020a251956000000b0059948f541cbso87446ybz.7
+        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 17:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=DHvdKUJPhOfdwKYi3gDlAxqlqPxsEI3eu21bt3UUIpQ=;
-        b=cRSRDiBD1t9urqOzflAsrMtB378EAPg5jZzAQBu3WBpF9lCRiO9i1nInagQ5WfJGFI
-         mazzpjLYk+9+pL+F9otrGLLg/n08ZevlzMBPHEYOnN+VdIB4A7wxwtFH6ZpoJLJJI+SZ
-         rxf/NY8q5ZYsMDzhr085D9FW1b3CZFNUgnmsBtUOczgqmJA3n25Cy7DHpE8+8o64Przh
-         loBGBaIDfQqOoqdZDGmQF17Fg+dmpa+acKaF2TUeYuJThxmscBQMPn7PZ7/xDoZrL4eO
-         EjriiepZFNfgucM3RIv8HD8YQIWksY61k2qaludpcxy2qAakOC66DdAdCPUomdcFD1HM
-         mmjg==
+        bh=l+qrTcHHbVOVfx3csFqTQJW+sIvVNtSUAKnqiNDseGU=;
+        b=YeIUfDPPv26/qQ9C6zbTR90RkfDch9YFOKAlHKUjSEVddL4Hpoya9tjkJY3A1wbIBn
+         QolRIg0F84AYiP8jYQF3PWlN+ULQv1tmI4e/BbUmbvQ35zPcx2ZQSqLKQ5AVao+1UhgO
+         fkWFWktVzgenJwImxC38FiwFCxzMEKkS1qQUUdmj1KFZcMw9Lyq83HZeYJH/euP/cfqF
+         3aiAClPO6WWDoE2XklbezJvqEtsZgyUPgX+DMcdLAHn5l7sHl4CT18xkeTalHsiGr3MZ
+         YjN79LXtHsUEDIVLT82BEQrYcZmX8jMYXoxZPFQJObu1cRhSKHjBMlVs35/os2e+0Sxl
+         Ec7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=DHvdKUJPhOfdwKYi3gDlAxqlqPxsEI3eu21bt3UUIpQ=;
-        b=Jj7EzdwakRRMaC/qe3luUROLcK5cYbGwTT+uRisYThTsi7M6jbHORZbJHRrlBP80i3
-         5UyiSPWvJyHgTQ6lV3GP9sgL5DOLUB4W+WHm5nJH3iGXx7gyQ+Fd1HeW7pA2JEtlcflD
-         Bu7Nal/IhlBT9dtVOPKHBIMmhaVey4SkBV8ztDqAr3MI2CA6/xSxDdXZIxfvfBoWYcHo
-         pWMJC76yVaomMUhOFgJ6z61G7SPxmEzqm2/qK6tdZH2RsnArh5vHodnxySv2RBpJGRC6
-         gersCGf0nITWOVOs7QvHlgBdccugPBqK//CwfBnQGXc8Ggk4wn92TNCERyFl+YLou5tq
-         6Yxw==
-X-Gm-Message-State: AOAM5321wn7bjJ6HGDDL3bm167O6UHBUYKAqhx2j3Src9SsNXbmKCo+F
-        VjTULqE5gXH4NisEVtnuZdWtD3By8gU=
-X-Google-Smtp-Source: ABdhPJwPL5V/RrJYzEwuqQz/lpqtoTngCSsfC6hM7seqpt+XgOfCSrLYZLMKAACl21hF27dX3suwlB0z88Y=
+        bh=l+qrTcHHbVOVfx3csFqTQJW+sIvVNtSUAKnqiNDseGU=;
+        b=Qocl8Y4F7oiAOwpgHZ6V4l/yRAitZuteMjMImU1JxHn5qCjt43K1i1rc0wmn6BdVe9
+         9hmSc1gm1yCDGPXa04bBR4dR9NivOFZ4XyHCuH8+iugMJ2jfG7MwRuz3TZV9i44iUFWm
+         R6u+8q9dDnnZFeYm+1a9efW8hCIPFHUOKh0C1OCy07Cze4fwwuG4yYFM2Mq5/HGnIKvC
+         B2JMjPWqV83tdyZqFacUOcQAsI0PKkCvuAKiJBeYNBhl2nSZBsLtt8qmcGTLHhvASjz+
+         H5WNB3GkH+IYM63PexyECnIeuDzvx7g1eQ8wieQwTvo/u+zb2UMPi1gxVaDwAD/BsfMO
+         eVPQ==
+X-Gm-Message-State: AOAM530v0xdiQ9upsFJN0qd6zpVobxc51KLobIjUTN0fRtd6r7GgmiQb
+        9vwVkedFruuwsvSMtcfx59GxtzH7fH8=
+X-Google-Smtp-Source: ABdhPJx5idLVf7lCndwsU5Ce4jbb5QTi9k0wtLEJzPA1boh4/EA6RmmuRvKiVHeqlDtlM2jyABObo3ywihc=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:f66c:b851:7e79:7ed4])
- (user=seanjc job=sendgmr) by 2002:ad4:5346:: with SMTP id v6mr12225725qvs.40.1630111003639;
- Fri, 27 Aug 2021 17:36:43 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:7cc3:: with SMTP id x186mr8484190ybc.227.1630110994660;
+ Fri, 27 Aug 2021 17:36:34 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 27 Aug 2021 17:35:53 -0700
+Date:   Fri, 27 Aug 2021 17:35:49 -0700
 In-Reply-To: <20210828003558.713983-1-seanjc@google.com>
-Message-Id: <20210828003558.713983-9-seanjc@google.com>
+Message-Id: <20210828003558.713983-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20210828003558.713983-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.259.gc128427fd7-goog
-Subject: [PATCH v2 08/13] KVM: x86: Drop current_vcpu for kvm_running_vcpu +
- kvm_arch_vcpu variable
+Subject: [PATCH v2 04/13] perf: Stop pretending that perf can handle multiple
+ guest callbacks
 From:   Sean Christopherson <seanjc@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -106,140 +106,142 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Use the generic kvm_running_vcpu plus a new 'handling_intr_from_guest'
-variable in kvm_arch_vcpu instead of the semi-redundant current_vcpu.
-kvm_before/after_interrupt() must be called while the vCPU is loaded,
-(which protects against preemption), thus kvm_running_vcpu is guaranteed
-to be non-NULL when handling_intr_from_guest is non-zero.
+Drop the 'int' return value from the perf (un)register callbacks helpers
+and stop pretending perf can support multiple callbacks.  The 'int'
+returns are not future proofing anything as none of the callers take
+action on an error.  It's also not obvious that there will ever be
+co-tenant hypervisors, and if there are, that allowing multiple callbacks
+to be registered is desirable or even correct.
 
-Switching to kvm_get_running_vcpu() will allows moving KVM's perf
-callbacks to generic code, and the new flag will be used in a future
-patch to more precisely identify the "NMI from guest" case.
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/kvm_host.h |  3 +--
- arch/x86/kvm/pmu.c              |  2 +-
- arch/x86/kvm/x86.c              | 21 ++++++++++++---------
- arch/x86/kvm/x86.h              | 10 ++++++----
- 4 files changed, 20 insertions(+), 16 deletions(-)
+ arch/arm64/include/asm/kvm_host.h |  4 ++--
+ arch/arm64/kvm/perf.c             |  8 ++++----
+ arch/x86/kvm/x86.c                |  2 +-
+ include/linux/perf_event.h        | 11 +++++------
+ kernel/events/core.c              | 14 +++-----------
+ 5 files changed, 15 insertions(+), 24 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 1080166fc0cf..2d86a2dfc775 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -763,6 +763,7 @@ struct kvm_vcpu_arch {
- 	unsigned nmi_pending; /* NMI queued after currently running handler */
- 	bool nmi_injected;    /* Trying to inject an NMI this entry */
- 	bool smi_pending;    /* SMI queued after currently running handler */
-+	u8 handling_intr_from_guest;
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index 41911585ae0c..ed940aec89e0 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -670,8 +670,8 @@ unsigned long kvm_mmio_read_buf(const void *buf, unsigned int len);
+ int kvm_handle_mmio_return(struct kvm_vcpu *vcpu);
+ int io_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa);
  
- 	struct kvm_mtrr mtrr_state;
- 	u64 pat;
-@@ -1874,8 +1875,6 @@ int kvm_skip_emulated_instruction(struct kvm_vcpu *vcpu);
- int kvm_complete_insn_gp(struct kvm_vcpu *vcpu, int err);
- void __kvm_request_immediate_exit(struct kvm_vcpu *vcpu);
+-int kvm_perf_init(void);
+-int kvm_perf_teardown(void);
++void kvm_perf_init(void);
++void kvm_perf_teardown(void);
  
--unsigned int kvm_guest_state(void);
--
- void __user *__x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
- 				     u32 size);
- bool kvm_vcpu_is_reset_bsp(struct kvm_vcpu *vcpu);
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 5b68d4188de0..eef48258e50f 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -87,7 +87,7 @@ static void kvm_perf_overflow_intr(struct perf_event *perf_event,
- 		 * woken up. So we should wake it, but this is impossible from
- 		 * NMI context. Do it from irq work instead.
- 		 */
--		if (!kvm_guest_state())
-+		if (!kvm_handling_nmi_from_guest(pmc->vcpu))
- 			irq_work_queue(&pmc_to_pmu(pmc)->irq_work);
- 		else
- 			kvm_make_request(KVM_REQ_PMI, pmc->vcpu);
+ long kvm_hypercall_pv_features(struct kvm_vcpu *vcpu);
+ gpa_t kvm_init_stolen_time(struct kvm_vcpu *vcpu);
+diff --git a/arch/arm64/kvm/perf.c b/arch/arm64/kvm/perf.c
+index 151c31fb9860..039fe59399a2 100644
+--- a/arch/arm64/kvm/perf.c
++++ b/arch/arm64/kvm/perf.c
+@@ -48,15 +48,15 @@ static struct perf_guest_info_callbacks kvm_guest_cbs = {
+ 	.get_guest_ip	= kvm_get_guest_ip,
+ };
+ 
+-int kvm_perf_init(void)
++void kvm_perf_init(void)
+ {
+ 	if (kvm_pmu_probe_pmuver() != 0xf && !is_protected_kvm_enabled())
+ 		static_branch_enable(&kvm_arm_pmu_available);
+ 
+-	return perf_register_guest_info_callbacks(&kvm_guest_cbs);
++	perf_register_guest_info_callbacks(&kvm_guest_cbs);
+ }
+ 
+-int kvm_perf_teardown(void)
++void kvm_perf_teardown(void)
+ {
+-	return perf_unregister_guest_info_callbacks(&kvm_guest_cbs);
++	perf_unregister_guest_info_callbacks();
+ }
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index b2a4d085aa4f..6df300c55461 100644
+index ffc6c2d73508..bae951344e28 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -8264,15 +8264,17 @@ static void kvm_timer_init(void)
- 			  kvmclock_cpu_online, kvmclock_cpu_down_prep);
+@@ -11092,7 +11092,7 @@ int kvm_arch_hardware_setup(void *opaque)
+ 
+ void kvm_arch_hardware_unsetup(void)
+ {
+-	perf_unregister_guest_info_callbacks(&kvm_guest_cbs);
++	perf_unregister_guest_info_callbacks();
+ 	kvm_guest_cbs.handle_intel_pt_intr = NULL;
+ 
+ 	static_call(kvm_x86_hardware_unsetup)();
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 6b0405e578c1..2b77e2154b61 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1245,8 +1245,8 @@ static inline struct perf_guest_info_callbacks *perf_get_guest_cbs(void)
+ 	/* Prevent reloading between a !NULL check and dereferences. */
+ 	return READ_ONCE(perf_guest_cbs);
+ }
+-extern int perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *callbacks);
+-extern int perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *callbacks);
++extern void perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *callbacks);
++extern void perf_unregister_guest_info_callbacks(void);
+ 
+ extern void perf_event_exec(void);
+ extern void perf_event_comm(struct task_struct *tsk, bool exec);
+@@ -1489,10 +1489,9 @@ perf_sw_event(u32 event_id, u64 nr, struct pt_regs *regs, u64 addr)	{ }
+ static inline void
+ perf_bp_event(struct perf_event *event, void *data)			{ }
+ 
+-static inline int perf_register_guest_info_callbacks
+-(struct perf_guest_info_callbacks *callbacks)				{ return 0; }
+-static inline int perf_unregister_guest_info_callbacks
+-(struct perf_guest_info_callbacks *callbacks)				{ return 0; }
++static inline void perf_register_guest_info_callbacks
++(struct perf_guest_info_callbacks *callbacks)				{ }
++static inline void perf_unregister_guest_info_callbacks(void)		{ }
+ 
+ static inline void perf_event_mmap(struct vm_area_struct *vma)		{ }
+ 
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 2126f6327321..1be95d9ace46 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6482,29 +6482,21 @@ static void perf_pending_event(struct irq_work *entry)
+ 		perf_swevent_put_recursion_context(rctx);
  }
  
--DEFINE_PER_CPU(struct kvm_vcpu *, current_vcpu);
--EXPORT_PER_CPU_SYMBOL_GPL(current_vcpu);
-+static inline bool kvm_pmi_in_guest(struct kvm_vcpu *vcpu)
-+{
-+	return vcpu && vcpu->arch.handling_intr_from_guest;
-+}
- 
--unsigned int kvm_guest_state(void)
-+static unsigned int kvm_guest_state(void)
- {
--	struct kvm_vcpu *vcpu = __this_cpu_read(current_vcpu);
-+	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
- 	unsigned int state;
- 
--	if (!vcpu)
-+	if (!kvm_pmi_in_guest(vcpu))
- 		return 0;
- 
- 	state = PERF_GUEST_ACTIVE;
-@@ -8284,9 +8286,10 @@ unsigned int kvm_guest_state(void)
- 
- static unsigned long kvm_guest_get_ip(void)
- {
--	struct kvm_vcpu *vcpu = __this_cpu_read(current_vcpu);
-+	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
- 
--	if (WARN_ON_ONCE(!vcpu))
-+	/* Retrieving the IP must be guarded by a call to kvm_guest_state(). */
-+	if (WARN_ON_ONCE(!kvm_pmi_in_guest(vcpu)))
- 		return 0;
- 
- 	return kvm_rip_read(vcpu);
-@@ -8294,10 +8297,10 @@ static unsigned long kvm_guest_get_ip(void)
- 
- static unsigned int kvm_handle_intel_pt_intr(void)
- {
--	struct kvm_vcpu *vcpu = __this_cpu_read(current_vcpu);
-+	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
- 
- 	/* '0' on failure so that the !PT case can use a RET0 static call. */
--	if (!vcpu)
-+	if (!kvm_pmi_in_guest(vcpu))
- 		return 0;
- 
- 	kvm_make_request(KVM_REQ_PMI, vcpu);
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index 7d66d63dc55a..a9c107e7c907 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -387,18 +387,20 @@ static inline bool kvm_cstate_in_guest(struct kvm *kvm)
- 	return kvm->arch.cstate_in_guest;
- }
- 
--DECLARE_PER_CPU(struct kvm_vcpu *, current_vcpu);
+-/*
+- * We assume there is only KVM supporting the callbacks.
+- * Later on, we might change it to a list if there is
+- * another virtualization implementation supporting the callbacks.
+- */
+ struct perf_guest_info_callbacks *perf_guest_cbs;
 -
- static inline void kvm_before_interrupt(struct kvm_vcpu *vcpu)
+-int perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
++void perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
  {
--	__this_cpu_write(current_vcpu, vcpu);
-+	WRITE_ONCE(vcpu->arch.handling_intr_from_guest, 1);
+ 	if (WARN_ON_ONCE(perf_guest_cbs))
+-		return -EBUSY;
++		return;
+ 
+ 	WRITE_ONCE(perf_guest_cbs, cbs);
+ 	synchronize_rcu();
+-	return 0;
  }
+ EXPORT_SYMBOL_GPL(perf_register_guest_info_callbacks);
  
- static inline void kvm_after_interrupt(struct kvm_vcpu *vcpu)
+-int perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
++void perf_unregister_guest_info_callbacks(void)
  {
--	__this_cpu_write(current_vcpu, NULL);
-+	WRITE_ONCE(vcpu->arch.handling_intr_from_guest, 0);
+ 	WRITE_ONCE(perf_guest_cbs, NULL);
+ 	synchronize_rcu();
+-	return 0;
  }
+ EXPORT_SYMBOL_GPL(perf_unregister_guest_info_callbacks);
  
-+static inline bool kvm_handling_nmi_from_guest(struct kvm_vcpu *vcpu)
-+{
-+	return !!vcpu->arch.handling_intr_from_guest;
-+}
- 
- static inline bool kvm_pat_valid(u64 data)
- {
 -- 
 2.33.0.259.gc128427fd7-goog
 

@@ -2,40 +2,40 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB09C433FE
-	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB5CDC433F5
+	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7D3861154
-	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9101A610E5
+	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239358AbhJFQpd (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 6 Oct 2021 12:45:33 -0400
-Received: from mail-oo1-f51.google.com ([209.85.161.51]:37661 "EHLO
-        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbhJFQpb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Oct 2021 12:45:31 -0400
-Received: by mail-oo1-f51.google.com with SMTP id h11-20020a4aa74b000000b002a933d156cbso1032380oom.4;
-        Wed, 06 Oct 2021 09:43:39 -0700 (PDT)
+        id S239446AbhJFQpk (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 6 Oct 2021 12:45:40 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:44582 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235329AbhJFQpg (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Oct 2021 12:45:36 -0400
+Received: by mail-ot1-f45.google.com with SMTP id o27-20020a9d411b000000b005453f95356cso2937157ote.11;
+        Wed, 06 Oct 2021 09:43:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lH5lm9ZJrN75WHjiktQyDKNUxUp68MdS3scEafa+VH8=;
-        b=lH59hLRG3AlfJK9hDLWg+PQLN2leBjtou5Ky52t6amZl+zMcOnJS2FoXmutZnU4JZc
-         S2lx4NPJmDORm6wUxYOwp9Id6HPO1OkkNIN5GPQCcMYjfnbwsVLEWL9MVTIcZA+V2HF+
-         1LS8VBSdGyBtAlM1uLhopI3IbqZTVWKNnnSyijxd98yrb2MR76/lwIaxuDQjJzULPtTq
-         N/NkRespD05daTz7OuFTXZ6MPPWUV7bdhBHvywcHuw06NB+QllcQdGwFe2cMA909t6eU
-         41EO+G4+TQMBBG6sd9hd/p2BVVOvZ61s5OShB5GnKQf3n+O7LkNmUmO2S37pVeXEDKFL
-         TsgQ==
-X-Gm-Message-State: AOAM532omC/5eXyTGo/6Ew/pC5o2D/QK94I8TSEsuSDAWSpx6A9yGmFi
-        9jxl+6+XzZDmIwMuTb0GEg==
-X-Google-Smtp-Source: ABdhPJwDQxYuha7mztXncei2FBwje0uHQ2qAvAT0rAc8M1CEq47s46mQjlS2vX0JBLAJhljiutK9EA==
-X-Received: by 2002:a4a:d108:: with SMTP id k8mr19009146oor.47.1633538619135;
-        Wed, 06 Oct 2021 09:43:39 -0700 (PDT)
+        bh=nz2VNzL+ydy4chpa3d7bE/r1R6JeAbCb1Q1l6nn9BO4=;
+        b=7kHkpTbRlj/Vf9sv2yc65QC96Q/cOPyHMyMqdZYVbDm8TEbOGv9xCeOHVn7lN3Mats
+         c0Nhc2itkn347UWtG/javVV71VKm952HnqtqGJP/UWf/80S1PXjt4WjzuLocBOOdIBcZ
+         ps0hLIgpdUFnlS3mjoqIqsNBdkmDbPCiFkoShj3Nl+PvLPdgxoVlpF1ORuC1YCgL4yMZ
+         xmf8tQBvE1V/kRpZXfwVkxpteS82JavSyk1xbFtEtJT9CTg5uSmaR0uTuZOosUHBeZh+
+         EXT08CyO+1rI3MIxdiU7ehv/12XZ3LvvyNeE3qTAo0RtgupENtKIZ8GMTGAzFw3m2e3N
+         v8AQ==
+X-Gm-Message-State: AOAM5311zfuKi/5NPBPaRcOr6hfjH2CYQGPOl7etXyrUndiao78Hp92e
+        TsuJHchT/2IwHRYlN/MzCw==
+X-Google-Smtp-Source: ABdhPJzkVUe2NQ95hrntc6XfGtsZUf11mFfAeFqW0+ilFUDkOjdRegXB0ef4DYKZYBjYmsjM+kfXAg==
+X-Received: by 2002:a9d:6ac7:: with SMTP id m7mr20566678otq.49.1633538622946;
+        Wed, 06 Oct 2021 09:43:42 -0700 (PDT)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id s29sm4236628otg.60.2021.10.06.09.43.37
+        by smtp.googlemail.com with ESMTPSA id s29sm4236628otg.60.2021.10.06.09.43.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 09:43:38 -0700 (PDT)
+        Wed, 06 Oct 2021 09:43:42 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>,
         James Morse <james.morse@arm.com>,
@@ -66,9 +66,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
         linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
         linux-sh@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 02/12] ARM: Use of_get_cpu_hwid()
-Date:   Wed,  6 Oct 2021 11:43:22 -0500
-Message-Id: <20211006164332.1981454-3-robh@kernel.org>
+Subject: [PATCH 04/12] arm64: Use of_get_cpu_hwid()
+Date:   Wed,  6 Oct 2021 11:43:24 -0500
+Message-Id: <20211006164332.1981454-5-robh@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211006164332.1981454-1-robh@kernel.org>
 References: <20211006164332.1981454-1-robh@kernel.org>
@@ -84,52 +84,63 @@ of_get_cpu_hwid().
 This change drops an error message for missing 'reg' property, but that
 should not be necessary as the DT tools will ensure 'reg' is present.
 
-Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm/kernel/devtree.c | 22 ++--------------------
- 1 file changed, 2 insertions(+), 20 deletions(-)
+ arch/arm64/kernel/smp.c | 31 ++-----------------------------
+ 1 file changed, 2 insertions(+), 29 deletions(-)
 
-diff --git a/arch/arm/kernel/devtree.c b/arch/arm/kernel/devtree.c
-index 28311dd0fee6..02839d8b6202 100644
---- a/arch/arm/kernel/devtree.c
-+++ b/arch/arm/kernel/devtree.c
-@@ -84,33 +84,15 @@ void __init arm_dt_init_cpu_maps(void)
- 		return;
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index 6f6ff072acbd..c5cebc406d24 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -466,33 +466,6 @@ void __init smp_prepare_boot_cpu(void)
+ 	kasan_init_hw_tags();
+ }
  
- 	for_each_of_cpu_node(cpu) {
--		const __be32 *cell;
--		int prop_bytes;
--		u32 hwid;
-+		u32 hwid = of_get_cpu_hwid(cpu, 0);
- 
- 		pr_debug(" * %pOF...\n", cpu);
--		/*
--		 * A device tree containing CPU nodes with missing "reg"
--		 * properties is considered invalid to build the
--		 * cpu_logical_map.
--		 */
--		cell = of_get_property(cpu, "reg", &prop_bytes);
--		if (!cell || prop_bytes < sizeof(*cell)) {
--			pr_debug(" * %pOF missing reg property\n", cpu);
--			of_node_put(cpu);
--			return;
--		}
- 
- 		/*
- 		 * Bits n:24 must be set to 0 in the DT since the reg property
- 		 * defines the MPIDR[23:0].
- 		 */
--		do {
--			hwid = be32_to_cpu(*cell++);
--			prop_bytes -= sizeof(*cell);
--		} while (!hwid && prop_bytes > 0);
+-static u64 __init of_get_cpu_mpidr(struct device_node *dn)
+-{
+-	const __be32 *cell;
+-	u64 hwid;
 -
--		if (prop_bytes || (hwid & ~MPIDR_HWID_BITMASK)) {
-+		if (hwid & ~MPIDR_HWID_BITMASK) {
- 			of_node_put(cpu);
- 			return;
- 		}
+-	/*
+-	 * A cpu node with missing "reg" property is
+-	 * considered invalid to build a cpu_logical_map
+-	 * entry.
+-	 */
+-	cell = of_get_property(dn, "reg", NULL);
+-	if (!cell) {
+-		pr_err("%pOF: missing reg property\n", dn);
+-		return INVALID_HWID;
+-	}
+-
+-	hwid = of_read_number(cell, of_n_addr_cells(dn));
+-	/*
+-	 * Non affinity bits must be set to 0 in the DT
+-	 */
+-	if (hwid & ~MPIDR_HWID_BITMASK) {
+-		pr_err("%pOF: invalid reg property\n", dn);
+-		return INVALID_HWID;
+-	}
+-	return hwid;
+-}
+-
+ /*
+  * Duplicate MPIDRs are a recipe for disaster. Scan all initialized
+  * entries and check for duplicates. If any is found just ignore the
+@@ -656,9 +629,9 @@ static void __init of_parse_and_init_cpus(void)
+ 	struct device_node *dn;
+ 
+ 	for_each_of_cpu_node(dn) {
+-		u64 hwid = of_get_cpu_mpidr(dn);
++		u64 hwid = of_get_cpu_hwid(dn, 0);
+ 
+-		if (hwid == INVALID_HWID)
++		if (hwid & ~MPIDR_HWID_BITMASK)
+ 			goto next;
+ 
+ 		if (is_mpidr_duplicate(cpu_count, hwid)) {
 -- 
 2.30.2
 

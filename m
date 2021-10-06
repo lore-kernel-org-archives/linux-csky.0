@@ -2,40 +2,40 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1A20C4332F
-	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8554CC433EF
+	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 922E6610E5
-	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71C4161184
+	for <linux-csky@archiver.kernel.org>; Wed,  6 Oct 2021 16:43:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239179AbhJFQpc (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 6 Oct 2021 12:45:32 -0400
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:42791 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbhJFQpa (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Oct 2021 12:45:30 -0400
-Received: by mail-oi1-f169.google.com with SMTP id x187so2464376oix.9;
-        Wed, 06 Oct 2021 09:43:37 -0700 (PDT)
+        id S239416AbhJFQpf (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 6 Oct 2021 12:45:35 -0400
+Received: from mail-oo1-f50.google.com ([209.85.161.50]:41971 "EHLO
+        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239395AbhJFQpd (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Oct 2021 12:45:33 -0400
+Received: by mail-oo1-f50.google.com with SMTP id b5-20020a4ac285000000b0029038344c3dso1022241ooq.8;
+        Wed, 06 Oct 2021 09:43:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uA/cSYcpVyY62IJQPXwhEfvcH0a7DNNoh6QF/gbSv/o=;
-        b=ODDM5tXYhSPxk2r/bCjAb5vFG1of6jbKB2UaKspq/dUbxxnFM9foFyghdlXZvWqxeJ
-         3q0DQJ5gkypQ+i7dJ0Id6IprWk22PuoDb3Ig+xEuyQKjUBTYLLxT22x3GTiwv/Oosco5
-         oslX8k+wVOYYJfmNdGJM8EiSGAjvQeptoK4Q1RmWInxnIsASFsKBhTfGRcHdUI5pqCNd
-         CMMa1NPTe+UjJt+WsUNPbPn1jPNQX/uK7+9pSlS0qgz1X79wOzyooUTU373PYGoXTKmT
-         t+PTgYTiAT0m3y65w6RWVx9jXPS4nBcn/xhUVzkBj819Y4fpXBOybO2OzdlpLw5+2gmT
-         2O+Q==
-X-Gm-Message-State: AOAM532RtxGJ8v/7tj8ZHsPCewZ8T5MtEdGeTGTrnxh6QktQEAK6tvCu
-        yA7Jq1q4EmEMHPJjk9NCvQ==
-X-Google-Smtp-Source: ABdhPJyz5HqR6tKtFIEsHk/GSarLhJvs4xTI3uQnRBWEIdAL05spj94Pn3luIAFrkmprFHNc17eP4A==
-X-Received: by 2002:a05:6808:231f:: with SMTP id bn31mr855081oib.66.1633538617237;
-        Wed, 06 Oct 2021 09:43:37 -0700 (PDT)
+        bh=SdvZjQ/BWS45GZwLPJ4dVbNMr/Wj7uXKHO/Bl7X5Es4=;
+        b=oU55qGR6BHceUgiewU1iBrshR/CxA3A9igLkdkXMmtO5+kFjEQcJVZoUvP9rFh7XHE
+         /+U2bTaQDZevTs0Dh5mWc0IYfhGY0ke6qSdsr2ZsgLETkpwkow8jzBKKdkSTBJAZZfTA
+         d3UG0CKOsVd/yAvkDvKpNK94QZbvaZsJL7Rhr3q4EKqFtIQIPS63sgvpoGL3k49zNMFG
+         zFFuyK0CLOCzemTQ8rRxqBMKLNSqY0R2HBvXDe5lS9TUQeMRxdpE7GwaKzv/bqTCDGqc
+         7wY7cWM66PXzWvG5jIORTVl+KkHUMo5DT0KaBtoRBd8z23GT2WQpWcxsuMWaXVLJUWR2
+         ASJw==
+X-Gm-Message-State: AOAM530SdEENQYPczjZ7XJWdg7qpyXpIizsimlPvs6KzIFbBOoR+Ddse
+        3yjzuS6q5+N3HDPCtXxUhw==
+X-Google-Smtp-Source: ABdhPJy1h3H+xIThEc/Bx5W+PW+QqHTa7nGnBvK2axsTz6MHYy0vHuhJmmz3xzrXGNxNysUcAEgxdA==
+X-Received: by 2002:a4a:4c46:: with SMTP id a67mr18657206oob.72.1633538621020;
+        Wed, 06 Oct 2021 09:43:41 -0700 (PDT)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id s29sm4236628otg.60.2021.10.06.09.43.35
+        by smtp.googlemail.com with ESMTPSA id s29sm4236628otg.60.2021.10.06.09.43.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 09:43:36 -0700 (PDT)
+        Wed, 06 Oct 2021 09:43:40 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>,
         James Morse <james.morse@arm.com>,
@@ -66,9 +66,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
         linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
         linux-sh@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 01/12] of: Add of_get_cpu_hwid() to read hardware ID from CPU nodes
-Date:   Wed,  6 Oct 2021 11:43:21 -0500
-Message-Id: <20211006164332.1981454-2-robh@kernel.org>
+Subject: [PATCH 03/12] ARM: broadcom: Use of_get_cpu_hwid()
+Date:   Wed,  6 Oct 2021 11:43:23 -0500
+Message-Id: <20211006164332.1981454-4-robh@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211006164332.1981454-1-robh@kernel.org>
 References: <20211006164332.1981454-1-robh@kernel.org>
@@ -78,65 +78,37 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-There are various open coded implementions parsing the CPU node 'reg'
-property which contains the CPU's hardware ID. Introduce a new function,
-of_get_cpu_hwid(), to read the hardware ID.
+Replace open coded parsing of CPU nodes 'reg' property with
+of_get_cpu_hwid().
 
-All the callers should be DT only code, so no need for an empty
-function.
-
-Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: Russell King <linux@armlinux.org.uk>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/of/base.c  | 22 ++++++++++++++++++++++
- include/linux/of.h |  1 +
- 2 files changed, 23 insertions(+)
+ arch/arm/mach-bcm/bcm63xx_pmb.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/of/base.c b/drivers/of/base.c
-index f720c0d246f2..e587ab44be22 100644
---- a/drivers/of/base.c
-+++ b/drivers/of/base.c
-@@ -286,6 +286,28 @@ const void *of_get_property(const struct device_node *np, const char *name,
- }
- EXPORT_SYMBOL(of_get_property);
+diff --git a/arch/arm/mach-bcm/bcm63xx_pmb.c b/arch/arm/mach-bcm/bcm63xx_pmb.c
+index 0e5a05bac3ea..003f1472ab45 100644
+--- a/arch/arm/mach-bcm/bcm63xx_pmb.c
++++ b/arch/arm/mach-bcm/bcm63xx_pmb.c
+@@ -91,10 +91,10 @@ static int bcm63xx_pmb_get_resources(struct device_node *dn,
+ 	struct of_phandle_args args;
+ 	int ret;
  
-+/**
-+ * of_get_cpu_hwid - Get the hardware ID from a CPU device node
-+ *
-+ * @cpun: CPU number(logical index) for which device node is required
-+ * @thread: The local thread number to get the hardware ID for.
-+ *
-+ * Return: The hardware ID for the CPU node or ~0ULL if not found.
-+ */
-+u64 of_get_cpu_hwid(struct device_node *cpun, unsigned int thread)
-+{
-+	const __be32 *cell;
-+	int ac, len;
-+
-+	ac = of_n_addr_cells(cpun);
-+	cell = of_get_property(cpun, "reg", &len);
-+	if (!cell || !ac || ((sizeof(*cell) * ac * (thread + 1)) > len))
-+		return ~0ULL;
-+
-+	cell += ac * thread;
-+	return of_read_number(cell, ac);
-+}
-+
- /*
-  * arch_match_cpu_phys_id - Match the given logical CPU and physical id
-  *
-diff --git a/include/linux/of.h b/include/linux/of.h
-index 6f1c41f109bb..807f8168dad9 100644
---- a/include/linux/of.h
-+++ b/include/linux/of.h
-@@ -353,6 +353,7 @@ extern struct device_node *of_get_cpu_node(int cpu, unsigned int *thread);
- extern struct device_node *of_get_next_cpu_node(struct device_node *prev);
- extern struct device_node *of_get_cpu_state_node(struct device_node *cpu_node,
- 						 int index);
-+extern u64 of_get_cpu_hwid(struct device_node *cpun, unsigned int thread);
+-	ret = of_property_read_u32(dn, "reg", cpu);
+-	if (ret) {
++	*cpu = of_get_cpu_hwid(dn, 0);
++	if (*cpu == ~0U) {
+ 		pr_err("CPU is missing a reg node\n");
+-		return ret;
++		return -ENODEV;
+ 	}
  
- #define for_each_property_of_node(dn, pp) \
- 	for (pp = dn->properties; pp != NULL; pp = pp->next)
+ 	ret = of_parse_phandle_with_args(dn, "resets", "#reset-cells",
 -- 
 2.30.2
 

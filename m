@@ -2,60 +2,98 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB3D8C433EF
-	for <linux-csky@archiver.kernel.org>; Sat, 16 Oct 2021 16:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 170BCC4332F
+	for <linux-csky@archiver.kernel.org>; Mon, 18 Oct 2021 03:38:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A64F461027
-	for <linux-csky@archiver.kernel.org>; Sat, 16 Oct 2021 16:23:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEAA660174
+	for <linux-csky@archiver.kernel.org>; Mon, 18 Oct 2021 03:38:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240708AbhJPQZa (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sat, 16 Oct 2021 12:25:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240694AbhJPQZ3 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 16 Oct 2021 12:25:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 583F2610D1;
-        Sat, 16 Oct 2021 16:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634401401;
-        bh=yRtHn1w9re0Zp9x/HnI3ySgmCs4w8DDs0ogGgg+lhGg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=O44rlF/X/Re9dNYuBQ/BewazF2+442d0yMq4GmhAMMgVgdqw7p8aXe5+WWhV3nqVJ
-         4Acv5lPaiUQBnKgwFfrCj1rFsC3kW/yDupi6+zjSx1+lYESnKyj/qSYv1MFXkTs/va
-         oHxILBYTHT0KumyrqP868k9rrX8PjAdE8TTKl15BEw2B9R7pnyNnMhvSjmCuWCxCMG
-         mGws7ioOCxhBkyB4AkGHWY2ZAR2bfGOxkrCuGye795Qivu+eXEeZ5fqmkrr8MxkIwH
-         85S/OHozeoknvW+OhIXHaImnPEG52DK1egiB0ZJ8KNib2pr0sPo9eLTVtvg5yzxvCb
-         AvyfzesvK4V8Q==
-Subject: Re: [GIT PULL] csky fixes for v5.15-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211016010635.2860644-1-guoren@kernel.org>
-References: <20211016010635.2860644-1-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211016010635.2860644-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
-X-PR-Tracked-Commit-Id: e21e52ad1e0126e2a5e2013084ac3f47cf1e887a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
-Message-Id: <163440140130.26929.4641296646306632379.pr-tracker-bot@kernel.org>
-Date:   Sat, 16 Oct 2021 16:23:21 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
+        id S231551AbhJRDkj (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 17 Oct 2021 23:40:39 -0400
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:40907 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229583AbhJRDkj (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 17 Oct 2021 23:40:39 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0UsUkvOd_1634528302;
+Received: from testdeMacBook-Pro.local(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0UsUkvOd_1634528302)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 18 Oct 2021 11:38:23 +0800
+To:     Guo Ren <guoren@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        live-patching@vger.kernel.org
+From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
+Subject: [PATCH v4 0/2] fix & prevent the missing preemption disabling
+Message-ID: <32a36348-69ee-6464-390c-3a8d6e9d2b53@linux.alibaba.com>
+Date:   Mon, 18 Oct 2021 11:38:21 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The pull request you sent on Sat, 16 Oct 2021 09:06:35 +0800:
+The testing show that perf_ftrace_function_call() are using smp_processor_id()
+with preemption enabled, all the checking on CPU could be wrong after preemption.
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
+As Peter point out, the section between ftrace_test_recursion_trylock/unlock()
+pair require the preemption to be disabled as 'Documentation/trace/ftrace-uses.rst'
+explained, but currently the work is done outside of the helpers.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
+And since the internal using of trace_test_and_set_recursion()
+and trace_clear_recursion() also require preemption to be disabled, we
+can just merge the logical together.
 
-Thank you!
+Patch 1/2 will make sure preemption disabled when recursion lock succeed,
+patch 2/2 will do smp_processor_id() checking after trylock() to address the
+issue.
+
+v1: https://lore.kernel.org/all/8c7de46d-9869-aa5e-2bb9-5dbc2eda395e@linux.alibaba.com/
+v2: https://lore.kernel.org/all/b1d7fe43-ce84-0ed7-32f7-ea1d12d0b716@linux.alibaba.com/
+v3: https://lore.kernel.org/all/609b565a-ed6e-a1da-f025-166691b5d994@linux.alibaba.com/
+
+Michael Wang (2):
+  ftrace: disable preemption when recursion locked
+  ftrace: do CPU checking after preemption disabled
+
+ arch/csky/kernel/probes/ftrace.c     |  2 --
+ arch/parisc/kernel/ftrace.c          |  2 --
+ arch/powerpc/kernel/kprobes-ftrace.c |  2 --
+ arch/riscv/kernel/probes/ftrace.c    |  2 --
+ arch/x86/kernel/kprobes/ftrace.c     |  2 --
+ include/linux/trace_recursion.h      | 20 +++++++++++++++++++-
+ kernel/livepatch/patch.c             | 13 +++++++------
+ kernel/trace/ftrace.c                | 15 +++++----------
+ kernel/trace/trace_event_perf.c      |  6 +++---
+ kernel/trace/trace_functions.c       |  5 -----
+ 10 files changed, 34 insertions(+), 35 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+1.8.3.1
+

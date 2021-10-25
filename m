@@ -2,115 +2,75 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44A95C433F5
-	for <linux-csky@archiver.kernel.org>; Wed, 20 Oct 2021 18:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A86D1C433F5
+	for <linux-csky@archiver.kernel.org>; Mon, 25 Oct 2021 09:12:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 270FB61038
-	for <linux-csky@archiver.kernel.org>; Wed, 20 Oct 2021 18:48:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AB1C60EFE
+	for <linux-csky@archiver.kernel.org>; Mon, 25 Oct 2021 09:12:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbhJTSuW (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 20 Oct 2021 14:50:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35640 "EHLO mail.kernel.org"
+        id S230146AbhJYJOu (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 25 Oct 2021 05:14:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41678 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230076AbhJTSuR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 20 Oct 2021 14:50:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A10E6103D;
-        Wed, 20 Oct 2021 18:48:03 +0000 (UTC)
+        id S232354AbhJYJOs (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 25 Oct 2021 05:14:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B78F60E8F;
+        Mon, 25 Oct 2021 09:12:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634755683;
-        bh=n8VrOe4I2yKWKENo2xOz+GrW26l+tosuZNQ1rYD5gKE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X8tKojH7Z8fdPyVTk4z+AoVAS3a9h5oYDEVDa7uI3b3vQWDC0RDkopnsSuFW09wMx
-         S5ymoCHlxw+BZDcfi8a/SbXyaru92R/D/4JVacWcGVpk2lCHkMZKGKNpRCcpV4amQE
-         0SC95mBmBf+xrbZsPKYOZ3Tw+i6Awvb4CDoD4fADso7xeFCGtNQbQjFeERWiYt5J4a
-         XviC1MWcQkWkyhnJbBbb7MhB9KdUgixAetlN+ZjGulMI+TYlz6yOX8pi/IJu8QIrAm
-         DPTPSRiUO2vc4Q2/LyUL9rJoQfRdVbdcu/SicgghaP/nLNsd5aIhVOahGYlBk3gw4h
-         jokZEwKpwMQ/g==
-Received: by mail-lf1-f42.google.com with SMTP id g36so328184lfv.3;
-        Wed, 20 Oct 2021 11:48:02 -0700 (PDT)
-X-Gm-Message-State: AOAM532bXNhmVLh6cfAOUxsJB+NDo+eiCLht4tPeKR4iEnlNWXGLeu4P
-        /I69BmJlS2QuRZe9tLV1khZkLcBv1KlsB4zS7g==
-X-Google-Smtp-Source: ABdhPJyDkQcU37hcsbyKe6namKZuEksRA+CPb1y/N+dx0XKOp77yba3905ZumF5lcfjyaXaZElnjUUGJ+2NqhJwXc9g=
-X-Received: by 2002:aa7:cd0a:: with SMTP id b10mr942298edw.164.1634755670808;
- Wed, 20 Oct 2021 11:47:50 -0700 (PDT)
+        s=k20201202; t=1635153146;
+        bh=UthJ29ilEEqKlZEydhUI+qhFYH7Ke4me3bETpEb4H7c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RU4Z/0eIWAAKl3FYvwLqGFxYYfKHwBcNWHMrg1ILqWoDy33JMAkTRmN/M3tmuVTOb
+         Pjg90Hot/OGnqMuYYVil65W72E5bUwH31nttXRuoypPvr7mw1AGMmN6i+QK7j2We40
+         0yDK8cQzjMNhIBoRhvoVBH97yrcyjdpbjjsAVSpftT8HccHzI3p33flk+U2ShKekHe
+         PrZdlxf8hz18tGu3KahrBlx+jLeDc4h4hZOyywdAsITEdrUer0WsC2Eyl298f8uuem
+         sq+iiB30PE/peh0r8TmBo9A3eNeemYL03DgKJ6md5oyYKAFPr3DJ4zEhxkUcufTTCI
+         sjO4W/uZM61oQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, maz@kernel.org, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Marc Zyngier <marc.zyngier@arm.com>
+Subject: [PATCH] irqchip/irq-csky-mpintc: Fixup mask/unmask un-implementation
+Date:   Mon, 25 Oct 2021 17:12:19 +0800
+Message-Id: <20211025091219.3665576-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211006164332.1981454-1-robh@kernel.org>
-In-Reply-To: <20211006164332.1981454-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 20 Oct 2021 13:47:39 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLg1=T52MqhsGgmAcRueC_nJdivGg4h+M2Bd8W3fyHCmg@mail.gmail.com>
-Message-ID: <CAL_JsqLg1=T52MqhsGgmAcRueC_nJdivGg4h+M2Bd8W3fyHCmg@mail.gmail.com>
-Subject: Re: [PATCH 00/12] DT: CPU h/w id parsing clean-ups and cacheinfo id support
-To:     Russell King <linux@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, X86 ML <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        Openrisc <openrisc@lists.librecores.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        SH-Linux <linux-sh@vger.kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Oct 6, 2021 at 11:43 AM Rob Herring <robh@kernel.org> wrote:
->
-> The first 10 patches add a new function, of_get_cpu_hwid(), which parses
-> CPU DT node 'reg' property, and then use it to replace all the open
-> coded versions of parsing CPU node 'reg' properties.
->
-> The last 2 patches add support for populating the cacheinfo 'id' on DT
-> platforms. The minimum associated CPU hwid is used for the id. The id is
-> optional, but necessary for resctrl which is being adapted for Arm MPAM.
->
-> Tested on arm64. Compile tested on arm, x86 and powerpc.
->
-> Rob
->
-> Rob Herring (12):
->   of: Add of_get_cpu_hwid() to read hardware ID from CPU nodes
->   ARM: Use of_get_cpu_hwid()
->   ARM: broadcom: Use of_get_cpu_hwid()
->   arm64: Use of_get_cpu_hwid()
->   csky: Use of_get_cpu_hwid()
->   openrisc: Use of_get_cpu_hwid()
->   powerpc: Use of_get_cpu_hwid()
->   riscv: Use of_get_cpu_hwid()
->   sh: Use of_get_cpu_hwid()
->   x86: dt: Use of_get_cpu_hwid()
->   cacheinfo: Allow for >32-bit cache 'id'
->   cacheinfo: Set cache 'id' based on DT data
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I've fixed up the openrisc error and applied 1-10 to the DT tree.
+The mask/unmask must be implemented, and enable/disable supplement
+them if the HW requires something different at startup time. When
+irq source is disabled by mask, mpintc could complete irq normally.
 
-The cacheinfo part is going to need some more work. I've found I will
-need the cache affinity (of possible cpus) as well, so I plan to also
-store the affinity instead of looping thru caches and cpus again.
+So just replace the with mask/unmask function.
 
-Rob
+Tested-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Marc Zyngier <marc.zyngier@arm.com>
+---
+ drivers/irqchip/irq-csky-mpintc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/irqchip/irq-csky-mpintc.c b/drivers/irqchip/irq-csky-mpintc.c
+index a1534edef7fa..f169600dbde6 100644
+--- a/drivers/irqchip/irq-csky-mpintc.c
++++ b/drivers/irqchip/irq-csky-mpintc.c
+@@ -164,8 +164,8 @@ static int csky_irq_set_affinity(struct irq_data *d,
+ static struct irq_chip csky_irq_chip = {
+ 	.name           = "C-SKY SMP Intc",
+ 	.irq_eoi	= csky_mpintc_eoi,
+-	.irq_enable	= csky_mpintc_enable,
+-	.irq_disable	= csky_mpintc_disable,
++	.irq_unmask	= csky_mpintc_enable,
++	.irq_mask	= csky_mpintc_disable,
+ 	.irq_set_type	= csky_mpintc_set_type,
+ #ifdef CONFIG_SMP
+ 	.irq_set_affinity = csky_irq_set_affinity,
+-- 
+2.25.1
+

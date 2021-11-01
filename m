@@ -2,59 +2,46 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F01C0C433F5
-	for <linux-csky@archiver.kernel.org>; Thu, 28 Oct 2021 23:28:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE86EC433EF
+	for <linux-csky@archiver.kernel.org>; Mon,  1 Nov 2021 01:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0F33610FD
-	for <linux-csky@archiver.kernel.org>; Thu, 28 Oct 2021 23:28:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9186C60F24
+	for <linux-csky@archiver.kernel.org>; Mon,  1 Nov 2021 01:57:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbhJ1Xaq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 28 Oct 2021 19:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbhJ1Xap (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 28 Oct 2021 19:30:45 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850AFC061745;
-        Thu, 28 Oct 2021 16:28:17 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id c28so16877445lfv.13;
-        Thu, 28 Oct 2021 16:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=g1ASowQL1SYh3xyvjjnrsnFWzhxhuZ1FkP7TdHa31mE=;
-        b=or9I8eXmdc6hOUu3ilMz+ymgHlGQQmwFfcjANI787MFy3461r29Qlx4Drko3A82jiZ
-         /Dxbh+rXJkVd+vSmZQz7ByF21FNMWE7Msuh2tmQH7FzEaAaJykw/79BGIIrJtKwboRDm
-         04V8OvO+c+XCXlI7f4QRPE7cqx6GZulezk5I+0MnmugoyzWrW9wGp3T/sQ+0YL50opsM
-         PEj+17btedXyPtu3l7DUltlj+rCIDD63O2gZoZwfDEKUeboD39P9kLuxM5uqsYcKe9n/
-         MuNWRD7sUlbhLEou6B/xsQNLsenMP/929SI9uvSZZXHuqFx/YvhRAZPMrz7X4+YxCerI
-         /TgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=g1ASowQL1SYh3xyvjjnrsnFWzhxhuZ1FkP7TdHa31mE=;
-        b=cOkqdGeNEuZcAHnpdUXk1+5EmFZRDGpC5tRffGYu/vF24A+jKJL7M9mnRkN7nhE4Y/
-         LlIOgzW7RGRIJLf6h/kSoUNlwyZ7r+bA3TrLtwBqHtuMzlXD/f4ggUxwqYZRPJpIHsIb
-         HuGEwaz/RCE2Gy2MXOoZ2zktFpQ5HhPFbSh1cbImIdWP/A+HLdqoy5buIrsEyfkUkJKZ
-         2tHzxnOJ/HcMzTARcchnIxOCgLkWturaRU9Za11tsOnWz0gkufF/9iFPnwYjiT0RUJa0
-         aZJ8hVZGX/ODzwg7U52cNmRwEUG18a+RScItWUvS/hh1vxdhHaTsYpYo/cRUMnMWPcmr
-         YeFg==
-X-Gm-Message-State: AOAM533VU1mbUz4A00epD7HQENnplQUD31uOpugw3cw/JurTbdWCBjVV
-        F8WtTJ0H/i4piMeiXBS1RTNW4VX7J48=
-X-Google-Smtp-Source: ABdhPJwV2hV4le461ll7P/MiVtzPzva4GF7PaVejAVvhmYPc9uewsxLl7FIVcxk+rSnnrtvlDg/jfg==
-X-Received: by 2002:a19:760a:: with SMTP id c10mr6627861lff.302.1635463695803;
-        Thu, 28 Oct 2021 16:28:15 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-44-18.dynamic.spd-mgts.ru. [46.138.44.18])
-        by smtp.googlemail.com with ESMTPSA id bn3sm414682ljb.7.2021.10.28.16.28.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Oct 2021 16:28:15 -0700 (PDT)
-Subject: Re: [PATCH v2 03/45] notifier: Add
- atomic/blocking_notifier_has_unique_priority()
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S230333AbhKACAG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 31 Oct 2021 22:00:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230234AbhKACAF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 31 Oct 2021 22:00:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 96C77610E5;
+        Mon,  1 Nov 2021 01:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635731852;
+        bh=fuaUan8WpsO3AU0Pd876OqdiQB5S59Rz/RFmfxHCqFo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WTZ2r/aqsZBJ/SEMp/W5aRRvu0wWWG+qZmM8hZPwjrObwwMpW1TgXwf1zWnw0Qa9i
+         Zv/YGYWGYxl7myNvWxfw0CIgJUc9b2/XePq2AH0H37XLuqx44GHHVjgkb3ys6UwuYH
+         QFUJSlyCI2x3AldpppHi6cKlbUrpf5epTIwYkQ0LyIddZNVrNNmKUj9pq1nkh3vhav
+         ePFznWLS5KXHwuBhRZexeraVkFwzXRLP/38HX/OFwy/5mrR8Hs9LdC9PbwjoOwqbNV
+         ADgrJu7beLvyyJTcpsvn3lAsea5miSCymSsM2dL/H4uMyDHc1oqmdVcUWCHL7cYIF+
+         w+SQ6/88DMfNA==
+Received: by mail-yb1-f173.google.com with SMTP id q74so34927729ybq.11;
+        Sun, 31 Oct 2021 18:57:32 -0700 (PDT)
+X-Gm-Message-State: AOAM532NZZipZ4PmQd8aebdgMaPN+5gcICkzFLd/y8dVP59BicYUBfRR
+        GiO3PJt2T6KiHFhFuW8wOniKZgqQn/AFtYLfgjc=
+X-Google-Smtp-Source: ABdhPJwLzr48xvkbPUYNSwW4wG4jcRHULAsaxHDgvLOaeOhiDi1MY+7mZCeP1WaifSe+QfUYgjKQrdu4XIYT2pTMgvI=
+X-Received: by 2002:ab0:6883:: with SMTP id t3mr16913634uar.66.1635731841194;
+ Sun, 31 Oct 2021 18:57:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211027211715.12671-1-digetx@gmail.com> <20211027211715.12671-13-digetx@gmail.com>
+In-Reply-To: <20211027211715.12671-13-digetx@gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 1 Nov 2021 09:57:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT+EsLt+pnYyTw_B0C8isho=E4tfOWROe9h-GZpYjET=w@mail.gmail.com>
+Message-ID: <CAJF2gTT+EsLt+pnYyTw_B0C8isho=E4tfOWROe9h-GZpYjET=w@mail.gmail.com>
+Subject: Re: [PATCH v2 12/45] csky: Use do_kernel_power_off()
+To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -64,9 +51,10 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Russell King <linux@armlinux.org.uk>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Will Deacon <will@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Ungerer <gerg@linux-m68k.org>,
         Joshua Thompson <funaho@jurai.org>,
@@ -96,7 +84,7 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Tony Lindgren <tony@atomide.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -108,39 +96,65 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Nancy Yuen <yuenn@google.com>,
         Benjamin Fair <benjaminfair@google.com>,
         Pavel Machek <pavel@ucw.cz>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20211027211715.12671-1-digetx@gmail.com>
- <20211027211715.12671-4-digetx@gmail.com>
- <YXqCz/utp2DFJJ45@smile.fi.intel.com>
- <c5fb7590-03a7-0eea-4040-07472a5c9710@gmail.com>
-Message-ID: <8a9c4a9a-ea0d-4bc9-cf57-9bd99b211d47@gmail.com>
-Date:   Fri, 29 Oct 2021 02:28:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <c5fb7590-03a7-0eea-4040-07472a5c9710@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-omap@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-29.10.2021 00:32, Dmitry Osipenko пишет:
->>> +	/*
->>> +	 * This code gets used during boot-up, when task switching is
->>> +	 * not yet working and interrupts must remain disabled.  At
->> One space is enough.
-> This comment is replicated multiple times over this source file. You can
-> find it before each down_write(). I borrowed the text as-is, for
-> consistency.
+Only for this patch, Acked-by: Guo Ren <guoren@kernel.org>
 
-Actually, it should be down_read() here since there are no writes. I'll
-correct it in v3.
+On Thu, Oct 28, 2021 at 5:18 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> Kernel now supports chained power-off handlers. Use do_kernel_power_off()
+> that invokes chained power-off handlers. It also invokes legacy
+> pm_power_off() for now, which will be removed once all drivers will
+> be converted to the new power-off API.
+>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  arch/csky/kernel/power.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/csky/kernel/power.c b/arch/csky/kernel/power.c
+> index 923ee4e381b8..86ee202906f8 100644
+> --- a/arch/csky/kernel/power.c
+> +++ b/arch/csky/kernel/power.c
+> @@ -9,16 +9,14 @@ EXPORT_SYMBOL(pm_power_off);
+>  void machine_power_off(void)
+>  {
+>         local_irq_disable();
+> -       if (pm_power_off)
+> -               pm_power_off();
+> +       do_kernel_power_off();
+>         asm volatile ("bkpt");
+>  }
+>
+>  void machine_halt(void)
+>  {
+>         local_irq_disable();
+> -       if (pm_power_off)
+> -               pm_power_off();
+> +       do_kernel_power_off();
+>         asm volatile ("bkpt");
+>  }
+>
+> --
+> 2.33.1
+>
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

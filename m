@@ -2,34 +2,37 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F491C433F5
-	for <linux-csky@archiver.kernel.org>; Tue, 23 Nov 2021 02:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ED74C433EF
+	for <linux-csky@archiver.kernel.org>; Wed, 24 Nov 2021 06:05:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhKWCbK (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 22 Nov 2021 21:31:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35016 "EHLO mail.kernel.org"
+        id S230249AbhKXGIi (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 24 Nov 2021 01:08:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229678AbhKWCbK (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 22 Nov 2021 21:31:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BC9560FD7;
-        Tue, 23 Nov 2021 02:28:01 +0000 (UTC)
+        id S229926AbhKXGIi (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 24 Nov 2021 01:08:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CFF9460F5D;
+        Wed, 24 Nov 2021 06:05:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637634483;
-        bh=tyfrpeux84ftug2ONg9ZfP/BwMlpGSVGl+i7DUhZPDY=;
+        s=k20201202; t=1637733928;
+        bh=/HbIf68YRKbhDZe5rHyxTQRnyZBZEnswWOQLwFovXW0=;
         h=From:To:Cc:Subject:Date:From;
-        b=LGNH61duIdHVHoGEPhi1amdYNfTiDEZRyI0RPdAVTt3G4tfnRtL9HAj0U/rFfmWwK
-         J8MjSsym4aSO1Ha4PvyCMHedm/suRmTTP1H0ocKNSRrmDbhiaHIre8WER2BPYs+52Z
-         asJloFmSmqcScYctnbjKoAKZS7hPo0E1AFx8iF7mlEZnzh+QiOCnSr+E8DEEhmz2Pr
-         68Ceu8x4kJXq+up1H0xSmS7qfqg9kl2PYJtMheuldLnDTrVe5z8c1qfunZMLZRI+zH
-         TMq6KPQnLFbQypvwGMZLAubC+9ZiluWKAmqM8jt0q0UWiQjRjDMUbRzfa3pbPlLus5
-         sga5A6ymc+02Q==
+        b=khivtZLGQQs8U72VVKoiEYN0lS0NNBU95NQO93UA+Ajjb8zG4UQHLMQFy2bof7woh
+         1YL5viroYHJgmpfqha9kEJ3Ov9yLiqueSWBPNuba1lhVCRtCFG9DQDkey99fnBYNY/
+         Jf8MDr1Azi/TjLjBeCGS0MUoX6W+lAXlLw9an4EwcApCdmZ6uHfWYiGfz2Bl+9xHJm
+         7Au7Z8GAuciFdMmh/6eLnbDwtdgwEkTd6fqiG7BcM6HD/2V9PVcVYCU43dTE8XfH6P
+         ScvPwO0jOqk0dXFQ7KzEFMxlR1+vQAAX4XT7r4V6CWiR+BO1n6mhzhmZZjATneqylU
+         uMTjTKCBEFVTQ==
 From:   guoren@kernel.org
-To:     guoren@kernel.org, akpm@linux-foundation.org
+To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] mailmap: Update email address for Guo Ren
-Date:   Tue, 23 Nov 2021 10:27:41 +0800
-Message-Id: <20211123022741.545541-1-guoren@kernel.org>
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <Atish.Patra@wdc.com>
+Subject: [PATCH] riscv: Fixup one-page wasting
+Date:   Wed, 24 Nov 2021 14:05:21 +0800
+Message-Id: <20211124060521.614015-1-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -39,27 +42,32 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The ren_guo@c-sky.com would be deprecated and use guoren@kernel.org
-as the main email address.
+For small memory systems(Allwinner D1s/F133), one page size memory
+cannot be ignored.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Atish Patra <Atish.Patra@wdc.com>
 ---
- .mailmap | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/riscv/mm/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.mailmap b/.mailmap
-index 14314e3c5d5e..c709878864ad 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -123,6 +123,8 @@ Greg Kroah-Hartman <gregkh@suse.de>
- Greg Kroah-Hartman <greg@kroah.com>
- Greg Kurz <groug@kaod.org> <gkurz@linux.vnet.ibm.com>
- Gregory CLEMENT <gregory.clement@bootlin.com> <gregory.clement@free-electrons.com>
-+Guo Ren <guoren@kernel.org> <guoren@linux.alibaba.com>
-+Guo Ren <guoren@kernel.org> <ren_guo@c-sky.com>
- Gustavo Padovan <gustavo@las.ic.unicamp.br>
- Gustavo Padovan <padovan@profusion.mobi>
- Hanjun Guo <guohanjun@huawei.com> <hanjun.guo@linaro.org>
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 24b2b8044602..097bb3bc4020 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -241,9 +241,9 @@ unsigned long riscv_pfn_base __ro_after_init;
+ EXPORT_SYMBOL(riscv_pfn_base);
+ 
+ pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+-pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+ static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
+ 
++pgd_t trampoline_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
+ 
 -- 
 2.25.1
 

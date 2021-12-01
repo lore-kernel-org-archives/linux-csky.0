@@ -2,156 +2,109 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D783CC433EF
-	for <linux-csky@archiver.kernel.org>; Tue, 30 Nov 2021 21:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDF79C433EF
+	for <linux-csky@archiver.kernel.org>; Wed,  1 Dec 2021 12:34:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240434AbhK3VLi (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 30 Nov 2021 16:11:38 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50962 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235904AbhK3VLf (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 30 Nov 2021 16:11:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C5101CE1C4F;
-        Tue, 30 Nov 2021 21:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78438C53FC7;
-        Tue, 30 Nov 2021 21:07:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638306491;
-        bh=CGQDQlRxlHpJq0xzSuKQi7AU9OYm37j7CJ7xfuMMlQY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MQT0554slXBNgzV6dz6ATkc3EGBq02EcnyIjFHm4NC/TQW+Ti/5+ZwpYdUyXTQSX0
-         FP/Mg9FHX1WkJdgEmvH+Sjh6chDp0qa4rdvwceLtLU4mrx9YqTjWtdVLiOuUAqqTr9
-         JxBBF8wiCf2msoHxAESTMHrwoozuA53LUQYu0nChlx4mPkmdPvsjcuZz6ld/73Q1EP
-         49cP1v8fZ5yU4pp+jiMhNoi6TZsD6QEaZ+s7211uBewrAF+q/t4jJF4C5l0VvizKZK
-         UqaJcABTKX49+eBLI8ebfD/p5ZMIh9Z6ly7YavV63rHaytjZkBuc5OrtUPGVxLkKwd
-         8IDw15RIkFr7Q==
-Date:   Tue, 30 Nov 2021 23:07:40 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Calvin Zhang <calvinzhang.cool@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rich Felker <dalias@libc.org>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Vladimir Isaev <isaev@synopsys.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        "Kirill A. Shutemov" <kirill.shtuemov@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marc Zyngier <maz@kernel.org>,
-        David Brazdil <dbrazdil@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
+        id S1349324AbhLAMhV (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 1 Dec 2021 07:37:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:35896 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243419AbhLAMhV (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 1 Dec 2021 07:37:21 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E9971477;
+        Wed,  1 Dec 2021 04:34:00 -0800 (PST)
+Received: from e127744.cambridge.arm.com (e127744.cambridge.arm.com [10.1.32.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EB1BC3F694;
+        Wed,  1 Dec 2021 04:33:56 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Souptick Joarder <jrdr.linux@gmail.com>,
-        Jinyang He <hejinyang@loongson.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andreas Oetken <andreas.oetken@siemens.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Zhang Yunkai <zhang.yunkai@zte.com.cn>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Markus Elfring <elfring@users.sourceforge.net>,
-        Ganesh Goudar <ganeshgr@linux.ibm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauri Sandberg <sandberg@mailfence.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/2] of: remove reserved regions count restriction
-Message-ID: <YaaSnJ2Meo5mEKDN@kernel.org>
-References: <20211119075844.2902592-1-calvinzhang.cool@gmail.com>
- <YZnqo3oA7srQik4N@kernel.org>
- <YaVrahm+ysoQRGKe@robh.at.kernel.org>
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v1 0/4] Support register names from all architectures
+Date:   Wed,  1 Dec 2021 12:33:28 +0000
+Message-Id: <20211201123334.679131-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaVrahm+ysoQRGKe@robh.at.kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 06:08:10PM -0600, Rob Herring wrote:
-> On Sun, Nov 21, 2021 at 08:43:47AM +0200, Mike Rapoport wrote:
-> > On Fri, Nov 19, 2021 at 03:58:17PM +0800, Calvin Zhang wrote:
-> > > The count of reserved regions in /reserved-memory was limited because
-> > > the struct reserved_mem array was defined statically. This series sorts
-> > > out reserved memory code and allocates that array from early allocator.
-> > > 
-> > > Note: reserved region with fixed location must be reserved before any
-> > > memory allocation. While struct reserved_mem array should be allocated
-> > > after allocator is activated. We make early_init_fdt_scan_reserved_mem()
-> > > do reservation only and add another call to initialize reserved memory.
-> > > So arch code have to change for it.
-> > 
-> > I think much simpler would be to use the same constant for sizing
-> > memblock.reserved and reserved_mem arrays.
-> 
-> Do those arrays get shrunk? Or do we waste the memory forever?
+The following changeset applies some corrections to the way system
+registers are processed and presented when reading perf.data files using
+the various perf tools.
 
-Memblock arrays don't get shrunk, but they are __init unless an architecture
-chose to keep them after boot, but most architectures that use device tree
-actually keep memblock structures.
- 
-> Maybe we can copy and shrink the initial array? Though I suspect struct 
-> reserved_mem pointers have already been given out.
+The commit message from [4/4] shows how register names aren't correctly
+presented when performing x-arch analysis of perf.data files (i.e.
+recording in one arch, then reading the file from a different arch).
 
-I'm not sure. It seems that reserved_mem pointers are given out at initcall
-time and AFAIU the reserved_mem array is created somewhere around
-setup_arch(). So maybe it's possible to copy and shrink the initial array.
- 
-> > 
-> > If there is too much reserved regions in the device tree, reserving them in
-> > memblock will fail anyway because memblock also starts with static array
-> > for memblock.reserved, so doing one pass with memblock_reserve() and
-> > another to set up reserved_mem wouldn't help anyway.
-> > 
-> > > I'm only familiar with arm and arm64 architectures. Approvals from arch
-> > > maintainers are required. Thank you all.
+Please let me know if there are any concerns with this approach, or if
+any improvements can be made for subsequent re-rolls of the changeset.
+
+  - [PATCH 1/4] Fixes a potential out-of-bounds access when reading the
+    values of the registers in the perf.data file.
+  - [PATCH 2/4] Modifies one of the callbacks in "struct scripting_ops"
+    so that the python version can obtain the correct register names.
+  - [PATCH 3/4] Adds header files with the register indices and names
+    from all architectures, which are used by the next patch.
+  - [PATCH 4/4] Refactors the function "perf_reg_name" so that it can
+    support registers from all architectures, not just the local one.
+
+Thanks,
+German
+
+German Gomez (4):
+  perf tools: Prevent out-of-bounds access to registers
+  perf script: Add "struct machine" parameter to process_event callback
+  perf tools: Crete header files with register names
+  perf tools: Support register names from all architectures
+
+ tools/perf/arch/arm/include/perf_regs.h       |  42 --------
+ tools/perf/arch/arm64/include/perf_regs.h     |  76 -------------
+ tools/perf/arch/csky/include/perf_regs.h      |  82 --------------
+ tools/perf/arch/mips/include/perf_regs.h      |  69 ------------
+ tools/perf/arch/powerpc/include/perf_regs.h   |  66 ------------
+ tools/perf/arch/riscv/include/perf_regs.h     |  74 -------------
+ tools/perf/arch/s390/include/perf_regs.h      |  78 --------------
+ tools/perf/arch/x86/include/perf_regs.h       |  82 --------------
+ tools/perf/builtin-script.c                   |  26 ++---
+ tools/perf/util/event.h                       |   5 +-
+ tools/perf/util/perf_regs.c                   |   3 +
+ tools/perf/util/perf_regs.h                   |  33 +++++-
+ tools/perf/util/perf_regs_arm.h               |  57 ++++++++++
+ tools/perf/util/perf_regs_arm64.h             |  83 ++++++++++++++
+ tools/perf/util/perf_regs_csky.h              | 101 ++++++++++++++++++
+ tools/perf/util/perf_regs_mips.h              |  76 +++++++++++++
+ tools/perf/util/perf_regs_powerpc.h           |  74 +++++++++++++
+ tools/perf/util/perf_regs_riscv.h             |  81 ++++++++++++++
+ tools/perf/util/perf_regs_s390.h              |  85 +++++++++++++++
+ tools/perf/util/perf_regs_x86.h               |  87 +++++++++++++++
+ .../util/scripting-engines/trace-event-perl.c |   3 +-
+ .../scripting-engines/trace-event-python.c    |  33 +++---
+ tools/perf/util/session.c                     |  25 ++---
+ tools/perf/util/trace-event-scripting.c       |   3 +-
+ tools/perf/util/trace-event.h                 |   3 +-
+ 25 files changed, 733 insertions(+), 614 deletions(-)
+ create mode 100644 tools/perf/util/perf_regs_arm.h
+ create mode 100644 tools/perf/util/perf_regs_arm64.h
+ create mode 100644 tools/perf/util/perf_regs_csky.h
+ create mode 100644 tools/perf/util/perf_regs_mips.h
+ create mode 100644 tools/perf/util/perf_regs_powerpc.h
+ create mode 100644 tools/perf/util/perf_regs_riscv.h
+ create mode 100644 tools/perf/util/perf_regs_s390.h
+ create mode 100644 tools/perf/util/perf_regs_x86.h
 
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+

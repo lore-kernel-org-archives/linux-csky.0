@@ -2,65 +2,138 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8546BC433F5
-	for <linux-csky@archiver.kernel.org>; Sun, 12 Dec 2021 19:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47B71C433F5
+	for <linux-csky@archiver.kernel.org>; Sun, 12 Dec 2021 21:19:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbhLLTQw (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 12 Dec 2021 14:16:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40040 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbhLLTQv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 12 Dec 2021 14:16:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F02AB80D63;
-        Sun, 12 Dec 2021 19:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FC0CC341C6;
-        Sun, 12 Dec 2021 19:16:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639336609;
-        bh=pSpyqRIm1XRtinaEeUqdyGDkr973ddqeF3xvtsAXzMw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=IE+aL40Zh9SCXHX/Nk5p4snpaY+/yKur69A1yq2hP3xvHUwRcb0oQUHJDwdc7xqCW
-         9GsghFoF8o1mmrxCwQeJQVjlhPlCA6vBae4MfsXRvTEY44XrncrO0sQSzSz+NB6yxZ
-         3YTWCQm1x70v/3Aq8EQqa3JZgcV0JHF4RO8UuEQc07UNNPCWCHGVcapNmtujfaZrX7
-         u7aBGbCdn6oOrwGsonZQC/rmlkmGYwceqr2mnG5Vk+0d/sSnaIWcOMERPnnERqSi+3
-         4BN/Le1BgZb17S4czRKO/nh63Dme3ty7FqFjt2peKFObBujujp82is6qhfYPWwoOS9
-         oqQWEHk3RvkxQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E91AB60A4D;
-        Sun, 12 Dec 2021 19:16:48 +0000 (UTC)
-Subject: Re: [GIT PULL] csky fixes for v5.16-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211212021753.3541366-1-guoren@kernel.org>
-References: <20211212021753.3541366-1-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-csky.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211212021753.3541366-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.16-rc5
-X-PR-Tracked-Commit-Id: a0793fdad9a11a32bc6d21317c93c83f4aa82ebc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0f3d41e82d78bf521dfee4d6db1d247628dcf399
-Message-Id: <163933660889.938.9065494604784665966.pr-tracker-bot@kernel.org>
-Date:   Sun, 12 Dec 2021 19:16:48 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, guoren@kernel.org
+        id S229588AbhLLVT4 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sun, 12 Dec 2021 16:19:56 -0500
+Received: from mail-ed1-f51.google.com ([209.85.208.51]:45590 "EHLO
+        mail-ed1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229585AbhLLVTz (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 12 Dec 2021 16:19:55 -0500
+Received: by mail-ed1-f51.google.com with SMTP id y12so45399380eda.12;
+        Sun, 12 Dec 2021 13:19:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NEBfa1fMA+x5w4qEnSCEpCMUhXzxF+K5pq5bQ4oFCgw=;
+        b=jKT5aLZfWR0wdy1ZRHa2+F5Hc16ta1np03rkr+cf27BN8zUNhbkEoAuNYpXOIawSIH
+         2XymTHuAk1C3VpWmhK4AsE1yb/G2IulrJt3rlG67Vh5DarQrO3/RvtCACcc9q/mrlMzG
+         idTBdpttStFv0rFHXoDeMkKrlqiTc6LMJnuQorLtWh4hfdMc2KQqq/SPJGqZAD8cFtP7
+         bU0fIoQxCEwyS17dGv1ELgqsYZc+uy4iyxYp9vTtn2S36VrT7egCJ/N2pPTJk/5GCnV0
+         wCdVD2AV/3wMZeA5Ef+Z3RwjWWbr7SVUDzZ2VoU/BSE2RRwY2l531P1a/0YVFVmDZNjy
+         PILQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NEBfa1fMA+x5w4qEnSCEpCMUhXzxF+K5pq5bQ4oFCgw=;
+        b=vEJhH9pOng1cZum6rjcF2heGIwb7c3NvKJC9mYl2SPdIHaJFH6OlR6Y3ifxZJKGVgn
+         idhX3vLFS517v1rad1goVx0P8ABIFdPeDd8jMkh7rjutUiFYN0QUJg31ROyfBVv3f80Y
+         o0CbTzBBPQWQMZ6pz0w0zWupE+Ziq4bp6mPCQIbn55lcqjWZ0ZQcd08IStwhjOWiHcEU
+         bDv4vtNMB6uays0fZ6miHVx029v/IQT00tA2kbvAejiHTZDGwUv4APtNTqc/8nAPKEfj
+         EtQl6rvCmRd60GmbDp6VJzoUKuw6PwHFgjLalgSVyg51qafUc88yvnwQhfzvCcKMltin
+         9viA==
+X-Gm-Message-State: AOAM5335hKSRRTTPSG282Bwvz8r8P+NjWeyYiQEGMtOGkkMD1Zw/IIJ6
+        BMJfrVemK7HGXTxESo7XCg79NNTY7Mc=
+X-Google-Smtp-Source: ABdhPJxgpZfqxao+vFSyfTfxI+LCB5noXzLgWBaLJYSm65bPEK2lM39NLgbcPLKrE+YWXn5oNC0cUA==
+X-Received: by 2002:a2e:a26a:: with SMTP id k10mr25711010ljm.156.1639343030651;
+        Sun, 12 Dec 2021 13:03:50 -0800 (PST)
+Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.gmail.com with ESMTPSA id y4sm1197172ljp.16.2021.12.12.13.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 13:03:50 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v5 08/21] arm64: Use do_kernel_power_off()
+Date:   Mon, 13 Dec 2021 00:02:56 +0300
+Message-Id: <20211212210309.9851-9-digetx@gmail.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211212210309.9851-1-digetx@gmail.com>
+References: <20211212210309.9851-1-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The pull request you sent on Sun, 12 Dec 2021 10:17:53 +0800:
+Kernel now supports chained power-off handlers. Use do_kernel_power_off()
+that invokes chained power-off handlers. It also invokes legacy
+pm_power_off() for now, which will be removed once all drivers will
+be converted to the new power-off API.
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.16-rc5
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ arch/arm64/kernel/process.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0f3d41e82d78bf521dfee4d6db1d247628dcf399
-
-Thank you!
-
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index aacf2f5559a8..f8db031afa7d 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -110,8 +110,7 @@ void machine_power_off(void)
+ {
+ 	local_irq_disable();
+ 	smp_send_stop();
+-	if (pm_power_off)
+-		pm_power_off();
++	do_kernel_power_off();
+ }
+ 
+ /*
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.33.1
+

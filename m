@@ -2,140 +2,120 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66CE0C433F5
-	for <linux-csky@archiver.kernel.org>; Mon, 27 Dec 2021 02:29:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9903AC433EF
+	for <linux-csky@archiver.kernel.org>; Mon, 27 Dec 2021 16:44:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbhL0C3F (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 26 Dec 2021 21:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234993AbhL0C3F (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 26 Dec 2021 21:29:05 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C7BC06173E
-        for <linux-csky@vger.kernel.org>; Sun, 26 Dec 2021 18:29:04 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id t26so29697770wrb.4
-        for <linux-csky@vger.kernel.org>; Sun, 26 Dec 2021 18:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=bOhEvVozhHM6YldXriruHfBFw2hklkJ8aXUAF0+xVPg=;
-        b=XoIoCzWCYSPvm4fY4M3T73vMITkswDgMyGplM+rbY6W6VkBBfPVdETLchyI2PCRrF0
-         xbvSb/rgdUlEDXwDPcHcrOJ5Ob49nn81tZ/qnfjjH3tf0btwcV4Z3wIsyvqNiyAG6syh
-         6OwGpi28YXtGyrkvuxqHEs5NFuM1nYrlAqhALE8XU24+1NqeT2WgiioMcASaTvF3k/EF
-         9pHla7ja7tr0wIPCKUDiU9ICMOuLGzA0Em7b0B/0FoTGbdkPSGCPnHKiCCNRoY2eNqJ9
-         Rp4wFGjLj7Up5L0Oo1ioaay6r6u1/K+k+WEYVSdR3svV8nKekHAazev9o/04eXai88lk
-         6swQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=bOhEvVozhHM6YldXriruHfBFw2hklkJ8aXUAF0+xVPg=;
-        b=LZ56kNXKX9RfrOoJUhCwDsIqUDGOlqaV/L6cFepsxgugpiWWXGJMM/FNferu2WTRl3
-         2if65fr5Zew0ylo+Mf3UDhsQgOFc3sDvTpFVdEZtg5b5ER9bpyP3yOLtpOXpI3QI+pOo
-         q3wRG4Mk9W4+pEgnIkuKwRSTtdaKJ0ZWnK/kSBszPSQJh2RgVMNTOgp8XwKd3S/XkdSy
-         9YW+zzDrGAt3I7xEK/vYgTPDC+Fq5HI+s7OXpD+fMoPrFXf5OFySA1RB+jm/diEq7PUx
-         IoKxunl9Sn++TYBKykKfe14TRreZC7HAGIFJd6fULssJjHgTko53y8FNQD0SLbvcidqM
-         Aj7g==
-X-Gm-Message-State: AOAM530fFbvENmRrM0OWGAVilS+rxB044+rONS5dYMPR0xZp0U1mYHBV
-        JEIu7RBGI6PjDZEmvsTuyai9Vw==
-X-Google-Smtp-Source: ABdhPJwqzX+wn7fueplWnROokfjMQchC3UHOG/zKLlnPZj61VkZ2EQle1lIluZZcEB73WdGst5H9xg==
-X-Received: by 2002:a05:6000:15c4:: with SMTP id y4mr11112209wry.166.1640572143101;
-        Sun, 26 Dec 2021 18:29:03 -0800 (PST)
-Received: from smtpclient.apple (global-5-141.nat-2.net.cam.ac.uk. [131.111.5.141])
-        by smtp.gmail.com with ESMTPSA id g5sm14158063wru.48.2021.12.26.18.29.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 Dec 2021 18:29:02 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH 00/13] riscv: compat: Add COMPAT mode support for rv64
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <CAJF2gTQ04utyOc9=q9Tu92togGuyygKgq3tWwfPBCuyTfLh2SQ@mail.gmail.com>
-Date:   Mon, 27 Dec 2021 02:29:02 +0000
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Jisheng Zhang <jszhang3@mail.ustc.edu.cn>,
+        id S229929AbhL0QoD (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 27 Dec 2021 11:44:03 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56368 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229913AbhL0QoC (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 27 Dec 2021 11:44:02 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRDki73013674;
+        Mon, 27 Dec 2021 16:43:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=hIBFcxjmtzohDZ/kmY6VFfuiyb5BHDC2Fbc38OZUi4w=;
+ b=G8P9SCJ2mqw9j31zqEc3b0xvjScuM6/UNcxqneFFwh5XeCxUQbJyY9MOuFUCNtU17EYj
+ W7NgHVl7T6qQdeedA4BSrswnqH1PgUAYb0lPYzY6jgTTmcDz23QSDH834b5hlKZYXcHB
+ BgX4owatBWc5mW2FExw7tJHA9TJIuDXctKehGiHsJ1MkF0w5nwaVU7SwRGCg1zbjKGbX
+ ozhgHK8oBmicXPFSXA1VyxdbFQ5nIV8kiDRYRZkQy51/7utb9DNWmr193nLfPydBoiDH
+ w3qna/3e8tTJfv0uJGHRz4jRusoEjyF4LXU3s7q8iikNE14TQK8KPgXbexXpLU2vI8ZZ IQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7dqem13v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:33 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRFueJR029166;
+        Mon, 27 Dec 2021 16:43:32 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7dqem13c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:32 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGgHMq010430;
+        Mon, 27 Dec 2021 16:43:31 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3d5tjjau6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:30 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGhStO30802366
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Dec 2021 16:43:28 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6515AA4064;
+        Mon, 27 Dec 2021 16:43:28 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D05A2A4054;
+        Mon, 27 Dec 2021 16:43:27 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Dec 2021 16:43:27 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?utf-8?B?IldlaSBXdSAo5ZC05LyfKSI=?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AA7091EA-C3AF-47CE-B0C5-E2ECE4133D09@jrtc27.com>
-References: <20211221163532.2636028-1-guoren@kernel.org>
- <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
- <CAJF2gTRAxX0qEcNmw+5N=3jZcJw9YF75oRjT7Y5FUMUkHoSz4Q@mail.gmail.com>
- <20211226162223.795f9417@xhacker>
- <CAJF2gTRHND1F_-5+Euzy-UdRRdg2oAXDY4dt8_5p9JxsHDSe6Q@mail.gmail.com>
- <CAK8P3a08kawHpz6RsLZsvNNn0_WKaFWRU-7M4fJ3e7i7J+GQcA@mail.gmail.com>
- <CAJF2gTQ04utyOc9=q9Tu92togGuyygKgq3tWwfPBCuyTfLh2SQ@mail.gmail.com>
-To:     Guo Ren <guoren@kernel.org>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: [RFC 03/32] ACPI: Kconfig: add HAS_IOPORT dependencies
+Date:   Mon, 27 Dec 2021 17:42:48 +0100
+Message-Id: <20211227164317.4146918-4-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CQK38XptqBK4i58UASdrK9AI5CnuPHMk
+X-Proofpoint-ORIG-GUID: 5bsj_d8tbA9EhcRyHrgYKVbpN-_VsNQK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-27_08,2021-12-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 clxscore=1011 malwarescore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112270080
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 27 Dec 2021, at 01:16, Guo Ren <guoren@kernel.org> wrote:
->=20
-> On Mon, Dec 27, 2021 at 4:31 AM Arnd Bergmann <arnd@arndb.de> wrote:
->>=20
->> On Sun, Dec 26, 2021 at 7:38 AM Guo Ren <guoren@kernel.org> wrote:
->>> On Sun, Dec 26, 2021 at 4:36 PM Jisheng Zhang =
-<jszhang3@mail.ustc.edu.cn> wrote:
->>>> On Wed, 22 Dec 2021 20:59:30 +0800 Guo Ren <guoren@kernel.org> =
-wrote:
->>>>> On Wed, Dec 22, 2021 at 2:10 AM Arnd Bergmann <arnd@arndb.de> =
-wrote:
->>>>=20
->>>> What about adding RV64 ILP32 support instead? This don't need HW =
-side
->>>> modifications so can benefit all RV64.
->>>=20
->>> ILP32 is another topic in C Language Data Type Models and it =
-couldn't
->>> replace the standard rv32 ecosystem.
->>> COMPAT is a common framework in Linux (7 arches have been =
-supported),
->>> so let rv64 support COMPAT mode is considerable.
->>>=20
->>> Customers would choose ILP32 / RV32-compat by themself and that
->>> depends on which one has a better ecosystem.
->>=20
->> =46rom a kernel perspective, supporting both is not much more work =
-than
->> supporting either of them. We had the same debate for Arm64, and =
-ended
->> up never merging the ILP32 patches despite them being well written
->> and maintainable, to limit the number of supported user space ABIs
->> as well as the possible attack vectors when there is an exploitable
->> bug that is specific to an ABI.
->>=20
->> arm64 does support big-endian mode, which is a similar niche, but it
->> can't easily be removed after it's already supported. Supporting =
-normal
->> compat mode is the easiest here because it doesn't add another user
->> space ABI, but I'd strongly recommend not to add any other ones.
->=20
-> @Palmer Dabbelt How do you think about supporting ILP32 & COMPAT both
-> in rv64? And let users vote by foot which is better.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. As ACPI always uses I/O port access we depend on
+HAS_IOPORT unconditionally.
 
-As psABI TG co-chair I really do not want an ILP32 RV64 to exist if it
-can at all be avoided. Every single attempt at an ILP32 ABI for a
-64-bit architecture has failed to take off in the past, so I struggle
-to see why RV64 will be any different. So, in my opinion, there is a
-relatively high barrier to entry for it to be an official frozen ABI,
-and without it being that I doubt upstreams will want to go near it, be
-it Linux, GCC, binutils or GCC, but they can speak for themselves if
-they feel otherwise.
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/acpi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Also, with every year that goes by, ILP32 becomes more and more limited
-in what you can use it for, due to increased memory footprints...
-
-Jess
+diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+index cdbdf68bd98f..b57f15817ede 100644
+--- a/drivers/acpi/Kconfig
++++ b/drivers/acpi/Kconfig
+@@ -9,6 +9,7 @@ config ARCH_SUPPORTS_ACPI
+ menuconfig ACPI
+ 	bool "ACPI (Advanced Configuration and Power Interface) Support"
+ 	depends on ARCH_SUPPORTS_ACPI
++	depends on HAS_IOPORT
+ 	select PNP
+ 	select NLS
+ 	default y if X86
+-- 
+2.32.0
 

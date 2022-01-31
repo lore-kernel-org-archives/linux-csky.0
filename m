@@ -2,53 +2,68 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F88EC4332F
-	for <linux-csky@archiver.kernel.org>; Sun, 30 Jan 2022 23:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3FD2C433EF
+	for <linux-csky@archiver.kernel.org>; Mon, 31 Jan 2022 09:29:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357119AbiA3Xkl (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Sun, 30 Jan 2022 18:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357394AbiA3XiF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 30 Jan 2022 18:38:05 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81396C06175B;
-        Sun, 30 Jan 2022 15:38:02 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id e17so17113900ljk.5;
-        Sun, 30 Jan 2022 15:38:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Fjun7H7HFd6eJVLuHg+U86J15PDVhx/hGCMSiPgf2P0=;
-        b=dd2fzDC5TDl8KpWUh0gU7+/JjGrL9a19MSGIOALm5z7fXs5VXHit+rqxXTBnz43EEy
-         6bAuu4TW+sayWblmW8KdfTygyhCSzYvoS93Z1gI42rqbvA3DwMo07+1y2fEK2Sdi+dYK
-         sDP0y+AYT+lJyA1SE0LAK8MGBAbFccq0iNsI8MFwHrM4VDudz2gSr9hVrcXqatHOdkrN
-         1PfcjftqYULiK+vhkvAQxqJqQERFYAQADXPAeAOnfrVl+/hqqAaB3aFTvjRxQxWLKkrn
-         UW62fbZN1kM7Fr/Abhtj4Byx5IJSmwGLhZ3+a2bcHkPKFWrQslOrFdx+rzve0FEyiDp5
-         +e8A==
+        id S231772AbiAaJ27 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 31 Jan 2022 04:28:59 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39460
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231148AbiAaJ27 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:28:59 -0500
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1D2843F33A
+        for <linux-csky@vger.kernel.org>; Mon, 31 Jan 2022 09:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643621338;
+        bh=dkzBuNd+uNU6CfCWtlWJDYP24x7ho0sbzpUOr5OCq8A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=iSqz/uLapSay7G/3A6PkXfNFarhEKpKi77MjwJT3TWh4Sv9zi8xxJc6Rkgnk/UQ3X
+         Yvr9zkdtcF2g6oFH10U/HqNYl2JgU6TIPCzY3Hp6miKzhib0mSoE8e1j5EE450Bes6
+         qC6Nk/QQtF9ZjHzny9/qSH3PJuaiAnJbMud9Sb5Y1vvXeTeXotimNFdFGDuIj+WzCx
+         +sQiPy0qGoT6niPfGMYqQPdW9mH+t2WQCNw63g8++6lWWWNXk4xKf1kdKExTBoWdtp
+         Fr8xP9lb7ptdwU+meL0LaKA08Pt3Gn+XokqmPxFvGnoCCSNkBA7DNg376izAfxT+dt
+         B9Ji0NE/qyypQ==
+Received: by mail-ed1-f70.google.com with SMTP id o25-20020a056402039900b0040631c2a67dso6571586edv.19
+        for <linux-csky@vger.kernel.org>; Mon, 31 Jan 2022 01:28:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Fjun7H7HFd6eJVLuHg+U86J15PDVhx/hGCMSiPgf2P0=;
-        b=EY7fm7x2TZqegodT/S1qvPr9CR6IGiPkrsEn9LbHOT1KZCLez8+Ssh5RVugJE7G1YV
-         KOutulLwumIZZnq4rK/KdsxmrfHxAaT7FdefLG+2Ew4rK144R/YmULtSZztzwlRq434u
-         BwBQNnu8EGnqC7UlAVv6HB3mjeDN2ksksQf7GGI7E+1w18Wzu2IGkbVgbA9eIQARza9t
-         ppJThI93JOBg0r144hHiGm9jQroVgVTFjQzebayQLftzcyIdeAEKKNx7xshKke7kO4aP
-         rJS/a5MIZmSOlGu+GJP7iAaVFykjB0LN8cxIOtsdI+a+PCeyGITpLfNjZKnOAah8yTNB
-         sYzA==
-X-Gm-Message-State: AOAM532tzXP+Vfs1zTutEHYwSSaoC1NQTXJLtH//OESkcKsrQl2x6MDS
-        rwqzx4+fqdbgZNncH4HB0Wc=
-X-Google-Smtp-Source: ABdhPJztEpqDu7c0duU4BlEMnF97NCTUImWX4xTUQenIAQJSUD2GpIv4OSVa9Xt8JSMsGNu6LN6TTQ==
-X-Received: by 2002:a2e:5858:: with SMTP id x24mr11923571ljd.519.1643585879834;
-        Sun, 30 Jan 2022 15:37:59 -0800 (PST)
-Received: from localhost.localdomain (109-252-138-126.dynamic.spd-mgts.ru. [109.252.138.126])
-        by smtp.gmail.com with ESMTPSA id a24sm1262950ljp.112.2022.01.30.15.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 15:37:59 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dkzBuNd+uNU6CfCWtlWJDYP24x7ho0sbzpUOr5OCq8A=;
+        b=vNC3dCIUhqU2Xu5y1YtfX5sGsKRc2Zg9sbt7ky6bAnSNP3gmr9ZoWpuB3kKMLNNIPS
+         vQ5i8vHagk6j0dnQ2OuarmpJ37GI0tQC7cGPrzUpLffa9DTceZSwPmjCHhUppRRQ/5Ny
+         YkmQIYFDraH6u5aU48Oso9yzqH11yfullXxFDGXurgI7WE4wohnNZBJc1XQJPXdTTUEu
+         4ROgzt0Lf9bduj5Vm28EGcbP/0HCJRYLkMVl/WMXxYmm383IfgkvEJdo1gvnyiLrfcZs
+         +GSWYYzdrK/KN5+tj7BvTnwA4yCZGFaESa/P8gUPmmtmbJ4pWtlVYCQSoY6WAIRCX9OR
+         P03w==
+X-Gm-Message-State: AOAM533Q3d7+cWVJY6RG2CtVhEXVjs09iHJZYhN/AWWqxQF3wAh3j8uj
+        JsOhGm+cC7Mi1/0llWgzB5P1F/NMNGAX2bv31og/8ZzGjF6eV+CmHH+5clKWdZMTeTD2pbHm+TR
+        xzZm80GIAsbpidgWMl0eiGAz2vtajrTHMvPFSMvc=
+X-Received: by 2002:a17:907:d88:: with SMTP id go8mr16082650ejc.343.1643621337659;
+        Mon, 31 Jan 2022 01:28:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxwUgdzk1HBzC4qCevIT6t5qYbRcRcbKgCipd7W6AaFHRRw14fKuy7dvOGc19/jX8mpPV7Ajw==
+X-Received: by 2002:a17:907:d88:: with SMTP id go8mr16082640ejc.343.1643621337451;
+        Mon, 31 Jan 2022 01:28:57 -0800 (PST)
+Received: from [192.168.0.71] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id z2sm2645158ejn.117.2022.01.31.01.28.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 01:28:56 -0800 (PST)
+Message-ID: <1e22e171-9d13-5763-a9e2-a24e7d98e130@canonical.com>
+Date:   Mon, 31 Jan 2022 10:28:54 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 18/21] memory: emif: Use kernel_can_power_off()
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -82,7 +97,6 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>,
         Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         Lee Jones <lee.jones@linaro.org>,
@@ -92,106 +106,36 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
         "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v6 19/21] ACPI: power: Switch to sys-off handler API
-Date:   Mon, 31 Jan 2022 02:37:16 +0300
-Message-Id: <20220130233718.21544-20-digetx@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220130233718.21544-1-digetx@gmail.com>
 References: <20220130233718.21544-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+ <20220130233718.21544-19-digetx@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220130233718.21544-19-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Switch to sys-off API that replaces legacy pm_power_off callbacks.
+On 31/01/2022 00:37, Dmitry Osipenko wrote:
+> Replace legacy pm_power_off with kernel_can_power_off() helper that
+> is aware about chained power-off handlers.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/memory/emif.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/acpi/sleep.c | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index a60ff5dfed3a..e27ac5b4645b 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -47,19 +47,11 @@ static void acpi_sleep_tts_switch(u32 acpi_state)
- 	}
- }
- 
--static int tts_notify_reboot(struct notifier_block *this,
--			unsigned long code, void *x)
-+static void tts_reboot_prepare(struct reboot_prep_data *data)
- {
- 	acpi_sleep_tts_switch(ACPI_STATE_S5);
--	return NOTIFY_DONE;
- }
- 
--static struct notifier_block tts_notifier = {
--	.notifier_call	= tts_notify_reboot,
--	.next		= NULL,
--	.priority	= 0,
--};
--
- static int acpi_sleep_prepare(u32 acpi_state)
- {
- #ifdef CONFIG_ACPI_SLEEP
-@@ -1031,7 +1023,7 @@ static void acpi_sleep_hibernate_setup(void)
- static inline void acpi_sleep_hibernate_setup(void) {}
- #endif /* !CONFIG_HIBERNATION */
- 
--static void acpi_power_off_prepare(void)
-+static void acpi_power_off_prepare(struct power_off_prep_data *data)
- {
- 	/* Prepare to power off the system */
- 	acpi_sleep_prepare(ACPI_STATE_S5);
-@@ -1039,7 +1031,7 @@ static void acpi_power_off_prepare(void)
- 	acpi_os_wait_events_complete();
- }
- 
--static void acpi_power_off(void)
-+static void acpi_power_off(struct power_off_data *data)
- {
- 	/* acpi_sleep_prepare(ACPI_STATE_S5) should have already been called */
- 	pr_debug("%s called\n", __func__);
-@@ -1047,6 +1039,11 @@ static void acpi_power_off(void)
- 	acpi_enter_sleep_state(ACPI_STATE_S5);
- }
- 
-+static struct sys_off_handler acpi_sys_off_handler = {
-+	.power_off_priority = POWEROFF_PRIO_FIRMWARE,
-+	.reboot_prepare_cb = tts_reboot_prepare,
-+};
-+
- int __init acpi_sleep_init(void)
- {
- 	char supported[ACPI_S_STATE_COUNT * 3 + 1];
-@@ -1063,8 +1060,8 @@ int __init acpi_sleep_init(void)
- 
- 	if (acpi_sleep_state_supported(ACPI_STATE_S5)) {
- 		sleep_states[ACPI_STATE_S5] = 1;
--		pm_power_off_prepare = acpi_power_off_prepare;
--		pm_power_off = acpi_power_off;
-+		acpi_sys_off_handler.power_off_cb = acpi_power_off;
-+		acpi_sys_off_handler.power_off_prepare_cb = acpi_power_off_prepare;
- 	} else {
- 		acpi_no_s5 = true;
- 	}
-@@ -1080,6 +1077,6 @@ int __init acpi_sleep_init(void)
- 	 * Register the tts_notifier to reboot notifier list so that the _TTS
- 	 * object can also be evaluated when the system enters S5.
- 	 */
--	register_reboot_notifier(&tts_notifier);
-+	register_sys_off_handler(&acpi_sys_off_handler);
- 	return 0;
- }
--- 
-2.34.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+
+Best regards,
+Krzysztof

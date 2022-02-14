@@ -2,108 +2,180 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E32CC433F5
-	for <linux-csky@archiver.kernel.org>; Mon, 14 Feb 2022 16:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0BE8C433EF
+	for <linux-csky@archiver.kernel.org>; Mon, 14 Feb 2022 16:35:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236294AbiBNQSH (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 14 Feb 2022 11:18:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59526 "EHLO
+        id S1356511AbiBNQgE (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 14 Feb 2022 11:36:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiBNQSG (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Feb 2022 11:18:06 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B96C73;
-        Mon, 14 Feb 2022 08:17:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=znrDaV5Pp8tpOYrjAn4pOH6aYRp8gwmkoLn2zKCQqvQ=; b=PcyT0t+eD5LLS9UJgGQMfmdjFJ
-        TnHDYVyUnmjJbua/G/sKncKzs2u2jdNelv6SUTTo/5Y4tZevv7V2ZtgsFmbj+kYzkjmaSGsHDurIT
-        VC1quvjwjbvF8Dagps5LTgmbbWLmWNSysZ0YwZnkq7fLP8X5BXBB6aTrmkJ0sYqI5WIIiIMl4uxW/
-        3qtk4WjOLcEKTlaMnjiAKnrqaugxrsV33SjXprE+2fKwW9+9cMhaaV3qjCBg+ny55TrBXZ7O26jcO
-        /icGLutz8LqeGoFwQV8N2tyYrTjUfLzF7yI95xabFD+EqTQZEkvi9YnUJBcBK6hadjpHrb0FDFpTf
-        JGmfOewg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJe2r-009we3-FJ; Mon, 14 Feb 2022 16:17:46 +0000
-Message-ID: <3d6bb73c-2486-f862-129e-877a571cce28@infradead.org>
-Date:   Mon, 14 Feb 2022 08:17:39 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/1] csky: Fix versioncheck warnings
-Content-Language: en-US
-To:     wonder_rock@126.com
-Cc:     axboe@kernel.dk, guoren@kernel.org, linux-csky@vger.kernel.org,
+        with ESMTP id S1356495AbiBNQgC (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Feb 2022 11:36:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2604DF73;
+        Mon, 14 Feb 2022 08:35:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A5A3614E8;
+        Mon, 14 Feb 2022 16:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10AAC340EF;
+        Mon, 14 Feb 2022 16:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644856553;
+        bh=rSFbUFHYbR/4za9tBP+uUtPbOSoTyakm57XSAj/Auqo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OZ4O1gNSNtwwNmiHhjY6IhU0E4BJ5We8XbBhorxEj9WTOfzc8GW6A9wXhW3abITrh
+         5VICuXJSDow6iYHC0e3qjJUZrd0nY+ZxgCA70cKABEhGmYygXnXVotyKfOCbgpbVrm
+         pGuK4IQR59nad5NN7zMl26jmakL0tF5IsM3zVKvJuUsbgvtw8ymirj23M7AeUqRAbK
+         Nb4ZCpdR7LXfqeDbObSioCUxRgm3spWcYhdjYFVER3t9sUGge35gaIcf4USGqAeqIv
+         Op0kZQjMjQu+Uf/UqNmdKlInWq80ZiSg5HRmKlo5FLGvtYFTEQ1arJmMBawI+kUcs8
+         VAdmt64TVWmMQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
         linux-kernel@vger.kernel.org
-References: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org>
- <20220214120250.10256-1-wonder_rock@126.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220214120250.10256-1-wonder_rock@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc:     linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, stable@vger.kernel.org,
+        David Laight <David.Laight@aculab.com>
+Subject: [PATCH 01/14] uaccess: fix integer overflow on access_ok()
+Date:   Mon, 14 Feb 2022 17:34:39 +0100
+Message-Id: <20220214163452.1568807-2-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20220214163452.1568807-1-arnd@kernel.org>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+From: Arnd Bergmann <arnd@arndb.de>
 
+Three architectures check the end of a user access against the
+address limit without taking a possible overflow into account.
+Passing a negative length or another overflow in here returns
+success when it should not.
 
-On 2/14/22 04:02, wonder_rock@126.com wrote:
-> From: Deyan Wang <wonder_rock@126.com>
-> 
-> arch/csky/include/asm/io.h: 8 linux/version.h not needed.
-> arch/csky/kernel/process.c: 5 linux/version.h not needed.
-> arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
-> 
-> Signed-off-by: Deyan Wang <wonder_rock@126.com>
+Use the most common correct implementation here, which optimizes
+for a constant 'size' argument, and turns the common case into a
+single comparison.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: stable@vger.kernel.org
+Fixes: da551281947c ("csky: User access")
+Fixes: f663b60f5215 ("microblaze: Fix uaccess_ok macro")
+Fixes: 7567746e1c0d ("Hexagon: Add user access functions")
+Reported-by: David Laight <David.Laight@aculab.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/csky/include/asm/uaccess.h       |  7 +++----
+ arch/hexagon/include/asm/uaccess.h    | 18 +++++++++---------
+ arch/microblaze/include/asm/uaccess.h | 19 ++++---------------
+ 3 files changed, 16 insertions(+), 28 deletions(-)
 
-Thanks.
-
-> ---
->  arch/csky/include/asm/io.h | 1 -
->  arch/csky/kernel/process.c | 1 -
->  arch/csky/mm/dma-mapping.c | 1 -
->  3 files changed, 3 deletions(-)
-> 
-> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-> index f82654053dc0..ed53f0b47388 100644
-> --- a/arch/csky/include/asm/io.h
-> +++ b/arch/csky/include/asm/io.h
-> @@ -5,7 +5,6 @@
->  
->  #include <linux/pgtable.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->  
->  /*
->   * I/O memory access primitives. Reads are ordered relative to any
-> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-> index 3d0ca22cd0e2..5de04707aa07 100644
-> --- a/arch/csky/kernel/process.c
-> +++ b/arch/csky/kernel/process.c
-> @@ -2,7 +2,6 @@
->  // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
->  
->  #include <linux/module.h>
-> -#include <linux/version.h>
->  #include <linux/sched.h>
->  #include <linux/sched/task_stack.h>
->  #include <linux/sched/debug.h>
-> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-> index c3a775a7e8f9..82447029feb4 100644
-> --- a/arch/csky/mm/dma-mapping.c
-> +++ b/arch/csky/mm/dma-mapping.c
-> @@ -9,7 +9,6 @@
->  #include <linux/mm.h>
->  #include <linux/scatterlist.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->  #include <asm/cache.h>
->  
->  static inline void cache_op(phys_addr_t paddr, size_t size,
-
+diff --git a/arch/csky/include/asm/uaccess.h b/arch/csky/include/asm/uaccess.h
+index c40f06ee8d3e..ac5a54f57d40 100644
+--- a/arch/csky/include/asm/uaccess.h
++++ b/arch/csky/include/asm/uaccess.h
+@@ -3,14 +3,13 @@
+ #ifndef __ASM_CSKY_UACCESS_H
+ #define __ASM_CSKY_UACCESS_H
+ 
+-#define user_addr_max() \
+-	(uaccess_kernel() ? KERNEL_DS.seg : get_fs().seg)
++#define user_addr_max() (current_thread_info()->addr_limit.seg)
+ 
+ static inline int __access_ok(unsigned long addr, unsigned long size)
+ {
+-	unsigned long limit = current_thread_info()->addr_limit.seg;
++	unsigned long limit = user_addr_max();
+ 
+-	return ((addr < limit) && ((addr + size) < limit));
++	return (size <= limit) && (addr <= (limit - size));
+ }
+ #define __access_ok __access_ok
+ 
+diff --git a/arch/hexagon/include/asm/uaccess.h b/arch/hexagon/include/asm/uaccess.h
+index ef5bfef8d490..719ba3f3c45c 100644
+--- a/arch/hexagon/include/asm/uaccess.h
++++ b/arch/hexagon/include/asm/uaccess.h
+@@ -25,17 +25,17 @@
+  * Returns true (nonzero) if the memory block *may* be valid, false (zero)
+  * if it is definitely invalid.
+  *
+- * User address space in Hexagon, like x86, goes to 0xbfffffff, so the
+- * simple MSB-based tests used by MIPS won't work.  Some further
+- * optimization is probably possible here, but for now, keep it
+- * reasonably simple and not *too* slow.  After all, we've got the
+- * MMU for backup.
+  */
++#define uaccess_kernel() (get_fs().seg == KERNEL_DS.seg)
++#define user_addr_max() (uaccess_kernel() ? ~0UL : TASK_SIZE)
+ 
+-#define __access_ok(addr, size) \
+-	((get_fs().seg == KERNEL_DS.seg) || \
+-	(((unsigned long)addr < get_fs().seg) && \
+-	  (unsigned long)size < (get_fs().seg - (unsigned long)addr)))
++static inline int __access_ok(unsigned long addr, unsigned long size)
++{
++	unsigned long limit = TASK_SIZE;
++
++	return (size <= limit) && (addr <= (limit - size));
++}
++#define __access_ok __access_ok
+ 
+ /*
+  * When a kernel-mode page fault is taken, the faulting instruction
+diff --git a/arch/microblaze/include/asm/uaccess.h b/arch/microblaze/include/asm/uaccess.h
+index d2a8ef9f8978..5b6e0e7788f4 100644
+--- a/arch/microblaze/include/asm/uaccess.h
++++ b/arch/microblaze/include/asm/uaccess.h
+@@ -39,24 +39,13 @@
+ 
+ # define uaccess_kernel()	(get_fs().seg == KERNEL_DS.seg)
+ 
+-static inline int access_ok(const void __user *addr, unsigned long size)
++static inline int __access_ok(unsigned long addr, unsigned long size)
+ {
+-	if (!size)
+-		goto ok;
++	unsigned long limit = user_addr_max();
+ 
+-	if ((get_fs().seg < ((unsigned long)addr)) ||
+-			(get_fs().seg < ((unsigned long)addr + size - 1))) {
+-		pr_devel("ACCESS fail at 0x%08x (size 0x%x), seg 0x%08x\n",
+-			(__force u32)addr, (u32)size,
+-			(u32)get_fs().seg);
+-		return 0;
+-	}
+-ok:
+-	pr_devel("ACCESS OK at 0x%08x (size 0x%x), seg 0x%08x\n",
+-			(__force u32)addr, (u32)size,
+-			(u32)get_fs().seg);
+-	return 1;
++	return (size <= limit) && (addr <= (limit - size));
+ }
++#define access_ok(addr, size) __access_ok((unsigned long)addr, size)
+ 
+ # define __FIXUP_SECTION	".section .fixup,\"ax\"\n"
+ # define __EX_TABLE_SECTION	".section __ex_table,\"a\"\n"
 -- 
-~Randy
+2.29.2
+

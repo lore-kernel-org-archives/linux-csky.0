@@ -2,35 +2,35 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF39C43219
-	for <linux-csky@archiver.kernel.org>; Tue, 22 Mar 2022 14:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FE65C4321E
+	for <linux-csky@archiver.kernel.org>; Tue, 22 Mar 2022 14:42:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238241AbiCVOnw (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 22 Mar 2022 10:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S238027AbiCVOn4 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 22 Mar 2022 10:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbiCVOnd (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Mar 2022 10:43:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E4680201;
-        Tue, 22 Mar 2022 07:42:05 -0700 (PDT)
+        with ESMTP id S238184AbiCVOns (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Mar 2022 10:43:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838D57E5A7;
+        Tue, 22 Mar 2022 07:42:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEB85B81CFB;
-        Tue, 22 Mar 2022 14:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA574C340F2;
-        Tue, 22 Mar 2022 14:41:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8884615BE;
+        Tue, 22 Mar 2022 14:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE965C340EC;
+        Tue, 22 Mar 2022 14:42:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647960122;
-        bh=eCC4+U4U/ci3tY5teY5dpBY9tw/1fY0xwkgGYQqbXuQ=;
+        s=k20201202; t=1647960134;
+        bh=5ucjX4VG+LqJh2oWQ1pBBRlKhrNudWlPTr2cJhdCZBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ax3BrvN8vao2XlKfSMG+fER+GoY/KdHrIOXLv26fcIZxoqDpjPeTqXxo+QtpIBCSr
-         eE7aqOWe/zsLiauPhslINBMx04dhVAciA/1AucTwxt/1xzESQLw2QWnVlMEBEpz8mE
-         pUfCPiMn46dPtDelIPKH8qVNFIlv3AcFQrMtfORb1epju+fzQ31aZleUDZfSo8Efml
-         gMTxDbHeIqnpMPMZcfj6MOLLrBCf35IBb0PNnoU7XXp+g4jSm+u0KFRKQnFhsFNaFp
-         9hBZh2MPT9x2Rsy8dPKyo7Wvag6Kj6aw5BCg5aLs8iv+S6ZsRSPjJrvVMd5SgGi6ub
-         Uu2nurnY8baIA==
+        b=MowU19AHyduiMG1L1odLS15KJ5h+EnNOOgKEW+Xtw8c3diP0JgQllhhl69inwe543
+         Inw5X8EXGMHMkC3YxDGlQR/+Hl85HDVXO/LB2cU8HxnmYAl+Zs2fVjCa9ZBZ0d/JKs
+         WNKDypNzC6AJRo0KwgtJOr7tJ6DTB6zO0a2VwdXPEzTuHSSssGo3hSR0HAtQKE0uN6
+         nyBYjtzpAPwhV4BQSfo7oTHFZ/NkJZw2AB8PTT5V1eilA0wFiez27Bnl2WEguKt5Vk
+         6LIRIg3478nPv6h8iyFMVFB+3SCTNYlooX3Aymo4y84mg/7JmLzuT8Idu2UIAlLVgg
+         RIYu8Q9ZuYf/g==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         gregkh@linuxfoundation.org, hch@lst.de
@@ -42,9 +42,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, heiko@sntech.de,
         Guo Ren <guoren@linux.alibaba.com>,
         Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH V9 17/20] riscv: compat: vdso: Add setup additional pages implementation
-Date:   Tue, 22 Mar 2022 22:40:00 +0800
-Message-Id: <20220322144003.2357128-18-guoren@kernel.org>
+Subject: [PATCH V9 19/20] riscv: compat: ptrace: Add compat_arch_ptrace implement
+Date:   Tue, 22 Mar 2022 22:40:02 +0800
+Message-Id: <20220322144003.2357128-20-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220322144003.2357128-1-guoren@kernel.org>
 References: <20220322144003.2357128-1-guoren@kernel.org>
@@ -56,271 +56,201 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Reconstruct __setup_additional_pages() by appending vdso info
-pointer argument to meet compat_vdso_info requirement. And change
-vm_special_mapping *dm, *cm initialization into static.
+Now, you can use native gdb on riscv64 for rv32 app debugging.
+
+$ uname -a
+Linux buildroot 5.16.0-rc4-00036-gbef6b82fdf23-dirty #53 SMP Mon Dec 20 23:06:53 CST 2021 riscv64 GNU/Linux
+$ cat /proc/cpuinfo
+processor       : 0
+hart            : 0
+isa             : rv64imafdcsuh
+mmu             : sv48
+
+$ file /bin/busybox
+/bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+$ file /usr/bin/gdb
+/usr/bin/gdb: ELF 32-bit LSB shared object, UCB RISC-V, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+$ /usr/bin/gdb /bin/busybox
+GNU gdb (GDB) 10.2
+Copyright (C) 2021 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+...
+Reading symbols from /bin/busybox...
+(No debugging symbols found in /bin/busybox)
+(gdb) b main
+Breakpoint 1 at 0x8ddc
+(gdb) r
+Starting program: /bin/busybox
+Failed to read a valid object file image from memory.
+
+Breakpoint 1, 0x555a8ddc in main ()
+(gdb) i r
+ra             0x77df0b74       0x77df0b74
+sp             0x7fdd3d10       0x7fdd3d10
+gp             0x5567e800       0x5567e800 <bb_common_bufsiz1+160>
+tp             0x77f64280       0x77f64280
+t0             0x0      0
+t1             0x555a6fac       1431990188
+t2             0x77dd8db4       2011008436
+fp             0x7fdd3e34       0x7fdd3e34
+s1             0x7fdd3e34       2145205812
+a0             0xffffffff       -1
+a1             0x2000   8192
+a2             0x7fdd3e3c       2145205820
+a3             0x0      0
+a4             0x7fdd3d30       2145205552
+a5             0x555a8dc0       1431997888
+a6             0x77f2c170       2012397936
+a7             0x6a7c7a2f       1786542639
+s2             0x0      0
+s3             0x0      0
+s4             0x555a8dc0       1431997888
+s5             0x77f8a3a8       2012783528
+s6             0x7fdd3e3c       2145205820
+s7             0x5567cecc       1432866508
+--Type <RET> for more, q to quit, c to continue without paging--
+s8             0x1      1
+s9             0x0      0
+s10            0x55634448       1432568904
+s11            0x0      0
+t3             0x77df0bb8       2011106232
+t4             0x42fc   17148
+t5             0x0      0
+t6             0x40     64
+pc             0x555a8ddc       0x555a8ddc <main+28>
+(gdb) si
+0x555a78f0 in mallopt@plt ()
+(gdb) c
+Continuing.
+BusyBox v1.34.1 (2021-12-19 22:39:48 CST) multi-call binary.
+BusyBox is copyrighted by many authors between 1998-2015.
+Licensed under GPLv2. See source distribution for detailed
+copyright notices.
+
+Usage: busybox [function [arguments]...]
+   or: busybox --list[-full]
+...
+[Inferior 1 (process 107) exited normally]
+(gdb) q
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/riscv/include/asm/elf.h |   5 ++
- arch/riscv/include/asm/mmu.h |   1 +
- arch/riscv/kernel/vdso.c     | 105 +++++++++++++++++++++++------------
- 3 files changed, 76 insertions(+), 35 deletions(-)
+ arch/riscv/kernel/ptrace.c | 87 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 82 insertions(+), 5 deletions(-)
 
-diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-index 754fdb8cee96..14fc7342490b 100644
---- a/arch/riscv/include/asm/elf.h
-+++ b/arch/riscv/include/asm/elf.h
-@@ -130,5 +130,10 @@ do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)		\
- typedef compat_ulong_t			compat_elf_greg_t;
- typedef compat_elf_greg_t		compat_elf_gregset_t[ELF_NGREG];
+diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+index a89243730153..bb387593a121 100644
+--- a/arch/riscv/kernel/ptrace.c
++++ b/arch/riscv/kernel/ptrace.c
+@@ -12,6 +12,7 @@
+ #include <asm/thread_info.h>
+ #include <asm/switch_to.h>
+ #include <linux/audit.h>
++#include <linux/compat.h>
+ #include <linux/ptrace.h>
+ #include <linux/elf.h>
+ #include <linux/regset.h>
+@@ -111,11 +112,6 @@ static const struct user_regset_view riscv_user_native_view = {
+ 	.n = ARRAY_SIZE(riscv_user_regset),
+ };
  
-+extern int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
-+					      int uses_interp);
-+#define compat_arch_setup_additional_pages \
-+				compat_arch_setup_additional_pages
-+
- #endif /* CONFIG_COMPAT */
- #endif /* _ASM_RISCV_ELF_H */
-diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
-index 0099dc116168..cedcf8ea3c76 100644
---- a/arch/riscv/include/asm/mmu.h
-+++ b/arch/riscv/include/asm/mmu.h
-@@ -16,6 +16,7 @@ typedef struct {
- 	atomic_long_t id;
+-const struct user_regset_view *task_user_regset_view(struct task_struct *task)
+-{
+-	return &riscv_user_native_view;
+-}
+-
+ struct pt_regs_offset {
+ 	const char *name;
+ 	int offset;
+@@ -273,3 +269,84 @@ __visible void do_syscall_trace_exit(struct pt_regs *regs)
+ 		trace_sys_exit(regs, regs_return_value(regs));
  #endif
- 	void *vdso;
-+	void *vdso_info;
- #ifdef CONFIG_SMP
- 	/* A local icache flush is needed before user execution can resume. */
- 	cpumask_t icache_stale_mask;
-diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-index a9436a65161a..50fe4c877603 100644
---- a/arch/riscv/kernel/vdso.c
-+++ b/arch/riscv/kernel/vdso.c
-@@ -23,6 +23,9 @@ struct vdso_data {
- #endif
- 
- extern char vdso_start[], vdso_end[];
-+#ifdef CONFIG_COMPAT
-+extern char compat_vdso_start[], compat_vdso_end[];
-+#endif
- 
- enum vvar_pages {
- 	VVAR_DATA_PAGE_OFFSET,
-@@ -30,6 +33,11 @@ enum vvar_pages {
- 	VVAR_NR_PAGES,
- };
- 
-+enum rv_vdso_map {
-+	RV_VDSO_MAP_VVAR,
-+	RV_VDSO_MAP_VDSO,
-+};
-+
- #define VVAR_SIZE  (VVAR_NR_PAGES << PAGE_SHIFT)
- 
- /*
-@@ -52,12 +60,6 @@ struct __vdso_info {
- 	struct vm_special_mapping *cm;
- };
- 
--static struct __vdso_info vdso_info __ro_after_init = {
--	.name = "vdso",
--	.vdso_code_start = vdso_start,
--	.vdso_code_end = vdso_end,
--};
--
- static int vdso_mremap(const struct vm_special_mapping *sm,
- 		       struct vm_area_struct *new_vma)
- {
-@@ -66,37 +68,33 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
- 	return 0;
  }
- 
--static int __init __vdso_init(void)
-+static void __init __vdso_init(struct __vdso_info *vdso_info)
- {
- 	unsigned int i;
- 	struct page **vdso_pagelist;
- 	unsigned long pfn;
- 
--	if (memcmp(vdso_info.vdso_code_start, "\177ELF", 4)) {
--		pr_err("vDSO is not a valid ELF object!\n");
--		return -EINVAL;
--	}
-+	if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4))
-+		panic("vDSO is not a valid ELF object!\n");
- 
--	vdso_info.vdso_pages = (
--		vdso_info.vdso_code_end -
--		vdso_info.vdso_code_start) >>
-+	vdso_info->vdso_pages = (
-+		vdso_info->vdso_code_end -
-+		vdso_info->vdso_code_start) >>
- 		PAGE_SHIFT;
- 
--	vdso_pagelist = kcalloc(vdso_info.vdso_pages,
-+	vdso_pagelist = kcalloc(vdso_info->vdso_pages,
- 				sizeof(struct page *),
- 				GFP_KERNEL);
- 	if (vdso_pagelist == NULL)
--		return -ENOMEM;
-+		panic("vDSO kcalloc failed!\n");
- 
- 	/* Grab the vDSO code pages. */
--	pfn = sym_to_pfn(vdso_info.vdso_code_start);
-+	pfn = sym_to_pfn(vdso_info->vdso_code_start);
- 
--	for (i = 0; i < vdso_info.vdso_pages; i++)
-+	for (i = 0; i < vdso_info->vdso_pages; i++)
- 		vdso_pagelist[i] = pfn_to_page(pfn + i);
- 
--	vdso_info.cm->pages = vdso_pagelist;
--
--	return 0;
-+	vdso_info->cm->pages = vdso_pagelist;
- }
- 
- #ifdef CONFIG_TIME_NS
-@@ -116,13 +114,14 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
- {
- 	struct mm_struct *mm = task->mm;
- 	struct vm_area_struct *vma;
-+	struct __vdso_info *vdso_info = mm->context.vdso_info;
- 
- 	mmap_read_lock(mm);
- 
- 	for (vma = mm->mmap; vma; vma = vma->vm_next) {
- 		unsigned long size = vma->vm_end - vma->vm_start;
- 
--		if (vma_is_special_mapping(vma, vdso_info.dm))
-+		if (vma_is_special_mapping(vma, vdso_info->dm))
- 			zap_page_range(vma, vma->vm_start, size);
- 	}
- 
-@@ -187,11 +186,6 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
- 	return vmf_insert_pfn(vma, vmf->address, pfn);
- }
- 
--enum rv_vdso_map {
--	RV_VDSO_MAP_VVAR,
--	RV_VDSO_MAP_VDSO,
--};
--
- static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
- 	[RV_VDSO_MAP_VVAR] = {
- 		.name   = "[vvar]",
-@@ -203,25 +197,46 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
- 	},
- };
- 
-+static struct __vdso_info vdso_info __ro_after_init = {
-+	.name = "vdso",
-+	.vdso_code_start = vdso_start,
-+	.vdso_code_end = vdso_end,
-+	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-+	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-+};
 +
 +#ifdef CONFIG_COMPAT
-+static struct __vdso_info compat_vdso_info __ro_after_init = {
-+	.name = "compat_vdso",
-+	.vdso_code_start = compat_vdso_start,
-+	.vdso_code_end = compat_vdso_end,
-+	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-+	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-+};
-+#endif
-+
- static int __init vdso_init(void)
- {
--	vdso_info.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR];
--	vdso_info.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO];
-+	__vdso_init(&vdso_info);
-+#ifdef CONFIG_COMPAT
-+	__vdso_init(&compat_vdso_info);
-+#endif
- 
--	return __vdso_init();
-+	return 0;
- }
- arch_initcall(vdso_init);
- 
- static int __setup_additional_pages(struct mm_struct *mm,
- 				    struct linux_binprm *bprm,
--				    int uses_interp)
-+				    int uses_interp,
-+				    struct __vdso_info *vdso_info)
- {
- 	unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
- 	void *ret;
- 
- 	BUILD_BUG_ON(VVAR_NR_PAGES != __VVAR_PAGES);
- 
--	vdso_text_len = vdso_info.vdso_pages << PAGE_SHIFT;
-+	vdso_text_len = vdso_info->vdso_pages << PAGE_SHIFT;
- 	/* Be sure to map the data page */
- 	vdso_mapping_len = vdso_text_len + VVAR_SIZE;
- 
-@@ -232,16 +247,18 @@ static int __setup_additional_pages(struct mm_struct *mm,
- 	}
- 
- 	ret = _install_special_mapping(mm, vdso_base, VVAR_SIZE,
--		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info.dm);
-+		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info->dm);
- 	if (IS_ERR(ret))
- 		goto up_fail;
- 
- 	vdso_base += VVAR_SIZE;
- 	mm->context.vdso = (void *)vdso_base;
-+	mm->context.vdso_info = (void *)vdso_info;
-+
- 	ret =
- 	   _install_special_mapping(mm, vdso_base, vdso_text_len,
- 		(VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC),
--		vdso_info.cm);
-+		vdso_info->cm);
- 
- 	if (IS_ERR(ret))
- 		goto up_fail;
-@@ -253,6 +270,24 @@ static int __setup_additional_pages(struct mm_struct *mm,
- 	return PTR_ERR(ret);
- }
- 
-+#ifdef CONFIG_COMPAT
-+int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
-+				       int uses_interp)
++static int compat_riscv_gpr_get(struct task_struct *target,
++				const struct user_regset *regset,
++				struct membuf to)
 +{
-+	struct mm_struct *mm = current->mm;
++	struct compat_user_regs_struct cregs;
++
++	regs_to_cregs(&cregs, task_pt_regs(target));
++
++	return membuf_write(&to, &cregs,
++			    sizeof(struct compat_user_regs_struct));
++}
++
++static int compat_riscv_gpr_set(struct task_struct *target,
++				const struct user_regset *regset,
++				unsigned int pos, unsigned int count,
++				const void *kbuf, const void __user *ubuf)
++{
 +	int ret;
++	struct compat_user_regs_struct cregs;
 +
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &cregs, 0, -1);
 +
-+	ret = __setup_additional_pages(mm, bprm, uses_interp,
-+							&compat_vdso_info);
-+	mmap_write_unlock(mm);
++	cregs_to_regs(&cregs, task_pt_regs(target));
 +
 +	return ret;
 +}
-+#endif
 +
- int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- {
- 	struct mm_struct *mm = current->mm;
-@@ -261,7 +296,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	if (mmap_write_lock_killable(mm))
- 		return -EINTR;
- 
--	ret = __setup_additional_pages(mm, bprm, uses_interp);
-+	ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
- 	mmap_write_unlock(mm);
- 
- 	return ret;
++static const struct user_regset compat_riscv_user_regset[] = {
++	[REGSET_X] = {
++		.core_note_type = NT_PRSTATUS,
++		.n = ELF_NGREG,
++		.size = sizeof(compat_elf_greg_t),
++		.align = sizeof(compat_elf_greg_t),
++		.regset_get = compat_riscv_gpr_get,
++		.set = compat_riscv_gpr_set,
++	},
++#ifdef CONFIG_FPU
++	[REGSET_F] = {
++		.core_note_type = NT_PRFPREG,
++		.n = ELF_NFPREG,
++		.size = sizeof(elf_fpreg_t),
++		.align = sizeof(elf_fpreg_t),
++		.regset_get = riscv_fpr_get,
++		.set = riscv_fpr_set,
++	},
++#endif
++};
++
++static const struct user_regset_view compat_riscv_user_native_view = {
++	.name = "riscv",
++	.e_machine = EM_RISCV,
++	.regsets = compat_riscv_user_regset,
++	.n = ARRAY_SIZE(compat_riscv_user_regset),
++};
++
++long compat_arch_ptrace(struct task_struct *child, compat_long_t request,
++			compat_ulong_t caddr, compat_ulong_t cdata)
++{
++	long ret = -EIO;
++
++	switch (request) {
++	default:
++		ret = compat_ptrace_request(child, request, caddr, cdata);
++		break;
++	}
++
++	return ret;
++}
++#endif /* CONFIG_COMPAT */
++
++const struct user_regset_view *task_user_regset_view(struct task_struct *task)
++{
++#ifdef CONFIG_COMPAT
++	if (test_tsk_thread_flag(task, TIF_32BIT))
++		return &compat_riscv_user_native_view;
++	else
++#endif
++		return &riscv_user_native_view;
++}
 -- 
 2.25.1
 

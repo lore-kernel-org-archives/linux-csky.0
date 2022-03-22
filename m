@@ -2,35 +2,35 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE26BC4167D
-	for <linux-csky@archiver.kernel.org>; Tue, 22 Mar 2022 14:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BCD1C38162
+	for <linux-csky@archiver.kernel.org>; Tue, 22 Mar 2022 14:42:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238133AbiCVOnk (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 22 Mar 2022 10:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S238165AbiCVOnw (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 22 Mar 2022 10:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238107AbiCVOmm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Mar 2022 10:42:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17A288B05;
-        Tue, 22 Mar 2022 07:41:11 -0700 (PDT)
+        with ESMTP id S238161AbiCVOnl (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Mar 2022 10:43:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7C585BE3;
+        Tue, 22 Mar 2022 07:42:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 782D0B81CFB;
-        Tue, 22 Mar 2022 14:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE259C340F0;
-        Tue, 22 Mar 2022 14:41:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B15FA616B4;
+        Tue, 22 Mar 2022 14:42:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23AA4C340F0;
+        Tue, 22 Mar 2022 14:42:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647960069;
-        bh=MNkJYdoYJVD0cgTwHsZRdZ7qoGS1rN9vx70tcmJUxuM=;
+        s=k20201202; t=1647960128;
+        bh=gwexS5cDOjG6yPTnK5UPDkjABFJAJgKWUEeKQb6lmUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Te6ueS9SYDabPmx1YA6EVMd2g7IM2kKy7w7o6FrMIcETQS413FPcqWMXps87PpPxv
-         /xgcJ6QIqWhm+qVKit9ArSyIa7nGa40sojzzSRNT4wVsdMtZCg3O/4gOoeLPtEvQ09
-         RVg5tJoMvTh5mEXOnSwDbW6yaGOLQcyW7FenrFYdsjjBTMNVbXZmmHETRGLWP5afmm
-         xaDDB7vODSCKSsqhD5tzpKKGEGrMREf3DMBGzYvvUQGTqFb4ZTIroAqNzI8Oa1fO9x
-         U08o0Peo3iVkeSd9uBqhULJ4XgSczdo9hExoerWay8oG5C9bEAOAxdTo/fe5jbp8/0
-         jdzRCRAWv5ZsA==
+        b=cRnK+LISwdmBZavEQwkxpPR7JIB8X2mj6IRRGKZozd7OFdRpinTGc4j6e1KyjFGWW
+         NKdsTKfjTNb8L45kirPqpIXb2P/saL6F0RCSVo2E9K7CTHx40rwIAOIrena4WdLKXQ
+         fILabcjr2FgKAK83HfiCvXkXvSBz776W3jz1m1BMMN2tMofRp3F0Gukx/NbJAy3iJd
+         DccfDa5TFJh7FUtFPHM6rIfQubS1IFoMtg3MJQsgX/6Mpu58ImibGE5418zB7m/++F
+         AH37pIanimkfbuOFVeMgvFQSpJdcO/l70CIxVCixC1JcisLOA0wylblxQe4Q0hlyKH
+         rtDi7/M1Ydx9w==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         gregkh@linuxfoundation.org, hch@lst.de
@@ -39,10 +39,12 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V9 08/20] riscv: Fixup difference with defconfig
-Date:   Tue, 22 Mar 2022 22:39:51 +0800
-Message-Id: <20220322144003.2357128-9-guoren@kernel.org>
+        x86@kernel.org, heiko@sntech.de,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH V9 18/20] riscv: compat: signal: Add rt_frame implementation
+Date:   Tue, 22 Mar 2022 22:40:01 +0800
+Message-Id: <20220322144003.2357128-19-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220322144003.2357128-1-guoren@kernel.org>
 References: <20220322144003.2357128-1-guoren@kernel.org>
@@ -54,178 +56,320 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Let's follow the origin patch's spirit:
+Implement compat_setup_rt_frame for sigcontext save & restore. The
+main process is the same with signal, but the rv32 pt_regs' size
+is different from rv64's, so we needs convert them.
 
-The only difference between rv32_defconfig and defconfig is that
-rv32_defconfig has  CONFIG_ARCH_RV32I=y.
-
-This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
-
-Fixes: 1b937e8faa87ccfb ("RISC-V: Add separate defconfig for 32bit systems")
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/riscv/Makefile               |   4 +
- arch/riscv/configs/rv32_defconfig | 135 ------------------------------
- 2 files changed, 4 insertions(+), 135 deletions(-)
- delete mode 100644 arch/riscv/configs/rv32_defconfig
+ arch/riscv/kernel/Makefile        |   1 +
+ arch/riscv/kernel/compat_signal.c | 243 ++++++++++++++++++++++++++++++
+ arch/riscv/kernel/signal.c        |  13 +-
+ 3 files changed, 256 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/kernel/compat_signal.c
 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 7d81102cffd4..c6ca1b9cbf71 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -154,3 +154,7 @@ PHONY += rv64_randconfig
- rv64_randconfig:
- 	$(Q)$(MAKE) KCONFIG_ALLCONFIG=$(srctree)/arch/riscv/configs/64-bit.config \
- 		-f $(srctree)/Makefile randconfig
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 6365f382d2fd..2712a5925515 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -69,4 +69,5 @@ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+ 
+ obj-$(CONFIG_EFI)		+= efi.o
+ obj-$(CONFIG_COMPAT)		+= compat_syscall_table.o
++obj-$(CONFIG_COMPAT)		+= compat_signal.o
+ obj-$(CONFIG_COMPAT)		+= compat_vdso/
+diff --git a/arch/riscv/kernel/compat_signal.c b/arch/riscv/kernel/compat_signal.c
+new file mode 100644
+index 000000000000..7041742ded08
+--- /dev/null
++++ b/arch/riscv/kernel/compat_signal.c
+@@ -0,0 +1,243 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +
-+PHONY += rv32_defconfig
-+rv32_defconfig:
-+	$(Q)$(MAKE) -f $(srctree)/Makefile defconfig 32-bit.config
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-deleted file mode 100644
-index 8b56a7f1eb06..000000000000
---- a/arch/riscv/configs/rv32_defconfig
-+++ /dev/null
-@@ -1,135 +0,0 @@
--CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_NO_HZ_IDLE=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_BPF_SYSCALL=y
--CONFIG_IKCONFIG=y
--CONFIG_IKCONFIG_PROC=y
--CONFIG_CGROUPS=y
--CONFIG_CGROUP_SCHED=y
--CONFIG_CFS_BANDWIDTH=y
--CONFIG_CGROUP_BPF=y
--CONFIG_NAMESPACES=y
--CONFIG_USER_NS=y
--CONFIG_CHECKPOINT_RESTORE=y
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_EXPERT=y
--# CONFIG_SYSFS_SYSCALL is not set
--CONFIG_SOC_SIFIVE=y
--CONFIG_SOC_VIRT=y
--CONFIG_ARCH_RV32I=y
--CONFIG_SMP=y
--CONFIG_HOTPLUG_CPU=y
--CONFIG_VIRTUALIZATION=y
--CONFIG_KVM=m
--CONFIG_JUMP_LABEL=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--CONFIG_IP_PNP_BOOTP=y
--CONFIG_IP_PNP_RARP=y
--CONFIG_NETLINK_DIAG=y
--CONFIG_NET_9P=y
--CONFIG_NET_9P_VIRTIO=y
--CONFIG_PCI=y
--CONFIG_PCIEPORTBUS=y
--CONFIG_PCI_HOST_GENERIC=y
--CONFIG_PCIE_XILINX=y
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_VIRTIO_BLK=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_BLK_DEV_SR=y
--CONFIG_SCSI_VIRTIO=y
--CONFIG_ATA=y
--CONFIG_SATA_AHCI=y
--CONFIG_SATA_AHCI_PLATFORM=y
--CONFIG_NETDEVICES=y
--CONFIG_VIRTIO_NET=y
--CONFIG_MACB=y
--CONFIG_E1000E=y
--CONFIG_R8169=y
--CONFIG_MICROSEMI_PHY=y
--CONFIG_INPUT_MOUSEDEV=y
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_SERIAL_OF_PLATFORM=y
--CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
--CONFIG_HVC_RISCV_SBI=y
--CONFIG_VIRTIO_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_HW_RANDOM_VIRTIO=y
--CONFIG_SPI=y
--CONFIG_SPI_SIFIVE=y
--# CONFIG_PTP_1588_CLOCK is not set
--CONFIG_DRM=y
--CONFIG_DRM_RADEON=y
--CONFIG_DRM_VIRTIO_GPU=y
--CONFIG_FB=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_USB=y
--CONFIG_USB_XHCI_HCD=y
--CONFIG_USB_XHCI_PLATFORM=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_EHCI_HCD_PLATFORM=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_OHCI_HCD_PLATFORM=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_UAS=y
--CONFIG_MMC=y
--CONFIG_MMC_SPI=y
--CONFIG_RTC_CLASS=y
--CONFIG_VIRTIO_PCI=y
--CONFIG_VIRTIO_BALLOON=y
--CONFIG_VIRTIO_INPUT=y
--CONFIG_VIRTIO_MMIO=y
--CONFIG_RPMSG_CHAR=y
--CONFIG_RPMSG_VIRTIO=y
--CONFIG_EXT4_FS=y
--CONFIG_EXT4_FS_POSIX_ACL=y
--CONFIG_AUTOFS4_FS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
--CONFIG_NFS_V4_2=y
--CONFIG_ROOT_NFS=y
--CONFIG_9P_FS=y
--CONFIG_CRYPTO_USER_API_HASH=y
--CONFIG_CRYPTO_DEV_VIRTIO=y
--CONFIG_PRINTK_TIME=y
--CONFIG_DEBUG_FS=y
--CONFIG_DEBUG_PAGEALLOC=y
--CONFIG_SCHED_STACK_END_CHECK=y
--CONFIG_DEBUG_VM=y
--CONFIG_DEBUG_VM_PGFLAGS=y
--CONFIG_DEBUG_MEMORY_INIT=y
--CONFIG_DEBUG_PER_CPU_MAPS=y
--CONFIG_SOFTLOCKUP_DETECTOR=y
--CONFIG_WQ_WATCHDOG=y
--CONFIG_DEBUG_TIMEKEEPING=y
--CONFIG_DEBUG_RT_MUTEXES=y
--CONFIG_DEBUG_SPINLOCK=y
--CONFIG_DEBUG_MUTEXES=y
--CONFIG_DEBUG_RWSEMS=y
--CONFIG_DEBUG_ATOMIC_SLEEP=y
--CONFIG_STACKTRACE=y
--CONFIG_DEBUG_LIST=y
--CONFIG_DEBUG_PLIST=y
--CONFIG_DEBUG_SG=y
--# CONFIG_RCU_TRACE is not set
--CONFIG_RCU_EQS_DEBUG=y
--# CONFIG_FTRACE is not set
--# CONFIG_RUNTIME_TESTING_MENU is not set
--CONFIG_MEMTEST=y
++#include <linux/compat.h>
++#include <linux/signal.h>
++#include <linux/uaccess.h>
++#include <linux/syscalls.h>
++#include <linux/tracehook.h>
++#include <linux/linkage.h>
++
++#include <asm/ucontext.h>
++#include <asm/vdso.h>
++#include <asm/switch_to.h>
++#include <asm/csr.h>
++
++#define COMPAT_DEBUG_SIG 0
++
++struct compat_sigcontext {
++	struct compat_user_regs_struct sc_regs;
++	union __riscv_fp_state sc_fpregs;
++};
++
++struct compat_ucontext {
++	compat_ulong_t		uc_flags;
++	struct compat_ucontext	*uc_link;
++	compat_stack_t		uc_stack;
++	sigset_t		uc_sigmask;
++	/* There's some padding here to allow sigset_t to be expanded in the
++	 * future.  Though this is unlikely, other architectures put uc_sigmask
++	 * at the end of this structure and explicitly state it can be
++	 * expanded, so we didn't want to box ourselves in here. */
++	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
++	/* We can't put uc_sigmask at the end of this structure because we need
++	 * to be able to expand sigcontext in the future.  For example, the
++	 * vector ISA extension will almost certainly add ISA state.  We want
++	 * to ensure all user-visible ISA state can be saved and restored via a
++	 * ucontext, so we're putting this at the end in order to allow for
++	 * infinite extensibility.  Since we know this will be extended and we
++	 * assume sigset_t won't be extended an extreme amount, we're
++	 * prioritizing this. */
++	struct compat_sigcontext uc_mcontext;
++};
++
++struct compat_rt_sigframe {
++	struct compat_siginfo info;
++	struct compat_ucontext uc;
++};
++
++#ifdef CONFIG_FPU
++static long compat_restore_fp_state(struct pt_regs *regs,
++	union __riscv_fp_state __user *sc_fpregs)
++{
++	long err;
++	struct __riscv_d_ext_state __user *state = &sc_fpregs->d;
++	size_t i;
++
++	err = __copy_from_user(&current->thread.fstate, state, sizeof(*state));
++	if (unlikely(err))
++		return err;
++
++	fstate_restore(current, regs);
++
++	/* We support no other extension state at this time. */
++	for (i = 0; i < ARRAY_SIZE(sc_fpregs->q.reserved); i++) {
++		u32 value;
++
++		err = __get_user(value, &sc_fpregs->q.reserved[i]);
++		if (unlikely(err))
++			break;
++		if (value != 0)
++			return -EINVAL;
++	}
++
++	return err;
++}
++
++static long compat_save_fp_state(struct pt_regs *regs,
++			  union __riscv_fp_state __user *sc_fpregs)
++{
++	long err;
++	struct __riscv_d_ext_state __user *state = &sc_fpregs->d;
++	size_t i;
++
++	fstate_save(current, regs);
++	err = __copy_to_user(state, &current->thread.fstate, sizeof(*state));
++	if (unlikely(err))
++		return err;
++
++	/* We support no other extension state at this time. */
++	for (i = 0; i < ARRAY_SIZE(sc_fpregs->q.reserved); i++) {
++		err = __put_user(0, &sc_fpregs->q.reserved[i]);
++		if (unlikely(err))
++			break;
++	}
++
++	return err;
++}
++#else
++#define compat_save_fp_state(task, regs) (0)
++#define compat_restore_fp_state(task, regs) (0)
++#endif
++
++static long compat_restore_sigcontext(struct pt_regs *regs,
++	struct compat_sigcontext __user *sc)
++{
++	long err;
++	struct compat_user_regs_struct cregs;
++
++	/* sc_regs is structured the same as the start of pt_regs */
++	err = __copy_from_user(&cregs, &sc->sc_regs, sizeof(sc->sc_regs));
++
++	cregs_to_regs(&cregs, regs);
++
++	/* Restore the floating-point state. */
++	if (has_fpu())
++		err |= compat_restore_fp_state(regs, &sc->sc_fpregs);
++	return err;
++}
++
++COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
++{
++	struct pt_regs *regs = current_pt_regs();
++	struct compat_rt_sigframe __user *frame;
++	struct task_struct *task;
++	sigset_t set;
++
++	/* Always make any pending restarted system calls return -EINTR */
++	current->restart_block.fn = do_no_restart_syscall;
++
++	frame = (struct compat_rt_sigframe __user *)regs->sp;
++
++	if (!access_ok(frame, sizeof(*frame)))
++		goto badframe;
++
++	if (__copy_from_user(&set, &frame->uc.uc_sigmask, sizeof(set)))
++		goto badframe;
++
++	set_current_blocked(&set);
++
++	if (compat_restore_sigcontext(regs, &frame->uc.uc_mcontext))
++		goto badframe;
++
++	if (compat_restore_altstack(&frame->uc.uc_stack))
++		goto badframe;
++
++	return regs->a0;
++
++badframe:
++	task = current;
++	if (show_unhandled_signals) {
++		pr_info_ratelimited(
++			"%s[%d]: bad frame in %s: frame=%p pc=%p sp=%p\n",
++			task->comm, task_pid_nr(task), __func__,
++			frame, (void *)regs->epc, (void *)regs->sp);
++	}
++	force_sig(SIGSEGV);
++	return 0;
++}
++
++static long compat_setup_sigcontext(struct compat_rt_sigframe __user *frame,
++	struct pt_regs *regs)
++{
++	struct compat_sigcontext __user *sc = &frame->uc.uc_mcontext;
++	struct compat_user_regs_struct cregs;
++	long err;
++
++	regs_to_cregs(&cregs, regs);
++
++	/* sc_regs is structured the same as the start of pt_regs */
++	err = __copy_to_user(&sc->sc_regs, &cregs, sizeof(sc->sc_regs));
++	/* Save the floating-point state. */
++	if (has_fpu())
++		err |= compat_save_fp_state(regs, &sc->sc_fpregs);
++	return err;
++}
++
++static inline void __user *compat_get_sigframe(struct ksignal *ksig,
++	struct pt_regs *regs, size_t framesize)
++{
++	unsigned long sp;
++	/* Default to using normal stack */
++	sp = regs->sp;
++
++	/*
++	 * If we are on the alternate signal stack and would overflow it, don't.
++	 * Return an always-bogus address instead so we will die with SIGSEGV.
++	 */
++	if (on_sig_stack(sp) && !likely(on_sig_stack(sp - framesize)))
++		return (void __user __force *)(-1UL);
++
++	/* This is the X/Open sanctioned signal stack switching. */
++	sp = sigsp(sp, ksig) - framesize;
++
++	/* Align the stack frame. */
++	sp &= ~0xfUL;
++
++	return (void __user *)sp;
++}
++
++int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
++	struct pt_regs *regs)
++{
++	struct compat_rt_sigframe __user *frame;
++	long err = 0;
++
++	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
++	if (!access_ok(frame, sizeof(*frame)))
++		return -EFAULT;
++
++	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
++
++	/* Create the ucontext. */
++	err |= __put_user(0, &frame->uc.uc_flags);
++	err |= __put_user(NULL, &frame->uc.uc_link);
++	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
++	err |= compat_setup_sigcontext(frame, regs);
++	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
++	if (err)
++		return -EFAULT;
++
++	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
++			current->mm->context.vdso, rt_sigreturn);
++
++	/*
++	 * Set up registers for signal handler.
++	 * Registers that we don't modify keep the value they had from
++	 * user-space at the time we took the signal.
++	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
++	 * since some things rely on this (e.g. glibc's debug/segfault.c).
++	 */
++	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
++	regs->sp = (unsigned long)frame;
++	regs->a0 = ksig->sig;                     /* a0: signal number */
++	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
++	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
++
++#if COMPAT_DEBUG_SIG
++	pr_info("SIG deliver (%s:%d): sig=%d pc=%p ra=%p sp=%p\n",
++		current->comm, task_pid_nr(current), ksig->sig,
++		(void *)regs->epc, (void *)regs->ra, frame);
++#endif
++
++	return 0;
++}
+diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+index c2d5ecbe5526..27d8f39228c4 100644
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -6,6 +6,7 @@
+  * Copyright (C) 2012 Regents of the University of California
+  */
+ 
++#include <linux/compat.h>
+ #include <linux/signal.h>
+ #include <linux/uaccess.h>
+ #include <linux/syscalls.h>
+@@ -229,6 +230,11 @@ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_COMPAT
++extern int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
++				 struct pt_regs *regs);
++#endif
++
+ static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
+ {
+ 	sigset_t *oldset = sigmask_to_save();
+@@ -258,8 +264,13 @@ static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
+ 		}
+ 	}
+ 
++#ifdef CONFIG_COMPAT
+ 	/* Set up the stack frame */
+-	ret = setup_rt_frame(ksig, oldset, regs);
++	if (is_compat_task())
++		ret = compat_setup_rt_frame(ksig, oldset, regs);
++	else
++#endif
++		ret = setup_rt_frame(ksig, oldset, regs);
+ 
+ 	signal_setup_done(ret, ksig, 0);
+ }
 -- 
 2.25.1
 

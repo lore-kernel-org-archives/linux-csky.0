@@ -2,31 +2,31 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1C3CC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFE81C4332F
 	for <linux-csky@archiver.kernel.org>; Mon, 11 Apr 2022 23:41:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238350AbiDKXoB (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 11 Apr 2022 19:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
+        id S237888AbiDKXoA (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 11 Apr 2022 19:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242510AbiDKXnN (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Apr 2022 19:43:13 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECFA2899B;
-        Mon, 11 Apr 2022 16:40:14 -0700 (PDT)
+        with ESMTP id S239027AbiDKXmI (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Apr 2022 19:42:08 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFA22316F;
+        Mon, 11 Apr 2022 16:39:45 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id D86491F43D58
+        with ESMTPSA id A8ED81F43D21
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649720412;
-        bh=hM34PKEn71kZ4xmXtCUPFr55eHz3/O1kuCmTOESUU4Y=;
+        s=mail; t=1649720384;
+        bh=3jxNCr50hXMiuQKPY6aSTyDwgW9MB8tpZKXxC2xIhis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PtPUJQlDJJ5rFuzVrYc+ESusSLLSHjZpdI9VFKwDgE+S5NJFGesj4Fc4uzYDZNjFE
-         Ocf1F6B6cNDijXJ8/rU+1itKUTFbA5k0hlMvClUxNU3r93u9bbCIlECnb3oK0D92VE
-         SmO2ItGQR3u4t4yU6MknssGmHsTeCAjU2I3E+avkHq/MTRdeRZ/rxlf8APJXUO/7bK
-         r60HG7usRXR0WITVJVWyXlqP8LliCU+Qfwy3xYSMvysUlHTbP4wCXc3foDBH00lfIw
-         n1XLBbyjWeLabI4Y6zfSOi7mGOmoxPMX56wdx1OGzy6vufi46SxqVuIBGfFcqihN3w
-         Oo5Wc9WAPzgqQ==
+        b=R6Pz+NW8C1nY5ThJ2I8cAwEUAIBn3TF8sggu7KSDpBA2Ut/0exz6Xps+3/DnVgwBN
+         qp6Lqyx7CPyAYk+qZkUxz2KCm7SnCRJ4eOYnawabjYhGt6nRnQa9Y02z/Ytkv2jXpZ
+         wEcsyt2MDHlC1WX/nw52J0c857HvVJOhLeDrY7yRKznEzlbGj2ZC8hDBsKt1V+pZeP
+         zbdktiCEBi99v8s5+GasfGckA5YJsjqZH0zL18RDx2s4TE9tXf9pP/XNP1Ahm7vU8u
+         u3DSr1rfrTs/d19jgQcujhTQ+xjiQHnAYsKAqXTDcAVEVHrQCWORpLx/uihf64AFFO
+         sfXLGACDgXMIg==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,9 +78,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v7 19/20] regulator: pfuze100: Use devm_register_sys_off_handler()
-Date:   Tue, 12 Apr 2022 02:38:31 +0300
-Message-Id: <20220411233832.391817-20-dmitry.osipenko@collabora.com>
+Subject: [PATCH v7 12/20] m68k: Switch to new sys-off handler API
+Date:   Tue, 12 Apr 2022 02:38:24 +0300
+Message-Id: <20220411233832.391817-13-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
 References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
@@ -90,107 +90,132 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Use devm_register_sys_off_handler() that replaces global
-pm_power_off_prepare variable and allows to register multiple
-power-off handlers.
+Kernel now supports chained power-off handlers. Use
+register_power_off_handler() that registers power-off handlers and
+do_kernel_power_off() that invokes chained power-off handlers. Legacy
+pm_power_off() will be removed once all drivers will be converted to
+the new power-off API.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Normally arch code should adopt only the do_kernel_power_off() at first,
+but m68k is a special case because it uses pm_power_off() "inside out",
+i.e. pm_power_off() invokes machine_power_off() [in fact it does nothing],
+while it's machine_power_off() that should invoke the pm_power_off(), and
+thus, we can't convert platforms to the new API separately. There are only
+two platforms changed here, so it's not a big deal.
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/regulator/pfuze100-regulator.c | 38 ++++++++++----------------
- 1 file changed, 14 insertions(+), 24 deletions(-)
+ arch/m68k/emu/natfeat.c         | 3 ++-
+ arch/m68k/include/asm/machdep.h | 1 -
+ arch/m68k/kernel/process.c      | 5 ++---
+ arch/m68k/kernel/setup_mm.c     | 1 -
+ arch/m68k/kernel/setup_no.c     | 1 -
+ arch/m68k/mac/config.c          | 4 +++-
+ 6 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/regulator/pfuze100-regulator.c b/drivers/regulator/pfuze100-regulator.c
-index d60d7d1b7fa2..2eca8d43a097 100644
---- a/drivers/regulator/pfuze100-regulator.c
-+++ b/drivers/regulator/pfuze100-regulator.c
-@@ -10,6 +10,7 @@
- #include <linux/of_device.h>
- #include <linux/regulator/of_regulator.h>
- #include <linux/platform_device.h>
+diff --git a/arch/m68k/emu/natfeat.c b/arch/m68k/emu/natfeat.c
+index 71b78ecee75c..b19dc00026d9 100644
+--- a/arch/m68k/emu/natfeat.c
++++ b/arch/m68k/emu/natfeat.c
+@@ -15,6 +15,7 @@
+ #include <linux/string.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
 +#include <linux/reboot.h>
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
- #include <linux/regulator/pfuze100.h>
-@@ -76,6 +77,7 @@ struct pfuze_chip {
- 	struct pfuze_regulator regulator_descs[PFUZE100_MAX_REGULATOR];
- 	struct regulator_dev *regulators[PFUZE100_MAX_REGULATOR];
- 	struct pfuze_regulator *pfuze_regulators;
-+	struct sys_off_handler sys_off;
- };
+ #include <linux/io.h>
+ #include <asm/machdep.h>
+ #include <asm/natfeat.h>
+@@ -90,5 +91,5 @@ void __init nf_init(void)
+ 	pr_info("NatFeats found (%s, %lu.%lu)\n", buf, version >> 16,
+ 		version & 0xffff);
  
- static const int pfuze100_swbst[] = {
-@@ -569,10 +571,10 @@ static inline struct device_node *match_of_node(int index)
- 	return pfuze_matches[index].of_node;
+-	mach_power_off = nf_poweroff;
++	register_platform_power_off(nf_poweroff);
  }
+diff --git a/arch/m68k/include/asm/machdep.h b/arch/m68k/include/asm/machdep.h
+index 8fd80ef1b77e..8d8c3ee2069f 100644
+--- a/arch/m68k/include/asm/machdep.h
++++ b/arch/m68k/include/asm/machdep.h
+@@ -24,7 +24,6 @@ extern int (*mach_get_rtc_pll)(struct rtc_pll_info *);
+ extern int (*mach_set_rtc_pll)(struct rtc_pll_info *);
+ extern void (*mach_reset)( void );
+ extern void (*mach_halt)( void );
+-extern void (*mach_power_off)( void );
+ extern unsigned long (*mach_hd_init) (unsigned long, unsigned long);
+ extern void (*mach_hd_setup)(char *, int *);
+ extern void (*mach_heartbeat) (int);
+diff --git a/arch/m68k/kernel/process.c b/arch/m68k/kernel/process.c
+index a6030dbaa089..e160a7c57bd3 100644
+--- a/arch/m68k/kernel/process.c
++++ b/arch/m68k/kernel/process.c
+@@ -67,12 +67,11 @@ void machine_halt(void)
  
--static struct pfuze_chip *syspm_pfuze_chip;
--
--static void pfuze_power_off_prepare(void)
-+static void pfuze_power_off_prepare(struct power_off_prep_data *data)
+ void machine_power_off(void)
  {
-+	struct pfuze_chip *syspm_pfuze_chip = data->cb_data;
-+
- 	dev_info(syspm_pfuze_chip->dev, "Configure standby mode for power off");
- 
- 	/* Switch from default mode: APS/APS to APS/Off */
-@@ -611,24 +613,23 @@ static void pfuze_power_off_prepare(void)
- 
- static int pfuze_power_off_prepare_init(struct pfuze_chip *pfuze_chip)
- {
-+	int err;
-+
- 	if (pfuze_chip->chip_id != PFUZE100) {
- 		dev_warn(pfuze_chip->dev, "Requested pm_power_off_prepare handler for not supported chip\n");
- 		return -ENODEV;
- 	}
- 
--	if (pm_power_off_prepare) {
--		dev_warn(pfuze_chip->dev, "pm_power_off_prepare is already registered.\n");
--		return -EBUSY;
--	}
-+	pfuze_chip->sys_off.power_off_prepare_cb = pfuze_power_off_prepare;
-+	pfuze_chip->sys_off.cb_data = pfuze_chip;
- 
--	if (syspm_pfuze_chip) {
--		dev_warn(pfuze_chip->dev, "syspm_pfuze_chip is already set.\n");
--		return -EBUSY;
-+	err = devm_register_sys_off_handler(pfuze_chip->dev, &pfuze_chip->sys_off);
-+	if (err) {
-+		dev_err(pfuze_chip->dev,
-+			"failed to register sys-off handler: %d\n", err);
-+		return err;
- 	}
- 
--	syspm_pfuze_chip = pfuze_chip;
--	pm_power_off_prepare = pfuze_power_off_prepare;
--
- 	return 0;
+-	if (mach_power_off)
+-		mach_power_off();
++	do_kernel_power_off();
+ 	for (;;);
  }
  
-@@ -837,23 +838,12 @@ static int pfuze100_regulator_probe(struct i2c_client *client,
- 	return 0;
+-void (*pm_power_off)(void) = machine_power_off;
++void (*pm_power_off)(void);
+ EXPORT_SYMBOL(pm_power_off);
+ 
+ void show_regs(struct pt_regs * regs)
+diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
+index 8f94feed969c..47d55541612f 100644
+--- a/arch/m68k/kernel/setup_mm.c
++++ b/arch/m68k/kernel/setup_mm.c
+@@ -98,7 +98,6 @@ EXPORT_SYMBOL(mach_get_rtc_pll);
+ EXPORT_SYMBOL(mach_set_rtc_pll);
+ void (*mach_reset)( void );
+ void (*mach_halt)( void );
+-void (*mach_power_off)( void );
+ #ifdef CONFIG_HEARTBEAT
+ void (*mach_heartbeat) (int);
+ EXPORT_SYMBOL(mach_heartbeat);
+diff --git a/arch/m68k/kernel/setup_no.c b/arch/m68k/kernel/setup_no.c
+index 5e4104f07a44..00bf82258233 100644
+--- a/arch/m68k/kernel/setup_no.c
++++ b/arch/m68k/kernel/setup_no.c
+@@ -55,7 +55,6 @@ int (*mach_hwclk) (int, struct rtc_time*);
+ /* machine dependent reboot functions */
+ void (*mach_reset)(void);
+ void (*mach_halt)(void);
+-void (*mach_power_off)(void);
+ 
+ #ifdef CONFIG_M68000
+ #if defined(CONFIG_M68328)
+diff --git a/arch/m68k/mac/config.c b/arch/m68k/mac/config.c
+index 65d124ec80bb..382f656c29ea 100644
+--- a/arch/m68k/mac/config.c
++++ b/arch/m68k/mac/config.c
+@@ -12,6 +12,7 @@
+ 
+ #include <linux/errno.h>
+ #include <linux/module.h>
++#include <linux/reboot.h>
+ #include <linux/types.h>
+ #include <linux/mm.h>
+ #include <linux/tty.h>
+@@ -140,7 +141,6 @@ void __init config_mac(void)
+ 	mach_hwclk = mac_hwclk;
+ 	mach_reset = mac_reset;
+ 	mach_halt = mac_poweroff;
+-	mach_power_off = mac_poweroff;
+ #if IS_ENABLED(CONFIG_INPUT_M68K_BEEP)
+ 	mach_beep = mac_mksound;
+ #endif
+@@ -160,6 +160,8 @@ void __init config_mac(void)
+ 
+ 	if (macintosh_config->ident == MAC_MODEL_IICI)
+ 		mach_l2_flush = via_l2_flush;
++
++	register_platform_power_off(mac_poweroff);
  }
  
--static int pfuze100_regulator_remove(struct i2c_client *client)
--{
--	if (syspm_pfuze_chip) {
--		syspm_pfuze_chip = NULL;
--		pm_power_off_prepare = NULL;
--	}
--
--	return 0;
--}
--
- static struct i2c_driver pfuze_driver = {
- 	.driver = {
- 		.name = "pfuze100-regulator",
- 		.of_match_table = pfuze_dt_ids,
- 	},
- 	.probe = pfuze100_regulator_probe,
--	.remove = pfuze100_regulator_remove,
- };
- module_i2c_driver(pfuze_driver);
  
 -- 
 2.35.1

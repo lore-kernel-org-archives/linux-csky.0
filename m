@@ -2,125 +2,56 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C908CC433F5
-	for <linux-csky@archiver.kernel.org>; Tue, 12 Apr 2022 11:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD878C433F5
+	for <linux-csky@archiver.kernel.org>; Wed, 13 Apr 2022 09:42:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiDLLJ7 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 12 Apr 2022 07:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S234678AbiDMJop (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 13 Apr 2022 05:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354058AbiDLLFC (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 12 Apr 2022 07:05:02 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7646265799;
-        Tue, 12 Apr 2022 02:56:07 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id CA7361F44465
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649757366;
-        bh=zGnnxmSlqh0YJeepd6leEtd3OpvyuoG43h8kmGFF2wc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=P61L93uCY2BzkAlZkIa7DkNYhLesoazkWjHR45+XoCKZ8ns44JwAXtKwQtsKB5IWu
-         LBnshgET/1to4NkH52cenj6AcmR1fzToetNSgDLXX18/JYkgkQQSwZdaXlqZHCnpKj
-         1GBxRjPOedK74qEOQrXw+d5AInCvSk+FnCDQJJggENcP/eOVY2//qX2NkpjVfzBsqa
-         1dFmWcLJ7EUVzhKFegMKqxZGBg1v/mwnu50TrXhdgNf6aMdvdkZzAOzeVFn7EFF2vi
-         bG+4SHDoaE6xdqEupYSgMD2ed1PrE/GTXU258Xq63ayijsB2BJhDrJNAYUxYDRgOkh
-         gETvkTIe02RWg==
-Message-ID: <1b95163a-4b4d-3c0d-440d-0b6dd608b393@collabora.com>
-Date:   Tue, 12 Apr 2022 12:55:59 +0300
+        with ESMTP id S230400AbiDMJog (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Apr 2022 05:44:36 -0400
+Received: from mail.growthmindset24.pl (mail.growthmindset24.pl [212.237.36.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAA5554AA
+        for <linux-csky@vger.kernel.org>; Wed, 13 Apr 2022 02:42:16 -0700 (PDT)
+Received: by mail.growthmindset24.pl (Postfix, from userid 1001)
+        id BFAC288136; Tue, 12 Apr 2022 08:56:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=growthmindset24.pl;
+        s=mail; t=1649750217;
+        bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=TZly/fmkgaMnuzfWbRKuTbtfC/v79fneZg16/b7Rn18dnjx+LLSFpyVkkd3lxNEYb
+         TrCePTE+AggY8WNYu4tuKQ+CmtyG/cLfdWpsz9NSaP+41CPFMK1YVhn4He1GOYWm4w
+         QFU3OoYmTFv4nSeAy/OJTsWbWf/HiIX4SSKNsc29xYTuTnKlAaiNH/f3IxJqsmfuAd
+         KrLou+awnxS0C/O7+7o0yyHMzeRXSw0JIV1DMbYFu+7Y68fhvLQ1mvdEkSotrk0IcO
+         hzO3tTPXz5Gzs1eAWXk6bKZ1mXPr6jlz/fCVeqnvqnAAqAbN/drGNJ4xaCL9SMrfpK
+         8I54EkQKJoA1Q==
+Received: by mail.growthmindset24.pl for <linux-csky@vger.kernel.org>; Tue, 12 Apr 2022 07:56:00 GMT
+Message-ID: <20220412073001-0.1.2w.d8g3.0.345ljhikyy@growthmindset24.pl>
+Date:   Tue, 12 Apr 2022 07:56:00 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@growthmindset24.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.growthmindset24.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 16/20] mips: Use do_kernel_power_off()
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
- <20220411233832.391817-17-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220411233832.391817-17-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On 4/12/22 02:38, Dmitry Osipenko wrote:
-> Kernel now supports chained power-off handlers. Use do_kernel_power_off()
-> that invokes chained power-off handlers. It also invokes legacy
-> pm_power_off() for now, which will be removed once all drivers will
-> be converted to the new power-off API.
-> 
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  arch/mips/kernel/reset.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/reset.c b/arch/mips/kernel/reset.c
-> index 6288780b779e..e7ce07b3e79b 100644
-> --- a/arch/mips/kernel/reset.c
-> +++ b/arch/mips/kernel/reset.c
-> @@ -114,8 +114,7 @@ void machine_halt(void)
->  
->  void machine_power_off(void)
->  {
-> -	if (pm_power_off)
-> -		pm_power_off();
-> +	do_kernel_power_off();
->  
->  #ifdef CONFIG_SMP
->  	preempt_disable();
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Adding ack from Thomas that he gave to v6. It's missing in v7 by accident.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski

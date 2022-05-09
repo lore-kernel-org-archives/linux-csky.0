@@ -2,31 +2,31 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E633BC4167B
-	for <linux-csky@archiver.kernel.org>; Mon,  9 May 2022 23:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 883ACC4332F
+	for <linux-csky@archiver.kernel.org>; Mon,  9 May 2022 23:34:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiEIXh5 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 9 May 2022 19:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S232848AbiEIXiG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 9 May 2022 19:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232634AbiEIXhx (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 9 May 2022 19:37:53 -0400
+        with ESMTP id S232934AbiEIXh7 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 9 May 2022 19:37:59 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036AE22A8B2;
-        Mon,  9 May 2022 16:33:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C1B21E30B;
+        Mon,  9 May 2022 16:33:59 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id EB6021F43062
+        with ESMTPSA id 6209F1F441DD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652139206;
-        bh=ADq4GZWEPNK7q9JUz/PJH0s7RkDgF/Hn0bL9XYpd1xY=;
+        s=mail; t=1652139238;
+        bh=UUAJJ/IBIhNY6NA1AxJmIDD0rKb6vfi9bj1ZHogZ1sk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGyjgFeHS4c4whO9DLRPI4YnH/I1kcxhGjuZMUHWMXxrPTowBH3nsSioG+grbG2E8
-         mnkheS9YppXiE1XFZmpN8+NhD/nzj2UXihmV79dBZXmBvvWVTCKWXHTP8bvClUAXj1
-         4nlNgidw2ooBaq465rODMaKeABNVE6nkuJ7Q8Xm3bGYMUs6PLqgcdGYa5CtQU2PUK/
-         Jza3RN8pd4IlpFmarCSW5s3ufDshdt5+jjA/5gruEo9hsKxIniPgqZA10L6lW8+LoM
-         tuiD7AddByNEUUZsYAIaBWxhshHGAxlCDHWH4Mq16erEhm603eMlSqLobcqsLKpUet
-         qm4lCWHEs4Jdw==
+        b=TkUASExCPh+FoXzL2OnCGIIu2Z2HXaBISDFgR7ixWfN1WdyIfCSpaUflnD7rWGxDG
+         vQCzwQpQuFj71TlHQA9DCAV9sF+sdQH9hcN7lAC3LqA9C4TbZrGN3bNuc1ngng/O7i
+         rySb86VyOpMwBjDX/TS735BJig4rEchyEIwVD9KJ+d21dHQBFQDukdAhgeiYB28NSu
+         ynWq6arqtBNX91H7sywe74sjkSSFI7BlaiTD+aG/xhTaRyK3ZGoePGigvGG/rQBHkh
+         cCEmV1YRV999ye8BFKhlDYmcEURuTzQcgUzY2QPWWaOq0izK+9ObffwREMFkcbNPRX
+         aXMbf/7L3uBQA==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -78,44 +78,53 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v8 06/27] kernel/reboot: Add stub for pm_power_off
-Date:   Tue, 10 May 2022 02:32:14 +0300
-Message-Id: <20220509233235.995021-7-dmitry.osipenko@collabora.com>
+Subject: [PATCH v8 14/27] xen/x86: Use do_kernel_power_off()
+Date:   Tue, 10 May 2022 02:32:22 +0300
+Message-Id: <20220509233235.995021-15-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
 References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Add weak stub for the global pm_power_off callback variable. This will
-allow us to remove pm_power_off definitions from arch/ code and transition
-to the new sys-off based API that will replace the global variable.
+Kernel now supports chained power-off handlers. Use do_kernel_power_off()
+that invokes chained power-off handlers. It also invokes legacy
+pm_power_off() for now, which will be removed once all drivers will
+be converted to the new sys-off API.
 
+Acked-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- kernel/reboot.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/x86/xen/enlighten_pv.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 9afa99a32d62..eaede35f45e2 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -57,6 +57,12 @@ struct sys_off_handler {
- 	void *list;
- };
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 5038edb79ad5..af1f6e886225 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -31,6 +31,7 @@
+ #include <linux/gfp.h>
+ #include <linux/edd.h>
+ #include <linux/objtool.h>
++#include <linux/reboot.h>
  
-+/*
-+ * Temporary stub that prevents linkage failure while we're in process
-+ * of removing all uses of legacy pm_power_off() around the kernel.
-+ */
-+void __weak (*pm_power_off)(void);
-+
- /*
-  * If set, this is used for preparing the system to power off.
-  */
+ #include <xen/xen.h>
+ #include <xen/events.h>
+@@ -1071,8 +1072,7 @@ static void xen_machine_halt(void)
+ 
+ static void xen_machine_power_off(void)
+ {
+-	if (pm_power_off)
+-		pm_power_off();
++	do_kernel_power_off();
+ 	xen_reboot(SHUTDOWN_poweroff);
+ }
+ 
 -- 
 2.35.1
 

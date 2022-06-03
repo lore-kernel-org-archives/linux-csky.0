@@ -2,24 +2,24 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ED85CCA47D
-	for <linux-csky@archiver.kernel.org>; Fri,  3 Jun 2022 10:15:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A64EFCCA480
+	for <linux-csky@archiver.kernel.org>; Fri,  3 Jun 2022 10:15:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243474AbiFCKOy (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 3 Jun 2022 06:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S243502AbiFCKPI (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 3 Jun 2022 06:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243391AbiFCKOs (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 3 Jun 2022 06:14:48 -0400
+        with ESMTP id S243465AbiFCKPG (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 3 Jun 2022 06:15:06 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A442D3B28A;
-        Fri,  3 Jun 2022 03:14:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADE3A3B284;
+        Fri,  3 Jun 2022 03:15:04 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4523F150C;
-        Fri,  3 Jun 2022 03:14:46 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 130BB15A1;
+        Fri,  3 Jun 2022 03:15:04 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.42.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 69DED3F766;
-        Fri,  3 Jun 2022 03:14:37 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 864F13F766;
+        Fri,  3 Jun 2022 03:14:55 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
@@ -41,11 +41,10 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
         linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: [PATCH 2/6] s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Fri,  3 Jun 2022 15:44:07 +0530
-Message-Id: <20220603101411.488970-3-anshuman.khandual@arm.com>
+        Guo Ren <guoren@kernel.org>
+Subject: [PATCH 4/6] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Fri,  3 Jun 2022 15:44:09 +0530
+Message-Id: <20220603101411.488970-5-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220603101411.488970-1-anshuman.khandual@arm.com>
 References: <20220603101411.488970-1-anshuman.khandual@arm.com>
@@ -59,66 +58,65 @@ This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
 macros can be dropped which are no longer needed.
 
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-csky@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Acked-by: Sven Schnelle <svens@linux.ibm.com>
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Acked-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/s390/Kconfig               |  1 +
- arch/s390/include/asm/pgtable.h | 17 -----------------
- arch/s390/mm/mmap.c             | 33 +++++++++++++++++++++++++++++++++
- 3 files changed, 34 insertions(+), 17 deletions(-)
+ arch/csky/Kconfig               |  1 +
+ arch/csky/include/asm/pgtable.h | 18 ------------------
+ arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 18 deletions(-)
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index b17239ae7bd4..cdcf678deab1 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -81,6 +81,7 @@ config S390
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_VDSO_DATA
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 21d72b078eef..588b8a9c68ed 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -6,6 +6,7 @@ config CSKY
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_INLINE_READ_LOCK
- 	select ARCH_INLINE_READ_LOCK_BH
-diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-index a397b072a580..c63a05b5368a 100644
---- a/arch/s390/include/asm/pgtable.h
-+++ b/arch/s390/include/asm/pgtable.h
-@@ -424,23 +424,6 @@ static inline int is_module_addr(void *addr)
-  * implies read permission.
-  */
-          /*xwr*/
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
+diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+index bbe245117777..229a5f4ad7fc 100644
+--- a/arch/csky/include/asm/pgtable.h
++++ b/arch/csky/include/asm/pgtable.h
+@@ -77,24 +77,6 @@
+ #define MAX_SWAPFILES_CHECK() \
+ 		BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
+ 
 -#define __P000	PAGE_NONE
--#define __P001	PAGE_RO
--#define __P010	PAGE_RO
--#define __P011	PAGE_RO
--#define __P100	PAGE_RX
--#define __P101	PAGE_RX
--#define __P110	PAGE_RX
--#define __P111	PAGE_RX
+-#define __P001	PAGE_READ
+-#define __P010	PAGE_READ
+-#define __P011	PAGE_READ
+-#define __P100	PAGE_READ
+-#define __P101	PAGE_READ
+-#define __P110	PAGE_READ
+-#define __P111	PAGE_READ
 -
 -#define __S000	PAGE_NONE
--#define __S001	PAGE_RO
--#define __S010	PAGE_RW
--#define __S011	PAGE_RW
--#define __S100	PAGE_RX
--#define __S101	PAGE_RX
--#define __S110	PAGE_RWX
--#define __S111	PAGE_RWX
+-#define __S001	PAGE_READ
+-#define __S010	PAGE_WRITE
+-#define __S011	PAGE_WRITE
+-#define __S100	PAGE_READ
+-#define __S101	PAGE_READ
+-#define __S110	PAGE_WRITE
+-#define __S111	PAGE_WRITE
+-
+ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+ #define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
  
- /*
-  * Segment entry (large page) protection definitions.
-diff --git a/arch/s390/mm/mmap.c b/arch/s390/mm/mmap.c
-index d545f5c39f7e..11d75b8d5ec0 100644
---- a/arch/s390/mm/mmap.c
-+++ b/arch/s390/mm/mmap.c
-@@ -188,3 +188,36 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
- 		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
- 	}
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index bf2004aa811a..f9babbed17d4 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -197,3 +197,35 @@ void __init fixaddr_init(void)
+ 	vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
+ 	fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
  }
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
@@ -129,25 +127,24 @@ index d545f5c39f7e..11d75b8d5ec0 100644
 +	case VM_READ:
 +	case VM_WRITE:
 +	case VM_WRITE | VM_READ:
-+		return PAGE_RO;
 +	case VM_EXEC:
 +	case VM_EXEC | VM_READ:
 +	case VM_EXEC | VM_WRITE:
 +	case VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_RX;
++		return PAGE_READ;
 +	case VM_SHARED:
 +		return PAGE_NONE;
 +	case VM_SHARED | VM_READ:
-+		return PAGE_RO;
++		return PAGE_READ;
 +	case VM_SHARED | VM_WRITE:
 +	case VM_SHARED | VM_WRITE | VM_READ:
-+		return PAGE_RW;
++		return PAGE_WRITE;
 +	case VM_SHARED | VM_EXEC:
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_RX;
++		return PAGE_READ;
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
 +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_RWX;
++		return PAGE_WRITE;
 +	default:
 +		BUILD_BUG();
 +	}

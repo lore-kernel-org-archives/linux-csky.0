@@ -2,110 +2,95 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F8BC43334
-	for <linux-csky@archiver.kernel.org>; Thu, 14 Jul 2022 05:08:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 717FBC43334
+	for <linux-csky@archiver.kernel.org>; Thu, 14 Jul 2022 21:47:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiGNFIJ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 14 Jul 2022 01:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S231709AbiGNVrT (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 14 Jul 2022 17:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiGNFH2 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Jul 2022 01:07:28 -0400
-Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4DC1182C
-        for <linux-csky@vger.kernel.org>; Wed, 13 Jul 2022 22:06:07 -0700 (PDT)
-Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-01.nifty.com with ESMTP id 26E540WO010415
-        for <linux-csky@vger.kernel.org>; Thu, 14 Jul 2022 14:04:00 +0900
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id 26E52j5D024585;
-        Thu, 14 Jul 2022 14:02:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 26E52j5D024585
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1657774966;
-        bh=Jr7tDxJGBjHD4R2T6y2BGZyaLDORK8ue4Iw5NULwlPw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KD4/RiZBeLgrfUJnF4tmVDZ7vhdwFi4kzqb838JEmg77VoHeijXW3pOK+9+U8r3JC
-         05elbRclIpZuBE/OKG6M3hC12hHI2b2Uhn7iqWQF09u57299NhdR8Su8hcuFILDWO9
-         lZ/daEKJJPssyU+W1ens3ERZ16LwwENlDNMw0piUc/R5V1rCo+rbbVavwSAbxDYLcB
-         iryf7Qejyzc6K/3K2EZpu6F/mwGDIP8Nac1bJVA1j90PSUBUCtH6Cxe7IkHWkuxw6r
-         dvEKNmMs9/grc5RQcD85BU1PNDSepbmlvzWtC5M/wq1RzBJgXJDN5Z4O1DDDA2bW1M
-         p/MdB1GpqUF5w==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Jason Self <jason@bluehome.net>, Guo Ren <guoren@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] kbuild: rpm-pkg: fix build error when _arch is undefined
-Date:   Thu, 14 Jul 2022 14:02:40 +0900
-Message-Id: <20220714050243.16411-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229984AbiGNVrT (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Jul 2022 17:47:19 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D1E6F7C8;
+        Thu, 14 Jul 2022 14:47:18 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id z1so1583113plb.1;
+        Thu, 14 Jul 2022 14:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/JBraEEF7Pi/rPUlvSul3up/f1rkIrFL2lXpXxABUjo=;
+        b=lscc9nAaqk/gLbSr2XL8YrPRs/zyT8T4SiE+UzcwyfJZDejV2V03/Ceml36zOXDw2j
+         GSw5Bz+NY1ohcFs2Y+SbhIHhCmrrBRefc9Ctq2tTml3QpKdab/V6fYGRGmiVrgBUngI1
+         99Q4DNc0rMuLLiHGkogfp/rrBqI7OQKuhgDfVe9wNw9mtmWkUZ0MuZBbsOMzAVRzGvLD
+         9xrGld/ogqVffulMZ1eEaY/hE23kNAH0MTXlQDS3QZykMAvUoMSZwpUr0kXvMYTo6mw+
+         feoN81IqGiQNmpkPgcbCkP6v7rV2i5qe9SRfa03yGMJNePPiSyC36JkgtWtmZHn9FToR
+         7dKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/JBraEEF7Pi/rPUlvSul3up/f1rkIrFL2lXpXxABUjo=;
+        b=6QwXP10Cr/vxxjLJSZ/JduPHFicz+Gs1pjFXtD0jKhHC6YW+vjazKoiGDCyOkl0YtC
+         1/Hl+aLEdkqCOEt5hPwpXjeUFVoaZ9UkiaShQfLRWUQk+J3wFZkk688aPqMzAUjllg/u
+         vfdWnISFLvOf5rlQ++3rAbeB/yx9z2YiewUyJ0E3vQmj+fdWPM3UwyBWHpgI5+G0zl5k
+         Rz9NV42wyjoGfa8A+IvUZYkdAfdlr7b99x04mEdiEisMlLTcN3hVdSQkMYqcDp4/ABBY
+         vgU3sO8I2Atm8tKlVflU/tAOgE2xVhq7HSzBikqjJx7yAvWZd+b2SfDewhMUzIPRk5/F
+         vREA==
+X-Gm-Message-State: AJIora8Sqxb2/rc66bp0RsaYxKzplpdwEWRVDzMdarjEddkfoJy5oRNi
+        GVsOkqKEu6tM1brXZFI8tNYzK5aks4UKjQ==
+X-Google-Smtp-Source: AGRyM1v5QC4ANKVLVpkPuuJcTPGQopcKs4QNjHemdLKq1UTYUTez/Vz/d5mLTfj3qgv8jyrxm1KP0A==
+X-Received: by 2002:a17:90b:3c07:b0:1f0:eab4:79e4 with SMTP id pb7-20020a17090b3c0700b001f0eab479e4mr3015352pjb.186.1657835237487;
+        Thu, 14 Jul 2022 14:47:17 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id v21-20020a17090ac91500b001f113765d48sm145572pjt.2.2022.07.14.14.47.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 14:47:17 -0700 (PDT)
+From:   Stafford Horne <shorne@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Stafford Horne <shorne@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+Subject: [RFC PATCH 0/2] Updates for asm-generic/pci.h
+Date:   Fri, 15 Jul 2022 06:46:55 +0900
+Message-Id: <20220714214657.2402250-1-shorne@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Cross-building (bin)rpm-pkg fails on several architectures.
+When reviewing the OpenRISC PCI support patch Arnd suggested that
+we avoid copying arm64 and riscv asm/pci.h and moving that to be
+the new asm-generic/pci.h.
 
-For example, 'make ARCH=arm binrpm-pkg' fails like follows:
+This patch does that by first moving the old pci.h definition
+of pci_get_legacy_ide_irq out to the architectures that use it.
+Next, we create the new pci.h definition.
 
-  sh ./scripts/package/mkspec prebuilt > ./binkernel.spec
-  rpmbuild  --define "_builddir ." --target \
-          arm -bb ./binkernel.spec
-  Building target platforms: arm
-  Building for target arm
-  warning: line 19: It's not recommended to have unversioned Obsoletes: Obsoletes: kernel-headers
-  Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.0S8t2F
-  + umask 022
-  + cd .
-  + mkdir -p /home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.%{_arch}/boot
-  + make -f ./Makefile image_name
-  + cp arch/arm/boot/zImage /home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.%{_arch}/boot/vmlinuz-5.19.0-rc6
-  + make -f ./Makefile INSTALL_MOD_PATH=/home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.%{_arch} modules_install
-  make[3]: *** No rule to make target '/home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.arch/arm/crypto/aes-arm-bs.ko{_arch}/lib/modules/5.19.0-rc6/kernel/%', needed by '__modinst'.  Stop.
-  make[2]: *** [Makefile:1768: modules_install] Error 2
-  error: Bad exit status from /var/tmp/rpm-tmp.0S8t2F (%install)
+Stafford Horne (2):
+  asm-generic: Remove pci.h copying code out to architectures
+  asm-generic: Add new pci.h and use it
 
-By default, 'buildroot' contains %{_arch} (see /usr/lib/rpm/macros).
+ arch/alpha/include/asm/pci.h   |  1 -
+ arch/arm64/include/asm/pci.h   | 18 ++-----------
+ arch/csky/include/asm/pci.h    | 24 +++--------------
+ arch/ia64/include/asm/pci.h    |  1 -
+ arch/m68k/include/asm/pci.h    |  7 +++--
+ arch/powerpc/include/asm/pci.h |  1 -
+ arch/riscv/include/asm/pci.h   | 25 +++--------------
+ arch/s390/include/asm/pci.h    |  6 ++++-
+ arch/sparc/include/asm/pci.h   |  5 +++-
+ arch/um/include/asm/pci.h      | 24 ++---------------
+ arch/x86/include/asm/pci.h     |  6 +++--
+ arch/xtensa/include/asm/pci.h  |  6 +++--
+ include/asm-generic/pci.h      | 49 +++++++++++++++++++++++++---------
+ 13 files changed, 69 insertions(+), 104 deletions(-)
 
-_arch is generally defined in /usr/lib/rpm/platforms/*/macros, where
-the platform sub-directory is specified by --target= option for cross
-builds.
-
-If the given arch does not exist, %{_arch} is not expanded.
-In the example above, --target=arm is passed to rpmbuild, but
-/usr/lib/rpm/platforms/arm-linux/ does not exist.
-
-The '%' character in the path confuses GNU make and rpmbuild.
-
-The same occurs for such architectures as csky, microblaze, nios2, etc.
-
-Define _arch if it has not been defined.
-
-Reported-by: Jason Self <jason@bluehome.net>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/package/mkspec | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-index 7c477ca7dc98..8fa7c5b8a1a1 100755
---- a/scripts/package/mkspec
-+++ b/scripts/package/mkspec
-@@ -49,6 +49,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
- 	URL: https://www.kernel.org
- $S	Source: kernel-$__KERNELRELEASE.tar.gz
- 	Provides: $PROVIDES
-+	# $UTS_MACHINE as a fallback of _arch in case
-+	# /usr/lib/rpm/platform/*/macros was not included.
-+	%define _arch %{?_arch:$UTS_MACHINE}
- 	%define __spec_install_post /usr/lib/rpm/brp-compress || :
- 	%define debug_package %{nil}
- 
 -- 
-2.34.1
+2.36.1
 

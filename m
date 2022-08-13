@@ -2,191 +2,140 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CB7C00140
-	for <linux-csky@archiver.kernel.org>; Mon,  8 Aug 2022 07:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9956C25B0E
+	for <linux-csky@archiver.kernel.org>; Sat, 13 Aug 2022 22:00:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235718AbiHHHZo (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 8 Aug 2022 03:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S240258AbiHMWAr (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sat, 13 Aug 2022 18:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235172AbiHHHZi (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 8 Aug 2022 03:25:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6256B5F67;
-        Mon,  8 Aug 2022 00:25:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1469DB80E07;
-        Mon,  8 Aug 2022 07:25:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72B4C433D7;
-        Mon,  8 Aug 2022 07:25:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659943534;
-        bh=LF418aOF6Ob6gloAT5R9P5nGzwV/BElbsYz712Z9b+8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JtNueuqYf47ZpkR8iO5Hx8j1ADO1GsQb8zHJvgVgI513m2MGuJw4ICPXZyGW4RBOL
-         pWm+ea6nK9QIeY4l86sxSct1m85YBXoNBpWQPNXnszk6pyACVicRqPuUvwKN9bZhnt
-         UPQbHhMZm+B/wjrNIePRJ0jobF9NtYmEK+yCouhlSK+N1huJTLUm0RxAaKJ+FodRV5
-         vU7axRg11SRfM3RjtwVNbwqgIaVLTiMn/gcc66lV1WuGL8SmUPR6fn+92gqDVWyQVt
-         acLu4UHi7fuRCwjo6ulMpdj6SYgn/i7qRaMyiVfFQ9gvtZYIwplPmb9QYPAnLKrmid
-         sc39tF4ITwltA==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-10ee900cce0so9643620fac.5;
-        Mon, 08 Aug 2022 00:25:34 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0/4KFQZCMK8DkfOqFiILn8A5Z78pf12hzCCWP4mktBk7ddZCyn
-        i317M4Qa2ukZjKDZNe5vx1+jdqHXfVMnNO/ur7g=
-X-Google-Smtp-Source: AA6agR5eZRG38OuD86wzH2bZz2iWtGbDbq644XdywLdTekdRUdLjfEHttbFMfTkjfxb6umk6Ro+3bDaMVFrI4DYWnCw=
-X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
- ba22-20020a056870c59600b001016409ae62mr11378931oab.112.1659943533771; Mon, 08
- Aug 2022 00:25:33 -0700 (PDT)
+        with ESMTP id S240250AbiHMWAp (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 13 Aug 2022 18:00:45 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2890BF70;
+        Sat, 13 Aug 2022 15:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660428043; x=1691964043;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J2stkkYmPik2bQMds1PPTKQFWYY4K6w3/+pjsawBn4I=;
+  b=czriY2QSJtsHs+0YJIn5ie4MEylQAeO1kW/kS7jZoyutko3tg5lYKLsh
+   U8uwSotSnGfPl2vJQS7mXtH4oMFazwVlS/Xc7jXjm/W0R2M8xn4DxBnHw
+   kIWTBYyV1rhIi/CUgFr62xfLVN+CqYCowKo4VrUWdTiHHWU6njZrRlHxQ
+   kaTEKulZ63EuSu4qn9pNqf4xP0sdTWK/u2NAugMb9FbtEUSj30NAXgimh
+   5qPunzQISbEjtHhAHANiwq1Jl2HcUvhbN24qdPsixdN+lNMnl7ALLrf3m
+   ZKPstDNZJppuxJNs4K8cjvcKaPPyhu1ezSatsWfsJc/83jLR0F08xO9ot
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="293049446"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="293049446"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:00:42 -0700
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="635047705"
+Received: from tsaiyinl-mobl1.amr.corp.intel.com (HELO localhost) ([10.209.125.19])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:00:40 -0700
+From:   ira.weiny@intel.com
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org, keyrings@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        dri-devel@lists.freedesktop.org, dm-devel@redhat.com,
+        linux-raid@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, iommu@lists.linux.dev,
+        bpf@vger.kernel.org, kvm@vger.kernel.org
+Subject: [PATCH] checkpatch: Add kmap and kmap_atomic to the deprecated list
+Date:   Sat, 13 Aug 2022 15:00:34 -0700
+Message-Id: <20220813220034.806698-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220808071318.3335746-1-guoren@kernel.org>
-In-Reply-To: <20220808071318.3335746-1-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 8 Aug 2022 15:25:21 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQLjBnAaouDBWzuWfj5MnMVvHdkO-iKnBDv5jWZ6U-TPw@mail.gmail.com>
-Message-ID: <CAJF2gTQLjBnAaouDBWzuWfj5MnMVvHdkO-iKnBDv5jWZ6U-TPw@mail.gmail.com>
-Subject: Re: [PATCH V9 00/15] arch: Add qspinlock support and atomic cleanup
-To:     palmer@rivosinc.com, heiko@sntech.de, hch@infradead.org,
-        arnd@arndb.de, peterz@infradead.org, will@kernel.org,
-        boqun.feng@gmail.com, longman@redhat.com, shorne@gmail.com,
-        conor.dooley@microchip.com
-Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Sorry, here is the Changelog:
+From: Ira Weiny <ira.weiny@intel.com>
 
-Changes in V9:
- - Fixup xchg16 compile warning
- - Keep ticket-lock the same semantic with qspinlock
- - Remove unused xchg32 and xchg64
- - Forbid arch_cmpxchg64 for 32-bit
- - Add openrisc qspinlock support
+kmap() and kmap_atomic() are being deprecated in favor of
+kmap_local_page().
 
-Changes in V8:
- - Coding convention ticket fixup
- - Move combo spinlock into riscv and simply asm-generic/spinlock.h
- - Fixup xchg16 with wrong return value
- - Add csky qspinlock
- - Add combo & qspinlock & ticket-lock comparison
- - Clean up unnecessary riscv acquire and release definitions
- - Enable ARCH_INLINE_READ*/WRITE*/SPIN* for riscv & csky
+There are two main problems with kmap(): (1) It comes with an overhead
+as mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when
+the kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-Changes in V7:
- - Add combo spinlock (ticket & queued) support
- - Rename ticket_spinlock.h
- - Remove unnecessary atomic_read in ticket_spin_value_unlocked
+kmap_local_page() is safe from any context and is therefore redundant
+with kmap_atomic() with the exception of any pagefault or preemption
+disable requirements.  However, using kmap_atomic() for these side
+effects makes the code less clear.  So any requirement for pagefault or
+preemption disable should be made explicitly.
 
-Changes in V6:
- - Fixup Clang compile problem Reported-by: kernel test robot
-   <lkp@intel.com>
- - Cleanup asm-generic/spinlock.h
- - Remove changelog in patch main comment part, suggested by
-   Conor.Dooley@microchip.com
- - Remove "default y if NUMA" in Kconfig
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again,
+the kernel virtual addresses are restored.
 
-Changes in V5:
- - Update comment with RISC-V forward guarantee feature.
- - Back to V3 direction and optimize asm code.
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-Changes in V4:
- - Remove custom sub-word xchg implementation
- - Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32 in locking/qspinlock
+---
+Suggested by credits.
+	Thomas: Idea to keep from growing more kmap/kmap_atomic calls.
+	Fabio: Stole some of his boiler plate commit message.
 
-Changes in V3:
- - Coding convention by Peter Zijlstra's advices
+Notes on tree-wide conversions:
 
-Changes in V2:
- - Coding convention in cmpxchg.h
- - Re-implement short xchg
- - Remove char & cmpxchg implementations
+I've cc'ed mailing lists for subsystems which currently contains either kmap()
+or kmap_atomic() calls.  As some of you already know Fabio and I have been
+working through converting kmap() calls to kmap_local_page().  But there is a
+lot more work to be done.  Help from the community is always welcome,
+especially with kmap_atomic() conversions.  To keep from stepping on each
+others toes I've created a spreadsheet of the current calls[1].  Please let me
+or Fabio know if you plan on tacking one of the conversions so we can mark it
+off the list.
 
+[1] https://docs.google.com/spreadsheets/d/1i_ckZ10p90bH_CkxD2bYNi05S2Qz84E2OFPv8zq__0w/edit#gid=1679714357
 
+---
+ scripts/checkpatch.pl | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Mon, Aug 8, 2022 at 3:14 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> In this series:
->  - Cleanup generic ticket-lock code, (Using smp_mb__after_spinlock as RCsc)
->  - Add qspinlock and combo-lock for riscv
->  - Add qspinlock to openrisc
->  - Use generic header in csky
->  - Optimize cmpxchg & atomic code
->
-> Enable qspinlock and meet the requirements mentioned in a8ad07e5240c9
-> ("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
->
-> RISC-V LR/SC pairs could provide a strong/weak forward guarantee that
-> depends on micro-architecture. And RISC-V ISA spec has given out
-> several limitations to let hardware support strict forward guarantee
-> (RISC-V User ISA - 8.3 Eventual Success of Store-Conditional
-> Instructions).
->
-> eg:
-> Some riscv hardware such as BOOMv3 & XiangShan could provide strict &
-> strong forward guarantee (The cache line would be kept in an exclusive
-> state for Backoff cycles, and only this core's interrupt could break
-> the LR/SC pair).
-> Qemu riscv give a weak forward guarantee by wrong implementation
-> currently [1].
->
-> So we Add combo spinlock (ticket & queued) support for riscv. Thus different
-> kinds of memory model micro-arch processors could use the same Image
->
-> The first try of qspinlock for riscv was made in 2019.1 [2].
->
-> [1] https://github.com/qemu/qemu/blob/master/target/riscv/insn_trans/trans_rva.c.inc
-> [2] https://lore.kernel.org/linux-riscv/20190211043829.30096-1-michaeljclark@mac.com/#r
->
-> Guo Ren (15):
->   asm-generic: ticket-lock: Remove unnecessary atomic_read
->   asm-generic: ticket-lock: Use the same struct definitions with qspinlock
->   asm-generic: ticket-lock: Move into ticket_spinlock.h
->   asm-generic: ticket-lock: Keep ticket-lock the same semantic with qspinlock
->   asm-generic: spinlock: Add queued spinlock support in common header
->   riscv: atomic: Clean up unnecessary acquire and release definitions
->   riscv: cmpxchg: Remove xchg32 and xchg64
->   riscv: cmpxchg: Forbid arch_cmpxchg64 for 32-bit
->   riscv: cmpxchg: Optimize cmpxchg64
->   riscv: Enable ARCH_INLINE_READ*/WRITE*/SPIN*
->   riscv: Add qspinlock support
->   riscv: Add combo spinlock support
->   openrisc: cmpxchg: Cleanup unnecessary codes
->   openrisc: Move from ticket-lock to qspinlock
->   csky: spinlock: Use the generic header files
->
->  arch/csky/include/asm/Kbuild           |   2 +
->  arch/csky/include/asm/spinlock.h       |  12 --
->  arch/csky/include/asm/spinlock_types.h |   9 --
->  arch/openrisc/Kconfig                  |   1 +
->  arch/openrisc/include/asm/Kbuild       |   2 +
->  arch/openrisc/include/asm/cmpxchg.h    | 192 ++++++++++---------------
->  arch/riscv/Kconfig                     |  49 +++++++
->  arch/riscv/include/asm/Kbuild          |   3 +-
->  arch/riscv/include/asm/atomic.h        |  19 ---
->  arch/riscv/include/asm/cmpxchg.h       | 177 +++++++----------------
->  arch/riscv/include/asm/spinlock.h      |  77 ++++++++++
->  arch/riscv/kernel/setup.c              |  22 +++
->  include/asm-generic/spinlock.h         |  94 ++----------
->  include/asm-generic/spinlock_types.h   |  12 +-
->  include/asm-generic/ticket_spinlock.h  |  93 ++++++++++++
->  15 files changed, 384 insertions(+), 380 deletions(-)
->  delete mode 100644 arch/csky/include/asm/spinlock.h
->  delete mode 100644 arch/csky/include/asm/spinlock_types.h
->  create mode 100644 arch/riscv/include/asm/spinlock.h
->  create mode 100644 include/asm-generic/ticket_spinlock.h
->
-> --
-> 2.36.1
->
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 79e759aac543..9ff219e0a9d5 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -807,6 +807,8 @@ our %deprecated_apis = (
+ 	"rcu_barrier_sched"			=> "rcu_barrier",
+ 	"get_state_synchronize_sched"		=> "get_state_synchronize_rcu",
+ 	"cond_synchronize_sched"		=> "cond_synchronize_rcu",
++	"kmap"					=> "kmap_local_page",
++	"kmap_atomic"				=> "kmap_local_page",
+ );
+ 
+ #Create a search pattern for all these strings to speed up a loop below
 
-
+base-commit: 4a9350597aff50bbd0f4b80ccf49d2e02d1111f5
 -- 
-Best Regards
- Guo Ren
+2.35.3
+

@@ -2,76 +2,91 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76FCDC54EE9
-	for <linux-csky@archiver.kernel.org>; Tue, 13 Sep 2022 03:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD4FCC6FA82
+	for <linux-csky@archiver.kernel.org>; Tue, 13 Sep 2022 11:19:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiIMDih (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 12 Sep 2022 23:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        id S231750AbiIMLTR (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 13 Sep 2022 07:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiIMDib (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 12 Sep 2022 23:38:31 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFA554653;
-        Mon, 12 Sep 2022 20:38:28 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRTf16HnPzHntv;
-        Tue, 13 Sep 2022 11:36:25 +0800 (CST)
-Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 13 Sep
- 2022 11:38:25 +0800
-From:   Liao Chang <liaochang1@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>, <guoren@kernel.org>,
+        with ESMTP id S231639AbiIMLTQ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 13 Sep 2022 07:19:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EEF248EA;
+        Tue, 13 Sep 2022 04:19:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36BD46142A;
+        Tue, 13 Sep 2022 11:19:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FBC9C433D6;
+        Tue, 13 Sep 2022 11:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663067954;
+        bh=8WL+2ChhNqJlCeEkSghkmVAikI1JBjjo/JWZKZfMn+A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UhfEBLtkgUc3lrz38hjnenMo+Rg51QOM1iTk1lKYeEgONVhVxyeH3CGOrJw68hTV6
+         7jHgezmYrca3LZj1v+4hhN791suCz3UG9K9vWr4AsXS8+NGkB++3IVcLjEfr/OhNj6
+         1DsTUc6SUW31x79tpKfQbuU5YMehEz8dafiHWM01nVwvKRPlzazhtlJbJxkotBnNYV
+         rBpHAmzgoUsvAcjspfavQ4X6fhp31cH6AVI6kKTsw14N2zZKnCIYrbm3WsuzNlzGN3
+         R9uNKDAjHumn5p9xb/T6kR2qfrskiGYaFTT+iCy2vrXySykOI/RxJ/3RC04WV2Qx5Q
+         tBP94Ih85TpVg==
+Date:   Tue, 13 Sep 2022 20:19:09 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     <catalin.marinas@arm.com>, <will@kernel.org>, <guoren@kernel.org>,
         <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>, <liaochang1@huawei.com>, <maz@kernel.org>,
-        <alexandru.elisei@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
+        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>, <maz@kernel.org>,
+        <alexandru.elisei@arm.com>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
-Subject: [PATCH V2 2/3] csky/kprobe: Optimize the performance of patching single-step slot
-Date:   Tue, 13 Sep 2022 11:34:53 +0800
-Message-ID: <20220913033454.104519-3-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+Subject: Re: [PATCH V2 0/3] kprobe: Optimize the performance of patching ss
+Message-Id: <20220913201909.2c7e38a40e719461e3c19b12@kernel.org>
 In-Reply-To: <20220913033454.104519-1-liaochang1@huawei.com>
 References: <20220913033454.104519-1-liaochang1@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.53]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Single-step slot would not be used until kprobe is enabled, that means
-no race condition occurs on it under SMP, hence it is safe to pacth ss
-slot without stopping machine.
+On Tue, 13 Sep 2022 11:34:51 +0800
+Liao Chang <liaochang1@huawei.com> wrote:
 
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
----
- arch/csky/kernel/probes/kprobes.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> Single-step slot would not be used until kprobe is enabled, that means
+> no race condition occurs on it under SMP, hence it is safe to pacth ss
+> slot without stopping machine.
 
-diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
-index 3c6e5c725d81..4feb5ce16264 100644
---- a/arch/csky/kernel/probes/kprobes.c
-+++ b/arch/csky/kernel/probes/kprobes.c
-@@ -57,7 +57,11 @@ static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
- 
- 	p->ainsn.api.restore = (unsigned long)p->addr + offset;
- 
--	patch_text(p->ainsn.api.insn, p->opcode);
-+	memcpy(p->ainsn.api.insn, &p->opcode, offset);
-+	dcache_wb_range((unsigned long)p->ainsn.api.insn,
-+			(unsigned long)p->ainsn.api.insn + offset);
-+	icache_inv_range((unsigned long)p->ainsn.api.insn,
-+			 (unsigned long)p->ainsn.api.insn + offset);
- }
- 
- static void __kprobes arch_prepare_simulate(struct kprobe *p)
+All these patches look good to me, since single-step slot must not
+be executed until it is prepared.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+for this series.
+
+But I need Ack by each architecture maintainer.
+
+Thank you,
+
+> 
+> v2:
+> Backport riscv patch to cksy and arm64.
+> 
+> Liao Chang (3):
+>   riscv/kprobe: Optimize the performance of patching single-step slot
+>   csky/kprobe: Optimize the performance of patching single-step slot
+>   arm64/kprobe: Optimize the performance of patching single-step slot
+> 
+>  arch/arm64/kernel/probes/kprobes.c | 5 ++---
+>  arch/csky/kernel/probes/kprobes.c  | 6 +++++-
+>  arch/riscv/kernel/probes/kprobes.c | 8 +++++---
+>  3 files changed, 12 insertions(+), 7 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
+
+
 -- 
-2.17.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

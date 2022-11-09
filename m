@@ -2,57 +2,79 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ECB8C43217
-	for <linux-csky@archiver.kernel.org>; Mon,  7 Nov 2022 09:42:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B10E1C433FE
+	for <linux-csky@archiver.kernel.org>; Wed,  9 Nov 2022 17:45:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiKGJm0 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 7 Nov 2022 04:42:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S231215AbiKIRpH (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 9 Nov 2022 12:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiKGJmZ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Nov 2022 04:42:25 -0500
-X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Nov 2022 01:42:24 PST
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DAD17077
-        for <linux-csky@vger.kernel.org>; Mon,  7 Nov 2022 01:42:24 -0800 (PST)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id 4A38F82629; Mon,  7 Nov 2022 09:06:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1667811970; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=K+LmDXy6Nkru35OBQHXLD0J8q2uiae88wmrAmSz2YbnfN4fIf5FLaT7af3OSSEVDz
-         zAKU3USWJK3qlqZ9OANNrIpUaf3JyMhsYhcUwI8OLONIJGDF6NclEih50dBTgQLAhg
-         2b40sUvRo2F0XEfsIUOf6k94CDC1Bew1DWSQtdDLdbhxWki3hAKQFNZJIWc111n0Gi
-         RFiS5BUyB+A+2P93J2DIDdHCl2QYv/BZ0vzKQfjPNx5rH/sJNNVHd/jD0oRW90g5WD
-         yeJIR80NXwo7YqJQIaK3i6RrDMTz/1g1jY9A/Y0/0ru4tCgY32r8lt+fQ2KzVQF54z
-         GVfmnfxBqJA+A==
-Received: by mail.lokoho.com for <linux-csky@vger.kernel.org>; Mon,  7 Nov 2022 09:05:51 GMT
-Message-ID: <20221107074500-0.1.23.5lgz.0.amcl752b6i@lokoho.com>
-Date:   Mon,  7 Nov 2022 09:05:51 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-csky@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S229527AbiKIRpG (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 9 Nov 2022 12:45:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FFDBA8;
+        Wed,  9 Nov 2022 09:45:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DA4061965;
+        Wed,  9 Nov 2022 17:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63DE8C433D6;
+        Wed,  9 Nov 2022 17:44:59 +0000 (UTC)
+Date:   Wed, 9 Nov 2022 17:44:56 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Chris Zankel <chris@zankel.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org
+Subject: Re: [PATCH v1 2/2] stackprotector: actually use get_random_canary()
+Message-ID: <Y2vnGFuj5N9/o/Ia@arm.com>
+References: <20221023203208.118919-1-Jason@zx2c4.com>
+ <20221023203208.118919-3-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221023203208.118919-3-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Sun, Oct 23, 2022 at 10:32:08PM +0200, Jason A. Donenfeld wrote:
+> The RNG always mixes in the Linux version extremely early in boot. It
+> also always includes a cycle counter, not only during early boot, but
+> each and every time it is invoked prior to being fully initialized.
+> Together, this means that the use of additional xors inside of the
+> various stackprotector.h files is superfluous and over-complicated.
+> Instead, we can get exactly the same thing, but better, by just calling
+> `get_random_canary()`.
+> 
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  arch/arm/include/asm/stackprotector.h     |  9 +--------
+>  arch/arm64/include/asm/stackprotector.h   |  9 +--------
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+For arm64:
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
-
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
-
-
-Pozdrawiam
-Adam Charachuta
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

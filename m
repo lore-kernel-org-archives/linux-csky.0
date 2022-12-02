@@ -2,41 +2,41 @@ Return-Path: <linux-csky-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 545C2C47088
-	for <linux-csky@archiver.kernel.org>; Fri,  2 Dec 2022 16:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1C24C4708E
+	for <linux-csky@archiver.kernel.org>; Fri,  2 Dec 2022 16:01:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbiLBQAn (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 2 Dec 2022 11:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S233940AbiLBQBI (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 2 Dec 2022 11:01:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiLBQAO (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Dec 2022 11:00:14 -0500
+        with ESMTP id S233877AbiLBQA0 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Dec 2022 11:00:26 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0A419C01
-        for <linux-csky@vger.kernel.org>; Fri,  2 Dec 2022 07:59:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AB6CB226
+        for <linux-csky@vger.kernel.org>; Fri,  2 Dec 2022 07:59:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669996750;
+        s=mimecast20190719; t=1669996762;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zkIMvc7EhOE64u6GFhS7x1Bfp7Rm8YufbRtsmhjcZ2o=;
-        b=ZktDM+sPO1LbN8ahT3D8h84gocDllVUGdA7EGw24GePybPSxv/Az4ObGxy37XWjPHgppzg
-        hGZbYTNvdf573tG140qespk3RmIeX+IL1wi/6iMhlXew8B6DGe03D+jm70Qp24ZaVbE+NM
-        0goC/rGWXumfOTXJq1PWx3g49Me55NA=
+        bh=6o4aDoMnOyw6oIKqxXD/63VXzreRgu7lohjEhFx0NNg=;
+        b=OzouMb8yq8tuKd2KsA6W7WeRnK4mbl9f7FSgRmjVtOg6F4VOm7fsy58Kqc4ISmSeFBGYkH
+        27AWcdnSkk6dWrFw0yx78L6k+PwZexhTSpk0eG7THjQBtPHNVbUN6/KRf2qChlW8LA7Dj3
+        pvf6mPoHKPBXBXR6TBIwR1HRpaAYfR4=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-lYV170HcN-CcrO2NjCca_Q-1; Fri, 02 Dec 2022 10:59:04 -0500
-X-MC-Unique: lYV170HcN-CcrO2NjCca_Q-1
+ us-mta-594-Okj2luc0MBCEEYR4jqlogg-1; Fri, 02 Dec 2022 10:59:19 -0500
+X-MC-Unique: Okj2luc0MBCEEYR4jqlogg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E4E05833A0E;
-        Fri,  2 Dec 2022 15:59:02 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92E14101A528;
+        Fri,  2 Dec 2022 15:59:17 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.33.36.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9BFEE20290A5;
-        Fri,  2 Dec 2022 15:58:58 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EAE2920290A5;
+        Fri,  2 Dec 2022 15:59:11 +0000 (UTC)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
@@ -65,9 +65,9 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Guo Ren <guoren@kernel.org>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH v3 2/8] trace: Add trace_ipi_send_cpumask()
-Date:   Fri,  2 Dec 2022 15:58:11 +0000
-Message-Id: <20221202155817.2102944-3-vschneid@redhat.com>
+Subject: [PATCH v3 5/8] irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+Date:   Fri,  2 Dec 2022 15:58:14 +0000
+Message-Id: <20221202155817.2102944-6-vschneid@redhat.com>
 In-Reply-To: <20221202155817.2102944-1-vschneid@redhat.com>
 References: <20221202155817.2102944-1-vschneid@redhat.com>
 MIME-Version: 1.0
@@ -77,51 +77,55 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-trace_ipi_raise() is unsuitable for generically tracing IPI sources due to
-its "reason" argument being an uninformative string (on arm64 all you get
-is "Function call interrupts" for SMP calls).
-
-Add a variant of it that exports a target CPU, a callsite and a callback.
+IPIs sent to remote CPUs via irq_work_queue_on() are now covered by
+trace_ipi_send_cpumask(), add another instance of the tracepoint to cover
+self-IPIs.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/trace/events/ipi.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ kernel/irq_work.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/include/trace/events/ipi.h b/include/trace/events/ipi.h
-index 0be71dad6ec03..b1125dc27682c 100644
---- a/include/trace/events/ipi.h
-+++ b/include/trace/events/ipi.h
-@@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
- 	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
- );
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index 7afa40fe5cc43..c33e88e32a67a 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -22,6 +22,8 @@
+ #include <asm/processor.h>
+ #include <linux/kasan.h>
  
-+TRACE_EVENT(ipi_send_cpumask,
++#include <trace/events/ipi.h>
 +
-+	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
-+
-+	TP_ARGS(cpumask, callsite, callback),
-+
-+	TP_STRUCT__entry(
-+		__cpumask(cpumask)
-+		__field(void *, callsite)
-+		__field(void *, callback)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_cpumask(cpumask, cpumask_bits(cpumask));
-+		__entry->callsite = (void *)callsite;
-+		__entry->callback = callback;
-+	),
-+
-+	TP_printk("cpumask=%s callsite=%pS callback=%pS",
-+		  __get_cpumask(cpumask), __entry->callsite, __entry->callback)
-+);
-+
- DECLARE_EVENT_CLASS(ipi_handler,
+ static DEFINE_PER_CPU(struct llist_head, raised_list);
+ static DEFINE_PER_CPU(struct llist_head, lazy_list);
+ static DEFINE_PER_CPU(struct task_struct *, irq_workd);
+@@ -74,6 +76,16 @@ void __weak arch_irq_work_raise(void)
+ 	 */
+ }
  
- 	TP_PROTO(const char *reason),
++static __always_inline void irq_work_raise(struct irq_work *work)
++{
++	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt())
++		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
++				       _RET_IP_,
++				       work->func);
++
++	arch_irq_work_raise();
++}
++
+ /* Enqueue on current CPU, work must already be claimed and preempt disabled */
+ static void __irq_work_queue_local(struct irq_work *work)
+ {
+@@ -99,7 +111,7 @@ static void __irq_work_queue_local(struct irq_work *work)
+ 
+ 	/* If the work is "lazy", handle it from next tick if any */
+ 	if (!lazy_work || tick_nohz_tick_stopped())
+-		arch_irq_work_raise();
++		irq_work_raise(work);
+ }
+ 
+ /* Enqueue the irq work @work on the current CPU */
 -- 
 2.31.1
 

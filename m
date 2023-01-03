@@ -2,124 +2,111 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B14EAC4708E
-	for <linux-csky@archiver.kernel.org>; Thu, 29 Dec 2022 16:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78B28C53210
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Jan 2023 06:47:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbiL2QWv (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 29 Dec 2022 11:22:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S230389AbjACGrF (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 3 Jan 2023 01:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiL2QW0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 29 Dec 2022 11:22:26 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B27DCE
-        for <linux-csky@vger.kernel.org>; Thu, 29 Dec 2022 08:22:25 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id w37so12667252pga.5
-        for <linux-csky@vger.kernel.org>; Thu, 29 Dec 2022 08:22:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lGyrD0+PhkAL5dbAeObFs9RwoqBo5ONG0NwovuaDsrM=;
-        b=dahVygbdXamhJiKEgN7Jyg1lXYgvfTSo1DMUkYl6yXrdIMvfnyRS0HpjAJGhYD3IFg
-         E+JY0GnUUwwkM2h9ox2Zgy/UxJJ4gx7kMRbUi8BoQs1MkH7ANMKs27AnO7PEO784TqXp
-         ruuAqGepnkn93qVt3OFjdbG1AsqdvffnpusA3lSTC6zFKd8HiqB0qYg9fELjUJN4UbO/
-         3lnm7IU3UfXKaT3AUgnmQMHaYpOZ2VZND7TcbraC5FIjkTHVAEIVzHPRo5TQwNIMJbMP
-         q3kZJpTtujX11O+tGSd8oHpehkbK7CbScXp9TvIT0cj2FcWn3tOzaHwI3gNMSd/9wBDx
-         rNGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lGyrD0+PhkAL5dbAeObFs9RwoqBo5ONG0NwovuaDsrM=;
-        b=RQe+4lyV9MVCOA4jkVHhHG3V1r+nylJyFqazUleFQ9r1pH9u9hTJGwCrwvLyJNZRg9
-         3X3Bw+6HEz6AXBEKIk5/cNgSaMnUyOs29hsBik26QKWdK2iFVy+fvcQNheom/PC05Rv1
-         gxnClYEA2r7nA4uh/AcxUKZWtwdFwPlsRwwHrCnrWGKiw24bIRyODcv1MEOraXfx1/xO
-         j1OAPYFXwv4W8z78Pz1qT2fAxjmcs+6isWk+1kA/xwTmNHctvYIxc31IZ+sxI9GUjSIP
-         qdzW41HTiFXLObYjYyNRsJFBC1lDi5JPw6PedxAteZXz+yFEt07lo61oXexwIjprXX7O
-         AE3A==
-X-Gm-Message-State: AFqh2kptpxm46MgQHe+glRMKDPjd7AoyRj8n3ZG3/Ju6JLWxxBxv/JdI
-        mMvJsyWh2pLViJBjoWdxzjNz+w==
-X-Google-Smtp-Source: AMrXdXvpdMbR8CMYmi4dUk/9PgGNumQG+p4T2pa56FD3JYpViB2+8Ov5fWBEh9VYECa0d3vj+bwoEw==
-X-Received: by 2002:aa7:99cb:0:b0:580:d188:f516 with SMTP id v11-20020aa799cb000000b00580d188f516mr22924872pfi.19.1672330945228;
-        Thu, 29 Dec 2022 08:22:25 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id x185-20020a6286c2000000b0056bfebfa6e4sm12277463pfd.190.2022.12.29.08.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 08:22:24 -0800 (PST)
-Date:   Thu, 29 Dec 2022 08:22:24 -0800 (PST)
-X-Google-Original-Date: Thu, 29 Dec 2022 07:53:04 PST (-0800)
-Subject:     Re: [PATCH v2] vdso: Improve cmd_vdso_check to check all dynamic relocations
-In-Reply-To: <20221221235147.45lkqmosndritfpe@google.com>
-CC:     christophe.leroy@csgroup.eu, luto@kernel.org, tglx@linutronix.de,
-        vincenzo.frascino@arm.com, Arnd Bergmann <arnd@arndb.de>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     maskray@google.com
-Message-ID: <mhng-17d41c33-7f33-4a1c-8af2-ae7d07134e8c@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        with ESMTP id S236829AbjACGrD (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 01:47:03 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE406399;
+        Mon,  2 Jan 2023 22:47:01 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3036kKo2130521;
+        Tue, 3 Jan 2023 00:46:20 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672728380;
+        bh=JvO+0ma+HRXyIzQRjZijzxeByrRL1Bfwg9XNdT34yC8=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=t8xb4N9aiErMy7XeE3qFIiGuV5M/GFnslwQAqumfoIw5CGfIdNI9GRn0KgtEKlaAr
+         +NLQthS/QE6rs20WUAJrvU2YSndjqJb09YQpCj/2e9ZmqleKob23mtItoHxjsOuU/O
+         oFGqQOw3pQyHm4KrIk6j5Ck7Qdq5VJfJ1GCULp0s=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3036kKtR021216
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 3 Jan 2023 00:46:20 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
+ Jan 2023 00:46:19 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 3 Jan 2023 00:46:19 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3036kIFX085925;
+        Tue, 3 Jan 2023 00:46:19 -0600
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guo Ren <guoren@kernel.org>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux RISC-V List <linux-riscv@lists.infradead.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: [RFC PATCH 2/4] dt-bindings: vendor-prefixes: Add lincolntech
+Date:   Tue, 3 Jan 2023 12:16:13 +0530
+Message-ID: <20230103064615.5311-3-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230103064615.5311-1-a-bhatia1@ti.com>
+References: <20230103064615.5311-1-a-bhatia1@ti.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, 21 Dec 2022 15:51:47 PST (-0800), maskray@google.com wrote:
-> The actual intention is that no dynamic relocation exists. However, some
-> GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
-> the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
-> relocations. E.g. ld's powerpc port recently fixed
-> https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
-> generally no-op in the dynamic loaders. So just ignore them.
->
-> With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
-> bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
-> not called "absolute relocations". (The patch is motivated by the arm64
-> port missing R_AARCH64_RELATIVE.)
->
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> Change from v1:
-> * rebase after 8ac3b5cd3e0521d92f9755e90d140382fc292510 (lib/vdso: use "grep -E" instead of "egrep")
-> * change the commit message to mention an example GNU ld bug; no longer say the patch fixes a deprecated egrep use
-> ---
->   arch/arm/vdso/Makefile            |  3 ---
->   arch/arm64/kernel/vdso/Makefile   |  3 ---
->   arch/arm64/kernel/vdso32/Makefile |  3 ---
->   arch/csky/kernel/vdso/Makefile    |  3 ---
->   arch/loongarch/vdso/Makefile      |  3 ---
->   arch/mips/vdso/Makefile           |  3 ---
->   arch/powerpc/kernel/vdso/Makefile |  1 -
->   arch/riscv/kernel/vdso/Makefile   |  3 ---
->   arch/s390/kernel/vdso32/Makefile  |  2 --
->   arch/s390/kernel/vdso64/Makefile  |  2 --
->   arch/x86/entry/vdso/Makefile      |  4 ----
->   lib/vdso/Makefile                 | 13 ++++---------
->   12 files changed, 4 insertions(+), 39 deletions(-)
+Add document vendor prefix for Lincoln Technology Solutions
+(lincolntech).
 
-[snip]
+Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-> index 06e6b27f3bcc..d85c37e11b21 100644
-> --- a/arch/riscv/kernel/vdso/Makefile
-> +++ b/arch/riscv/kernel/vdso/Makefile
-> @@ -1,9 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   # Copied from arch/tile/kernel/vdso/Makefile
->
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
->   include $(srctree)/lib/vdso/Makefile
->   # Symbols present in the vdso
->   vdso-syms  = rt_sigreturn
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 516134cbcb3c..82427a6ddf97 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -729,6 +729,8 @@ patternProperties:
+     description: Lichee Pi
+   "^linaro,.*":
+     description: Linaro Limited
++  "^lincolntech,.*":
++    description: Lincoln Technology Solutions
+   "^linksprite,.*":
+     description: LinkSprite Technologies, Inc.
+   "^linksys,.*":
+-- 
+2.39.0
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
-
-Thanks!

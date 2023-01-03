@@ -2,43 +2,43 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DB1DC3DA7D
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Jan 2023 06:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4E5BC53210
+	for <linux-csky@archiver.kernel.org>; Tue,  3 Jan 2023 06:47:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjACGrG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 3 Jan 2023 01:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S230363AbjACGrg (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 3 Jan 2023 01:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236790AbjACGq5 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 01:46:57 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB0B399;
-        Mon,  2 Jan 2023 22:46:55 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3036kIY0020186;
-        Tue, 3 Jan 2023 00:46:18 -0600
+        with ESMTP id S236763AbjACGrH (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 01:47:07 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E442039F;
+        Mon,  2 Jan 2023 22:47:03 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3036kNU0036787;
+        Tue, 3 Jan 2023 00:46:23 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672728378;
-        bh=rM0KgNmnSZO7R3K4bUC8tZO+fNWZ9r7BepvZWMal+zk=;
+        s=ti-com-17Q1; t=1672728383;
+        bh=y98f6JcfN3LVqyfn9v+xxR4SH8jrP9djJmUQfnsRA+I=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=VSfNdYV+AmmYXTCI5JFlqecezz8CPZwF7EaIO0QjBB15/IkgtQJ+5LXNhTIsFbPRb
-         3O8JsYIQEzlPd7bsbGy84guLFeXS5QZqlphmysZBcpdcCXXd5xAG1bhYb2YaMd08Ax
-         7bpAklcAh3uVWVxTXZ9gCM9kIXl978b+Fv1gAcDg=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3036kINl005625
+        b=m+HoDosvulIDy/DnK5PY4BHL1hhI7U+8TanANrmlap/7ZDupz2Kb00l+DunjshKV1
+         4xmJ/57IZimzayYcEltqaREw2OEFpZjkEziywYQkdJS0ql3VBI8ZwVngeFPtZKm/tz
+         AiyDf5C6hcg9fpgw081AfD8bu/6pvf7uIosWuYac=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3036kMJR021242
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 3 Jan 2023 00:46:18 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 3 Jan 2023 00:46:22 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
- Jan 2023 00:46:18 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2023 00:46:22 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 3 Jan 2023 00:46:18 -0600
+ Frontend Transport; Tue, 3 Jan 2023 00:46:22 -0600
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3036kH4Q075225;
-        Tue, 3 Jan 2023 00:46:17 -0600
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3036kLfQ085969;
+        Tue, 3 Jan 2023 00:46:22 -0600
 From:   Aradhya Bhatia <a-bhatia1@ti.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -72,9 +72,9 @@ CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
         Jai Luthra <j-luthra@ti.com>,
         Jayesh Choudhary <j-choudhary@ti.com>,
         Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [RFC PATCH 1/4] dt-bindings: vendor-prefixes: Add microtips
-Date:   Tue, 3 Jan 2023 12:16:12 +0530
-Message-ID: <20230103064615.5311-2-a-bhatia1@ti.com>
+Subject: [RFC PATCH 4/4] drm: panel-lvds: Introduce dual-link panels
+Date:   Tue, 3 Jan 2023 12:16:15 +0530
+Message-ID: <20230103064615.5311-5-a-bhatia1@ti.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230103064615.5311-1-a-bhatia1@ti.com>
 References: <20230103064615.5311-1-a-bhatia1@ti.com>
@@ -86,26 +86,30 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Add document vendor prefix for Microtips Technology USA (microtips).
+Add a new compatible, "panel-dual-lvds".
+
+Dual-link LVDS interfaces have 2 links, with even pixels traveling on
+one link, and odd pixels on the other. These panels are also generic in
+nature, with no documented constraints, much like their single-link
+counterparts, "panel-lvds".
 
 Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/panel/panel-lvds.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 70ffb3780621..516134cbcb3c 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -821,6 +821,8 @@ patternProperties:
-     description: Microsoft Corporation
-   "^microsys,.*":
-     description: MicroSys Electronics GmbH
-+  "^microtips,.*":
-+    description: Microtips Technology USA
-   "^mikroe,.*":
-     description: MikroElektronika d.o.o.
-   "^mikrotik,.*":
+diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
+index de8758c30e6e..bf6f84af0730 100644
+--- a/drivers/gpu/drm/panel/panel-lvds.c
++++ b/drivers/gpu/drm/panel/panel-lvds.c
+@@ -241,6 +241,7 @@ static int panel_lvds_remove(struct platform_device *pdev)
+ 
+ static const struct of_device_id panel_lvds_of_table[] = {
+ 	{ .compatible = "panel-lvds", },
++	{ .compatible = "panel-dual-lvds", },
+ 	{ /* Sentinel */ },
+ };
+ 
 -- 
 2.39.0
 

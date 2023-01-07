@@ -2,188 +2,123 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A99A4C3DA7D
-	for <linux-csky@archiver.kernel.org>; Tue,  3 Jan 2023 11:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66DD8C6379F
+	for <linux-csky@archiver.kernel.org>; Sat,  7 Jan 2023 11:04:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbjACLwE (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 3 Jan 2023 06:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S230243AbjAGLE4 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Sat, 7 Jan 2023 06:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237496AbjACLvx (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 06:51:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E922D6589;
-        Tue,  3 Jan 2023 03:51:51 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 659896602CE7;
-        Tue,  3 Jan 2023 11:51:48 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672746709;
-        bh=6chUOuhMbPwhQBYMQBmnbgN9yec/HXnOChceMVGoqic=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gG9UbXrrgSVeMwXELIxIuwXvRhEU35Fb89KnSK5SmwjjhQ9O3wB7j+BDd3lS8jkhk
-         IXgHZgJELX2+QlzUlyCHHifndDkJ/2C1gc/F9rNweTIPXZBgR/cStGIXLdTInfoLBt
-         fqAq68aomRHY5F6Agw7R+3syaZLI8BGtsv5gRrLWVFzk/aOzdA/QNPtdMRApVusFr8
-         wja6kGf3ePZt9CQfJkUIc1/xZxeB5SrDZ5kqIlna9JDTABicClm3FJzZX0XJIsahmP
-         JAvAje3oGDflWCSLKcHLAvKvlArcK3wtj7nt16E5ROG0/Em2+bgbSRcE6Rq7SdWvIW
-         i1+Njg4yfhRbQ==
-Message-ID: <09f1ca83-c7d5-a186-6fa6-09cdd7a0b9cc@collabora.com>
-Date:   Tue, 3 Jan 2023 12:51:45 +0100
+        with ESMTP id S230135AbjAGLEz (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 7 Jan 2023 06:04:55 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9879F4F124;
+        Sat,  7 Jan 2023 03:04:54 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id ay40so2704294wmb.2;
+        Sat, 07 Jan 2023 03:04:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jV2yBF+mbkDE0BvyOwe05ARE6EO7XhtOfB/KJLMsfFA=;
+        b=BzPTx+ODS2RwGu5d9Av3CGI6XJ0NbmKP1pStUzg0M0m6+VF6wu2vf0tqTwK0k6q0qV
+         Fbx7Y4Wluy9p+k8PZjL3FOoLufHJHxtq2K/BaarEwd/dPtd/DgO4uDiDqLUXCcfzSy4g
+         Wd0wz4xfpZYGbxR/O6enZWRjIhs25ZrrKgwvTGouDcupcbkSfLeRveiApotbcr4XMgph
+         w/4+08uhP/RwKAozhcyw6lYPvScMk8zL6fmWwbkyxQOkT9WdSUz8lze9ta3Mlh7zLg9k
+         cM2v76pe7iQT/2ZR+EkGweLVXlhhfTIoWJwjo2u32vXfi3qjeDrWte72tROnSs3wxhtS
+         1Wwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jV2yBF+mbkDE0BvyOwe05ARE6EO7XhtOfB/KJLMsfFA=;
+        b=f6beJaoz3jCOL/c6eOjf3eeUBcHKDVUaH0Uw7trbB+q3preXNB8XQN+BgMEgXIqyrg
+         ztQ0YAwwQaBudBMFT671W0eam+CskRUARfQ2XtTMgg7PiwB16C4qvG0b2DGR8BAeYCdV
+         bjE0ugK+fesG9oz6KyRgSvF1+EPPvRlWpElpDIRlqjl3n5CE931DsOVRR67+Oc0OvvUU
+         qarRyALAo/0CgrsP1WoMbvFscUnStpWk5q7ULbXRDwxCcfn2VYXgqtcJFerXS2Z6O5F8
+         beGTpGvDntwL4xWdS5LKe1BVCIIzmFG6ZI1prA001YwkI8usgU5FZC7q8O2rG9nMPSjr
+         Vt0w==
+X-Gm-Message-State: AFqh2kp6KNn7SZRVsi7FHGQnApV2HTmVi/cE5A8/t+/ipcJNN8L/Cf0I
+        P0aGIHmiHJAhWmac1ay0yUU=
+X-Google-Smtp-Source: AMrXdXuUafS1AFxogNrZXZJj6k6oC1QjVGeJmfZCRFdf2sgwNHMbrVBUD4+y7GGme2gWJhcqxBhA0A==
+X-Received: by 2002:a05:600c:601e:b0:3c6:e61e:ae71 with SMTP id az30-20020a05600c601e00b003c6e61eae71mr50341357wmb.1.1673089493118;
+        Sat, 07 Jan 2023 03:04:53 -0800 (PST)
+Received: from gmail.com (1F2EF507.nat.pool.telekom.hu. [31.46.245.7])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm10657278wms.31.2023.01.07.03.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 03:04:50 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 7 Jan 2023 12:04:47 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3 3/8] sched, smp: Trace IPIs sent via
+ send_call_function_single_ipi()
+Message-ID: <Y7lRz7oCaAmAhoqS@gmail.com>
+References: <20221202155817.2102944-1-vschneid@redhat.com>
+ <20221202155817.2102944-4-vschneid@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 3/4] dt-bindings: panel: Introduce dual-link LVDS
- panel
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Guo Ren <guoren@kernel.org>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Linux RISC-V List <linux-riscv@lists.infradead.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
-        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230103064615.5311-1-a-bhatia1@ti.com>
- <20230103064615.5311-4-a-bhatia1@ti.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230103064615.5311-4-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202155817.2102944-4-vschneid@redhat.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Il 03/01/23 07:46, Aradhya Bhatia ha scritto:
-> Dual-link LVDS interfaces have 2 links, with even pixels traveling on
-> one link, and odd pixels on the other. These panels are also generic in
-> nature, with no documented constraints, much like their single-link
-> counterparts, "panel-lvds".
+
+* Valentin Schneider <vschneid@redhat.com> wrote:
+
+> send_call_function_single_ipi() is the thing that sends IPIs at the bottom
+> of smp_call_function*() via either generic_exec_single() or
+> smp_call_function_many_cond(). Give it an IPI-related tracepoint.
 > 
-> Add a new compatible, "panel-dual-lvds", and a dt-binding document for
-> these panels.
+> Note that this ends up tracing any IPI sent via __smp_call_single_queue(),
+> which covers __ttwu_queue_wakelist() and irq_work_queue_on() "for free".
 > 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> ---
->   .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
->   MAINTAINERS                                   |   1 +
->   2 files changed, 158 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
-> new file mode 100644
-> index 000000000000..88a7aa2410be
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
-> @@ -0,0 +1,157 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/panel-dual-lvds.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic Dual-Link LVDS Display Panel
-> +
-> +maintainers:
-> +  - Aradhya Bhatia <a-bhatia1@ti.com>
-> +  - Thierry Reding <thierry.reding@gmail.com>
-> +
-> +description: |
-> +  A dual-LVDS interface is a dual-link connection with the even pixels
-> +  traveling on one link, and the odd pixels traveling on the other.
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +  - $ref: /schemas/display/lvds.yaml/#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - lincolntech,lcd185-101ct
-> +              - microtips,13-101hieb0hf0-s
-> +          - const: panel-dual-lvds
-> +      - const: panel-dual-lvds
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: The sink for first set of LVDS pixels.
-> +
-> +        properties:
-> +          dual-lvds-odd-pixels:
-> +            type: boolean
-> +
-> +          dual-lvds-even-pixels:
-> +            type: boolean
-> +
-> +        oneOf:
-> +          - required: [dual-lvds-odd-pixels]
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-One question: why do we need a "panel-dual-lvds" compatible?
-A Dual-LVDS panel is a LVDS panel using two ports, hence still a panel-lvds.
+Acked-by: Ingo Molnar <mingo@kernel.org>
 
-If you're doing this to clearly distinguish, for human readability purposes,
-single-link vs dual-link panels, I think that this would still be clear even
-if we use panel-lvds alone because dual-link panels, as you wrote in this
-binding, does *require* two ports, with "dual-lvds-{odd,even}-pixels" properties.
+Patch series logistics:
 
-So... the devicetree node would look like this:
+ - No objections from the scheduler side, this feature looks pretty useful.
 
-panel {
-	compatible = "vendor,panel", "panel-lvds";
-	....
-	ports {
-		port@0 {
-			.....
-			-> dual-lvds-odd-pixels <-
-		}
+ - Certain patches are incomplete, others are noted as being merged 
+   separately, so I presume you'll send an updated/completed series 
+   eventually?
 
-		port@1 {
-			.....
-			-> dual-lvds-even-pixels <-
-		};
-	};
-};
+ - We can merge this via the scheduler tree I suspect, as most callbacks 
+   affected relate to tip:sched/core and tmp:smp/core - but if you have 
+   some other preferred tree that's fine too.
 
-> +          - required: [dual-lvds-even-pixels]
+Thanks,
 
-...Though, if you expect dual-lvds panels to get other quirks in the future,
-that's a whole different story and you may actually need the panel-dual-lvds
-compatible.
-
-Regards,
-Angelo
+	Ingo

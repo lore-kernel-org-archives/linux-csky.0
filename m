@@ -2,42 +2,42 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8164AC71131
-	for <linux-csky@archiver.kernel.org>; Thu, 12 Jan 2023 20:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0199CC678D4
+	for <linux-csky@archiver.kernel.org>; Thu, 12 Jan 2023 20:00:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240640AbjALUAH (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 12 Jan 2023 15:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S240647AbjALUAJ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 12 Jan 2023 15:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjALT6b (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 12 Jan 2023 14:58:31 -0500
+        with ESMTP id S237088AbjALT7U (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 12 Jan 2023 14:59:20 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A7F2E4;
-        Thu, 12 Jan 2023 11:58:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F252DDA;
+        Thu, 12 Jan 2023 11:58:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=57ZArFmnIQzaVihzbRCoRwr2LaVbKaf8OfuJB2z1dTg=; b=MtUDAduugAyCbC0x+GybWDrpg6
-        nvFGvIRZYvWlQOex2R/1t/2v/rActZJrR7vwvuJlXKveemU/iz4++d4GotlAkvaPASxt/V69sv0IW
-        ri/Ll4jnWKlySnMYN9/0CSP41DFCufPsa7lcX0Y1q6jOn11nHz/zwBf2W3f6x84qUVyueoCSvSKRR
-        DDk6HyQ9GyyQiRgH8jh5MXflBjo3tYUtlSuDlBNuXxdzteU1sUfcP1XhD97BszaVYQzTxHQKcA/vV
-        NNxIPT51Nkp1qj3KnJg7Rf8w5flxOjT2ZXNdvpP1EgMJE26QJPdlDIpe57D//TgbDdRbWno0lBcoI
-        JmIhzKag==;
+        bh=1NaK9G2/I/OTlb13IaE2Tqn3F/yijw+kp1Wy55f7+Ak=; b=d9VgDAL2fWp2M2wxA7J9NgpFTT
+        2pG2qOlYmRDNCuzGSRUBqoo9hMDtSgVzgVID6gFby7pOIrlbQNFtimg6GKmL90aKS1vg2lYRpe6E6
+        S50bRd4JCG17JCzCaWBBkWkX3v2Clfdjl01hTLfMxi/Kdtf8TxtDe2XST56gTJTH8NeJMqeihArR8
+        XcEZk4Z/I8fpUGsOtTlAneoT7X5OaEcAPvRQEER0lr8m6A3mwQn1+QXc8ME5pao1f5nnwssK44DRU
+        EUlFxQhJpcHlwX2ret9+B92moOLu8UBxS4OPT7RcvdlONjNMGjsPHDbl2769rXFicjenGXiSAmJvx
+        Q+I8zi6w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pG3ha-005Odr-Km; Thu, 12 Jan 2023 19:57:30 +0000
+        id 1pG3hZ-005Odc-MG; Thu, 12 Jan 2023 19:57:29 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6226E303427;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4894230341A;
         Thu, 12 Jan 2023 20:57:13 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id F0FCD2CCF1F7D; Thu, 12 Jan 2023 20:57:07 +0100 (CET)
-Message-ID: <20230112195540.556912863@infradead.org>
+        id DAA122CCF1F62; Thu, 12 Jan 2023 20:57:07 +0100 (CET)
+Message-ID: <20230112195540.312601331@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 12 Jan 2023 20:43:34 +0100
+Date:   Thu, 12 Jan 2023 20:43:30 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -104,7 +104,7 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v3 20/51] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IBRS
+Subject: [PATCH v3 16/51] cpuidle: Annotate poll_idle()
 References: <20230112194314.845371875@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,46 +112,39 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-vmlinux.o: warning: objtool: intel_idle_ibrs+0x17: call to spec_ctrl_current() leaves .noinstr.text section
-vmlinux.o: warning: objtool: intel_idle_ibrs+0x27: call to wrmsrl.constprop.0() leaves .noinstr.text section
+The __cpuidle functions will become a noinstr class, as such they need
+explicit annotations.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Acked-by: Frederic Weisbecker <frederic@kernel.org>
 Tested-by: Tony Lindgren <tony@atomide.com>
 Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- arch/x86/kernel/cpu/bugs.c |    2 +-
- drivers/idle/intel_idle.c  |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/cpuidle/poll_state.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -79,7 +79,7 @@ void write_spec_ctrl_current(u64 val, bo
- 		wrmsrl(MSR_IA32_SPEC_CTRL, val);
- }
- 
--u64 spec_ctrl_current(void)
-+noinstr u64 spec_ctrl_current(void)
+--- a/drivers/cpuidle/poll_state.c
++++ b/drivers/cpuidle/poll_state.c
+@@ -13,7 +13,10 @@
+ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+ 			       struct cpuidle_driver *drv, int index)
  {
- 	return this_cpu_read(x86_spec_ctrl_current);
- }
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -181,12 +181,12 @@ static __cpuidle int intel_idle_ibrs(str
- 	int ret;
+-	u64 time_start = local_clock();
++	u64 time_start;
++
++	instrumentation_begin();
++	time_start = local_clock();
  
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-+		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
+ 	dev->poll_time_limit = false;
  
- 	ret = __intel_idle(dev, drv, index);
+@@ -39,6 +42,7 @@ static int __cpuidle poll_idle(struct cp
+ 	raw_local_irq_disable();
  
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-+		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
+ 	current_clr_polling();
++	instrumentation_end();
  
- 	return ret;
+ 	return index;
  }
 
 

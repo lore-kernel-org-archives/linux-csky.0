@@ -2,43 +2,43 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2AD7C25B4E
-	for <linux-csky@archiver.kernel.org>; Tue, 24 Jan 2023 10:13:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2641C25B4E
+	for <linux-csky@archiver.kernel.org>; Tue, 24 Jan 2023 10:13:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbjAXKNZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Tue, 24 Jan 2023 05:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S233768AbjAXKNb (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 24 Jan 2023 05:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233741AbjAXKNV (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 24 Jan 2023 05:13:21 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAED22A16;
-        Tue, 24 Jan 2023 02:13:19 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30OACgTE019820;
-        Tue, 24 Jan 2023 04:12:42 -0600
+        with ESMTP id S233559AbjAXKN1 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 24 Jan 2023 05:13:27 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4253D09E;
+        Tue, 24 Jan 2023 02:13:25 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30OACdf1062044;
+        Tue, 24 Jan 2023 04:12:39 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674555162;
-        bh=TbI0et8o9xsZ9z4H+7u5mLi2Xelz8H1ZgN17q6rtog4=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=bbi+KPe1fzkccDFZP6aEsX0fqgwX0gsJhbYFb/5zAUXFPrIpXtXbZ5xkhh+i6rr5Q
-         7I1Cr3b6KSp3DYLjsmxEz5hXd9o2vz/vasWs1YAsQXgaPJvti3z+FAeLvD74vF2ZoK
-         5rt6xNbHYX6R1Rh/hRdsN3qxC0phUCNjlY4uF6mc=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30OACg6R032434
+        s=ti-com-17Q1; t=1674555159;
+        bh=gviSn9vb49cpzvtHbSo3QRdOijS+3xM9ZngoeJVs8kI=;
+        h=From:To:CC:Subject:Date;
+        b=XHy9sHQVFuVI/50lkjqrIOB2PTooqm1ouxm0BMDtL9onNCKMNq88bZnnYfcwNH6tu
+         6sWasbP4AioszP0Bhn5dMVHRImYTXAk948WGmfVrYx2+edOz/7e0eJDe/4shKlBWvp
+         2uhU7Zkq+NfGoyRw74a/ywEyl5/Yy+5dCHEMhFOw=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30OACd22038297
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Jan 2023 04:12:42 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 24 Jan 2023 04:12:39 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 24
- Jan 2023 04:12:42 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2023 04:12:39 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 24 Jan 2023 04:12:42 -0600
+ Frontend Transport; Tue, 24 Jan 2023 04:12:39 -0600
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30OACfWO018473;
-        Tue, 24 Jan 2023 04:12:42 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30OACc7f005965;
+        Tue, 24 Jan 2023 04:12:39 -0600
 From:   Aradhya Bhatia <a-bhatia1@ti.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -72,12 +72,10 @@ CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
         Jai Luthra <j-luthra@ti.com>,
         Jayesh Choudhary <j-choudhary@ti.com>,
         Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v2 2/4] dt-bindings: vendor-prefixes: Add lincolntech
-Date:   Tue, 24 Jan 2023 15:42:36 +0530
-Message-ID: <20230124101238.4542-3-a-bhatia1@ti.com>
+Subject: [PATCH v2 0/4] dt-bindings: Introduce dual-link panels & panel-vendors
+Date:   Tue, 24 Jan 2023 15:42:34 +0530
+Message-ID: <20230124101238.4542-1-a-bhatia1@ti.com>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230124101238.4542-1-a-bhatia1@ti.com>
-References: <20230124101238.4542-1-a-bhatia1@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -86,29 +84,52 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Add document vendor prefix for Lincoln Technology Solutions
-(lincolntech).
+Hi all,
 
-Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+Microtips Technology Solutions USA, and Lincoln Technology Solutions are
+2 display panel vendors, and the first 2 patches add their vendor
+prefixes.
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 169a3d4210bb..347459dc5d1b 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -737,6 +737,8 @@ patternProperties:
-     description: Lichee Pi
-   "^linaro,.*":
-     description: Linaro Limited
-+  "^lincolntech,.*":
-+    description: Lincoln Technology Solutions
-   "^lineartechnology,.*":
-     description: Linear Technology
-   "^linksprite,.*":
+The third patch introduces a dt-binding for generic dual-link LVDS
+panels. These panels do not have any documented constraints, except for
+their timing characteristics. Further, these panels have 2 pixel-sinks.
+In a dual-link connection between an LVDS encoder and the panel, one
+sink accepts the odd set of LVDS pixels and the other, the even set.
+
+The fourth patch introduces driver support for the 'panel-dual-lvds'
+in the panel-lvds driver, by adding the compatible.
+
+A lot of this has been based from the Advantech,idk-2121wr dual-link
+panel[1] and Maxime's patches for generic LVDS panels[2] (which are
+single-link by default.) and the discussions that happened before they
+were finally merged.
+
+Thank you!
+
+[1]: https://patchwork.freedesktop.org/patch/357122/
+[2]: https://patchwork.freedesktop.org/patch/471228/
+
+Changes in V2:
+==============
+  - Rebased to latest linux-next.
+  - Made dt-binding syntax corrections in Patch 3/4, based on comments
+    by Krzysztof Kozlowski and Laurent Pinchart.
+
+V1: https://lore.kernel.org/all/20230103064615.5311-1-a-bhatia1@ti.com/
+
+Aradhya Bhatia (4):
+  dt-bindings: vendor-prefixes: Add microtips
+  dt-bindings: vendor-prefixes: Add lincolntech
+  dt-bindings: panel: Introduce dual-link LVDS panel
+  drm: panel-lvds: Introduce dual-link panels
+
+ .../display/panel/panel-dual-lvds.yaml        | 149 ++++++++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+ MAINTAINERS                                   |   1 +
+ drivers/gpu/drm/panel/panel-lvds.c            |   1 +
+ 4 files changed, 155 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+
 -- 
 2.39.0
 

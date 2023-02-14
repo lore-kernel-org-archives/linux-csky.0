@@ -2,125 +2,94 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94DBDC636D4
-	for <linux-csky@archiver.kernel.org>; Mon, 13 Feb 2023 07:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17FDEC61DA4
+	for <linux-csky@archiver.kernel.org>; Tue, 14 Feb 2023 07:07:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjBMHyo (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 13 Feb 2023 02:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S231803AbjBNHH1 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Tue, 14 Feb 2023 02:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBMHyn (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 13 Feb 2023 02:54:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD259422A;
-        Sun, 12 Feb 2023 23:54:42 -0800 (PST)
+        with ESMTP id S231802AbjBNHHW (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Feb 2023 02:07:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D6E1E2A3;
+        Mon, 13 Feb 2023 23:06:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4871F60EC3;
-        Mon, 13 Feb 2023 07:54:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3884FC433EF;
-        Mon, 13 Feb 2023 07:54:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE36C61465;
+        Tue, 14 Feb 2023 07:06:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7744CC433AE;
+        Tue, 14 Feb 2023 07:06:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676274881;
-        bh=6metnuiv9QkmKFu+JTHLVBvZLre3nFtuNi3AR7PlA78=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P/NLBLn1QBccO0iLmwEVdjTRTOu/1JTVdr0CvbgYz4ThLcAoENpkQwi1mRk7/P19V
-         Brn+rbVYSD8LBBQWtetps+o6x9tV427CYirqerxd+gmGggehAz5OXTZeiD3MkT7U29
-         s/as2HenQlPGtPPTTf3fp/G4jLA+MmtrrPcey6hAK36CzGgOAg/0LtwnODYIfT0DI9
-         MUeph4dw/P2V8jMyhN9SftHlhcEV/JNhGKIKb6cMv7netYSdbt356AlVVkhPoiPUvd
-         r4aExWVaj3CL3McIngU/VdH3ENcuJwfiC6rBQVcgRCzZo3MtbE8U1j5N/4s5pn2pxp
-         sfCWQJUUPJk8Q==
-Date:   Mon, 13 Feb 2023 09:54:17 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
- pfn_valid() for FLATMEM
-Message-ID: <Y+nsqV6u/PqNlwDS@kernel.org>
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-5-rppt@kernel.org>
- <20230212161320.GA3784076@roeck-us.net>
- <Y+mRz6Wfocopv9jw@kernel.org>
- <15a2c023-fdfa-9543-ac36-a846e5f8a000@roeck-us.net>
+        s=k20201202; t=1676358412;
+        bh=Ya58HiCcymNeXiDsDrSrB3MVa42ANSTnVDrYM/I8DGE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=o1g46MnmwcBx8T5+mpqxpWg9RNiPGwxWh7u50+UbvVV/HCNE/CzztVflEM53qxglv
+         YYK/YrY0Q9V6xIHds9bSBH9HN0lqUKa6Z1xe3cfCjxpSNsspagp2pNbL0WMNKEQ0Rx
+         pzr+HaAh9N3K2/cV0XtAVxzNNCB75oEBpHNITqIRR27J3mfkFgz/r562+bVXahSIST
+         IY0Pnmrhw/r9K8+6kstkVaj4pLQJnS5iSYM8p9up4WRV2EcZ3VkSKGVUgn+3GYoIew
+         SCyrNFtXGmtYxVMosYI0z60anWodjY2gKyCCb0H5AEcAnHnT5mlvQpZIVvTrKYjllD
+         UOkJrRuEY33Fg==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: [PATCH v2 02/24] alpha/cpu: Make sure arch_cpu_idle_dead() doesn't return
+Date:   Mon, 13 Feb 2023 23:05:36 -0800
+Message-Id: <19ffef09a175fecb783abcd44d6bcfeade2857eb.1676358308.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <cover.1676358308.git.jpoimboe@kernel.org>
+References: <cover.1676358308.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15a2c023-fdfa-9543-ac36-a846e5f8a000@roeck-us.net>
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Andrew, 
+arch_cpu_idle_dead() doesn't return.  Make that more explicit with a
+BUG().
 
-On Sun, Feb 12, 2023 at 10:37:15PM -0800, Guenter Roeck wrote:
-> On 2/12/23 17:26, Mike Rapoport wrote:
-> > On Sun, Feb 12, 2023 at 08:13:20AM -0800, Guenter Roeck wrote:
-> > > On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
-> > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > > > 
-> > > > Every architecture that supports FLATMEM memory model defines its own
-> > > > version of pfn_valid() that essentially compares a pfn to max_mapnr.
-> > > > 
-> > > > Use mips/powerpc version implemented as static inline as a generic
-> > > > implementation of pfn_valid() and drop its per-architecture definitions.
-> > > > 
-> > > 
-> > > With this patch in the tree, sh4 and sh4eb qemu emulations no longer boot.
-> > > Reverting this patch fixes the problem.
-> > 
-> > This should be a better fix than a revert:
-> > 
-> > diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
-> > index 506784702430..bf1b54055316 100644
-> > --- a/arch/sh/mm/init.c
-> > +++ b/arch/sh/mm/init.c
-> > @@ -301,6 +301,7 @@ void __init paging_init(void)
-> >   	 */
-> >   	max_low_pfn = max_pfn = memblock_end_of_DRAM() >> PAGE_SHIFT;
-> >   	min_low_pfn = __MEMORY_START >> PAGE_SHIFT;
-> > +	set_max_mapnr(max_low_pfn - min_low_pfn);
-> >   	nodes_clear(node_online_map);
-> 
-> Confirmed, this fixes the problem for me.
+BUG() is preferable to unreachable() because BUG() is a more explicit
+failure mode and avoids undefined behavior like falling off the edge of
+the function into whatever code happens to be next.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/alpha/kernel/process.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/alpha/kernel/process.c b/arch/alpha/kernel/process.c
+index d1f2e8b6b107..d0ff06eda8fa 100644
+--- a/arch/alpha/kernel/process.c
++++ b/arch/alpha/kernel/process.c
+@@ -63,6 +63,7 @@ void arch_cpu_idle(void)
+ void arch_cpu_idle_dead(void)
+ {
+ 	wtint(INT_MAX);
++	BUG();
+ }
+ #endif /* ALPHA_WTINT */
  
-What is your preference for this and m68k fix? Fixups on top of mm-stable
-or v3 of the entire series? 
-
-> Thanks,
-> Guenter
-
 -- 
-Sincerely yours,
-Mike.
+2.39.1
+

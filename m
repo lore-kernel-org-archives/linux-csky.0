@@ -2,36 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74E1FC7EE2A
-	for <linux-csky@archiver.kernel.org>; Thu,  4 May 2023 19:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 020E0C7EE29
+	for <linux-csky@archiver.kernel.org>; Thu,  4 May 2023 19:03:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjEDTDg (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 4 May 2023 15:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S230249AbjEDTDt (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 4 May 2023 15:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjEDTCw (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 4 May 2023 15:02:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170F293E5;
-        Thu,  4 May 2023 12:02:25 -0700 (PDT)
-Message-ID: <20230504185937.145906075@linutronix.de>
+        with ESMTP id S230097AbjEDTDR (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 4 May 2023 15:03:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D659EC6;
+        Thu,  4 May 2023 12:02:36 -0700 (PDT)
+Message-ID: <20230504185937.257347750@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683226943;
+        s=2020; t=1683226946;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=lJLvACyWoTrqBZOps4v6XbP7wlJ3d4Q7defz4e+9Zb8=;
-        b=M3KgFVyzFkR4ccZ70dYavQ5/yqmJzYsNUe2w4AYa1zmqPGpOGfvnO2dLe+bqfdSYVxHNmg
-        UzxBYDkuh0vO9FnTUv0U0boU0E1jTAuFuEPxGvjM1vNFxZkY4+YKEIRoL7asL6MLh7WY2k
-        YHroxEZc/MyAi6EghJhWG+wOe//5AznxGGSpRWucK1h/BnTyT75KngcAYt8WZjiMtq166b
-        mZZvUfn/tKwnN+lYf/c6UiDK6atXikbDlaDBZ4sMT8u+PU/SPukxmYsr0YlXnC0aFBugr6
-        4bUgvijH50TXxyxKZ9qydiyNaQwVfzl3UXTSijqX2pY50ezKH3gbSbXO2Pf/Zg==
+         references:references; bh=7K79vzHgMUP9R0A/9c85ZFgwBToV4EA8CXJkDqIYiAA=;
+        b=UC7UBpzkmxaEWM2nz/Qw6Vjvrnn6fWsNM/KnljWxV7HMtz5u7vnaAfODd1M7vTr5ktTb20
+        nVojYUScHcp2OqOxJ8IqsoIvsDu/7IdzIUdDuRTyFO8wPuGlIHpnfYJUn5p8bx3AiClEX1
+        fRskIOaKRFHPshjjQegmMKxWZJiKU/W1wNR+46su4jgsn/9Va0iMm7QqwA01siEqX7wCZg
+        cW+AbT9hwgRm2RTXxGoRlf6T+Y7L4Mnn/bxe5uXiXqUdghVOxD2GUZ9J1ZZ4wpm572Kggb
+        lAqMgDTfSLuvpAL4aW6s90BbYxngLSPUP8QvW4PAuFXJ0OZBFaKLB/9XRIX9dw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683226943;
+        s=2020e; t=1683226946;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=lJLvACyWoTrqBZOps4v6XbP7wlJ3d4Q7defz4e+9Zb8=;
-        b=YUlyUuTQQYH6MyD4cTuFQt3gYiD8H4Dxlm3l2cVGkFebVjVj9D7krF98nosGppSH1sXEJ5
-        189JeF0cp5TwVnAA==
+         references:references; bh=7K79vzHgMUP9R0A/9c85ZFgwBToV4EA8CXJkDqIYiAA=;
+        b=y1BzbUsMle0wpOLNE2p2p2IO/b5quxM8T3suQns4J8s0UcXtZFuk8jCSoUG3pH8YtIQT2K
+        ezemL9386MNKclAg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -66,74 +66,52 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch V2 15/38] x86/smpboot: Remove wait for cpu_online()
+Subject: [patch V2 17/38] x86/xen/hvm: Get rid of DEAD_FROZEN handling
 References: <20230504185733.126511787@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu,  4 May 2023 21:02:22 +0200 (CEST)
+Date:   Thu,  4 May 2023 21:02:25 +0200 (CEST)
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Now that the core code drops sparse_irq_lock after the idle thread
-synchronized, it's pointless to wait for the AP to mark itself online.
+No point in this conditional voodoo. Un-initializing the lock mechanism is
+safe to be called unconditionally even if it was already invoked when the
+CPU died.
+
+Remove the invocation of xen_smp_intr_free() as that has been already
+cleaned up in xen_cpu_dead_hvm().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: xen-devel@lists.xenproject.org
 
 ---
- arch/x86/kernel/smpboot.c |   26 ++------------------------
- 1 file changed, 2 insertions(+), 24 deletions(-)
+ arch/x86/xen/enlighten_hvm.c |   11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 ---
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -281,7 +281,6 @@ static void notrace start_secondary(void
- 	 * half valid vector space.
+--- a/arch/x86/xen/enlighten_hvm.c
++++ b/arch/x86/xen/enlighten_hvm.c
+@@ -161,13 +161,12 @@ static int xen_cpu_up_prepare_hvm(unsign
+ 	int rc = 0;
+ 
+ 	/*
+-	 * This can happen if CPU was offlined earlier and
+-	 * offlining timed out in common_cpu_die().
++	 * If a CPU was offlined earlier and offlining timed out then the
++	 * lock mechanism is still initialized. Uninit it unconditionally
++	 * as it's safe to call even if already uninited. Interrupts and
++	 * timer have already been handled in xen_cpu_dead_hvm().
  	 */
- 	lock_vector_lock();
--	/* Sync point with do_wait_cpu_online() */
- 	set_cpu_online(smp_processor_id(), true);
- 	lapic_online();
- 	unlock_vector_lock();
-@@ -1110,20 +1109,6 @@ static int wait_cpu_initialized(unsigned
- 	return 0;
- }
+-	if (cpu_report_state(cpu) == CPU_DEAD_FROZEN) {
+-		xen_smp_intr_free(cpu);
+-		xen_uninit_lock_cpu(cpu);
+-	}
++	xen_uninit_lock_cpu(cpu);
  
--/*
-- * Bringup step three: Wait for the target AP to reach set_cpu_online() in
-- * start_secondary().
-- */
--static void wait_cpu_online(unsigned int cpu)
--{
--	/*
--	 * Wait for the AP to mark itself online, so the core caller
--	 * can drop sparse_irq_lock.
--	 */
--	while (!cpu_online(cpu))
--		schedule();
--}
--
- static int native_kick_ap(unsigned int cpu, struct task_struct *tidle)
- {
- 	int apicid = apic->cpu_present_to_apicid(cpu);
-@@ -1170,16 +1155,9 @@ int native_cpu_up(unsigned int cpu, stru
- 	int ret;
- 
- 	ret = native_kick_ap(cpu, tidle);
--	if (ret)
--		goto out;
--
--	ret = wait_cpu_initialized(cpu);
--	if (ret)
--		goto out;
--
--	wait_cpu_online(cpu);
-+	if (!ret)
-+		ret = wait_cpu_initialized(cpu);
- 
--out:
- 	/* Cleanup possible dangling ends... */
- 	if (x86_platform.legacy.warm_reset)
- 		smpboot_restore_warm_reset_vector();
+ 	if (cpu_acpi_id(cpu) != U32_MAX)
+ 		per_cpu(xen_vcpu_id, cpu) = cpu_acpi_id(cpu);
 

@@ -2,36 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58C4FC77B75
-	for <linux-csky@archiver.kernel.org>; Fri, 12 May 2023 21:09:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63803C7EE24
+	for <linux-csky@archiver.kernel.org>; Fri, 12 May 2023 21:09:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240311AbjELVJh (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Fri, 12 May 2023 17:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S240357AbjELVJp (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Fri, 12 May 2023 17:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239949AbjELVI2 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 12 May 2023 17:08:28 -0400
+        with ESMTP id S240169AbjELVIu (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 12 May 2023 17:08:50 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB11100DF;
-        Fri, 12 May 2023 14:07:49 -0700 (PDT)
-Message-ID: <20230512205256.916055844@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB1CAD22;
+        Fri, 12 May 2023 14:07:55 -0700 (PDT)
+Message-ID: <20230512205257.027075560@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683925660;
+        s=2020; t=1683925664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=3WyGAeXCoINo+ZjbtqDSmG4Uv4XxBoW1eRT13EQq0fk=;
-        b=gCuo784jqFHJl8ajBn8394w4OmHWarWHua689soLfocU0hu6yonNTwuMrKteuZS5UiIuEV
-        qrcv15f4Q6TokbWN0YfdK3MSd6z8xiHfnEZzev7CF61wRptMWuiL7c2cva2fdafmy4x44i
-        QLCrGnHJHlwNB/wrQX3E9sCIWLmnibPYc8f6Fvn0Mhtkx8DzedCkReA25Zy2fK9LabrFWb
-        x1UPFk0hgEJqdWWpnRwgFxJ1i3v5p9suQyaN5MHQM1jUq9DQq3rPXVvibiH0XDHv/RMwo0
-        mWl2Aksb+Mjpq0yv8/Ii5IfUB3vzQQo6B2UpFf/trJXJtP52QvDOQWDArAV10Q==
+         references:references; bh=QdUmczWTVhK7K/GEDp21ZZBW6QiyoqITsSHkVbZTwSo=;
+        b=QxFsCk8M0IwU/AWXJTbXBb8OmrmczN7eSVShQBD/xtp9CSloxhz1odBQguueWNc/vEM52/
+        0Kl3gldkf4/0GgZgMmCaVqarwnt6c2WxoW5biu9zyuJifvGtM9/Jij2+5GahK4gODm1Y1Q
+        1hd8RJJvQbU0l+Gnh64z7qRhDPk39TNRP842ELWqPXiUeNBVOhZ36Jqvxt0WeLRCeD/TLr
+        8ppgeI8QfGvfUVwsNNPzx6acsMuK+QD0Sy+DuKWmGes0FQJYbkh9eWywGTaBGzAG8N39CJ
+        IMTWuS0FUzsmcC8AS5xDPopwnYu51b4FiPLMJd67kDoqwu/y1krpwzf6eMhGgw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683925660;
+        s=2020e; t=1683925664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=3WyGAeXCoINo+ZjbtqDSmG4Uv4XxBoW1eRT13EQq0fk=;
-        b=LWXqEciaP4I0I25ywyzxuHHtRRVAY1D7DccVqnOk2GJSZvUntz/BBxlff7vjipNfXjw8l7
-        MDKU/BWHM78qyUDA==
+         references:references; bh=QdUmczWTVhK7K/GEDp21ZZBW6QiyoqITsSHkVbZTwSo=;
+        b=kpZz6QyptBqFfMzJcx1ZcoW9ytkNNQFs/6P8KAIUryIP/ZE4SXsEP30lmowL1TlGesMnkc
+        +R008NAdqKJ6jZCQ==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -67,94 +67,68 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Ross Philipson <ross.philipson@oracle.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [patch V4 27/37] riscv: Switch to hotplug core state synchronization
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: [patch V4 29/37] cpu/hotplug: Reset task stack state in _cpu_up()
 References: <20230512203426.452963764@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 23:07:40 +0200 (CEST)
+Date:   Fri, 12 May 2023 23:07:43 +0200 (CEST)
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Switch to the CPU hotplug core state tracking and synchronization
-mechanim. No functional change intended.
+Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
+ensured that the shadow call stack and KASAN poisoning were removed from
+a CPU's stack each time that CPU is brought up, not just once.
 
+This is not incorrect. However, with parallel bringup the idle thread setup
+will happen at a different step. As a consequence the cleanup in
+bringup_cpu() would be too late.
+
+Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
+which already ensures that the new CPU's stack is available, purely to
+allow for early failure. This occurs when the CPU to be brought up is
+in the CPUHP_OFFLINE state, which should correctly do the cleanup any
+time the CPU has been taken down to the point where such is needed.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 ---
- arch/riscv/Kconfig              |    1 +
- arch/riscv/include/asm/smp.h    |    2 +-
- arch/riscv/kernel/cpu-hotplug.c |   14 +++++++-------
- 3 files changed, 9 insertions(+), 8 deletions(-)
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -122,6 +122,7 @@ config RISCV
- 	select HAVE_RSEQ
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
-+	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select IRQ_DOMAIN
- 	select IRQ_FORCED_THREADING
- 	select KASAN_VMALLOC if KASAN
---- a/arch/riscv/include/asm/smp.h
-+++ b/arch/riscv/include/asm/smp.h
-@@ -70,7 +70,7 @@ asmlinkage void smp_callin(void);
- 
- #if defined CONFIG_HOTPLUG_CPU
- int __cpu_disable(void);
--void __cpu_die(unsigned int cpu);
-+static inline void __cpu_die(unsigned int cpu) { }
- #endif /* CONFIG_HOTPLUG_CPU */
- 
- #else
---- a/arch/riscv/kernel/cpu-hotplug.c
-+++ b/arch/riscv/kernel/cpu-hotplug.c
-@@ -8,6 +8,7 @@
- #include <linux/sched.h>
- #include <linux/err.h>
- #include <linux/irq.h>
-+#include <linux/cpuhotplug.h>
- #include <linux/cpu.h>
- #include <linux/sched/hotplug.h>
- #include <asm/irq.h>
-@@ -49,17 +50,15 @@ int __cpu_disable(void)
- 	return ret;
- }
- 
-+#ifdef CONFIG_HOTPLUG_CPU
- /*
-- * Called on the thread which is asking for a CPU to be shutdown.
-+ * Called on the thread which is asking for a CPU to be shutdown, if the
-+ * CPU reported dead to the hotplug core.
-  */
--void __cpu_die(unsigned int cpu)
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
- {
- 	int ret = 0;
- 
--	if (!cpu_wait_death(cpu, 5)) {
--		pr_err("CPU %u: didn't die\n", cpu);
--		return;
--	}
- 	pr_notice("CPU%u: off\n", cpu);
- 
- 	/* Verify from the firmware if the cpu is really stopped*/
-@@ -76,9 +75,10 @@ void __noreturn arch_cpu_idle_dead(void)
- {
- 	idle_task_exit();
- 
--	(void)cpu_report_death();
-+	cpuhp_ap_report_dead();
- 
- 	cpu_ops[smp_processor_id()]->cpu_stop();
- 	/* It should never reach here */
- 	BUG();
- }
-+#endif
+ kernel/cpu.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -771,12 +771,6 @@ static int bringup_cpu(unsigned int cpu)
+ 		return -EAGAIN;
+ 
+ 	/*
+-	 * Reset stale stack state from the last time this CPU was online.
+-	 */
+-	scs_task_reset(idle);
+-	kasan_unpoison_task_stack(idle);
+-
+-	/*
+ 	 * Some architectures have to walk the irq descriptors to
+ 	 * setup the vector space for the cpu which comes online.
+ 	 *
+@@ -1587,6 +1581,12 @@ static int _cpu_up(unsigned int cpu, int
+ 			ret = PTR_ERR(idle);
+ 			goto out;
+ 		}
++
++		/*
++		 * Reset stale stack state from the last time this CPU was online.
++		 */
++		scs_task_reset(idle);
++		kasan_unpoison_task_stack(idle);
+ 	}
+ 
+ 	cpuhp_tasks_frozen = tasks_frozen;
 

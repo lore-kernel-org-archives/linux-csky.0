@@ -2,347 +2,270 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 090AFC77B73
-	for <linux-csky@archiver.kernel.org>; Tue,  6 Jun 2023 01:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E81C7EE2E
+	for <linux-csky@archiver.kernel.org>; Thu,  8 Jun 2023 09:59:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbjFFBsM (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 5 Jun 2023 21:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S235865AbjFHJ7M (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 8 Jun 2023 05:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbjFFBsG (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 5 Jun 2023 21:48:06 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B9010E3
-        for <linux-csky@vger.kernel.org>; Mon,  5 Jun 2023 18:47:41 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-528cdc9576cso2942151a12.0
-        for <linux-csky@vger.kernel.org>; Mon, 05 Jun 2023 18:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686016037; x=1688608037;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N+507jsXO1BnVewAsLkwzOZpkiaji1CsapmTp9yyUaM=;
-        b=dIxbCIi0rJbSLxPR/xfTQsCM+M6jm4HaUgLS+0uDUowhc7bgpH7HzmYEH+r/3F82JE
-         Z+O3HYuNoF2wk2r9DwHjkLbLwlRLhDt+FqAxsOa7YI8yuTuFwhnDia/M0RW/UrEz/F6J
-         4G8Sdh6Fyn7qpG7+jlBs2DbK1WO3e5X/djFyNZcEXfSjPg5M84z/JXAOY+gosf0ZlzSO
-         ditxWwuhEnAQlT77aoag2kWVU7cff8H/I6VbV+AQTQkBqaLDQzZQE+2ES1eN4vZ80B36
-         MtBklXlYuEq6QxkzSfoIRdvmKuFnkis40PTVm8FiOR+8o5Mxjj3q2zYJL2L5xPFGbThz
-         0ohg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686016037; x=1688608037;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N+507jsXO1BnVewAsLkwzOZpkiaji1CsapmTp9yyUaM=;
-        b=kIpDu0kdjBbj+KyXG+aZBMsCvBSHRSAxgP0B7rtk/GNoD3nJPnFVQkv4tZ6O7lstqu
-         lbRQBbB4BiMdn0vGxfTt+bwJBJwR4aNobLJz81qZQfU/OoZB6zhw6/el3P0hrldU6gGM
-         Jy+4gS9j0u8wM9G53q53fbRYzzwLGxyF5MBeCLKcWmSZpCkH6T3ePvbYpLuICZwQSVRD
-         +RypWv3XlKZfDPDnY3BGNdw2XV/iiPdrcopuL6jmc5rk6T97IKBbaTXvGoaiW3lhKhCw
-         OHkGJb/6P1akesdBhkHQFqHzgcBGEitOzrmOjL8zh1USrCW0uiSzG2uqKEehAfrI448r
-         QtJg==
-X-Gm-Message-State: AC+VfDyOS4vTTM/1DciBVOUy+TF0/yN2CzLNtL6rIQLcjzYDtY1CqzAF
-        yF9Qjh9TNmI1oZN587F5Y5+k4w==
-X-Google-Smtp-Source: ACHHUZ5wNp+vHV2+xqeEpakEuvMMeVGxroHVvlVQpo9lYy5LiPQ7V3r7CA3CKHEXyKL2AYHAW29eDA==
-X-Received: by 2002:a05:6a20:549c:b0:116:9255:88eb with SMTP id i28-20020a056a20549c00b00116925588ebmr602780pzk.46.1686016036830;
-        Mon, 05 Jun 2023 18:47:16 -0700 (PDT)
-Received: from leoy-huanghe.lan ([240e:389:8603:ad00:6600:a29f:6ab:1788])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b001a64851087bsm7197805plq.272.2023.06.05.18.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 18:47:16 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ming Wang <wangming01@loongson.cn>,
-        Eric Lin <eric.lin@sifive.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 6/6] perf parse-regs: Move out arch specific header from util/perf_regs.h
-Date:   Tue,  6 Jun 2023 09:45:59 +0800
-Message-Id: <20230606014559.21783-7-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230606014559.21783-1-leo.yan@linaro.org>
-References: <20230606014559.21783-1-leo.yan@linaro.org>
+        with ESMTP id S235863AbjFHJ7G (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 8 Jun 2023 05:59:06 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646472D52;
+        Thu,  8 Jun 2023 02:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686218342; x=1717754342;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=lQws4uprA9sr/zsoQh/AXbU7/jhzjZmrrt3upVrA6vA=;
+  b=IG6t/eNOFgwM7kt2UtZ2RCaBRCVSsvnPnSwk6pXIPyolCi/pdbFN3jyz
+   t9SvaqMRncVbQfdZ7L007K/Jf92P6+7clWya6AesqeiTMGGd8IqRWCxmj
+   v6dRhb90T/xQaxnwYkKi0nv+BwLaQ0utFh1u8PAFxcfv8pOyPZ61QaC8w
+   acMESdRR9hw+xPa52ttfCj4kNPJR+2TO4XAornyBy1OToAtZMXW40GkYr
+   yrQdBkR9+j2Kv3BVeZmbJSSapXDuGYQgWmm+n+pyW1dH/zTjEnc9TCqxT
+   OIrHruVryvXLGvGuByUKb2GQbe2U5T30laR4T+cXiQsumlLyIgBljiCRI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357273381"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="357273381"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 02:59:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="660319355"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="660319355"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2023 02:59:01 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 02:59:00 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 02:59:00 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 8 Jun 2023 02:59:00 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 8 Jun 2023 02:58:59 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jxe1S8319iha9WYBEZ4arYLSsJ5taRQx4zjxMUSQA01bFPnq0UC8TwDSGuZ7oExn187Bszt607/t51lVVMZFQqwHzi27r6GavBWjysu2UZWwEMTYb7ObdJGss4aoTw+40NLtQ83Q+pZ3xqnNAgY5TWwNrSjQUNpOIZcD83qOC2qKYejIvGK6dmOxXHLkSTkR1mtS9fYX216l+PCDWT7v1VmT9bQRmtHSZ3kKWLhsHTqXx2qFD4+/Zr9SgrGGjop0Dw/Humcb3sdss8zpdDU/Z+4oaLLUayCZJQJwKSIeawxAMt8b/t92dKh2m5iTNYWmOXDwlWDGdjSVJtGnlGrQwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lQws4uprA9sr/zsoQh/AXbU7/jhzjZmrrt3upVrA6vA=;
+ b=M+K48mLj/MjORhSv8QTgV+/2R50a6D+FBfQzO6xgK9XNxGym3httYMOXBOtbUASKYcsx2+4zLL8nOiAuwAzh6ytJglDmEOLmw65YIVr1r5VImhcrwfsOVQ7zvJ9RD+pr3aoJbgkVYnWsz/dTNp3ZHURB3JWcs+wd5PnFQM7tMxyai1KYVj2yV8E+0ne6eTf0hnJ6QGnJPKt2B+s6k/vW2CYEYrhTi/9uZ3XXSS5locWyIzO7pp6Vohs9+D6XKNixYU+zQPryNkQja8ljxSObH1cQ7RY8ghcMW/eMdBRe4gf/1a3PCPUdsOGQiu997/b5WDtx+m7FJECNj9xLjGd5Ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by MW6PR11MB8340.namprd11.prod.outlook.com (2603:10b6:303:23e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Thu, 8 Jun
+ 2023 09:58:59 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::5486:41e6:7c9e:740e]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::5486:41e6:7c9e:740e%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 09:58:59 +0000
+From:   "Liu, Yujie" <yujie.liu@intel.com>
+To:     "ndesaulniers@google.com" <ndesaulniers@google.com>
+CC:     lkp <lkp@intel.com>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "Li, Philip" <philip.li@intel.com>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ardb@kernel.org" <ardb@kernel.org>
+Subject: Re: [PATCH] certs: buffer stderr from openssl unless error
+Thread-Topic: [PATCH] certs: buffer stderr from openssl unless error
+Thread-Index: AQHZiXLsaJQDawZJt0OZH6y+M8afcq9gn5aAgCAsWgA=
+Date:   Thu, 8 Jun 2023 09:58:59 +0000
+Message-ID: <6869338a02e108d9ed2c893f921c750ed1e00fb6.camel@intel.com>
+References: <20230517-genkey-v1-1-b887424da4a8@google.com>
+         <202305181712.xjvv1fbD-lkp@intel.com>
+         <CAKwvOd=hoKFMC40U-Pd=2dBJ4zT4P60OgJpHvNmH+zdGAd_J-Q@mail.gmail.com>
+In-Reply-To: <CAKwvOd=hoKFMC40U-Pd=2dBJ4zT4P60OgJpHvNmH+zdGAd_J-Q@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR11MB6392:EE_|MW6PR11MB8340:EE_
+x-ms-office365-filtering-correlation-id: 65c3aabe-32d8-4cdf-09bf-08db6806fadb
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: u3w+a9YT84zRXxf0cPY8HsMLje2SW/b7heP0tSRFAVXxHFSeDtJOGOtp00EKdW52ZHcxZKpvfric+sCXg6kVonaI5MQKcO8VZPpVXzUD7Sg7+1N457LIlzcqv/pD3qHEGQMzTXMZ40+OWKhRLsLsYaGuN1lTV7KqroPb1CLfOFZaxtEaRBV5mz2iAllMZ1tJdhVrVHfKMbBpxF6/RQ8A5yvvyCWJCtncykTQT3o/qA1uLlonvkIDuTi4Gr45dLl9gL8wzLkER342WlCBpcwqs/cLMxiyJ6aMgAtYQlZ+WECQyQiisateDWR8V2uSeTwiwG3xyY/gf0Xe5P+6Nw4kndbahAXoCCGJIJrs7Ll587+zA9NKfRzjBIP/8oE+oG21sQirKtvMZDND4yOrYsZWqyuMt8Euy7yiNXjM4HBy+530LNKPcCVH1R4fcj1R88S+E1TXv6Yxeus/1wmlH/9FgaCmTyGLMeqguThQogO+maDQ9KLDTKmtrr1pjaHk4tEfszEca2mPoKzcHiVDeNHiWnZz+GO6Yz4c/YIRtqTLI3iY4GQf28km2Bx7k4g0H6/3JiaVDBjgEJNiRKSs9UYOUlWkrFSSlCTeeLu+MRpdlIh70eP+maZj5wMbaT4ykpWen4Fak5CT5v1XCo6wDmkKhQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(346002)(396003)(376002)(39860400002)(451199021)(54906003)(71200400001)(478600001)(66446008)(5660300002)(122000001)(8936002)(8676002)(4326008)(2906002)(36756003)(86362001)(38070700005)(66476007)(76116006)(91956017)(66556008)(66946007)(82960400001)(6916009)(316002)(64756008)(6506007)(38100700002)(41300700001)(2616005)(53546011)(6512007)(26005)(186003)(966005)(83380400001)(6486002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZGx5enhKVnBCWnJTa2FYNjB1VDZVaWsxMlZXY2tobjFDeGRFbUwraVdLb1l4?=
+ =?utf-8?B?VzFuUDlreUQrdytEVzRHS2FPZ3RhUE1FMkd4ZGJwM2g0blpka2dWcE5HNTJ3?=
+ =?utf-8?B?ZnBZcVFXcTB2OUlQZnVjZDlUYWsyZ3R5Vm9JcG5US0NsaDFwL1dJNE9oZTR6?=
+ =?utf-8?B?KzVlbzRuYm95bzVOR3U3VjgwaVNQRE9JV1BKK2YrTnE3aXlNSlBVcnYwdU5Z?=
+ =?utf-8?B?NjFPbFEwdEFsMFRhaDE5eXYwWXoxUWhJKzVpRW5JVkxPTnAxRnlybmRURGM2?=
+ =?utf-8?B?cXE0eUNuTVFGTERWcHY0NVcwZ3A1NVVxYzdsMEwrSXcrdFRJOTR2NUpqUHRD?=
+ =?utf-8?B?d2Q1RnZNTXM3UHE2S2ZMOFk3K25Od0REUzB4TGQ4VW5iMGI5YXd5eXpnYUlN?=
+ =?utf-8?B?NmkwV1JOSTBIRjNFT0ZQbWtmM1pKN2gzVUlPaWppSlE5cnlBazlLQjUyT2Jw?=
+ =?utf-8?B?bnduTDlDOFVTSzFqQWc4REdVN3E5QlJpcUY5bmhkN2lhS052OWhMamkvTi9R?=
+ =?utf-8?B?YkFYZHY3YXBFV2ZLRXlDQ3hCRVNpbjRJbmM5Qm05Vjd3cWFNckIxRHp0N2lm?=
+ =?utf-8?B?Ui8vUC9rK0s5Z2E0UVo4YlExbnpPMXpBZ2Yvc3NwZEhiNU5QYWVRaEl5TUpl?=
+ =?utf-8?B?SlF2cGYyTUR2ZDNwbUE3cERTcGplYW12d2JWWUNxcUNpbnlpRTNyc0c2NDFq?=
+ =?utf-8?B?Q1c5S1hQcThyQ2VTYVpHcFBoUzVJT0R5emhOMVBxaUlNVzZhVWYrdVNZZXh3?=
+ =?utf-8?B?VG9oRnJaZEw2S2J1emNMSGJsdUcvKzBudHowRmwyTE9VZnVWOVBHWEJ6SDNC?=
+ =?utf-8?B?Unl1UU5rUmJXTkpKbkcxMFJtU1R2WG40Q0ptYVBLbFVRVzFVM0RSQ1loTUt1?=
+ =?utf-8?B?S1o3YzlHbk1YMjhKSUwvSWlHcjc2cWRqV051MjhEaHBzdjRwL1V0SWtGN0hu?=
+ =?utf-8?B?dkhRVDNHblNRVnlqZ2dXU1FuNTBObG9JVHdvVm9xWi9lanFmakVKYnYvT3dB?=
+ =?utf-8?B?WHpPOUJLeFkwRE9hbWtJRVNxYjFuelp2UzFXVi9KYVcyWmQ5UGJQM1lqM2pv?=
+ =?utf-8?B?dUM1ZExzRDJRWjlnTnRkdWsvTjFLRGZLeW5yMXlEWkowZGRETG9kQUdMVFBr?=
+ =?utf-8?B?YU9qQysrSW9Xcm52QjEwSVkwbnpiU2VRd3NreDYrMjVsOHFwcGUrcDBwUVVJ?=
+ =?utf-8?B?bnNxTjVTdU56a2pTOTBiQ3BEOHBqdlJLblJkMmZ5Q01Tbk5hNFovMk01V0t4?=
+ =?utf-8?B?NHZmL3NYRHMvMXVwYTdPQ2FHVjhkWkJsRFlCVEdRK1hCUXNlNEh1dEg5d1dx?=
+ =?utf-8?B?N3dmZGp4Sk45MzlHRFZjZWlpcEg0M2F2Q3ZWdGdvbHg4OGhJQ3dOK3g2VXJ0?=
+ =?utf-8?B?S1JpWUNKSzhKcjlBK1lTbWhDUHJtZE02QmpkdzJrUHFlK2paaWZSdWRYcGNs?=
+ =?utf-8?B?bnZ4eHlrUitRdi9yWGgxbk5ZRnNkMEFCMGI3aVp5NU9yYWI0KzZoZUxTMXAx?=
+ =?utf-8?B?ZzR6ZkZYaHFVUndSWXBZM3EwRUhqUG9VRUs5VFBvL0xYNmNXK3dlRkJGOTdz?=
+ =?utf-8?B?emlGVXIwSjB4NEplMy9DV0VnekhESnJQMmprb0FLeW5KUlVhNmd6YUpySWdU?=
+ =?utf-8?B?bGhML2g0NzR1ZG1KUS9HVUV6RkdGczdFdUZvYnZid2Q4d2crUGlMd1RVSmU0?=
+ =?utf-8?B?K3kxZXBoNnZmNGk4ekhkU29taytuRjRHOHNGczlOVU1WVTlIN2U0Sk54VWNL?=
+ =?utf-8?B?VUxCeW84bGtuSXlZNUk1Q1Qva2VjOERPR01hSEVPOEVYc0pHb2tpSkNGN0Ix?=
+ =?utf-8?B?SlZ1bDNNZU5Fd1FsZXgva01sSGxyL0ZFSERVYnJjTXZkejdhY09tRWZoajkx?=
+ =?utf-8?B?MmpjdTBzWElPYkhJT1V1cFdGd0ZHajBHSUMyejJhckxTSTQzazBReURZTVpq?=
+ =?utf-8?B?QTJuSm9FaWVvbFhNZ2w1bm1PcmZoMGxGNkJINVpnenByc3JpeEUvSzFNR0pu?=
+ =?utf-8?B?bGxkMXV3dGp3cmx6bnd6RGRJdTBkSFMyVTBGeWx2b1NqcHVNRmxPN1pndE0w?=
+ =?utf-8?B?VUVKTkRMTDMzWVQyRjYzeW1rSDI0cWN3M00vTUsvUm9QWE5TNUZoV0pKWVB0?=
+ =?utf-8?Q?OQxBvO+3WdWA6XtZUzhbu2dVh?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <85507672B71016418C52B7CADD37553E@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65c3aabe-32d8-4cdf-09bf-08db6806fadb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 09:58:59.0426
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tFCgcYwcvKXyvGCCi/mAXI2iphpN6gNi8sPA3D2AJMzY4q0Ufh2VoPiJoqcXD+IXYPsE9MMSxGiz8z/lbkoM7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR11MB8340
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-util/perf_regs.h includes another perf_regs.h:
-
-  #include <perf_regs.h>
-
-Here it includes architecture specific header, for example, if we build
-arm64 target, the header tools/perf/arch/arm64/include/perf_regs.h is
-included.
-
-We use this implicit way to include architecture specific header, which
-is not directive; furthermore, util/perf_regs.c is coupled with the
-architecture specific definitions.
-
-This patch moves out arch specific header from util/perf_regs.h for
-generalizing the 'util' folder, as a result, the source files in 'arch'
-folder explicitly include architecture's perf_regs.h.
-
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/arch/arm/util/perf_regs.c          | 1 +
- tools/perf/arch/arm/util/unwind-libdw.c       | 1 +
- tools/perf/arch/arm64/util/machine.c          | 1 +
- tools/perf/arch/arm64/util/perf_regs.c        | 1 +
- tools/perf/arch/arm64/util/unwind-libdw.c     | 1 +
- tools/perf/arch/csky/util/perf_regs.c         | 1 +
- tools/perf/arch/csky/util/unwind-libdw.c      | 1 +
- tools/perf/arch/loongarch/util/perf_regs.c    | 1 +
- tools/perf/arch/loongarch/util/unwind-libdw.c | 1 +
- tools/perf/arch/mips/util/perf_regs.c         | 1 +
- tools/perf/arch/powerpc/util/perf_regs.c      | 1 +
- tools/perf/arch/powerpc/util/unwind-libdw.c   | 1 +
- tools/perf/arch/riscv/util/perf_regs.c        | 1 +
- tools/perf/arch/riscv/util/unwind-libdw.c     | 1 +
- tools/perf/arch/s390/util/perf_regs.c         | 1 +
- tools/perf/arch/s390/util/unwind-libdw.c      | 1 +
- tools/perf/arch/x86/util/perf_regs.c          | 1 +
- tools/perf/arch/x86/util/unwind-libdw.c       | 1 +
- tools/perf/util/perf_regs.h                   | 2 --
- 19 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/arch/arm/util/perf_regs.c b/tools/perf/arch/arm/util/perf_regs.c
-index d9d4777bf7f9..2c56e8b56ddf 100644
---- a/tools/perf/arch/arm/util/perf_regs.c
-+++ b/tools/perf/arch/arm/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/arm/util/unwind-libdw.c b/tools/perf/arch/arm/util/unwind-libdw.c
-index 1834a0cd9ce3..4e02cef461e3 100644
---- a/tools/perf/arch/arm/util/unwind-libdw.c
-+++ b/tools/perf/arch/arm/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/arm64/util/machine.c b/tools/perf/arch/arm64/util/machine.c
-index 235a0a1e1ec7..ba1144366e85 100644
---- a/tools/perf/arch/arm64/util/machine.c
-+++ b/tools/perf/arch/arm64/util/machine.c
-@@ -6,6 +6,7 @@
- #include "debug.h"
- #include "symbol.h"
- #include "callchain.h"
-+#include "perf_regs.h"
- #include "record.h"
- #include "util/perf_regs.h"
- 
-diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm64/util/perf_regs.c
-index 76e2e30702cd..1b79d8eab22f 100644
---- a/tools/perf/arch/arm64/util/perf_regs.c
-+++ b/tools/perf/arch/arm64/util/perf_regs.c
-@@ -6,6 +6,7 @@
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../perf-sys.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
-diff --git a/tools/perf/arch/arm64/util/unwind-libdw.c b/tools/perf/arch/arm64/util/unwind-libdw.c
-index 09385081bb03..e056d50ab42e 100644
---- a/tools/perf/arch/arm64/util/unwind-libdw.c
-+++ b/tools/perf/arch/arm64/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/csky/util/perf_regs.c b/tools/perf/arch/csky/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/csky/util/perf_regs.c
-+++ b/tools/perf/arch/csky/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/csky/util/unwind-libdw.c b/tools/perf/arch/csky/util/unwind-libdw.c
-index 4bb4a06776e4..79df4374ab18 100644
---- a/tools/perf/arch/csky/util/unwind-libdw.c
-+++ b/tools/perf/arch/csky/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- // Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd.
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/event.h"
-diff --git a/tools/perf/arch/loongarch/util/perf_regs.c b/tools/perf/arch/loongarch/util/perf_regs.c
-index d9d4777bf7f9..2c56e8b56ddf 100644
---- a/tools/perf/arch/loongarch/util/perf_regs.c
-+++ b/tools/perf/arch/loongarch/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/loongarch/util/unwind-libdw.c b/tools/perf/arch/loongarch/util/unwind-libdw.c
-index a9415385230a..7b3b9a4b21f8 100644
---- a/tools/perf/arch/loongarch/util/unwind-libdw.c
-+++ b/tools/perf/arch/loongarch/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2020-2023 Loongson Technology Corporation Limited */
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/sample.h"
-diff --git a/tools/perf/arch/mips/util/perf_regs.c b/tools/perf/arch/mips/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/mips/util/perf_regs.c
-+++ b/tools/perf/arch/mips/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/powerpc/util/perf_regs.c b/tools/perf/arch/powerpc/util/perf_regs.c
-index 1d264bf55955..b38aa056eea0 100644
---- a/tools/perf/arch/powerpc/util/perf_regs.c
-+++ b/tools/perf/arch/powerpc/util/perf_regs.c
-@@ -4,6 +4,7 @@
- #include <regex.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
-diff --git a/tools/perf/arch/powerpc/util/unwind-libdw.c b/tools/perf/arch/powerpc/util/unwind-libdw.c
-index e616642c754c..e9a5a8bb67d9 100644
---- a/tools/perf/arch/powerpc/util/unwind-libdw.c
-+++ b/tools/perf/arch/powerpc/util/unwind-libdw.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
- #include <linux/kernel.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/riscv/util/perf_regs.c b/tools/perf/arch/riscv/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/riscv/util/perf_regs.c
-+++ b/tools/perf/arch/riscv/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/riscv/util/unwind-libdw.c b/tools/perf/arch/riscv/util/unwind-libdw.c
-index 54a198714eb8..5c98010d8b59 100644
---- a/tools/perf/arch/riscv/util/unwind-libdw.c
-+++ b/tools/perf/arch/riscv/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd. */
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/sample.h"
-diff --git a/tools/perf/arch/s390/util/perf_regs.c b/tools/perf/arch/s390/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/s390/util/perf_regs.c
-+++ b/tools/perf/arch/s390/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/s390/util/unwind-libdw.c b/tools/perf/arch/s390/util/unwind-libdw.c
-index 7d92452d5287..f50fb6dbb35c 100644
---- a/tools/perf/arch/s390/util/unwind-libdw.c
-+++ b/tools/perf/arch/s390/util/unwind-libdw.c
-@@ -5,6 +5,7 @@
- #include "../../util/event.h"
- #include "../../util/sample.h"
- #include "dwarf-regs-table.h"
-+#include "perf_regs.h"
- 
- 
- bool libdw__arch_set_initial_registers(Dwfl_Thread *thread, void *arg)
-diff --git a/tools/perf/arch/x86/util/perf_regs.c b/tools/perf/arch/x86/util/perf_regs.c
-index 218747a8b039..b813502a2727 100644
---- a/tools/perf/arch/x86/util/perf_regs.c
-+++ b/tools/perf/arch/x86/util/perf_regs.c
-@@ -5,6 +5,7 @@
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../perf-sys.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/debug.h"
-diff --git a/tools/perf/arch/x86/util/unwind-libdw.c b/tools/perf/arch/x86/util/unwind-libdw.c
-index ef71e8bf80bf..edb77e20e083 100644
---- a/tools/perf/arch/x86/util/unwind-libdw.c
-+++ b/tools/perf/arch/x86/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "util/sample.h"
-diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-index 8583c52572b1..4f6a3c1ba901 100644
---- a/tools/perf/util/perf_regs.h
-+++ b/tools/perf/util/perf_regs.h
-@@ -30,8 +30,6 @@ uint64_t arch__user_reg_mask(void);
- #ifdef HAVE_PERF_REGS_SUPPORT
- extern const struct sample_reg sample_reg_masks[];
- 
--#include <perf_regs.h>
--
- #define DWARF_MINIMAL_REGS(arch)	\
- 	((1ULL << perf_arch_reg_ip(arch)) | (1ULL << perf_arch_reg_sp(arch)))
- 
--- 
-2.34.1
-
+SGkgTmljaywNCg0KT24gVGh1LCAyMDIzLTA1LTE4IGF0IDE1OjM2IC0wNzAwLCBOaWNrIERlc2F1
+bG5pZXJzIHdyb3RlOg0KPiBPbiBUaHUsIE1heSAxOCwgMjAyMyBhdCAzOjIz4oCvQU0ga2VybmVs
+IHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+IHdyb3RlOg0KPiA+IA0KPiA+IEhpLA0KPiA+IA0K
+PiA+IGtlcm5lbCB0ZXN0IHJvYm90IG5vdGljZWQgdGhlIGZvbGxvd2luZyBidWlsZCBlcnJvcnM6
+DQo+ID4gDQo+ID4gW2F1dG8gYnVpbGQgdGVzdCBFUlJPUiBvbiBmMWZjYmFhMThiMjhkZWMxMDI4
+MTU1MWRmZTZlZDNhM2VkODBlM2Q2XQ0KPiA+IA0KPiA+IHVybDrCoMKgwqAgaHR0cHM6Ly9naXRo
+dWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgvY29tbWl0cy9uZGVzYXVsbmllcnMtZ29vZ2xlLWNv
+bS9jZXJ0cy1idWZmZXItc3RkZXJyLWZyb20tb3BlbnNzbC11bmxlc3MtZXJyb3IvMjAyMzA1MTgt
+MDA0NzUzDQo+ID4gYmFzZTrCoMKgIGYxZmNiYWExOGIyOGRlYzEwMjgxNTUxZGZlNmVkM2EzZWQ4
+MGUzZDYNCj4gPiBwYXRjaCBsaW5rOsKgwqDCoCBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIw
+MjMwNTE3LWdlbmtleS12MS0xLWI4ODc0MjRkYTRhOCU0MGdvb2dsZS5jb20NCj4gPiBwYXRjaCBz
+dWJqZWN0OiBbUEFUQ0hdIGNlcnRzOiBidWZmZXIgc3RkZXJyIGZyb20gb3BlbnNzbCB1bmxlc3Mg
+ZXJyb3INCj4gPiBjb25maWc6IGNza3ktcmFuZGNvbmZpZy1tMDQxLTIwMjMwNTE3DQo+ID4gY29t
+cGlsZXI6IGNza3ktbGludXgtZ2NjIChHQ0MpIDEyLjEuMA0KPiA+IHJlcHJvZHVjZSAodGhpcyBp
+cyBhIFc9MSBidWlsZCk6DQo+ID4gwqDCoMKgwqDCoMKgwqAgd2dldCBodHRwczovL3Jhdy5naXRo
+dWJ1c2VyY29udGVudC5jb20vaW50ZWwvbGtwLXRlc3RzL21hc3Rlci9zYmluL21ha2UuY3Jvc3PC
+oC1PIH4vYmluL21ha2UuY3Jvc3MNCj4gDQo+IF4gc2hvdWxkIGVuY291cmFnZSBgbWtkaXIgfi9i
+aW5gOyB0aGUgZGViaWFuIGRvY2tlciBjb250YWluZXIgZG9lc24ndA0KPiBoYXZlIGB+L2JpbmAu
+DQo+IA0KPiA+IMKgwqDCoMKgwqDCoMKgIGNobW9kICt4IH4vYmluL21ha2UuY3Jvc3MNCj4gPiDC
+oMKgwqDCoMKgwqDCoCAjIGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC1sYWItbGtwL2xpbnV4L2Nv
+bW1pdC8wZTQzN2E0MWZkYjQxYzg0ODM0ZGU2Nzc2YmYzODk1MWIxOTc3OTJhDQo+ID4gwqDCoMKg
+wqDCoMKgwqAgZ2l0IHJlbW90ZSBhZGQgbGludXgtcmV2aWV3IGh0dHBzOi8vZ2l0aHViLmNvbS9p
+bnRlbC1sYWItbGtwL2xpbnV4DQo+ID4gwqDCoMKgwqDCoMKgwqAgZ2l0IGZldGNoIC0tbm8tdGFn
+cyBsaW51eC1yZXZpZXcgbmRlc2F1bG5pZXJzLWdvb2dsZS1jb20vY2VydHMtYnVmZmVyLXN0ZGVy
+ci1mcm9tLW9wZW5zc2wtdW5sZXNzLWVycm9yLzIwMjMwNTE4LTAwNDc1Mw0KPiANCj4gXiBob2x5
+IGNyYXAgdGhhdCB0YWtlcyBmb3JldmVyLiBtYXliZSByZWNvbW1lbmQgYGI0IHNoYXphbSA8bG9y
+ZSBsaW5rPmA/DQo+IA0KPiA+IMKgwqDCoMKgwqDCoMKgIGdpdCBjaGVja291dCAwZTQzN2E0MWZk
+YjQxYzg0ODM0ZGU2Nzc2YmYzODk1MWIxOTc3OTJhDQo+ID4gwqDCoMKgwqDCoMKgwqAgIyBzYXZl
+IHRoZSBjb25maWcgZmlsZQ0KPiA+IMKgwqDCoMKgwqDCoMKgIG1rZGlyIGJ1aWxkX2RpciAmJiBj
+cCBjb25maWcgYnVpbGRfZGlyLy5jb25maWcNCj4gPiDCoMKgwqDCoMKgwqDCoCBDT01QSUxFUl9J
+TlNUQUxMX1BBVEg9JEhPTUUvMGRheSBDT01QSUxFUj1nY2MtMTIuMS4wIG1ha2UuY3Jvc3MgVz0x
+IE89YnVpbGRfZGlyIEFSQ0g9Y3NreSBvbGRkZWZjb25maWcNCj4gDQo+IF4gc2hvdWxkIHVzZSBg
+fi9iaW4vbWFrZS5jcm9zc2Agc2luY2UgYH4vYmluYCBtYXkgbm90IGV4aXN0IGluICRQQVRILg0K
+PiANCj4gPiDCoMKgwqDCoMKgwqDCoCBDT01QSUxFUl9JTlNUQUxMX1BBVEg9JEhPTUUvMGRheSBD
+T01QSUxFUj1nY2MtMTIuMS4wIG1ha2UuY3Jvc3MgVz0xIE89YnVpbGRfZGlyIEFSQ0g9Y3NreSBT
+SEVMTD0vYmluL2Jhc2gNCg0KV2UndmUgdXBkYXRlZCB0aGUgInJlcHJvZHVjZSIgc2VjdGlvbiBp
+biBib3QncyByZXBvcnRzIHRvIGJlIG1vcmUNCnByZWNpc2UuIFRoYW5rcyBhIGxvdCBmb3IgdGhl
+IGlucHV0cy4NCg0KPiBIaSBQaGlsaXAsDQo+IEkndmUgcnVuIGludG8gc29tZSBpc3N1ZXMgd2l0
+aCBtYWtlLmNyb3NzIHdoZW4gdHJ5aW5nIHRvIGluc3RhbGwgdGhlDQo+IGNza3kgdG9vbGNoYWlu
+LiBNYXliZSB5b3UgY2FuIGhlbHA/DQo+IA0KPiBgYGANCj4gJCBDT01QSUxFUl9JTlNUQUxMX1BB
+VEg9JEhPTUUvMGRheSBDT01QSUxFUj1nY2MtMTIuMS4wDQo+IH4vYmluL21ha2UuY3Jvc3MgVz0x
+IE89YnVpbGRfZGlyIEFSQ0g9Y3NreSBvbGRkZWZjb25maWcNCj4gQ29tcGlsZXIgd2lsbCBiZSBp
+bnN0YWxsZWQgaW4gL3Jvb3QvMGRheQ0KPiBtYWtlOiBnY2M6IE5vIHN1Y2ggZmlsZSBvciBkaXJl
+Y3RvcnkNCj4gbGZ0cGdldCAtYyBodHRwczovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2Nyb3Nz
+LXBhY2thZ2UvLi9nY2MtMTIuMS4wLW5vbGliYy94ODZfNjQtZ2NjLTEyLjEuMC1ub2xpYmNfY3Nr
+eS1saW51eC50YXIueHoNCj4gL2xpbnV4DQo+IHRhciBKeGYgL3Jvb3QvMGRheS9nY2MtMTIuMS4w
+LW5vbGliYy94ODZfNjQtZ2NjLTEyLjEuMC1ub2xpYmNfY3NreS1saW51eC50YXIueHoNCj4gLUMg
+L3Jvb3QvMGRheQ0KPiBQbGVhc2UgdXBkYXRlOiBsaWJjNiBvciBnbGliYw0KPiBsZGQgL3Jvb3Qv
+MGRheS9nY2MtMTIuMS4wLW5vbGliYy9jc2t5LWxpbnV4L2Jpbi9jc2t5LWxpbnV4LWdjYw0KPiAv
+cm9vdC8wZGF5L2djYy0xMi4xLjAtbm9saWJjL2Nza3ktbGludXgvYmluL2Nza3ktbGludXgtZ2Nj
+Og0KPiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGliYy5zby42OiB2ZXJzaW9uIGBHTElCQ18yLjMy
+JyBub3QgZm91bmQNCj4gKHJlcXVpcmVkIGJ5IC9yb290LzBkYXkvZ2NjLTEyLjEuMC1ub2xpYmMv
+Y3NreS1saW51eC9iaW4vY3NreS1saW51eC1nY2MpDQo+IC9yb290LzBkYXkvZ2NjLTEyLjEuMC1u
+b2xpYmMvY3NreS1saW51eC9iaW4vY3NreS1saW51eC1nY2M6DQo+IC9saWIveDg2XzY0LWxpbnV4
+LWdudS9saWJjLnNvLjY6IHZlcnNpb24gYEdMSUJDXzIuMzMnIG5vdCBmb3VuZA0KPiAocmVxdWly
+ZWQgYnkgL3Jvb3QvMGRheS9nY2MtMTIuMS4wLW5vbGliYy9jc2t5LWxpbnV4L2Jpbi9jc2t5LWxp
+bnV4LWdjYykNCj4gc2V0dXBfY3Jvc3N0b29sIGZhaWxlZA0KPiANCj4gJCBsZGQgLXYgL2xpYi94
+ODZfNjQtbGludXgtZ251L2xpYmMuc28uNg0KPiAvbGliNjQvbGQtbGludXgteDg2LTY0LnNvLjIg
+KDB4MDAwMDdmMTFmMzQ3ODAwMCkNCj4gbGludXgtdmRzby5zby4xICgweDAwMDA3ZmZjZjQ1YjIw
+MDApDQo+IA0KPiBWZXJzaW9uIGluZm9ybWF0aW9uOg0KPiAvbGliL3g4Nl82NC1saW51eC1nbnUv
+bGliYy5zby42Og0KPiBsZC1saW51eC14ODYtNjQuc28uMiAoR0xJQkNfMi4zKSA9PiAvbGliNjQv
+bGQtbGludXgteDg2LTY0LnNvLjINCj4gbGQtbGludXgteDg2LTY0LnNvLjIgKEdMSUJDX1BSSVZB
+VEUpID0+IC9saWI2NC9sZC1saW51eC14ODYtNjQuc28uMg0KPiANCj4gJCBjYXQgL2V0Yy9kZWJp
+YW5fdmVyc2lvbg0KPiAxMS42DQo+IGBgYA0KPiBQZXJoYXBzIEkgTVVTVCB1cGRhdGUgbXkgZGVi
+aWFuIGNvbnRhaW5lciB0byAxMS43Pw0KPiANCj4gQXJlIHRoZSAwZGF5IHRvb2xjaGFpbnMgbm90
+IHN0YXRpY2FsbHkgbGlua2VkPw0KPiBDYW4gdGhleSB1c2UgdGhlIG9uZXMgZnJvbSBrZXJuZWwu
+b3JnIHdoaWNoIGFyZT8NCj4gaHR0cHM6Ly9taXJyb3JzLmVkZ2Uua2VybmVsLm9yZy9wdWIvdG9v
+bHMvY3Jvc3N0b29sLw0KDQpQbGVhc2UgZm9sbG93IGJlbG93IHN0ZXBzIHRvIHVzZSB0aGUgdG9v
+bGNoYWlucyBwcm92aWRlZCBieSBrZXJuZWwub3JnLg0KV2UndmUgdGVzdGVkIHRoaXMgYW5kIGl0
+IGNhbiB3b3JrIGluIGEgZGViaWFuIDExLjYgZG9ja2VyIGVudi4NCg0KJCBjYXQgL2V0Yy9kZWJp
+YW5fdmVyc2lvbiANCjExLjYNCg0KJCBsZGQgLXYgL2xpYi94ODZfNjQtbGludXgtZ251L2xpYmMu
+c28uNiB8IGdyZXAgR0xJQkMNCgkJbGQtbGludXgteDg2LTY0LnNvLjIgKEdMSUJDXzIuMykgPT4g
+L2xpYjY0L2xkLWxpbnV4LXg4Ni02NC5zby4yDQoJCWxkLWxpbnV4LXg4Ni02NC5zby4yIChHTElC
+Q19QUklWQVRFKSA9PiAvbGliNjQvbGQtbGludXgteDg2LTY0LnNvLjINCg0KJCBleHBvcnQgVVJM
+PWh0dHBzOi8vbWlycm9ycy5lZGdlLmtlcm5lbC5vcmcvcHViL3Rvb2xzL2Nyb3NzdG9vbC9maWxl
+cy9iaW4veDg2XzY0DQoNCiQgQ09NUElMRVJfSU5TVEFMTF9QQVRIPSRIT01FLzBkYXkgQ09NUElM
+RVI9Z2NjLTEyLjEuMCAuL21ha2UuY3Jvc3MgVz0xIEFSQ0g9Y3NreSBvbGRkZWZjb25maWcNCkNv
+bXBpbGVyIHdpbGwgYmUgaW5zdGFsbGVkIGluIC9yb290LzBkYXkNCmxmdHBnZXQgLWMgaHR0cHM6
+Ly9taXJyb3JzLmVkZ2Uua2VybmVsLm9yZy9wdWIvdG9vbHMvY3Jvc3N0b29sL2ZpbGVzL2Jpbi94
+ODZfNjQvLi8xMi4xLjAveDg2XzY0LWdjYy0xMi4xLjAtbm9saWJjLWNza3ktbGludXgudGFyLnh6
+DQovcm9vdC9saW51eCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgDQp0YXIgSnhmIC9y
+b290LzBkYXkvMTIuMS4wL3g4Nl82NC1nY2MtMTIuMS4wLW5vbGliYy1jc2t5LWxpbnV4LnRhci54
+eiAtQyAvcm9vdC8wZGF5DQptYWtlIC0ta2VlcC1nb2luZyBDT05GSUdfT0ZfQUxMX0RUQlM9eSBD
+T05GSUdfRFRDPXkgQ1JPU1NfQ09NUElMRT0vcm9vdC8wZGF5L2djYy0xMi4xLjAtbm9saWJjL2Nz
+a3ktbGludXgvYmluL2Nza3ktbGludXgtIC0tam9icz0xNDQgVz0xIEFSQ0g9Y3NreSBvbGRkZWZj
+b25maWcNCi4uLg0KDQoNClRoYW5rcyBhIGxvdCBmb3IgdGhlIHN1Z2dlc3Rpb25zLiBXZSB3aWxs
+IGZ1cnRoZXIgaW1wcm92ZSB0aGUgMGRheQ0KbWFrZS5jcm9zcyB0b29sIHN1Y2ggYXM6DQoNCiog
+UHJvdmlkZSBzdGF0aWNhbGx5IGxpbmtlZCB0b29sY2hhaW5zIHRoYXQgZG9uJ3QgZGVwZW5kIG9u
+IHRoZSBsaWJjIGluDQp0aGUgZGlzdHJpYnV0aW9uDQoqIEFkZCBoaW50IHRvIGhlbHAgdXNlciBk
+ZWNpZGUgd2hldGhlciB0byB1c2UgMGRheSBvciBrZXJuZWwub3JnDQp0b29sY2hhaW5zLg0KDQpC
+ZXN0IFJlZ2FyZHMsDQpZdWppZQ0KDQo+ID4gDQo+ID4gSWYgeW91IGZpeCB0aGUgaXNzdWUsIGtp
+bmRseSBhZGQgZm9sbG93aW5nIHRhZyB3aGVyZSBhcHBsaWNhYmxlDQo+ID4gPiBSZXBvcnRlZC1i
+eToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+ID4gPiBDbG9zZXM6IGh0dHBz
+Oi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyMzA1MTgxNzEyLnhqdnYxZmJELWxr
+cEBpbnRlbC5jb20vDQo+ID4gDQo+ID4gQWxsIGVycm9ycyAobmV3IG9uZXMgcHJlZml4ZWQgYnkg
+Pj4pOg0KPiA+IA0KPiA+IMKgwqAgQXQgbWFpbi5jOjE1MjoNCj4gPiDCoMKgIC0gU1NMIGVycm9y
+OkZGRkZGRkZGODAwMDAwMDI6c3lzdGVtIGxpYnJhcnk6Ok5vIHN1Y2ggZmlsZSBvciBkaXJlY3Rv
+cnk6IC4uL2NyeXB0by9iaW8vYnNzX2ZpbGUuYzo2Nw0KPiA+IMKgwqAgLSBTU0wgZXJyb3I6MTAw
+MDAwODA6QklPIHJvdXRpbmVzOjpubyBzdWNoIGZpbGU6IC4uL2NyeXB0by9iaW8vYnNzX2ZpbGUu
+Yzo3NQ0KPiA+ID4gPiBleHRyYWN0LWNlcnQ6IGNlcnRzL3NpZ25pbmdfa2V5LnBlbTogTm8gc3Vj
+aCBmaWxlIG9yIGRpcmVjdG9yeQ0KPiA+IA0KPiA+IC0tDQo+ID4gMC1EQVkgQ0kgS2VybmVsIFRl
+c3QgU2VydmljZQ0KPiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC9sa3AtdGVzdHMvd2lraQ0K
+PiANCj4gDQo+IA0KDQo=

@@ -2,124 +2,121 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA86CA9EB7
-	for <linux-csky@archiver.kernel.org>; Mon, 12 Jun 2023 21:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02ACBC7EE43
+	for <linux-csky@archiver.kernel.org>; Mon, 12 Jun 2023 23:45:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239894AbjFLVJq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 12 Jun 2023 17:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S234190AbjFLXpt (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 12 Jun 2023 19:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238616AbjFLVIB (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 12 Jun 2023 17:08:01 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD8F2950;
-        Mon, 12 Jun 2023 14:05:09 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-56d2b7a9465so15630047b3.3;
-        Mon, 12 Jun 2023 14:05:09 -0700 (PDT)
+        with ESMTP id S237728AbjFLXps (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 12 Jun 2023 19:45:48 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778A51718
+        for <linux-csky@vger.kernel.org>; Mon, 12 Jun 2023 16:45:46 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9786fc23505so720180566b.2
+        for <linux-csky@vger.kernel.org>; Mon, 12 Jun 2023 16:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686603908; x=1689195908;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e/NReaJdz90gZ2NQIlUYsxuwjuA5PoSk9HvAIR22dRg=;
-        b=cJPixJ7fvL8lj4msWoT6T4UdDliAegelx3fhfZFkllamFJSmCzzBfgBkJHvHf5VBH4
-         +bFQaX0c9HvMpz3cMr64OoUwpvHF+4NrriYC39tboK0Z4VjLF9J6MmzkevSDnSF+eJ9S
-         vsFP6THd62TglAym5r/waWV4KiQYY/X7Hysf9ft4FBrKTw7bicGfQMMhWM2I4CuvKtOv
-         cwDTHbNBV8LRmkAEvkAc0kAr+XDxv+lhnXg68dTw4NnjCIip7ummoW4kmN1lP3wtz1t1
-         rgvGb1IbL+Qt1u/Y4z+ep/GLJI6yTMWmeJDiLjESMtlIxdtrVlVrtQkxPe5yKm5XHK1M
-         0mYQ==
+        d=linaro.org; s=google; t=1686613545; x=1689205545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J6RKBwJ1snfOShsMKSa/kdTwHRc2sX8E52+VmBrW73M=;
+        b=d3xgiOjtTog0mLVt0UUF6SYGGd8ZNr4HF7QbG3ANNB0F9pm2Mnfq6cMKvB6sbMuSRV
+         QgWIqQPT0Bz/c6PzgCrCP7PjhIQEf53F9Hq1ZzRfje3zYm9eFWGopD2mOQlyY3W6Ct1C
+         diLMaiEHR/d2lY6XdYCuUVT8MxiBw26YRbJ+vLXKhx4eckjH/IBs8Vu650PjnGgHLZfm
+         F+52i+6LlG/DNA9AL6mhi/Ytu30a/yapXnU8e4vUqRcJdEh8s8OFO1YXOUJadub+iQHv
+         z6vbdQtv6OfPN8ZdleCLjbUevHZa+Wcr6lxGX03ENnGWHZ1Zg+XQGmkr7kxiw7qx+njU
+         qXkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686603908; x=1689195908;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e/NReaJdz90gZ2NQIlUYsxuwjuA5PoSk9HvAIR22dRg=;
-        b=aepoKjP1xsUQDMauiCnZ6rVGnHYEUeJr3GdZlunKqW1bKzN5hVAMCeZsyVFfKWEkgd
-         m3ceIgAPEmhZgOXY4ccnuCylr2IDnAITaRBksCIhPwsDcKE63ouhLzQGZuKTcfI0MnMf
-         CfdhQTsg04SPJyX5kllOAbyJIEas/X2vkChdhYN4LMhvs0CxrBlDBwefA91OwXMZ2557
-         C4wj4qabvEkYV/XGZHigJEbctm8q9QpM8sW5mwKmwYLfssK+g+uWIcgIw82Nqz6zasu/
-         Nvr97j7ZdY+lrI/g+VJ+KKO+Fl8q+2M5QN7oISDo9uxwz5ZfIk+BIM4nWBIQlih275DL
-         NXow==
-X-Gm-Message-State: AC+VfDztSBOzccz4f3tlCL5cenXCPwbel8LUjI95gdDLM8CYYy/QOs1k
-        G8hUXMxVt8QnSDmGwtHYaew=
-X-Google-Smtp-Source: ACHHUZ5kijcVYXBTbbFcK1VnPllJL1iB2ONZxmZAAAXhO7jcUSS10Gkxlzbwqmp6U6Z9PG+yvX9PWw==
-X-Received: by 2002:a81:9288:0:b0:56c:f916:905 with SMTP id j130-20020a819288000000b0056cf9160905mr7254032ywg.32.1686603908266;
-        Mon, 12 Jun 2023 14:05:08 -0700 (PDT)
-Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
-        by smtp.googlemail.com with ESMTPSA id s125-20020a817783000000b00569eb609458sm2757115ywc.81.2023.06.12.14.05.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 14:05:08 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH v4 11/34] mm: Convert pmd_ptlock_free() to use ptdescs
-Date:   Mon, 12 Jun 2023 14:04:00 -0700
-Message-Id: <20230612210423.18611-12-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230612210423.18611-1-vishal.moola@gmail.com>
-References: <20230612210423.18611-1-vishal.moola@gmail.com>
+        d=1e100.net; s=20221208; t=1686613545; x=1689205545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J6RKBwJ1snfOShsMKSa/kdTwHRc2sX8E52+VmBrW73M=;
+        b=A+e0764PJdVfejwR1dgBaFpxIu91cXbTGhym63pS6IBcMZsHBY9f8zcoarWbfE/MHB
+         0riowAFOsTD2HaaSDgMaFIyiy6Zr+uPrH8eLj7dLG2/V4ehJyGc0hm933Tq9Dby8SXEL
+         NRa+1JRBQXHju6Sre/FwbbW6g0LVVBTsHqo+rv/S0sIIsJ4llX1lIjXy5G7KO51PfQjz
+         rVbGU1fc8NN1u/wfkEMnvjorNzLvNP25jEWflVM2a+T1a4IPx74tUaYmUVet8JkDcvpz
+         HPFrFA8LZhYNkOQs4gfwd1QZNA7TEwa82FOKzShZ9AGlSuNx+hFfMm9y+DsnsKbvJQAl
+         72+w==
+X-Gm-Message-State: AC+VfDxFCarwtQQTAAT+Y/LKvg8aggI7hEXvENyLtvXCooyWn1Dym6Sq
+        hRULkeHKRXnC8Fm/1++VyK1Cfw==
+X-Google-Smtp-Source: ACHHUZ6dtuV5DoYQYE0R52xSIR6NpJYLC8VAvw2sPNu3DqvDkPqqCuCfv+mCrhCPNNxlAI9Ns3XUug==
+X-Received: by 2002:a17:906:dac3:b0:96f:9608:da7c with SMTP id xi3-20020a170906dac300b0096f9608da7cmr11947868ejb.36.1686613544905;
+        Mon, 12 Jun 2023 16:45:44 -0700 (PDT)
+Received: from [10.10.0.115] ([185.140.244.249])
+        by smtp.gmail.com with ESMTPSA id h18-20020a1709063b5200b0097457363fc0sm5849378ejf.33.2023.06.12.16.45.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 16:45:44 -0700 (PDT)
+Message-ID: <41b22e82-fd6c-5bcd-44ae-e5b799ed0175@linaro.org>
+Date:   Tue, 13 Jun 2023 01:45:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [patch V4 04/37] x86/smpboot: Rename start_cpu0() to
+ soft_restart_cpu()
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Ross Philipson <ross.philipson@oracle.com>
+References: <20230512203426.452963764@linutronix.de>
+ <20230512205255.662319599@linutronix.de>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230512205255.662319599@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This removes some direct accesses to struct page, working towards
-splitting out struct ptdesc from struct page.
+On 12/5/23 23:07, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> This is used in the SEV play_dead() implementation to re-online CPUs. But
+> that has nothing to do with CPU0.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>   arch/x86/include/asm/cpu.h   |    2 +-
+>   arch/x86/kernel/callthunks.c |    2 +-
+>   arch/x86/kernel/head_32.S    |   10 +++++-----
+>   arch/x86/kernel/head_64.S    |   10 +++++-----
+>   arch/x86/kernel/sev.c        |    2 +-
+>   5 files changed, 13 insertions(+), 13 deletions(-)
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- include/linux/mm.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index f48e626d9c98..3b54bb4c9753 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2950,12 +2950,12 @@ static inline bool pmd_ptlock_init(struct ptdesc *ptdesc)
- 	return ptlock_init(ptdesc);
- }
- 
--static inline void pmd_ptlock_free(struct page *page)
-+static inline void pmd_ptlock_free(struct ptdesc *ptdesc)
- {
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
--	VM_BUG_ON_PAGE(page->pmd_huge_pte, page);
-+	VM_BUG_ON_PAGE(ptdesc->pmd_huge_pte, ptdesc_page(ptdesc));
- #endif
--	ptlock_free(page);
-+	ptlock_free(ptdesc_page(ptdesc));
- }
- 
- #define pmd_huge_pte(mm, pmd) (pmd_ptdesc(pmd)->pmd_huge_pte)
-@@ -2968,7 +2968,7 @@ static inline spinlock_t *pmd_lockptr(struct mm_struct *mm, pmd_t *pmd)
- }
- 
- static inline bool pmd_ptlock_init(struct ptdesc *ptdesc) { return true; }
--static inline void pmd_ptlock_free(struct page *page) {}
-+static inline void pmd_ptlock_free(struct ptdesc *ptdesc) {}
- 
- #define pmd_huge_pte(mm, pmd) ((mm)->pmd_huge_pte)
- 
-@@ -2992,7 +2992,7 @@ static inline bool pgtable_pmd_page_ctor(struct page *page)
- 
- static inline void pgtable_pmd_page_dtor(struct page *page)
- {
--	pmd_ptlock_free(page);
-+	pmd_ptlock_free(page_ptdesc(page));
- 	__ClearPageTable(page);
- 	dec_lruvec_page_state(page, NR_PAGETABLE);
- }
--- 
-2.40.1
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 

@@ -2,52 +2,52 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21DDBC04FE0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0761EC05051
 	for <linux-csky@archiver.kernel.org>; Thu, 29 Jun 2023 12:20:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjF2MUR (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Thu, 29 Jun 2023 08:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S231953AbjF2MUS (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 29 Jun 2023 08:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjF2MT7 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 29 Jun 2023 08:19:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607CA1FD8;
-        Thu, 29 Jun 2023 05:19:58 -0700 (PDT)
+        with ESMTP id S232234AbjF2MUD (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 29 Jun 2023 08:20:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C2C3583;
+        Thu, 29 Jun 2023 05:20:02 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CBF141FD66;
-        Thu, 29 Jun 2023 12:19:56 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9783221883;
+        Thu, 29 Jun 2023 12:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688041196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1688041200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dI1kzUuKD59kYjvBY6wFpwuLP1T5iqiK0PZL3S9tS+4=;
-        b=iOn4KP8zx9qPUKtbQYB/3UuemmzcIp1jKec6IhGp4JnfO4Zc3Qon64c22j4rYtRaUYgve5
-        sr75PQ8iy2XZULzepyxG8DgzelksuLJRjEhAS/DO7S2Ysp725W5TaLjeeV8vgf+fFhfKEZ
-        7AYRAgxOMdWjSM+8Ou37M9XmyDJGHm0=
+        bh=hnbbGu1zMH1syDJirDMyTtBxk9C138IDNFMzmPrl3+w=;
+        b=bo7SVurtRzf6nQUYeNtLdtPzbtB8L0YrwlE4sXHKNnAg7Cu2uGNYODuxBxpmRIunRpXcYS
+        PWsewt1WIYrSj0EdEavb/uQo9L4N+Ib3vXbQzoQSDywNdXQfLB+/NLycoqViude3+m8B6u
+        8xk8gg9YaloVKPax+pmspUavuXy32zQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688041196;
+        s=susede2_ed25519; t=1688041200;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dI1kzUuKD59kYjvBY6wFpwuLP1T5iqiK0PZL3S9tS+4=;
-        b=BL/25Txh4w4sSCwBtjxZWN/dcdEjEYYqC2SO2/bckqsruuNu5moVIyXmc/8QJu230txCAq
-        mYmRl8mkEdvMruCA==
+        bh=hnbbGu1zMH1syDJirDMyTtBxk9C138IDNFMzmPrl3+w=;
+        b=AKURaBo/0ARnZtjd/p7sna/scgkTBT8fsQl7ZO4UmWIEUzy86Z4AHS/B3MZhegYy0IgKYj
+        Phr0x7NmPveOpYDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 535A113A43;
-        Thu, 29 Jun 2023 12:19:56 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 22A5413905;
+        Thu, 29 Jun 2023 12:20:00 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id gDVLE+x2nWRlVAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 12:19:56 +0000
+        id QCN8B/B2nWRlVAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 12:20:00 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     arnd@arndb.de, deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
 Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
@@ -59,13 +59,10 @@ Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
         sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-hyperv@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linux-staging@lists.linux.dev, linux-arch@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: [PATCH 03/12] sysfb: Do not include <linux/screen_info.h> from sysfb header
-Date:   Thu, 29 Jun 2023 13:45:42 +0200
-Message-ID: <20230629121952.10559-4-tzimmermann@suse.de>
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 08/12] drivers/firmware: Remove trailing whitespaces
+Date:   Thu, 29 Jun 2023 13:45:47 +0200
+Message-ID: <20230629121952.10559-9-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230629121952.10559-1-tzimmermann@suse.de>
 References: <20230629121952.10559-1-tzimmermann@suse.de>
@@ -75,32 +72,26 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The header file <linux/sysfb.h> does not need anything from
-<linux/screen_info.h>. Declare struct screen_info and remove
-the include statements.
+Fix coding style. No functional changes.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Javier Martinez Canillas <javierm@redhat.com>
 ---
- include/linux/sysfb.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/firmware/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sysfb.h b/include/linux/sysfb.h
-index c1ef5fc60a3cb..19cb803dd5ecd 100644
---- a/include/linux/sysfb.h
-+++ b/include/linux/sysfb.h
-@@ -9,7 +9,8 @@
+diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+index b59e3041fd627..0432737bbb8b4 100644
+--- a/drivers/firmware/Kconfig
++++ b/drivers/firmware/Kconfig
+@@ -99,7 +99,7 @@ config EFI_PCDP
+ 	  You must also enable the appropriate drivers (serial, VGA, etc.)
  
- #include <linux/kernel.h>
- #include <linux/platform_data/simplefb.h>
--#include <linux/screen_info.h>
-+
-+struct screen_info;
+ 	  See DIG64_HCDPv20_042804.pdf available from
+-	  <http://www.dig64.org/specifications/> 
++	  <http://www.dig64.org/specifications/>
  
- enum {
- 	M_I17,		/* 17-Inch iMac */
+ config DMIID
+     bool "Export DMI identification via sysfs to userspace"
 -- 
 2.41.0
 

@@ -2,36 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD2B0C41513
-	for <linux-csky@archiver.kernel.org>; Wed,  2 Aug 2023 16:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEF6CC04FDF
+	for <linux-csky@archiver.kernel.org>; Wed,  2 Aug 2023 16:49:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjHBQsz (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 2 Aug 2023 12:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S230175AbjHBQtY (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 2 Aug 2023 12:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjHBQsb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 2 Aug 2023 12:48:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027EBE4D;
-        Wed,  2 Aug 2023 09:48:30 -0700 (PDT)
+        with ESMTP id S232583AbjHBQtH (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 2 Aug 2023 12:49:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C436173A;
+        Wed,  2 Aug 2023 09:49:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9356D61A3C;
-        Wed,  2 Aug 2023 16:48:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B243C433CA;
-        Wed,  2 Aug 2023 16:48:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74D47619D7;
+        Wed,  2 Aug 2023 16:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D0EC433C8;
+        Wed,  2 Aug 2023 16:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690994909;
-        bh=Au/Lyz8DXodsj2BximBqrlWp9CS+kuzK/WJVuS2wC2I=;
+        s=k20201202; t=1690994940;
+        bh=aihpQWSsOm2PcncftaveeMsJLoT6t46RobNm6fedvI0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=als1lRCOJxdh/U1/AvTkFei2EbgRZxakwU0D9uVRfRIomZL/fq8CEWW3moTZe54Es
-         WzmElOVBSjsv3lXViFfoKxolbN2RO8feD/ampz9MdfxWLuKS2nn4UqFjg9F0UmpgmD
-         mhXOUQxD3MgpD9WqvU+ob/LHeeQtO2IieOhOsdeQ6N2dzJEZ1GYF0iiZeMafPn3TDM
-         ra0UTrgk8/Of75IqyQUCzWAtCiDyAxFsFEEzA3sWx6Ft3AvbJfsfcibhgPb+AsQu22
-         sptAKkxGEn90iHZUf6HJkucTb2r5aJi3d8cIAsPueG123ytbFSthz+8F7+fIYyJ76l
-         qMWL+iex6NlJw==
+        b=gbOQExxxuCtl7NH7eEJ6hZqSndwRoPGdr6xkLNldxD4i6d4f0tfBTN5SijbtBjNvx
+         fdi8poo5hOLsGtXmkhJcW1h9mQKVPkjqiGLD7kBl5pDcvzZgngOHIN7AMts+s5i3Qj
+         fdBVjn6mxmEqIbXZUouDJ4xRfdc78I8Z3VWhBuxUmvUAX/2fkI46rYY93zJKRTAnfZ
+         8qSJXsZETG38yrWe6xpLlaUj5vllcbH/4ubvCaSE6xiccTKV+nHZLKQAqK1nkFTZ7J
+         igQd0L4wWlGyOVq+znHVp7JrBhdfRkz+eb4jb9ntBJcSScgyImGIJd8jyTdlAD3Kq6
+         BC8aj1j1UYJXw==
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -47,9 +47,9 @@ Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
-Subject: [PATCH V10 03/19] riscv: qspinlock: errata: Add ERRATA_THEAD_WRITE_ONCE fixup
-Date:   Wed,  2 Aug 2023 12:46:45 -0400
-Message-Id: <20230802164701.192791-4-guoren@kernel.org>
+Subject: [PATCH V10 05/19] riscv: qspinlock: Introduce combo spinlock
+Date:   Wed,  2 Aug 2023 12:46:47 -0400
+Message-Id: <20230802164701.192791-6-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230802164701.192791-1-guoren@kernel.org>
 References: <20230802164701.192791-1-guoren@kernel.org>
@@ -61,193 +61,210 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The early version of T-Head C9xx cores has a store merge buffer
-delay problem. The store merge buffer could improve the store queue
-performance by merging multi-store requests, but when there are not
-continued store requests, the prior single store request would be
-waiting in the store queue for a long time. That would cause
-significant problems for communication between multi-cores. This
-problem was found on sg2042 & th1520 platforms with the qspinlock
-lock torture test.
+Combo spinlock could support queued and ticket in one Linux Image and
+select them during boot time via errata mechanism. Here is the func
+size (Bytes) comparison table below:
 
-So appending a fence w.o could immediately flush the store merge
-buffer and let other cores see the write result.
+TYPE			: COMBO | TICKET | QUEUED
+arch_spin_lock		: 106	| 60     | 50
+arch_spin_unlock	: 54    | 36     | 26
+arch_spin_trylock	: 110   | 72     | 54
+arch_spin_is_locked	: 48    | 34     | 20
+arch_spin_is_contended	: 56    | 40     | 24
+rch_spin_value_unlocked	: 48    | 34     | 24
 
-This will apply the WRITE_ONCE errata to handle the non-standard
-behavior via appending a fence w.o instruction for WRITE_ONCE().
+One example of disassemble combo arch_spin_unlock:
+   0xffffffff8000409c <+14>:    nop                # detour slot
+   0xffffffff800040a0 <+18>:    fence   rw,w       # queued spinlock start
+   0xffffffff800040a4 <+22>:    sb      zero,0(a4) # queued spinlock end
+   0xffffffff800040a8 <+26>:    ld      s0,8(sp)
+   0xffffffff800040aa <+28>:    addi    sp,sp,16
+   0xffffffff800040ac <+30>:    ret
+   0xffffffff800040ae <+32>:    lw      a5,0(a4)   # ticket spinlock start
+   0xffffffff800040b0 <+34>:    sext.w  a5,a5
+   0xffffffff800040b2 <+36>:    fence   rw,w
+   0xffffffff800040b6 <+40>:    addiw   a5,a5,1
+   0xffffffff800040b8 <+42>:    slli    a5,a5,0x30
+   0xffffffff800040ba <+44>:    srli    a5,a5,0x30
+   0xffffffff800040bc <+46>:    sh      a5,0(a4)   # ticket spinlock end
+   0xffffffff800040c0 <+50>:    ld      s0,8(sp)
+   0xffffffff800040c2 <+52>:    addi    sp,sp,16
+   0xffffffff800040c4 <+54>:    ret
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+The qspinlock is smaller and faster than ticket-lock when all are in
+fast-path, and combo spinlock could provide a compatible Linux Image
+for different micro-arch design (weak/strict fwd guarantee) processors.
+
 Signed-off-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 ---
- arch/riscv/Kconfig.errata              | 19 +++++++++++++++++++
- arch/riscv/errata/thead/errata.c       | 20 ++++++++++++++++++++
- arch/riscv/include/asm/errata_list.h   | 13 -------------
- arch/riscv/include/asm/rwonce.h        | 24 ++++++++++++++++++++++++
- arch/riscv/include/asm/vendorid_list.h | 14 ++++++++++++++
- include/asm-generic/rwonce.h           |  2 ++
- 6 files changed, 79 insertions(+), 13 deletions(-)
- create mode 100644 arch/riscv/include/asm/rwonce.h
+ arch/riscv/Kconfig                |  9 +++-
+ arch/riscv/include/asm/hwcap.h    |  1 +
+ arch/riscv/include/asm/spinlock.h | 87 ++++++++++++++++++++++++++++++-
+ arch/riscv/kernel/cpufeature.c    | 10 ++++
+ 4 files changed, 104 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
-index 0c8f4652cd82..4745a5c57e7c 100644
---- a/arch/riscv/Kconfig.errata
-+++ b/arch/riscv/Kconfig.errata
-@@ -77,4 +77,23 @@ config ERRATA_THEAD_PMU
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index e89a3bea3dc1..119e774a3dcf 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -440,7 +440,7 @@ config NODES_SHIFT
  
- 	  If you don't know what to do here, say "Y".
+ choice
+ 	prompt "RISC-V spinlock type"
+-	default RISCV_TICKET_SPINLOCKS
++	default RISCV_COMBO_SPINLOCKS
  
-+config ERRATA_THEAD_WRITE_ONCE
-+	bool "Apply T-Head WRITE_ONCE errata"
-+	depends on ERRATA_THEAD
-+	default y
+ config RISCV_TICKET_SPINLOCKS
+ 	bool "Using ticket spinlock"
+@@ -452,6 +452,13 @@ config RISCV_QUEUED_SPINLOCKS
+ 	help
+ 	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
+ 	  Otherwise, stay at ticket-lock.
++
++config RISCV_COMBO_SPINLOCKS
++	bool "Using combo spinlock"
++	depends on SMP && MMU
++	select ARCH_USE_QUEUED_SPINLOCKS
 +	help
-+	  The early version of T-Head C9xx cores has a store merge buffer
-+	  delay problem. The store merge buffer could improve the store queue
-+	  performance by merging multi-store requests, but when there are no
-+	  continued store requests, the prior single store request would be
-+	  waiting in the store queue for a long time. That would cause
-+	  significant problems for communication between multi-cores. Appending
-+	  a fence w.o could immediately flush the store merge buffer and let
-+	  other cores see the write result.
-+
-+	  This will apply the WRITE_ONCE errata to handle the non-standard
-+	  behavior via appending a fence w.o instruction for WRITE_ONCE().
-+
-+	  If you don't know what to do here, say "Y".
-+
- endmenu # "CPU errata selection"
-diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-index be84b14f0118..881729746d2e 100644
---- a/arch/riscv/errata/thead/errata.c
-+++ b/arch/riscv/errata/thead/errata.c
-@@ -69,6 +69,23 @@ static bool errata_probe_pmu(unsigned int stage,
- 	return true;
- }
++	  Select queued spinlock or ticket-lock via errata.
+ endchoice
  
-+static bool errata_probe_write_once(unsigned int stage,
-+				    unsigned long arch_id, unsigned long impid)
+ config RISCV_ALTERNATIVE
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index f041bfa7f6a0..08ae75a694c2 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -54,6 +54,7 @@
+ #define RISCV_ISA_EXT_ZIFENCEI		41
+ #define RISCV_ISA_EXT_ZIHPM		42
+ 
++#define RISCV_ISA_EXT_XTICKETLOCK	63
+ #define RISCV_ISA_EXT_MAX		64
+ #define RISCV_ISA_EXT_NAME_LEN_MAX	32
+ 
+diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
+index c644a92d4548..9eb3ad31e564 100644
+--- a/arch/riscv/include/asm/spinlock.h
++++ b/arch/riscv/include/asm/spinlock.h
+@@ -7,11 +7,94 @@
+ #define _Q_PENDING_LOOPS	(1 << 9)
+ #endif
+ 
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++#include <asm-generic/ticket_spinlock.h>
++
++#undef arch_spin_is_locked
++#undef arch_spin_is_contended
++#undef arch_spin_value_unlocked
++#undef arch_spin_lock
++#undef arch_spin_trylock
++#undef arch_spin_unlock
++
++#include <asm-generic/qspinlock.h>
++#include <asm/hwcap.h>
++
++#undef arch_spin_is_locked
++#undef arch_spin_is_contended
++#undef arch_spin_value_unlocked
++#undef arch_spin_lock
++#undef arch_spin_trylock
++#undef arch_spin_unlock
++
++#define COMBO_DETOUR				\
++	asm_volatile_goto(ALTERNATIVE(		\
++		"nop",				\
++		"j %l[ticket_spin_lock]",	\
++		0,				\
++		RISCV_ISA_EXT_XTICKETLOCK,	\
++		CONFIG_RISCV_COMBO_SPINLOCKS)	\
++		: : : : ticket_spin_lock);
++
++static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
 +{
-+	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
-+		return false;
-+
-+	/* target-c9xx cores report arch_id and impid as 0 */
-+	if (arch_id != 0 || impid != 0)
-+		return false;
-+
-+	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT ||
-+	    stage == RISCV_ALTERNATIVES_MODULE)
-+		return true;
-+
-+	return false;
++	COMBO_DETOUR
++	queued_spin_lock(lock);
++	return;
++ticket_spin_lock:
++	ticket_spin_lock(lock);
 +}
 +
- static u32 thead_errata_probe(unsigned int stage,
- 			      unsigned long archid, unsigned long impid)
- {
-@@ -83,6 +100,9 @@ static u32 thead_errata_probe(unsigned int stage,
- 	if (errata_probe_pmu(stage, archid, impid))
- 		cpu_req_errata |= BIT(ERRATA_THEAD_PMU);
- 
-+	if (errata_probe_write_once(stage, archid, impid))
-+		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
++static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	return queued_spin_trylock(lock);
++ticket_spin_lock:
++	return ticket_spin_trylock(lock);
++}
 +
- 	return cpu_req_errata;
- }
- 
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 712cab7adffe..fbb2b8d39321 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -11,19 +11,6 @@
- #include <asm/hwcap.h>
- #include <asm/vendorid_list.h>
- 
--#ifdef CONFIG_ERRATA_SIFIVE
--#define	ERRATA_SIFIVE_CIP_453 0
--#define	ERRATA_SIFIVE_CIP_1200 1
--#define	ERRATA_SIFIVE_NUMBER 2
--#endif
--
--#ifdef CONFIG_ERRATA_THEAD
--#define	ERRATA_THEAD_PBMT 0
--#define	ERRATA_THEAD_CMO 1
--#define	ERRATA_THEAD_PMU 2
--#define	ERRATA_THEAD_NUMBER 3
--#endif
--
- #ifdef __ASSEMBLY__
- 
- #define ALT_INSN_FAULT(x)						\
-diff --git a/arch/riscv/include/asm/rwonce.h b/arch/riscv/include/asm/rwonce.h
-new file mode 100644
-index 000000000000..be0b8864969d
---- /dev/null
-+++ b/arch/riscv/include/asm/rwonce.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	queued_spin_unlock(lock);
++	return;
++ticket_spin_lock:
++	ticket_spin_unlock(lock);
++}
 +
-+#ifndef __ASM_RWONCE_H
-+#define __ASM_RWONCE_H
++static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
++{
++	COMBO_DETOUR
++	return queued_spin_value_unlocked(lock);
++ticket_spin_lock:
++	return ticket_spin_value_unlocked(lock);
++}
 +
-+#include <linux/compiler_types.h>
-+#include <asm/alternative-macros.h>
-+#include <asm/vendorid_list.h>
++static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	return queued_spin_is_locked(lock);
++ticket_spin_lock:
++	return ticket_spin_is_locked(lock);
++}
 +
-+#define __WRITE_ONCE(x, val)				\
-+do {							\
-+	*(volatile typeof(x) *)&(x) = (val);		\
-+	asm volatile(ALTERNATIVE(			\
-+		__nops(1),				\
-+		"fence w, o\n\t",			\
-+		THEAD_VENDOR_ID,			\
-+		ERRATA_THEAD_WRITE_ONCE,		\
-+		CONFIG_ERRATA_THEAD_WRITE_ONCE)		\
-+		: : : "memory");			\
-+} while (0)
++static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
++{
++	COMBO_DETOUR
++	return queued_spin_is_contended(lock);
++ticket_spin_lock:
++	return ticket_spin_is_contended(lock);
++}
++#else /* CONFIG_RISCV_COMBO_SPINLOCKS */
 +
-+#include <asm-generic/rwonce.h>
-+
-+#endif	/* __ASM_RWONCE_H */
-diff --git a/arch/riscv/include/asm/vendorid_list.h b/arch/riscv/include/asm/vendorid_list.h
-index cb89af3f0704..73078cfe4029 100644
---- a/arch/riscv/include/asm/vendorid_list.h
-+++ b/arch/riscv/include/asm/vendorid_list.h
-@@ -8,4 +8,18 @@
- #define SIFIVE_VENDOR_ID	0x489
- #define THEAD_VENDOR_ID		0x5b7
- 
-+#ifdef CONFIG_ERRATA_SIFIVE
-+#define	ERRATA_SIFIVE_CIP_453 0
-+#define	ERRATA_SIFIVE_CIP_1200 1
-+#define	ERRATA_SIFIVE_NUMBER 2
-+#endif
-+
-+#ifdef CONFIG_ERRATA_THEAD
-+#define	ERRATA_THEAD_PBMT 0
-+#define	ERRATA_THEAD_CMO 1
-+#define	ERRATA_THEAD_PMU 2
-+#define	ERRATA_THEAD_WRITE_ONCE 3
-+#define	ERRATA_THEAD_NUMBER 4
-+#endif
-+
+ #ifdef CONFIG_QUEUED_SPINLOCKS
+ #include <asm/qspinlock.h>
+-#include <asm/qrwlock.h>
+ #else
+-#include <asm-generic/spinlock.h>
++#include <asm-generic/ticket_spinlock.h>
  #endif
-diff --git a/include/asm-generic/rwonce.h b/include/asm-generic/rwonce.h
-index 8d0a6280e982..fb07fe8c6e45 100644
---- a/include/asm-generic/rwonce.h
-+++ b/include/asm-generic/rwonce.h
-@@ -50,10 +50,12 @@
- 	__READ_ONCE(x);							\
- })
  
-+#ifndef __WRITE_ONCE
- #define __WRITE_ONCE(x, val)						\
- do {									\
- 	*(volatile typeof(x) *)&(x) = (val);				\
- } while (0)
++#endif /* CONFIG_RISCV_COMBO_SPINLOCKS */
++
++#include <asm/qrwlock.h>
++
+ #endif /* __ASM_RISCV_SPINLOCK_H */
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index bdcf460ea53d..e65b0e54152d 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -324,6 +324,16 @@ void __init riscv_fill_hwcap(void)
+ 		set_bit(RISCV_ISA_EXT_ZICSR, isainfo->isa);
+ 		set_bit(RISCV_ISA_EXT_ZIFENCEI, isainfo->isa);
+ 
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++		/*
++		 * The RISC-V Linux used queued spinlock at first; then, we used ticket_lock
++		 * as default or queued spinlock by choice. Because ticket_lock would dirty
++		 * spinlock value, the only way is to change from queued_spinlock to
++		 * ticket_spinlock, but can not be vice.
++		 */
++		set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
 +#endif
- 
- #define WRITE_ONCE(x, val)						\
- do {									\
++
+ 		/*
+ 		 * These ones were as they were part of the base ISA when the
+ 		 * port & dt-bindings were upstreamed, and so can be set
 -- 
 2.36.1
 

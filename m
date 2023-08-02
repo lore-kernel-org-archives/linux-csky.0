@@ -2,36 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B0F3C04FE2
-	for <linux-csky@archiver.kernel.org>; Wed,  2 Aug 2023 16:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7ACFC001E0
+	for <linux-csky@archiver.kernel.org>; Wed,  2 Aug 2023 16:50:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjHBQtZ (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 2 Aug 2023 12:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        id S232096AbjHBQt4 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 2 Aug 2023 12:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjHBQtF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 2 Aug 2023 12:49:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C912D78;
-        Wed,  2 Aug 2023 09:48:46 -0700 (PDT)
+        with ESMTP id S232949AbjHBQto (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 2 Aug 2023 12:49:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8D230E0;
+        Wed,  2 Aug 2023 09:49:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A51C61A3C;
-        Wed,  2 Aug 2023 16:48:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D8BC433CA;
-        Wed,  2 Aug 2023 16:48:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D92C261A18;
+        Wed,  2 Aug 2023 16:49:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE991C433C7;
+        Wed,  2 Aug 2023 16:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690994925;
-        bh=XpJMmQpizgl+1q4faLgZyV4Sr5SWoDQzo87jc2k0hEU=;
+        s=k20201202; t=1690994973;
+        bh=qTocF+5HifQQ2/cevfHJiy/Dt4gxsiBcGO8u/t7qAjw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rgxujrsdn7f+bcZFJbQ7fNjqz5y2CrBgF0JiPl0DEbMPu20EiePiHkH95Lmot58DW
-         LviM3KysginZdajdwkNuvDoxVNN9RrLMOjPSuZ2jRVFlm0Qny2n4KMliWznJBLtDdM
-         PysXqLOrB6cwwXJ7jKWDbYVbH0jnEiJgiskSOUOEj3Oeoj/ZstrC+OQYehdAcghRJK
-         G7L0DezO+mrmdTlz+SbrU0xEuUAXSYjh3wFuhnVhocrtahkE+ip2vFt+KKjTcY8dze
-         FrXIL/40ohIWf2ObIM0DmN2LJ5i1atvvrNMdz0WAJ+g3S86+2/6kXwSMt708WfOkjC
-         iMkIyJYOTzcAA==
+        b=HzKhu1rw4zVY83o3aI0QRxuEoefnVtHfGIm54LDyeZfq6g0LxLrXs7I4vNqtzFs6+
+         2q8sf2QEoId6+sKw73J7aEIT5YLQLPVa/vzfO+h6M85J04AkY6O7Ww9717CT31VAfz
+         pL+nmf8pE/EDqMdwrvEl4pC2GTEn7nWlvDpt2xBBAnqn4xFaeqsL1+2Z7fTA2UiWmV
+         h8wzWKSgpZM7N5ip55dDhWMilqgGJn4HLsfjl3vf/97Wq88D754dkMU9ojregLnLNz
+         uxMU25MAhuAxaBFytRB/nZn8ozCqw4yybE4TlWd0BStHvq5hgLlpZYJwCbuxOjwIs7
+         NuiGKj3a2TZrA==
 From:   guoren@kernel.org
 To:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
@@ -47,9 +47,9 @@ Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
-Subject: [PATCH V10 04/19] riscv: qspinlock: Add basic queued_spinlock support
-Date:   Wed,  2 Aug 2023 12:46:46 -0400
-Message-Id: <20230802164701.192791-5-guoren@kernel.org>
+Subject: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce ERRATA_THEAD_QSPINLOCK
+Date:   Wed,  2 Aug 2023 12:46:49 -0400
+Message-Id: <20230802164701.192791-8-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230802164701.192791-1-guoren@kernel.org>
 References: <20230802164701.192791-1-guoren@kernel.org>
@@ -61,192 +61,150 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The requirements of qspinlock have been documented by commit:
-a8ad07e5240c ("asm-generic: qspinlock: Indicate the use of mixed-size
-atomics").
+According to qspinlock requirements, RISC-V gives out a weak LR/SC
+forward progress guarantee which does not satisfy qspinlock. But
+many vendors could produce stronger forward guarantee LR/SC to
+ensure the xchg_tail could be finished in time on any kind of
+hart. T-HEAD is the vendor which implements strong forward
+guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
+with errata help.
 
-Although RISC-V ISA gives out a weaker forward guarantee LR/SC, which
-doesn't satisfy the requirements of qspinlock above, it won't prevent
-some riscv vendors from implementing a strong fwd guarantee LR/SC in
-microarchitecture to match xchg_tail requirement. T-HEAD C9xx processor
-is the one.
+T-HEAD early version of processors has the merge buffer delay
+problem, so we need ERRATA_WRITEONCE to support qspinlock.
 
-We've tested the patch on SOPHGO sg2042 & th1520 and passed the stress
-test on Fedora & Ubuntu & OpenEuler ... Here is the performance
-comparison between qspinlock and ticket_lock on sg2042 (64 cores):
-
-sysbench test=threads threads=32 yields=100 lock=8 (+13.8%):
-  queued_spinlock 0.5109/0.00
-  ticket_spinlock 0.5814/0.00
-
-perf futex/hash (+6.7%):
-  queued_spinlock 1444393 operations/sec (+- 0.09%)
-  ticket_spinlock 1353215 operations/sec (+- 0.15%)
-
-perf futex/wake-parallel (+8.6%):
-  queued_spinlock (waking 1/64 threads) in 0.0253 ms (+-2.90%)
-  ticket_spinlock (waking 1/64 threads) in 0.0275 ms (+-3.12%)
-
-perf futex/requeue (+4.2%):
-  queued_spinlock Requeued 64 of 64 threads in 0.0785 ms (+-0.55%)
-  ticket_spinlock Requeued 64 of 64 threads in 0.0818 ms (+-4.12%)
-
-System Benchmarks (+6.4%)
-  queued_spinlock:
-    System Benchmarks Index Values               BASELINE       RESULT    INDEX
-    Dhrystone 2 using register variables         116700.0  628613745.4  53865.8
-    Double-Precision Whetstone                       55.0     182422.8  33167.8
-    Execl Throughput                                 43.0      13116.6   3050.4
-    File Copy 1024 bufsize 2000 maxblocks          3960.0    7762306.2  19601.8
-    File Copy 256 bufsize 500 maxblocks            1655.0    3417556.8  20649.9
-    File Copy 4096 bufsize 8000 maxblocks          5800.0    7427995.7  12806.9
-    Pipe Throughput                               12440.0   23058600.5  18535.9
-    Pipe-based Context Switching                   4000.0    2835617.7   7089.0
-    Process Creation                                126.0      12537.3    995.0
-    Shell Scripts (1 concurrent)                     42.4      57057.4  13456.9
-    Shell Scripts (8 concurrent)                      6.0       7367.1  12278.5
-    System Call Overhead                          15000.0   33308301.3  22205.5
-                                                                       ========
-    System Benchmarks Index Score                                       12426.1
-
-  ticket_spinlock:
-    System Benchmarks Index Values               BASELINE       RESULT    INDEX
-    Dhrystone 2 using register variables         116700.0  626541701.9  53688.2
-    Double-Precision Whetstone                       55.0     181921.0  33076.5
-    Execl Throughput                                 43.0      12625.1   2936.1
-    File Copy 1024 bufsize 2000 maxblocks          3960.0    6553792.9  16550.0
-    File Copy 256 bufsize 500 maxblocks            1655.0    3189231.6  19270.3
-    File Copy 4096 bufsize 8000 maxblocks          5800.0    7221277.0  12450.5
-    Pipe Throughput                               12440.0   20594018.7  16554.7
-    Pipe-based Context Switching                   4000.0    2571117.7   6427.8
-    Process Creation                                126.0      10798.4    857.0
-    Shell Scripts (1 concurrent)                     42.4      57227.5  13497.1
-    Shell Scripts (8 concurrent)                      6.0       7329.2  12215.3
-    System Call Overhead                          15000.0   30766778.4  20511.2
-                                                                       ========
-    System Benchmarks Index Score                                       11670.7
-
-The qspinlock has a significant improvement on SOPHGO SG2042 64
-cores platform than the ticket_lock.
-
-Signed-off-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/Kconfig                | 16 ++++++++++++++++
- arch/riscv/include/asm/Kbuild     |  3 ++-
- arch/riscv/include/asm/cmpxchg.h  | 24 ++++++++++++++++++++++++
- arch/riscv/include/asm/spinlock.h | 17 +++++++++++++++++
- 4 files changed, 59 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/include/asm/spinlock.h
+ arch/riscv/Kconfig.errata              | 13 +++++++++++++
+ arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
+ arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
+ arch/riscv/include/asm/vendorid_list.h |  3 ++-
+ arch/riscv/kernel/cpufeature.c         |  3 ++-
+ 5 files changed, 61 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 93ff677d2be5..e89a3bea3dc1 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -438,6 +438,22 @@ config NODES_SHIFT
- 	  Specify the maximum number of NUMA Nodes available on the target
- 	  system.  Increases memory reserved to accommodate various tables.
+diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+index 4745a5c57e7c..eb43677b13cc 100644
+--- a/arch/riscv/Kconfig.errata
++++ b/arch/riscv/Kconfig.errata
+@@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
  
-+choice
-+	prompt "RISC-V spinlock type"
-+	default RISCV_TICKET_SPINLOCKS
-+
-+config RISCV_TICKET_SPINLOCKS
-+	bool "Using ticket spinlock"
-+
-+config RISCV_QUEUED_SPINLOCKS
-+	bool "Using queued spinlock"
-+	depends on SMP && MMU
-+	select ARCH_USE_QUEUED_SPINLOCKS
+ 	  If you don't know what to do here, say "Y".
+ 
++config ERRATA_THEAD_QSPINLOCK
++	bool "Apply T-Head queued spinlock errata"
++	depends on ERRATA_THEAD
++	default y
 +	help
-+	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
-+	  Otherwise, stay at ticket-lock.
-+endchoice
++	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
++	  match the xchg_tail requirement of qspinlock.
 +
- config RISCV_ALTERNATIVE
- 	bool
- 	depends on !XIP_KERNEL
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 504f8b7e72d4..a0dc85e4a754 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -2,10 +2,11 @@
- generic-y += early_ioremap.h
- generic-y += flat.h
- generic-y += kvm_para.h
-+generic-y += mcs_spinlock.h
- generic-y += parport.h
--generic-y += spinlock.h
- generic-y += spinlock_types.h
- generic-y += qrwlock.h
- generic-y += qrwlock_types.h
-+generic-y += qspinlock.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 2f4726d3cfcc..d12231d752a4 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -11,12 +11,36 @@
- #include <asm/barrier.h>
- #include <asm/fence.h>
++	  This will apply the QSPINLOCK errata to handle the non-standard
++	  behavior via using qspinlock instead of ticket_lock.
++
++	  If you don't know what to do here, say "Y".
++
+ endmenu # "CPU errata selection"
+diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+index 881729746d2e..d560dc45c0e7 100644
+--- a/arch/riscv/errata/thead/errata.c
++++ b/arch/riscv/errata/thead/errata.c
+@@ -86,6 +86,27 @@ static bool errata_probe_write_once(unsigned int stage,
+ 	return false;
+ }
  
-+static inline ulong __xchg16_relaxed(ulong new, void *ptr)
++static bool errata_probe_qspinlock(unsigned int stage,
++				   unsigned long arch_id, unsigned long impid)
 +{
-+	ulong ret, tmp;
-+	ulong shif = ((ulong)ptr & 2) ? 16 : 0;
-+	ulong mask = 0xffff << shif;
-+	ulong *__ptr = (ulong *)((ulong)ptr & ~2);
++	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_QSPINLOCK))
++		return false;
 +
-+	__asm__ __volatile__ (
-+		"0:	lr.w %0, %2\n"
-+		"	and  %1, %0, %z3\n"
-+		"	or   %1, %1, %z4\n"
-+		"	sc.w %1, %1, %2\n"
-+		"	bnez %1, 0b\n"
-+		: "=&r" (ret), "=&r" (tmp), "+A" (*__ptr)
-+		: "rJ" (~mask), "rJ" (new << shif)
-+		: "memory");
++	/*
++	 * The queued_spinlock torture would get in livelock without
++	 * ERRATA_THEAD_WRITE_ONCE fixup for the early versions of T-HEAD
++	 * processors.
++	 */
++	if (arch_id == 0 && impid == 0 &&
++	    !IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
++		return false;
 +
-+	return (ulong)((ret & mask) >> shif);
++	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
++		return true;
++
++	return false;
 +}
 +
- #define __xchg_relaxed(ptr, new, size)					\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(new) __new = (new);					\
- 	__typeof__(*(ptr)) __ret;					\
- 	switch (size) {							\
-+	case 2:								\
-+		__ret = (__typeof__(*(ptr)))				\
-+			__xchg16_relaxed((ulong)__new, __ptr);		\
-+		break;							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"	amoswap.w %0, %2, %1\n"			\
-diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-new file mode 100644
-index 000000000000..c644a92d4548
---- /dev/null
-+++ b/arch/riscv/include/asm/spinlock.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+ static u32 thead_errata_probe(unsigned int stage,
+ 			      unsigned long archid, unsigned long impid)
+ {
+@@ -103,6 +124,9 @@ static u32 thead_errata_probe(unsigned int stage,
+ 	if (errata_probe_write_once(stage, archid, impid))
+ 		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
+ 
++	if (errata_probe_qspinlock(stage, archid, impid))
++		cpu_req_errata |= BIT(ERRATA_THEAD_QSPINLOCK);
 +
-+#ifndef __ASM_RISCV_SPINLOCK_H
-+#define __ASM_RISCV_SPINLOCK_H
+ 	return cpu_req_errata;
+ }
+ 
+diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+index fbb2b8d39321..a696d18d1b0d 100644
+--- a/arch/riscv/include/asm/errata_list.h
++++ b/arch/riscv/include/asm/errata_list.h
+@@ -141,6 +141,26 @@ asm volatile(ALTERNATIVE(						\
+ 	: "=r" (__ovl) :						\
+ 	: "memory")
+ 
++static __always_inline bool
++riscv_has_errata_thead_qspinlock(void)
++{
++	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
++		asm_volatile_goto(
++		ALTERNATIVE(
++		"j	%l[l_no]", "nop",
++		THEAD_VENDOR_ID,
++		ERRATA_THEAD_QSPINLOCK,
++		CONFIG_ERRATA_THEAD_QSPINLOCK)
++		: : : : l_no);
++	} else {
++		goto l_no;
++	}
 +
-+#ifdef CONFIG_QUEUED_SPINLOCKS
-+#define _Q_PENDING_LOOPS	(1 << 9)
-+#endif
++	return true;
++l_no:
++	return false;
++}
 +
-+#ifdef CONFIG_QUEUED_SPINLOCKS
-+#include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
-+#else
-+#include <asm-generic/spinlock.h>
-+#endif
-+
-+#endif /* __ASM_RISCV_SPINLOCK_H */
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif
+diff --git a/arch/riscv/include/asm/vendorid_list.h b/arch/riscv/include/asm/vendorid_list.h
+index 73078cfe4029..1f1d03877f5f 100644
+--- a/arch/riscv/include/asm/vendorid_list.h
++++ b/arch/riscv/include/asm/vendorid_list.h
+@@ -19,7 +19,8 @@
+ #define	ERRATA_THEAD_CMO 1
+ #define	ERRATA_THEAD_PMU 2
+ #define	ERRATA_THEAD_WRITE_ONCE 3
+-#define	ERRATA_THEAD_NUMBER 4
++#define	ERRATA_THEAD_QSPINLOCK 4
++#define	ERRATA_THEAD_NUMBER 5
+ #endif
+ 
+ #endif
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index f8dbbe1bbd34..d9694fe40a9a 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
+ 		 * spinlock value, the only way is to change from queued_spinlock to
+ 		 * ticket_spinlock, but can not be vice.
+ 		 */
+-		if (!force_qspinlock) {
++		if (!force_qspinlock &&
++		    !riscv_has_errata_thead_qspinlock()) {
+ 			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
+ 		}
+ #endif
 -- 
 2.36.1
 

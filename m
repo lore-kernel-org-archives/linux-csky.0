@@ -2,151 +2,285 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4185CC25B7D
-	for <linux-csky@archiver.kernel.org>; Mon,  7 Aug 2023 23:08:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7FA8EB64DD
+	for <linux-csky@archiver.kernel.org>; Tue,  8 Aug 2023 02:12:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjHGXIo (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 7 Aug 2023 19:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S230376AbjHHCMe (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 7 Aug 2023 22:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjHGXHM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Aug 2023 19:07:12 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3F72109;
-        Mon,  7 Aug 2023 16:06:21 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d35a9d7a5bdso5116874276.0;
-        Mon, 07 Aug 2023 16:06:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691449572; x=1692054372;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NpbBCMkwg1WbsmcEnKHREFultw/IY4tG3Jsqz6w0a8E=;
-        b=nS5J1UYk8f9msjmOJfcwkB8RnOSNZv60DefW2TDIHuOlvS9npGk8oT2LZd+SySl8sv
-         g+gjV1veIOE2SNGvcFOMJ1pPimwLTZ7+pvFQ4bVBKr+eOsPpBFIPNto8klZeZdDlbFxo
-         wkyNcA7u+kweH04q+BG4NvsUNaK7E9zibuZ01wwXmu5qj90Fw+mY1pf3xcSZWMeZa7wK
-         aGRqh9CjWX7iCRUWp+ZrbhBol1e4MCC8JBlzqolLSWyg74wpF8elWEgkI2Vj4oenaGhD
-         isx7MJZrX54CbrhbHsj99pEt0PqmBmGh9HnsD2DaWM5Gm6veS11IW5m9dzOKe44sU/M/
-         md6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691449572; x=1692054372;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NpbBCMkwg1WbsmcEnKHREFultw/IY4tG3Jsqz6w0a8E=;
-        b=DHdwlr1ZLcIzfSyCwcFedN1pehdxk2lPDpj5jadwZTLJc4GFEAaoqWrQah7s/iRmPQ
-         xpHWqQSNAXGQ+fQpXUQRUVHkk+sA/oQPGwi8mneqnmqjTzNTtxO1AjAvobOtn2nyXH+Q
-         XxNAmZvISteddm8aG70TYyZ3YcyBCP0uLo57BPaYX87RJi2lTHQ1VtR5D+5sZSjki7yM
-         oleFFYFPwzMMvfsUTYPSSTJv3g8eqt1wxAE/7ss7VDREkgCwlyoehSukWhF4YCQmTQKs
-         clK8zPZ1QiDaiN0rIiy7h8K5OVdAJZ7eX3ZKvuGIXC0hdpAWUDdXd6s6SR4YskmbiUDt
-         6GCw==
-X-Gm-Message-State: AOJu0YxXqGFxmNPd9O+Y7p2Nd6y+QzBcpUpO0+L7UTxOLQYijx1fEOSd
-        n3+k6vIpz9vmgKdfWdWU7ms=
-X-Google-Smtp-Source: AGHT+IHFLqgFAthROKM1yjg8aTn4QAXhjx425iARLy/TVdE1z6PZIG9RjSxWoTmqjhSqLQZr0gTMYg==
-X-Received: by 2002:a25:d24d:0:b0:d0a:127e:7478 with SMTP id j74-20020a25d24d000000b00d0a127e7478mr9478817ybg.44.1691449571835;
-        Mon, 07 Aug 2023 16:06:11 -0700 (PDT)
-Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
-        by smtp.googlemail.com with ESMTPSA id d190-20020a25cdc7000000b00d3596aca5bcsm2545203ybf.34.2023.08.07.16.06.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 16:06:11 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH mm-unstable v9 26/31] riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
-Date:   Mon,  7 Aug 2023 16:05:08 -0700
-Message-Id: <20230807230513.102486-27-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230807230513.102486-1-vishal.moola@gmail.com>
-References: <20230807230513.102486-1-vishal.moola@gmail.com>
+        with ESMTP id S229621AbjHHCMd (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Aug 2023 22:12:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE91711;
+        Mon,  7 Aug 2023 19:12:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E3AC62377;
+        Tue,  8 Aug 2023 02:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A6CC433C9;
+        Tue,  8 Aug 2023 02:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691460748;
+        bh=VRkYha2WcYiFCfW1jnh2VzYnyzSI0BELp4Vbm5rvuJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kIDPQ2tkRoESMxlHw70sgk7jaT2faK4xi7GqlRBnpsnrfAGVWf56MAMy5koAx3fEu
+         rc8orB5Jl57n/+LS4Q+M8wXPJlijTHZ/Mf+BbCq7fRz0uH9WVui1WSDJbW/sdv74h6
+         hpcz6wB9Nf+Kae77HrB87LBryEUzWLuy8NCpFfX9qOy/CmCuFW+WeZJHruny88kTUU
+         g+w7Yzys9y9TwUPJEJ4M+eT+sn+F/H3G+VIWsU/UsSfzSpmjECNB4p90XnDdXv0hcn
+         A0ZPCj9ITwAzmSiKqhaCLUy9pW4lcrGn647Zu7X+t/8052h+2ejyG/w7z2f/x1Cre8
+         vHXMHucz3xXmA==
+Date:   Mon, 7 Aug 2023 22:12:15 -0400
+From:   Guo Ren <guoren@kernel.org>
+To:     Stefan O'Rear <sorear@fastmail.com>
+Cc:     paul.walmsley@sifive.com, Anup Patel <anup@brainfault.org>,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>, longman@redhat.com,
+        boqun.feng@gmail.com, tglx@linutronix.de, paulmck@kernel.org,
+        rostedt@goodmis.org, rdunlap@infradead.org,
+        catalin.marinas@arm.com, Conor Dooley <conor.dooley@microchip.com>,
+        xiaoguang.xing@sophgo.com,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        alexghiti@rivosinc.com, Kees Cook <keescook@chromium.org>,
+        greentime.hu@sifive.com, Andrew Jones <ajones@ventanamicro.com>,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        guoren@kernel.org
+Subject: Re: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce
+ ERRATA_THEAD_QSPINLOCK
+Message-ID: <ZNGkf88lhPt7fdhH@gmail.com>
+References: <20230802164701.192791-1-guoren@kernel.org>
+ <20230802164701.192791-8-guoren@kernel.org>
+ <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-As part of the conversions to replace pgtable constructor/destructors with
-ptdesc equivalents, convert various page table functions to use ptdescs.
+On Mon, Aug 07, 2023 at 01:23:34AM -0400, Stefan O'Rear wrote:
+> On Wed, Aug 2, 2023, at 12:46 PM, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > According to qspinlock requirements, RISC-V gives out a weak LR/SC
+> > forward progress guarantee which does not satisfy qspinlock. But
+> > many vendors could produce stronger forward guarantee LR/SC to
+> > ensure the xchg_tail could be finished in time on any kind of
+> > hart. T-HEAD is the vendor which implements strong forward
+> > guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
+> > with errata help.
+> >
+> > T-HEAD early version of processors has the merge buffer delay
+> > problem, so we need ERRATA_WRITEONCE to support qspinlock.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/Kconfig.errata              | 13 +++++++++++++
+> >  arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
+> >  arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
+> >  arch/riscv/include/asm/vendorid_list.h |  3 ++-
+> >  arch/riscv/kernel/cpufeature.c         |  3 ++-
+> >  5 files changed, 61 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+> > index 4745a5c57e7c..eb43677b13cc 100644
+> > --- a/arch/riscv/Kconfig.errata
+> > +++ b/arch/riscv/Kconfig.errata
+> > @@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
+> > 
+> >  	  If you don't know what to do here, say "Y".
+> > 
+> > +config ERRATA_THEAD_QSPINLOCK
+> > +	bool "Apply T-Head queued spinlock errata"
+> > +	depends on ERRATA_THEAD
+> > +	default y
+> > +	help
+> > +	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
+> > +	  match the xchg_tail requirement of qspinlock.
+> > +
+> > +	  This will apply the QSPINLOCK errata to handle the non-standard
+> > +	  behavior via using qspinlock instead of ticket_lock.
+> > +
+> > +	  If you don't know what to do here, say "Y".
+> 
+> If this is to be applied, I would like to see a detailed explanation somewhere,
+> preferably with citations, of:
+> 
+> (a) The memory model requirements for qspinlock
+These were written in commit: a8ad07e5240 ("asm-generic: qspinlock: Indicate the use of
+mixed-size atomics"). For riscv, the most controversial point is xchg_tail()
+implementation for native queued spinlock.
 
-Some of the functions use the *get*page*() helper functions. Convert
-these to use pagetable_alloc() and ptdesc_address() instead to help
-standardize page tables further.
+> (b) Why, with arguments, RISC-V does not architecturally meet (a)
+In the spec "Eventual Success of Store-Conditional Instructions":
+"By contrast, if other harts or devices continue to write to that reservation set, it is
+not guaranteed that any hart will exit its LR/SC loop."
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- arch/riscv/include/asm/pgalloc.h |  8 ++++----
- arch/riscv/mm/init.c             | 16 ++++++----------
- 2 files changed, 10 insertions(+), 14 deletions(-)
+1. The arch_spinlock_t is 32-bit width, and it contains LOCK_PENDING
+   part and IDX_TAIL part.
+    - LOCK:     lock holder
+    - PENDING:  next waiter (Only once per contended situation)
+    - IDX:      nested context (normal, hwirq, softirq, nmi)
+    - TAIL:     last contended cpu
+   The xchg_tail operate on IDX_TAIL part, so there is no guarantee on "NO"
+   "other harts or devices continue to write to that reservation set".
 
-diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
-index 59dc12b5b7e8..d169a4f41a2e 100644
---- a/arch/riscv/include/asm/pgalloc.h
-+++ b/arch/riscv/include/asm/pgalloc.h
-@@ -153,10 +153,10 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
- 
- #endif /* __PAGETABLE_PMD_FOLDED */
- 
--#define __pte_free_tlb(tlb, pte, buf)   \
--do {                                    \
--	pgtable_pte_page_dtor(pte);     \
--	tlb_remove_page((tlb), pte);    \
-+#define __pte_free_tlb(tlb, pte, buf)			\
-+do {							\
-+	pagetable_pte_dtor(page_ptdesc(pte));		\
-+	tlb_remove_page_ptdesc((tlb), page_ptdesc(pte));\
- } while (0)
- #endif /* CONFIG_MMU */
- 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 9ce504737d18..430a3d05a841 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -353,12 +353,10 @@ static inline phys_addr_t __init alloc_pte_fixmap(uintptr_t va)
- 
- static phys_addr_t __init alloc_pte_late(uintptr_t va)
- {
--	unsigned long vaddr;
--
--	vaddr = __get_free_page(GFP_KERNEL);
--	BUG_ON(!vaddr || !pgtable_pte_page_ctor(virt_to_page((void *)vaddr)));
-+	struct ptdesc *ptdesc = pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM, 0);
- 
--	return __pa(vaddr);
-+	BUG_ON(!ptdesc || !pagetable_pte_ctor(ptdesc));
-+	return __pa((pte_t *)ptdesc_address(ptdesc));
- }
- 
- static void __init create_pte_mapping(pte_t *ptep,
-@@ -436,12 +434,10 @@ static phys_addr_t __init alloc_pmd_fixmap(uintptr_t va)
- 
- static phys_addr_t __init alloc_pmd_late(uintptr_t va)
- {
--	unsigned long vaddr;
--
--	vaddr = __get_free_page(GFP_KERNEL);
--	BUG_ON(!vaddr || !pgtable_pmd_page_ctor(virt_to_page((void *)vaddr)));
-+	struct ptdesc *ptdesc = pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM, 0);
- 
--	return __pa(vaddr);
-+	BUG_ON(!ptdesc || !pagetable_pmd_ctor(ptdesc));
-+	return __pa((pmd_t *)ptdesc_address(ptdesc));
- }
- 
- static void __init create_pmd_mapping(pmd_t *pmdp,
--- 
-2.40.1
+2. When you do lock torture test, you may see a long contended ring queue:
+                                                                xchg_tail
+                                                                    +-----> CPU4 (big core)
+                                                                    |
+   CPU3 (lock holder) -> CPU1 (mcs queued) -> CPU2 (mcs queued) ----+-----> CPU0 (little core)
+    |                                                               |
+    |                                                               +-----> CPU5 (big core)
+    |                                                               |
+    +--locktorture release lock (spin_unlock) and spin_lock again --+-----> CPU3 (big core)
 
+    If CPU0 doesn't have a strong fwd guarantee, xhg_tail is consistently failed.
+
+> (c) Why, with arguments, T-HEAD C9xx meets (a)
+> (d) Why at least one other architecture which defines ARCH_USE_QUEUED_SPINLOCKS
+>     meets (a)
+I can't give the C9xx microarch implementation detail. But many
+open-source riscv cores have provided strong forward progress guarantee
+LR/SC implementation [1] [2]. But I would say these implementations are
+too rude, which makes LR send a cacheline unique interconnect request.
+It satisfies xchg_tail but not cmpxchg & cond_load. CPU vendors should
+carefully consider your LR/SC fwd guarantee implementation.
+
+[1]: https://github.com/riscv-boom/riscv-boom/blob/v3.0.0/src/main/scala/lsu/dcache.scala#L650
+[2]: https://github.com/OpenXiangShan/XiangShan/blob/v1.0/src/main/scala/xiangshan/cache/MainPipe.scala#L470
+
+> 
+> As far as I can tell, the RISC-V guarantees concerning constrained LR/SC loops
+> (livelock freedom but no starvation freedom) are exactly the same as those in
+> Armv8 (as of 0487F.c) for equivalent loops, and xchg_tail compiles to a
+> constrained LR/SC loop with guaranteed eventual success (with -O1).  Clearly you
+> disagree; I would like to see your perspective.
+For Armv8, I would use LSE for the lock-contended scenario. Ref this
+commit 0ea366f5e1b6: ("arm64: atomics: prefetch the destination word for
+write prior to stxr").
+
+> 
+> -s
+> 
+> > +
+> >  endmenu # "CPU errata selection"
+> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> > index 881729746d2e..d560dc45c0e7 100644
+> > --- a/arch/riscv/errata/thead/errata.c
+> > +++ b/arch/riscv/errata/thead/errata.c
+> > @@ -86,6 +86,27 @@ static bool errata_probe_write_once(unsigned int stage,
+> >  	return false;
+> >  }
+> > 
+> > +static bool errata_probe_qspinlock(unsigned int stage,
+> > +				   unsigned long arch_id, unsigned long impid)
+> > +{
+> > +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_QSPINLOCK))
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * The queued_spinlock torture would get in livelock without
+> > +	 * ERRATA_THEAD_WRITE_ONCE fixup for the early versions of T-HEAD
+> > +	 * processors.
+> > +	 */
+> > +	if (arch_id == 0 && impid == 0 &&
+> > +	    !IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
+> > +		return false;
+> > +
+> > +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> > +		return true;
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  static u32 thead_errata_probe(unsigned int stage,
+> >  			      unsigned long archid, unsigned long impid)
+> >  {
+> > @@ -103,6 +124,9 @@ static u32 thead_errata_probe(unsigned int stage,
+> >  	if (errata_probe_write_once(stage, archid, impid))
+> >  		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
+> > 
+> > +	if (errata_probe_qspinlock(stage, archid, impid))
+> > +		cpu_req_errata |= BIT(ERRATA_THEAD_QSPINLOCK);
+> > +
+> >  	return cpu_req_errata;
+> >  }
+> > 
+> > diff --git a/arch/riscv/include/asm/errata_list.h 
+> > b/arch/riscv/include/asm/errata_list.h
+> > index fbb2b8d39321..a696d18d1b0d 100644
+> > --- a/arch/riscv/include/asm/errata_list.h
+> > +++ b/arch/riscv/include/asm/errata_list.h
+> > @@ -141,6 +141,26 @@ asm volatile(ALTERNATIVE(						\
+> >  	: "=r" (__ovl) :						\
+> >  	: "memory")
+> > 
+> > +static __always_inline bool
+> > +riscv_has_errata_thead_qspinlock(void)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+> > +		asm_volatile_goto(
+> > +		ALTERNATIVE(
+> > +		"j	%l[l_no]", "nop",
+> > +		THEAD_VENDOR_ID,
+> > +		ERRATA_THEAD_QSPINLOCK,
+> > +		CONFIG_ERRATA_THEAD_QSPINLOCK)
+> > +		: : : : l_no);
+> > +	} else {
+> > +		goto l_no;
+> > +	}
+> > +
+> > +	return true;
+> > +l_no:
+> > +	return false;
+> > +}
+> > +
+> >  #endif /* __ASSEMBLY__ */
+> > 
+> >  #endif
+> > diff --git a/arch/riscv/include/asm/vendorid_list.h 
+> > b/arch/riscv/include/asm/vendorid_list.h
+> > index 73078cfe4029..1f1d03877f5f 100644
+> > --- a/arch/riscv/include/asm/vendorid_list.h
+> > +++ b/arch/riscv/include/asm/vendorid_list.h
+> > @@ -19,7 +19,8 @@
+> >  #define	ERRATA_THEAD_CMO 1
+> >  #define	ERRATA_THEAD_PMU 2
+> >  #define	ERRATA_THEAD_WRITE_ONCE 3
+> > -#define	ERRATA_THEAD_NUMBER 4
+> > +#define	ERRATA_THEAD_QSPINLOCK 4
+> > +#define	ERRATA_THEAD_NUMBER 5
+> >  #endif
+> > 
+> >  #endif
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index f8dbbe1bbd34..d9694fe40a9a 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
+> >  		 * spinlock value, the only way is to change from queued_spinlock to
+> >  		 * ticket_spinlock, but can not be vice.
+> >  		 */
+> > -		if (!force_qspinlock) {
+> > +		if (!force_qspinlock &&
+> > +		    !riscv_has_errata_thead_qspinlock()) {
+> >  			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
+> >  		}
+> >  #endif
+> > -- 
+> > 2.36.1
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv

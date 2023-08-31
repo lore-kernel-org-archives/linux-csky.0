@@ -2,83 +2,169 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C52DBC83F2E
-	for <linux-csky@archiver.kernel.org>; Wed, 30 Aug 2023 18:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DE12C83F01
+	for <linux-csky@archiver.kernel.org>; Thu, 31 Aug 2023 01:15:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjH3Spp (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S243892AbjHaBPu (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 30 Aug 2023 21:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242818AbjH3JrD (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 30 Aug 2023 05:47:03 -0400
+        with ESMTP id S1345514AbjHaBPt (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 30 Aug 2023 21:15:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602161A4;
-        Wed, 30 Aug 2023 02:47:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FE2CDA;
+        Wed, 30 Aug 2023 18:15:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3265615A0;
-        Wed, 30 Aug 2023 09:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A3CFC433C8;
-        Wed, 30 Aug 2023 09:46:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94F3362BFE;
+        Thu, 31 Aug 2023 01:15:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06ACAC433C8;
+        Thu, 31 Aug 2023 01:15:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693388820;
-        bh=kTGYHnWJ3gzPlhXKqsUN9bUzT388h/9DiQuE8wCZUho=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FWT31d/f0mCee+oe2RpoHRWuy7BaEhYxxWMFJaiZAN6CR0tJNLANokteDrW4eThQT
-         UsOJ9R3xmuZnfB53mDG1PFU06C6Uzfw799Fvw4pPcHf0ydZ2LVE4PfRIVvQDj3IxEz
-         v96Ot9FTGUw18MLSYOyr1QZi7pYgKSwO3iupMAf2vW5QPYJq/aZ5s0i8rG1/4vE5Lf
-         ZmmwbstV/QOF5y0CgCw08qsJNiWaelMqn4uDThCdEnSNZ6oIEkTJstTcI1ch67J8ZZ
-         0nHWIdtBAOEyXw43Yr9XLEJTl76oU3bUR7rY/bV4QDJ2IFu8xMXH7VDFFxqMhCewJt
-         ppQ5UqdKp34aw==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de, linux@roeck-us.net
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] csky: Fixup compile error
-Date:   Wed, 30 Aug 2023 05:46:53 -0400
-Message-Id: <20230830094653.2833443-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        s=k20201202; t=1693444545;
+        bh=/GzOoeS9IMqEaWMOStyGqmqIPHMn2UclD/Jy+ErIxqQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SR04DyWk+8bpGGOEP5ZNNkMHaB/Qd1OzdznW7sCYASPDR10mru69Lmoq9TBj30cEz
+         fL2qBKXKUT1NpK1zAfPsn6BNG/+XGs/nLTtU076Xn/5zJAp2w6Q3xVOCG1NRgcZZHW
+         iFkTugblkqUfzuERq59bjBAUZ2EBLOuOJxYsbwSTOFQrKYMT5SMchvibK8XfP5Y+DK
+         SnUnu5hDlXluOGzgCxZhip3LlD3rWD6bLN6220gYEjBXpTuEnzqlvAgLbbOo1qODm6
+         7R+pH3oZ6Y9umh9y4CzZ4laHiXnZ1cgCV8VN1041aneZCgPT5GnGlfvCEqDZqTpYtb
+         2BdYpDx4n/vUQ==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-500cd6261fdso691689e87.3;
+        Wed, 30 Aug 2023 18:15:44 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzkwljhlZeG8jDqsLYGKb0+4cijoB55k04HoBr7s0KUKfiINBBS
+        a50QM77vRyKkIfT6TCxEbfatNUZ/oFjEODwnvW4=
+X-Google-Smtp-Source: AGHT+IFMI0XICvOxep1KkiT7TXvtmbnTrF2Hinm9tQH3PUqzjE1OWf8hlGEdMkT/79MzecgXSwMIBXNRce+hOjeOmSU=
+X-Received: by 2002:a05:6512:1196:b0:500:adc6:141d with SMTP id
+ g22-20020a056512119600b00500adc6141dmr3178899lfr.45.1693444543034; Wed, 30
+ Aug 2023 18:15:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <ZO8qkS0Skg9L4xzr@debian> <527df158-7d32-42ba-d5f1-9dad30704cc1@leemhuis.info>
+In-Reply-To: <527df158-7d32-42ba-d5f1-9dad30704cc1@leemhuis.info>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 31 Aug 2023 09:15:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQWWi_Cb1iQiLOr4114kZW7L93KNwjCu3ArKb7ffxcO+A@mail.gmail.com>
+Message-ID: <CAJF2gTQWWi_Cb1iQiLOr4114kZW7L93KNwjCu3ArKb7ffxcO+A@mail.gmail.com>
+Subject: Re: mainline build failure due to c8171a86b274 ("csky: Fixup
+ -Wmissing-prototypes warning")
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Oleg Nesterov <oleg@redhat.com>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Wed, Aug 30, 2023 at 9:07=E2=80=AFPM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> On 30.08.23 13:40, Sudip Mukherjee (Codethink) wrote:
+> >
+> > The latest mainline kernel branch fails to build csky allmodconfig with
+> > the error:
+>
+> Thx for the report and involving regzbot. To make one thing more obvious:
+>
+> Guo Ren, it seems to be caused by a commit of yours.
+>
+> And fun fact: seem 0day bot found the same problem nearly thee weeks
+> ago, but nobody cared afaics:
+> https://lore.kernel.org/all/202308120502.MXpchFC1-lkp@intel.com/
+>
+> Ciao, Thorsten
+>
+> > In file included from ./arch/csky/include/asm/ptrace.h:7,
+> >                  from ./arch/csky/include/asm/processor.h:8,
+> >                  from ./include/linux/prefetch.h:15,
+> >                  from drivers/net/ethernet/intel/i40e/i40e_txrx.c:4:
+> > ./arch/csky/include/asm/traps.h:43:11: error: expected ';' before 'void=
+'
+> >    43 | asmlinkage void do_trap_unknown(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:44:11: error: expected ';' before 'void=
+'
+> >    44 | asmlinkage void do_trap_zdiv(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:45:11: error: expected ';' before 'void=
+'
+> >    45 | asmlinkage void do_trap_buserr(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:46:11: error: expected ';' before 'void=
+'
+> >    46 | asmlinkage void do_trap_misaligned(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:47:11: error: expected ';' before 'void=
+'
+> >    47 | asmlinkage void do_trap_bkpt(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:48:11: error: expected ';' before 'void=
+'
+> >    48 | asmlinkage void do_trap_illinsn(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:49:11: error: expected ';' before 'void=
+'
+> >    49 | asmlinkage void do_trap_fpe(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:50:11: error: expected ';' before 'void=
+'
+> >    50 | asmlinkage void do_trap_priv(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:51:11: error: expected ';' before 'void=
+'
+> >    51 | asmlinkage void trap_c(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> > ./arch/csky/include/asm/traps.h:53:11: error: expected ';' before 'void=
+'
+> >    53 | asmlinkage void do_notify_resume(struct pt_regs *regs,
+> >       |           ^~~~~
+> >       |           ;
+> > In file included from ./arch/csky/include/asm/processor.h:8,
+> >                  from ./include/linux/prefetch.h:15,
+> >                  from drivers/net/ethernet/intel/i40e/i40e_txrx.c:4:
+> > ./arch/csky/include/asm/ptrace.h:99:11: error: expected ';' before 'int=
+'
+> >    99 | asmlinkage int syscall_trace_enter(struct pt_regs *regs);
+> >       |           ^~~~
+> >       |           ;
+> > ./arch/csky/include/asm/ptrace.h:100:11: error: expected ';' before 'vo=
+id'
+> >   100 | asmlinkage void syscall_trace_exit(struct pt_regs *regs);
+> >       |           ^~~~~
+> >       |           ;
+> >
+> > git bisect pointed to c8171a86b274 ("csky: Fixup -Wmissing-prototypes w=
+arning").
+> >
+> > Reverting the commit has fixed the build failure.
+> >
+> > I will be happy to test any patch or provide any extra log if needed.
+> >
+> > #regzbot introduced: c8171a86b27401aa1f492dd1f080f3102264f1ab
+>
+> #regzbot monitor:
+> https://lore.kernel.org/all/202308120502.MXpchFC1-lkp@intel.com/
 
-Add header file for asmlinkage macro.
+Sorry, Fixes have been sent, I'm waiting for it into the linux-next,
+and then I will send 2nd pull request.
 
-Error log:
-In file included from arch/csky/include/asm/ptrace.h:7,
-                 from arch/csky/include/asm/elf.h:6,
-                 from include/linux/elf.h:6,
-                 from kernel/extable.c:6:
-arch/csky/include/asm/traps.h:43:11: error: expected ';' before 'void'
-   43 | asmlinkage void do_trap_unknown(struct pt_regs *regs);
-      |           ^~~~~
+https://lore.kernel.org/linux-csky/20230830094653.2833443-1-guoren@kernel.o=
+rg/
 
-Fixes: c8171a86b274 ("csky: Fixup -Wmissing-prototypes warning")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/csky/include/asm/traps.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/csky/include/asm/traps.h b/arch/csky/include/asm/traps.h
-index 1e7d303b91e9..732c4aaa2e26 100644
---- a/arch/csky/include/asm/traps.h
-+++ b/arch/csky/include/asm/traps.h
-@@ -3,6 +3,8 @@
- #ifndef __ASM_CSKY_TRAPS_H
- #define __ASM_CSKY_TRAPS_H
- 
-+#include <linux/linkage.h>
-+
- #define VEC_RESET	0
- #define VEC_ALIGN	1
- #define VEC_ACCESS	2
--- 
-2.36.1
-
+--=20
+Best Regards
+ Guo Ren

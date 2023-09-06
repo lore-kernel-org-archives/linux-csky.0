@@ -2,63 +2,140 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1374BC71153
-	for <linux-csky@archiver.kernel.org>; Mon,  4 Sep 2023 08:19:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04555EB8FB6
+	for <linux-csky@archiver.kernel.org>; Wed,  6 Sep 2023 10:04:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349995AbjIDITW (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 4 Sep 2023 04:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S238398AbjIFKEN (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 6 Sep 2023 06:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345687AbjIDITW (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 4 Sep 2023 04:19:22 -0400
-X-Greylist: delayed 1250 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Sep 2023 01:19:19 PDT
-Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54A1FD
-        for <linux-csky@vger.kernel.org>; Mon,  4 Sep 2023 01:19:19 -0700 (PDT)
-Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
-        id 76514833F9; Mon,  4 Sep 2023 09:41:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
-        s=mail; t=1693813333;
-        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
-        h=Date:From:To:Subject:From;
-        b=M3qiXSKpZkqtv6O971H5RUqZDuLnRVxRtqXDgQPnCcnokl4aLzucjTqTAJbWIb3zO
-         aR9fCeLDHsr2EZTFtTgu0xr5v7An4xsFj18oi/FNdSwQRVUw1+52DkUXojklRRvfLV
-         m282Bymbr+I7pfk2j088TOGLt3WDWvLfxDk1pjwG6hkD2QW2BRx/32XEg+i0nW+PYM
-         fOt67sw6Kihfakm4owd6NVRD29sA2fFNHkYBmP5hM1GyVX2RNROntHwM2R/nXNbcum
-         RJF0rmqPgiAXE/bzkTVXh0RVjeh0C4ecz+WU+ZWLHYWGd1M1LAUb2WoocIGbAvulaR
-         20VZ3EZJnHh/g==
-Received: by mail.equinoxrise.pl for <linux-csky@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
-Message-ID: <20230904084500-0.1.7.rm5.0.9p61o40ttq@equinoxrise.pl>
-Date:   Mon,  4 Sep 2023 07:40:34 GMT
-From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.equinoxrise.pl
+        with ESMTP id S234025AbjIFKEM (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Sep 2023 06:04:12 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481C210F5;
+        Wed,  6 Sep 2023 03:04:09 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DADA3C433B6;
+        Wed,  6 Sep 2023 10:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693994648;
+        bh=+eBg2MuGRnaepU3d97JddC2GORIukwXODmv/XHfrfnY=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+        b=T0Kat/c3XWHyxAFHdaYGHIr1s0/KmuhsXFvdMUvnGcrZdv73alGuXsOiLS1xMLNBz
+         k1PXKm+793Go9fDhEFfLnr2En7Sw5HbK5dXaPCSJYNrxvxghFCHkw4V7uRRze+aJwa
+         NgX9HkqaNLZAOP6BacmtSdgXbxRlIB5dbXteCgCzo8UtI5e1GYo4L4zdJfPDYBLCBI
+         mryAPwwhcSX1lA4hKWf9KijTEjzCOVJwhsI0Z00nq3peZz7YV33TJEChAi2aXO1VNQ
+         ff7LAZNbxNnyHBOtc8RzjG9dIuWU96TwJd0BL6C14exVJlUIGL8+R5tSUvqNS//l9U
+         EgXmx+xN+V0og==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id C2F63EB8FB9;
+        Wed,  6 Sep 2023 10:04:08 +0000 (UTC)
+From:   Joel Granados via B4 Relay 
+        <devnull+j.granados.samsung.com@kernel.org>
+Date:   Wed, 06 Sep 2023 12:03:24 +0200
+Subject: [PATCH 3/8] arch/x86: Remove sentinel elem from ctl_table arrays
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230906-jag-sysctl_remove_empty_elem_arch-v1-3-3935d4854248@samsung.com>
+References: <20230906-jag-sysctl_remove_empty_elem_arch-v1-0-3935d4854248@samsung.com>
+In-Reply-To: <20230906-jag-sysctl_remove_empty_elem_arch-v1-0-3935d4854248@samsung.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>, willy@infradead.org,
+        josh@joshtriplett.org, Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Guo Ren <guoren@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-csky@vger.kernel.org,
+        Joel Granados <j.granados@samsung.com>
+X-Mailer: b4 0.13-dev-86aa5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1462;
+ i=j.granados@samsung.com; h=from:subject:message-id;
+ bh=zE8VMMPVQAIy8aYws+rz9C7nboCop5JGzS4P9YCQBl8=;
+ b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBk+E6UOpNP14i3hne/osuimerfTGC3syLUxLuIE
+ wJnpVtSWo2JAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZPhOlAAKCRC6l81St5ZB
+ Ty+ADACIdkG3Hd7tMm/sgfnkWqZQ41Yqd4IqdWF3+e/5NOpevgoE/o35ullHAkd+2+l54Gro3re
+ 805skkVS7qQpu0GSacvMb47Ph0nmJsJ/3t+fQxhqRqfQZlhrqDpTY3sJYdbls932x0mXiXdRePW
+ onZGnYDxlkWQlKKOjPUAdV8ydzH8RRVhEibZfi/O9W/oqOCvySZGu3WH/frsjAvYcR5m9xeYOV1
+ sWc6C293qC6bApVsEyywLxZb6a/FO+J3R5mFpq8AEIoKH5HLwQe7kj8DbPLQ7Hy8OVR6Xg5cXFr
+ 17bCYjl2uGbwXx90Zeg8x1lmyvF86/CWj6u+wrPIyXxT99cq6GWFGsIzA62RT+vtmiqa51QrniI
+ 27jCQay0zabmB/WRkRMcq6n2I7Lt6wGJ0g/i7gI3MfBBqi/cpAtcvde3NNHcGoZoDKvnPY3bhSB
+ dQdCAAKz/tFS678n2zpX68mI+DJnUxqI/EweCEX18IdWgPBEkYQ0iOIhXhO/XiPyrsM/g=
+X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
+ fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
+X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with auth_id=70
+X-Original-From: Joel Granados <j.granados@samsung.com>
+Reply-To: <j.granados@samsung.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry!
+From: Joel Granados <j.granados@samsung.com>
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+This commit comes at the tail end of a greater effort to remove the
+empty elements at the end of the ctl_table arrays (sentinels) which
+will reduce the overall build time size of the kernel and run time
+memory bloat by ~64 bytes per sentinel (further information Link :
+https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+Remove sentinel element from sld_sysctl and itmt_kern_table.
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+Signed-off-by: Joel Granados <j.granados@samsung.com>
+---
+ arch/x86/kernel/cpu/intel.c | 3 +--
+ arch/x86/kernel/itmt.c      | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index be4045628fd3..e63391b82624 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -1015,8 +1015,7 @@ static struct ctl_table sld_sysctls[] = {
+ 		.proc_handler	= proc_douintvec_minmax,
+ 		.extra1         = SYSCTL_ZERO,
+ 		.extra2         = SYSCTL_ONE,
+-	},
+-	{}
++	}
+ };
+ 
+ static int __init sld_mitigate_sysctl_init(void)
+diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
+index ee4fe8cdb857..5f2ccff38297 100644
+--- a/arch/x86/kernel/itmt.c
++++ b/arch/x86/kernel/itmt.c
+@@ -73,8 +73,7 @@ static struct ctl_table itmt_kern_table[] = {
+ 		.proc_handler	= sched_itmt_update_handler,
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+-	},
+-	{}
++	}
+ };
+ 
+ static struct ctl_table_header *itmt_sysctl_header;
 
+-- 
+2.30.2
 
-Pozdrawiam
-Mateusz Talaga

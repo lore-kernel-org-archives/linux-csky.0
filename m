@@ -2,64 +2,68 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1E25EE14A9
-	for <linux-csky@archiver.kernel.org>; Wed,  6 Sep 2023 21:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EEFBEC873F
+	for <linux-csky@archiver.kernel.org>; Thu,  7 Sep 2023 15:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236768AbjIFV7B (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 6 Sep 2023 17:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S230442AbjIGPqG (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Thu, 7 Sep 2023 11:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235690AbjIFV7A (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Sep 2023 17:59:00 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E1172E;
-        Wed,  6 Sep 2023 14:58:57 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31c5cac3ae2so305517f8f.3;
-        Wed, 06 Sep 2023 14:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694037535; x=1694642335; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fUEsUDVRFl9we3IvMz1iDQ5wrm80qIsR/HrhiCU8qwU=;
-        b=kQYYj8qGkAuKLI7d7WD/+tivDtKxDqsaxAp5uA1cWYaszSsU8X4wq7G/BRiEfObbIM
-         Mla4HSaUaYMxmefL4xy4/uRsxwItsqUPonRO8CoIDEd/WJbwkdTjWXCks1DNeEa9g3nU
-         5kvQnDvM92aoYi5Io67y37m26h+eV5mHTh5DlVdDxj99/asYPAVJXk+8XBJYGANIYUBl
-         YHtySgm9W2Z8G9YZnUANJysNaozE+kj6hdVaJC/hZVh1LgEqW9Z41R8EKrhtj783uRop
-         1B7PHOk6L0ueIJ5lTEt4GCDk8QlmrQMEUt5nhEQM0uIx8hWq29k7oQAglztfmGg3HShx
-         0NNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694037535; x=1694642335;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fUEsUDVRFl9we3IvMz1iDQ5wrm80qIsR/HrhiCU8qwU=;
-        b=YUSbc0rTygLZ5FnH359Jl2n7x6o8ySCb3SC+UIV7tZH+u7g1ieJE7zLPFgbNBN5D9P
-         JEBM7Fz+7FZRFg0t1IuWZSHwEFgTIFw2/dqBNScAtidirPlhiKkTt9eI4/xnUiteJPoU
-         4IT/Yg0VKrrUihcMJyG+qMVRgIDf+KneYPDYRiPdBiGAj3g1VK5y/XuulsadfR8TM/xN
-         UXTxr/l1lq7qybRL6cQhWVPcosIgLFrN1AXXQ4OSLXf9UlXUWYF2Xa/JtN0yEAyhhAJ/
-         tss50SZf3X1eXlTNjNdtXs1kgP/D8gGFlNy/f6SzXHsEkPMtdT0fOnwzeR0YBsATViZp
-         THcA==
-X-Gm-Message-State: AOJu0YxTzhFXU/yPUb9ksfDR0viFF1k19UA7AV2BwowdaryM9O7jAAKV
-        H0A2fCl2unEJ2EvuxWKFJ4Q=
-X-Google-Smtp-Source: AGHT+IG5nMeuL/VoGmcwCLwFLhOfCIhRsiIb9391lHp1yY958vfciaCR4r3uuUZhhDYYQHGkLNQJgQ==
-X-Received: by 2002:a5d:604b:0:b0:30e:3da5:46e5 with SMTP id j11-20020a5d604b000000b0030e3da546e5mr3830642wrt.59.1694037535283;
-        Wed, 06 Sep 2023 14:58:55 -0700 (PDT)
-Received: from gmail.com (1F2EF6A2.nat.pool.telekom.hu. [31.46.246.162])
-        by smtp.gmail.com with ESMTPSA id n10-20020adffe0a000000b003140f47224csm21447397wrr.15.2023.09.06.14.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 14:58:50 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 6 Sep 2023 23:58:47 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     j.granados@samsung.com, Luis Chamberlain <mcgrof@kernel.org>,
-        willy@infradead.org, josh@joshtriplett.org,
-        Kees Cook <keescook@chromium.org>,
+        with ESMTP id S1344305AbjIGPcw (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 7 Sep 2023 11:32:52 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116EA10F7;
+        Thu,  7 Sep 2023 08:32:35 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3879caOR000951;
+        Thu, 7 Sep 2023 10:00:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=I6yKRPq+c/Elou32cUh1duley7ZNzCzx4dQ/LkpfUxA=;
+ b=DHZPQ3XGt33x5GrsId/vXYrG/iE6E+gLrOKL+U/VBJeW1vQgM6j4lPAkPytg5yNyn4yC
+ NnLZ5I7eNikiD1CNmPx8keD5poJzm+agENSTbS0nTQ9Suh3Z74JOzOoxlyxj6w4UuPDe
+ 6FGh3s703rP9WxKOILztdPuC6HHT3j0oU/XrJGheS6W5kfMlMLbcLsZNXiXPTIPa+X8k
+ Dd/VnjBmIij+CBeIxHBAsYfT8aUL+BWpmN1xeapO8VO+rKi7r/QP2ks34gKCEgzCz+qQ
+ l3l+d10nbE06eDslOYbDPbHR3lzBRFReLxGBevEkdsg3sN5IUhD94CoFPZFOVRgYkv+a Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sybvkrphg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Sep 2023 10:00:53 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3879cqIs002126;
+        Thu, 7 Sep 2023 10:00:52 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sybvkrpe2-9
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Sep 2023 10:00:52 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3877lVZc021441;
+        Thu, 7 Sep 2023 09:08:22 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3svfrytjyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Sep 2023 09:08:22 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38798JP624511186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Sep 2023 09:08:19 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 24B6E20067;
+        Thu,  7 Sep 2023 09:08:19 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BBF92006C;
+        Thu,  7 Sep 2023 09:08:16 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.70.29])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu,  7 Sep 2023 09:08:16 +0000 (GMT)
+Date:   Thu, 7 Sep 2023 11:08:15 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     j.granados@samsung.com
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, willy@infradead.org,
+        josh@joshtriplett.org, Kees Cook <keescook@chromium.org>,
         Iurii Zaikin <yzaikin@google.com>,
         Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
@@ -83,54 +87,51 @@ Cc:     j.granados@samsung.com, Luis Chamberlain <mcgrof@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
         linux-ia64@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: Re: [PATCH 3/8] arch/x86: Remove sentinel elem from ctl_table arrays
-Message-ID: <ZPj2F4retSgg3vAj@gmail.com>
+Subject: Re: [PATCH 1/8] S390: Remove sentinel elem from ctl_table arrays
+Message-ID: <ZPmS/zkAs66pLcum@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 References: <20230906-jag-sysctl_remove_empty_elem_arch-v1-0-3935d4854248@samsung.com>
- <20230906-jag-sysctl_remove_empty_elem_arch-v1-3-3935d4854248@samsung.com>
- <d0d30ad4-7837-b0c4-39f4-3e317e35a41b@intel.com>
-MIME-Version: 1.0
+ <20230906-jag-sysctl_remove_empty_elem_arch-v1-1-3935d4854248@samsung.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d0d30ad4-7837-b0c4-39f4-3e317e35a41b@intel.com>
+In-Reply-To: <20230906-jag-sysctl_remove_empty_elem_arch-v1-1-3935d4854248@samsung.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GQagwlLX8g4Qk39DU96L0orHwbmZ3MCK
+X-Proofpoint-GUID: zMgjc5iBGTBt0dXVXUPsKepJtgT9tqBy
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-07_01,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 phishscore=0 bulkscore=0 clxscore=1011
+ mlxlogscore=794 spamscore=0 suspectscore=0 impostorscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309070084
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-
-* Dave Hansen <dave.hansen@intel.com> wrote:
-
-> On 9/6/23 03:03, Joel Granados via B4 Relay wrote:
-> > This commit comes at the tail end of a greater effort to remove the
-> > empty elements at the end of the ctl_table arrays (sentinels) which
-> > will reduce the overall build time size of the kernel and run time
-> > memory bloat by ~64 bytes per sentinel (further information Link :
-> > https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
-> > 
-> > Remove sentinel element from sld_sysctl and itmt_kern_table.
+On Wed, Sep 06, 2023 at 12:03:22PM +0200, Joel Granados via B4 Relay wrote:
+> From: Joel Granados <j.granados@samsung.com>
 > 
-> There's a *LOT* of content to read for a reviewer to figure out what's
-> going on here between all the links.  I would have appreciated one more
-> sentence here, maybe:
+> This commit comes at the tail end of a greater effort to remove the
+> empty elements at the end of the ctl_table arrays (sentinels) which
+> will reduce the overall build time size of the kernel and run time
+> memory bloat by ~64 bytes per sentinel (further information Link :
+> https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 > 
-> 	This is now safe because the sysctl registration code
-> 	(register_sysctl()) implicitly uses ARRAY_SIZE() in addition
-> 	to checking for a sentinel.
+> Remove the sentinel element from appldata_table, s390dbf_table,
+> topology_ctl_table, cmm_table and page_table_sysctl. Reduced the
+> memory allocation in appldata_register_ops by 1 effectively removing the
+> sentinel from ops->ctl_table.
 > 
-> That needs to be more prominent _somewhere_.  Maybe here, or maybe in
-> the cover letter, but _somewhere_.
-> 
-> That said, feel free to add this to the two x86 patches:
-> 
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com> # for x86
+> Signed-off-by: Joel Granados <j.granados@samsung.com>
+> ---
+>  arch/s390/appldata/appldata_base.c | 6 ++----
+>  arch/s390/kernel/debug.c           | 3 +--
+>  arch/s390/kernel/topology.c        | 3 +--
+>  arch/s390/mm/cmm.c                 | 3 +--
+>  arch/s390/mm/pgalloc.c             | 3 +--
+>  5 files changed, 6 insertions(+), 12 deletions(-)
 
-Absolutely needs to be in the title as well, something like:
-
-   arch/x86: Remove now superfluous sentinel elem from ctl_table arrays
-
-With that propagated into the whole series:
-
-   Reviewed-by: Ingo Molnar <mingo@kernel.org>
-
-Thanks,
-
-	Ingo
+Tested-by: Alexander Gordeev <agordeev@linux.ibm.com>

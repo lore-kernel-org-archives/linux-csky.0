@@ -2,249 +2,143 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDC6CA0EC3
-	for <linux-csky@archiver.kernel.org>; Mon, 11 Sep 2023 22:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89A21CA0EC3
+	for <linux-csky@archiver.kernel.org>; Mon, 11 Sep 2023 22:25:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241730AbjIKWX0 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 11 Sep 2023 18:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
+        id S241803AbjIKWX3 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 11 Sep 2023 18:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244127AbjIKTGY (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Sep 2023 15:06:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D202FD8
-        for <linux-csky@vger.kernel.org>; Mon, 11 Sep 2023 12:05:32 -0700 (PDT)
+        with ESMTP id S237633AbjIKNEO (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Sep 2023 09:04:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07821E5
+        for <linux-csky@vger.kernel.org>; Mon, 11 Sep 2023 06:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694459131;
+        s=mimecast20190719; t=1694437408;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yukk2f6oqMsdHKjhoJE1WmcLNdeEJDKH4QDEs4EiGPg=;
-        b=RukaH4huovX9rJuSekdg9NGrBo+B9J1vA3GQdCY4NSnwR3QZaiIF+RIKot/ccaAoPnWH+C
-        4sHdVB8BgWSgLvk77K+j7pRNpPNjJ9WLaeXbpWyxj8VTtYjvCTGdZ+eTqKhA8hZ4F5UIeG
-        qcwTxwxgKDMThm8TTVgPX3EmfxHPbJE=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-328-WFLAu5KKOzSu_ps-BF-YJg-1; Mon, 11 Sep 2023 15:05:30 -0400
-X-MC-Unique: WFLAu5KKOzSu_ps-BF-YJg-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6c0f3675070so799059a34.1
-        for <linux-csky@vger.kernel.org>; Mon, 11 Sep 2023 12:05:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694459130; x=1695063930;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yukk2f6oqMsdHKjhoJE1WmcLNdeEJDKH4QDEs4EiGPg=;
-        b=ZW72AvGhirqPO2MgXvJ5raujWBNguUsq+i6tH00hqriwqNvW5b3iRRzGXletZD2JgJ
-         9ydSK54Qd4Jb1rbgeKljNpVEs+SOwaRX8CCSgBnF94Yu0LqNhZW9OgrxkqhfLs8FZIgA
-         a4pNcYsBkBLR5QZmrsJwen9XZ50o0NTJ7Skn+/5iPzPuVFvOS3YZRaHBwPbVOaDO2I4o
-         7nR04hdP7BjoFNhztu0yyW5dpaJTOaV2jiBWDhRWsYss7D1/J3qw1nZPHCkpkrVwHIqc
-         zwiEsQHkkHVdo+xBau8k13r/QjwipF1qRmSJmtB5UZ0wNvhrEh1+Gwn/o3a56fKjuthS
-         nFKA==
-X-Gm-Message-State: AOJu0Yz5HkiQoXpPt2yb1B3vmwla9DVMH8MjsHAK2Ikbf7HDawQHVo9p
-        87D2bmm7DqnCJlzUgxUU/zlf9F8ISG04AZ+zvnOTJVB5PCVyHQT7KrXNoNgs/z1zCBMAAAVY/F1
-        ZXdmV6ytvnAFrG3ijTqiDcw==
-X-Received: by 2002:a9d:4e90:0:b0:6c0:abdd:a875 with SMTP id v16-20020a9d4e90000000b006c0abdda875mr11713389otk.18.1694459129879;
-        Mon, 11 Sep 2023 12:05:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGStsqh389BzmE57cp5mD7HYmxQywTAlI0LrMmQ6OTXG7DZOO3hPQDzK0WcE6xAB/YEW7bphA==
-X-Received: by 2002:a9d:4e90:0:b0:6c0:abdd:a875 with SMTP id v16-20020a9d4e90000000b006c0abdda875mr11713377otk.18.1694459129611;
-        Mon, 11 Sep 2023 12:05:29 -0700 (PDT)
-Received: from ?IPv6:2804:1b3:a803:c91:da45:7fbc:86c3:920a? ([2804:1b3:a803:c91:da45:7fbc:86c3:920a])
-        by smtp.gmail.com with ESMTPSA id l17-20020a05683016d100b006b95392cf09sm3318989otr.33.2023.09.11.12.05.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 12:05:28 -0700 (PDT)
-Message-ID: <5c082cb1fd306cb75abbcaa80229d791260f8756.camel@redhat.com>
-Subject: Re: [PATCH V11 01/17] asm-generic: ticket-lock: Reuse
- arch_spinlock_t of qspinlock
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     guoren@kernel.org, paul.walmsley@sifive.com, anup@brainfault.org,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn
-Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Date:   Mon, 11 Sep 2023 16:05:20 -0300
-In-Reply-To: <20230910082911.3378782-2-guoren@kernel.org>
-References: <20230910082911.3378782-1-guoren@kernel.org>
-         <20230910082911.3378782-2-guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+        bh=VSJPoGx10J6x6+0exgf8zlMMy8M925rAu1G76vFf9bs=;
+        b=fEGg9rjFONjOoKpiJKTFuMLiyz0J16Q1PdCgkGHi3OZ/jiAn2lwHJeBr2kviWYIMkWbN6P
+        Cy+rWBfTVyMc3UCzbzzB9rOiL3onKZ1XNYrNQT8CFeFAFmAvQWwic6qrIsvkTBMY2uBRX+
+        Usqsaen6zpMiJ0QHAYlI0UTG3u/rayA=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-HRl8HX2aMzS5sXQtod1MAA-1; Mon, 11 Sep 2023 09:03:23 -0400
+X-MC-Unique: HRl8HX2aMzS5sXQtod1MAA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E90643C1DC25;
+        Mon, 11 Sep 2023 13:03:21 +0000 (UTC)
+Received: from [10.22.32.237] (unknown [10.22.32.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 460CC40C6EA8;
+        Mon, 11 Sep 2023 13:03:20 +0000 (UTC)
+Message-ID: <06714da1-d566-766f-7a13-a3c93b5953c4@redhat.com>
+Date:   Mon, 11 Sep 2023 09:03:20 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH V11 04/17] locking/qspinlock: Improve xchg_tail for number
+ of cpus >= 16k
+Content-Language: en-US
+To:     Guo Ren <guoren@kernel.org>
+Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        palmer@rivosinc.com, boqun.feng@gmail.com, tglx@linutronix.de,
+        paulmck@kernel.org, rostedt@goodmis.org, rdunlap@infradead.org,
+        catalin.marinas@arm.com, conor.dooley@microchip.com,
+        xiaoguang.xing@sophgo.com, bjorn@rivosinc.com,
+        alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        leobras@redhat.com, linux-arch@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230910082911.3378782-1-guoren@kernel.org>
+ <20230910082911.3378782-5-guoren@kernel.org>
+ <f091ead0-99b9-b30a-a295-730ce321ac60@redhat.com>
+ <CAJF2gTSbUUdLhN8PFdFzQd0M1T2MVOL1cdZn46WKq1S8MuQYHw@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <CAJF2gTSbUUdLhN8PFdFzQd0M1T2MVOL1cdZn46WKq1S8MuQYHw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, 2023-09-10 at 04:28 -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->=20
-> The arch_spinlock_t of qspinlock has contained the atomic_t val, which
-> satisfies the ticket-lock requirement. Thus, unify the arch_spinlock_t
-> into qspinlock_types.h. This is the preparation for the next combo
-> spinlock.
->=20
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> ---
->  include/asm-generic/spinlock.h       | 14 +++++++-------
->  include/asm-generic/spinlock_types.h | 12 ++----------
->  2 files changed, 9 insertions(+), 17 deletions(-)
->=20
-> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinloc=
-k.h
-> index 90803a826ba0..4773334ee638 100644
-> --- a/include/asm-generic/spinlock.h
-> +++ b/include/asm-generic/spinlock.h
-> @@ -32,7 +32,7 @@
-> =20
->  static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
->  {
-> -	u32 val =3D atomic_fetch_add(1<<16, lock);
-> +	u32 val =3D atomic_fetch_add(1<<16, &lock->val);
->  	u16 ticket =3D val >> 16;
-> =20
->  	if (ticket =3D=3D (u16)val)
-> @@ -46,31 +46,31 @@ static __always_inline void arch_spin_lock(arch_spinl=
-ock_t *lock)
->  	 * have no outstanding writes due to the atomic_fetch_add() the extra
->  	 * orderings are free.
->  	 */
-> -	atomic_cond_read_acquire(lock, ticket =3D=3D (u16)VAL);
-> +	atomic_cond_read_acquire(&lock->val, ticket =3D=3D (u16)VAL);
->  	smp_mb();
->  }
-> =20
->  static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
->  {
-> -	u32 old =3D atomic_read(lock);
-> +	u32 old =3D atomic_read(&lock->val);
-> =20
->  	if ((old >> 16) !=3D (old & 0xffff))
->  		return false;
-> =20
-> -	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc *=
-/
-> +	return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC, for =
-RCsc */
->  }
-> =20
->  static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
->  {
->  	u16 *ptr =3D (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-> -	u32 val =3D atomic_read(lock);
-> +	u32 val =3D atomic_read(&lock->val);
-> =20
->  	smp_store_release(ptr, (u16)val + 1);
->  }
-> =20
->  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock=
-)
->  {
-> -	u32 val =3D lock.counter;
-> +	u32 val =3D lock.val.counter;
-> =20
->  	return ((val >> 16) =3D=3D (val & 0xffff));
->  }
+On 9/10/23 23:09, Guo Ren wrote:
+> On Mon, Sep 11, 2023 at 10:35 AM Waiman Long <longman@redhat.com> wrote:
+>>
+>> On 9/10/23 04:28, guoren@kernel.org wrote:
+>>> From: Guo Ren <guoren@linux.alibaba.com>
+>>>
+>>> The target of xchg_tail is to write the tail to the lock value, so
+>>> adding prefetchw could help the next cmpxchg step, which may
+>>> decrease the cmpxchg retry loops of xchg_tail. Some processors may
+>>> utilize this feature to give a forward guarantee, e.g., RISC-V
+>>> XuanTie processors would block the snoop channel & irq for several
+>>> cycles when prefetch.w instruction (from Zicbop extension) retired,
+>>> which guarantees the next cmpxchg succeeds.
+>>>
+>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>>> ---
+>>>    kernel/locking/qspinlock.c | 5 ++++-
+>>>    1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+>>> index d3f99060b60f..96b54e2ade86 100644
+>>> --- a/kernel/locking/qspinlock.c
+>>> +++ b/kernel/locking/qspinlock.c
+>>> @@ -223,7 +223,10 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
+>>>     */
+>>>    static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
+>>>    {
+>>> -     u32 old, new, val = atomic_read(&lock->val);
+>>> +     u32 old, new, val;
+>>> +
+>>> +     prefetchw(&lock->val);
+>>> +     val = atomic_read(&lock->val);
+>>>
+>>>        for (;;) {
+>>>                new = (val & _Q_LOCKED_PENDING_MASK) | tail;
+>> That looks a bit weird. You pre-fetch and then immediately read it. How
+>> much performance gain you get by this change alone?
+>>
+>> Maybe you can define an arch specific primitive that default back to
+>> atomic_read() if not defined.
+> Thx for the reply. This is a generic optimization point I would like
+> to talk about with you.
+>
+> First, prefetchw() makes cacheline an exclusive state and serves for
+> the next cmpxchg loop semantic, which writes the idx_tail part of
+> arch_spin_lock. The atomic_read only makes cacheline in the shared
+> state, which couldn't give any guarantee for the next cmpxchg loop
+> semantic. Micro-architecture could utilize prefetchw() to provide a
+> strong forward progress guarantee for the xchg_tail, e.g., the T-HEAD
+> XuanTie processor would hold the exclusive cacheline state until the
+> next cmpxchg write success.
+>
+> In the end, Let's go back to the principle: the xchg_tail is an atomic
+> swap operation that contains write eventually, so giving a prefetchw()
+> at the beginning is acceptable for all architectures..
+> ••••••••••••
 
-This one seems to be different in torvalds/master, but I suppose it's becau=
-se of
-the requirement patches I have not merged.
+I did realize afterward that prefetchw gets the cacheline in exclusive 
+state. I will suggest you mention that in your commit log as well as 
+adding a comment about its purpose in the code.
 
-> @@ -84,7 +84,7 @@ static __always_inline int arch_spin_is_locked(arch_spi=
-nlock_t *lock)
-> =20
->  static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
->  {
-> -	u32 val =3D atomic_read(lock);
-> +	u32 val =3D atomic_read(&lock->val);
-> =20
->  	return (s16)((val >> 16) - (val & 0xffff)) > 1;
->  }
-> diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/s=
-pinlock_types.h
-> index 8962bb730945..f534aa5de394 100644
-> --- a/include/asm-generic/spinlock_types.h
-> +++ b/include/asm-generic/spinlock_types.h
-> @@ -3,15 +3,7 @@
->  #ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
->  #define __ASM_GENERIC_SPINLOCK_TYPES_H
-> =20
-> -#include <linux/types.h>
-> -typedef atomic_t arch_spinlock_t;
-> -
-> -/*
-> - * qrwlock_types depends on arch_spinlock_t, so we must typedef that bef=
-ore the
-> - * include.
-> - */
-> -#include <asm/qrwlock_types.h>
-> -
-> -#define __ARCH_SPIN_LOCK_UNLOCKED	ATOMIC_INIT(0)
-> +#include <asm-generic/qspinlock_types.h>
-> +#include <asm-generic/qrwlock_types.h>
-> =20
->  #endif /* __ASM_GENERIC_SPINLOCK_TYPES_H */
+Thanks,
+Longman
 
-FWIW, LGTM:
-
-Reviewed-by: Leonardo Bras <leobras@redhat.com>
-
-
-Just a suggestion: In this patch I could see a lot of usage changes to
-arch_spinlock_t, and only at the end I could see the actual change in the .=
-h
-file.
-
-In cases like this, it looks nicer to see the .h file first.
-
-I recently found out about this git diff.orderFile option, which helps to
-achieve exactly this.
-
-I use the following git.orderfile, adapted from qemu:
-
-###########################################################################=
-#
-#
-# order file for git, to produce patches which are easier to review
-# by diffing the important stuff like interface changes first.
-#
-# one-off usage:
-#   git diff -O scripts/git.orderfile ...
-#
-# add to git config:
-#   git config diff.orderFile scripts/git.orderfile
-#
-
-MAINTAINERS
-
-# Documentation
-Documentation/*
-*.rst
-*.rst.inc
-
-# build system
-Kbuild
-Makefile*
-*.mak
-
-# semantic patches
-*.cocci
-
-# headers
-*.h
-*.h.inc
-
-# code
-*.c
-*.c.inc
-
+>> Cheers,
+>> Longman
+>>
+>
 

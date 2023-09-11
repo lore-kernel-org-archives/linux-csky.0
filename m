@@ -2,218 +2,249 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D8AACA0EC6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDC6CA0EC3
 	for <linux-csky@archiver.kernel.org>; Mon, 11 Sep 2023 22:25:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbjIKWXV (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Mon, 11 Sep 2023 18:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S241730AbjIKWX0 (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Mon, 11 Sep 2023 18:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237489AbjIKMxm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Sep 2023 08:53:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5167ACEB;
-        Mon, 11 Sep 2023 05:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1694436818; x=1725972818;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F18RZdFWM4GMQROAAbnXFN2k3b4JLezGGc1Iq3gZ/zs=;
-  b=Qof1Tn7Drz2q5pJBs19D48KXqtndp0XKgs3tlMDifP76PS338MECL1dh
-   WAHlq0xoY3413x9Ban2Nz06RWbaUnazYlREVnPkuBmtj1XKmChE9bgUO/
-   1qKK+RKn5M6v6RiuoxrUBr45xcjSm0pgbL5P3aoOzKMQW9X0Vc4LY5wIs
-   alLHvVcJ7epXnzlDZzBDE5eowV9oDvRZx9VFc4sRm/n1U0h0ZCh0wvmKN
-   AYNlxz6QqdgDcbFHFnpb7ym6k0CXbBo7aatj6c+g8BcbjrzPCiaQut6Wf
-   mUyNOChpsyMtz9EqSSWL0V/8fxR2hJ87nCpUURCYcLOA4q9/UidAVnyzp
-   A==;
-X-CSE-ConnectionGUID: rGMnXp3/ScCh2he0ZE8W7g==
-X-CSE-MsgGUID: +aT+43DkQw6jnFnRFXnEkQ==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="asc'?scan'208";a="3979966"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Sep 2023 05:53:37 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 11 Sep 2023 05:53:19 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 11 Sep 2023 05:53:14 -0700
-Date:   Mon, 11 Sep 2023 13:52:59 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Guo Ren <guoren@kernel.org>
-CC:     Conor Dooley <conor@kernel.org>, <paul.walmsley@sifive.com>,
-        <anup@brainfault.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <will@kernel.org>, <palmer@rivosinc.com>, <longman@redhat.com>,
-        <boqun.feng@gmail.com>, <tglx@linutronix.de>, <paulmck@kernel.org>,
-        <rostedt@goodmis.org>, <rdunlap@infradead.org>,
-        <catalin.marinas@arm.com>, <xiaoguang.xing@sophgo.com>,
-        <bjorn@rivosinc.com>, <alexghiti@rivosinc.com>,
-        <keescook@chromium.org>, <greentime.hu@sifive.com>,
-        <ajones@ventanamicro.com>, <jszhang@kernel.org>, <wefu@redhat.com>,
-        <wuwei2016@iscas.ac.cn>, <leobras@redhat.com>,
-        <linux-arch@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-csky@vger.kernel.org>, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 00/17] riscv: Add Native/Paravirt qspinlock support
-Message-ID: <20230911-nimbly-outcome-496efae7adc6@wendy>
+        with ESMTP id S244127AbjIKTGY (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Sep 2023 15:06:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D202FD8
+        for <linux-csky@vger.kernel.org>; Mon, 11 Sep 2023 12:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694459131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yukk2f6oqMsdHKjhoJE1WmcLNdeEJDKH4QDEs4EiGPg=;
+        b=RukaH4huovX9rJuSekdg9NGrBo+B9J1vA3GQdCY4NSnwR3QZaiIF+RIKot/ccaAoPnWH+C
+        4sHdVB8BgWSgLvk77K+j7pRNpPNjJ9WLaeXbpWyxj8VTtYjvCTGdZ+eTqKhA8hZ4F5UIeG
+        qcwTxwxgKDMThm8TTVgPX3EmfxHPbJE=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-328-WFLAu5KKOzSu_ps-BF-YJg-1; Mon, 11 Sep 2023 15:05:30 -0400
+X-MC-Unique: WFLAu5KKOzSu_ps-BF-YJg-1
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6c0f3675070so799059a34.1
+        for <linux-csky@vger.kernel.org>; Mon, 11 Sep 2023 12:05:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694459130; x=1695063930;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yukk2f6oqMsdHKjhoJE1WmcLNdeEJDKH4QDEs4EiGPg=;
+        b=ZW72AvGhirqPO2MgXvJ5raujWBNguUsq+i6tH00hqriwqNvW5b3iRRzGXletZD2JgJ
+         9ydSK54Qd4Jb1rbgeKljNpVEs+SOwaRX8CCSgBnF94Yu0LqNhZW9OgrxkqhfLs8FZIgA
+         a4pNcYsBkBLR5QZmrsJwen9XZ50o0NTJ7Skn+/5iPzPuVFvOS3YZRaHBwPbVOaDO2I4o
+         7nR04hdP7BjoFNhztu0yyW5dpaJTOaV2jiBWDhRWsYss7D1/J3qw1nZPHCkpkrVwHIqc
+         zwiEsQHkkHVdo+xBau8k13r/QjwipF1qRmSJmtB5UZ0wNvhrEh1+Gwn/o3a56fKjuthS
+         nFKA==
+X-Gm-Message-State: AOJu0Yz5HkiQoXpPt2yb1B3vmwla9DVMH8MjsHAK2Ikbf7HDawQHVo9p
+        87D2bmm7DqnCJlzUgxUU/zlf9F8ISG04AZ+zvnOTJVB5PCVyHQT7KrXNoNgs/z1zCBMAAAVY/F1
+        ZXdmV6ytvnAFrG3ijTqiDcw==
+X-Received: by 2002:a9d:4e90:0:b0:6c0:abdd:a875 with SMTP id v16-20020a9d4e90000000b006c0abdda875mr11713389otk.18.1694459129879;
+        Mon, 11 Sep 2023 12:05:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGStsqh389BzmE57cp5mD7HYmxQywTAlI0LrMmQ6OTXG7DZOO3hPQDzK0WcE6xAB/YEW7bphA==
+X-Received: by 2002:a9d:4e90:0:b0:6c0:abdd:a875 with SMTP id v16-20020a9d4e90000000b006c0abdda875mr11713377otk.18.1694459129611;
+        Mon, 11 Sep 2023 12:05:29 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a803:c91:da45:7fbc:86c3:920a? ([2804:1b3:a803:c91:da45:7fbc:86c3:920a])
+        by smtp.gmail.com with ESMTPSA id l17-20020a05683016d100b006b95392cf09sm3318989otr.33.2023.09.11.12.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 12:05:28 -0700 (PDT)
+Message-ID: <5c082cb1fd306cb75abbcaa80229d791260f8756.camel@redhat.com>
+Subject: Re: [PATCH V11 01/17] asm-generic: ticket-lock: Reuse
+ arch_spinlock_t of qspinlock
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     guoren@kernel.org, paul.walmsley@sifive.com, anup@brainfault.org,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
+        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
+        rdunlap@infradead.org, catalin.marinas@arm.com,
+        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
+        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn
+Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Date:   Mon, 11 Sep 2023 16:05:20 -0300
+In-Reply-To: <20230910082911.3378782-2-guoren@kernel.org>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910-esteemed-exodus-706aaae940b1@spud>
- <CAJF2gTRQd_dNuZHNwfg3SwD0XERaYXYUdFUFQiarym40kpxFRQ@mail.gmail.com>
- <20230910-baggage-accent-ec5331b58c8e@spud>
- <CAJF2gTS8Vh5XdMUcgLA_GJzW6Nm3JKHxuMN9jYSNe_YCEjgCXA@mail.gmail.com>
- <20230910-facsimile-answering-60d1452b8c10@spud>
- <CAJF2gTSP1rxVhuwOKyWiE2vFFijJFc2aKRU2=0rTK9nDc8AbsQ@mail.gmail.com>
+         <20230910082911.3378782-2-guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="GbfQjpg1lIhwJuEz"
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTSP1rxVhuwOKyWiE2vFFijJFc2aKRU2=0rTK9nDc8AbsQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
---GbfQjpg1lIhwJuEz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Sep 11, 2023 at 11:36:27AM +0800, Guo Ren wrote:
-> On Mon, Sep 11, 2023 at 3:45=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Sun, Sep 10, 2023 at 05:49:13PM +0800, Guo Ren wrote:
-> > > On Sun, Sep 10, 2023 at 5:32=E2=80=AFPM Conor Dooley <conor@kernel.or=
-g> wrote:
-> > > >
-> > > > On Sun, Sep 10, 2023 at 05:16:46PM +0800, Guo Ren wrote:
-> > > > > On Sun, Sep 10, 2023 at 4:58=E2=80=AFPM Conor Dooley <conor@kerne=
-l.org> wrote:
-> > > > > >
-> > > > > > On Sun, Sep 10, 2023 at 04:28:54AM -0400, guoren@kernel.org wro=
-te:
-> > > > > >
-> > > > > > > Changlog:
-> > > > > > > V11:
-> > > > > > >  - Based on Leonardo Bras's cmpxchg_small patches v5.
-> > > > > > >  - Based on Guo Ren's Optimize arch_spin_value_unlocked patch=
- v3.
-> > > > > > >  - Remove abusing alternative framework and use jump_label in=
-stead.
-> > > > > >
-> > > > > > btw, I didn't say that using alternatives was the problem, it w=
-as
-> > > > > > abusing the errata framework to perform feature detection that =
-I had
-> > > > > > a problem with. That's not changed in v11.
-> > > > > I've removed errata feature detection. The only related patches a=
-re:
-> > > > >  - riscv: qspinlock: errata: Add ERRATA_THEAD_WRITE_ONCE fixup
-> > > > >  - riscv: qspinlock: errata: Enable qspinlock for T-HEAD processo=
-rs
-> > > > >
-> > > > > Which one is your concern? Could you reply on the exact patch thr=
-ead? Thx.
-> > > >
-> > > > riscv: qspinlock: errata: Enable qspinlock for T-HEAD processors
-> > > >
-> > > > Please go back and re-read the comments I left on v11 about using t=
-he
-> > > > errata code for feature detection.
-> > > >
-> > > > > > A stronger forward progress guarantee is not an erratum, AFAICT.
-> > > >
-> > > > > Sorry, there is no erratum of "stronger forward progress guarante=
-e" in the V11.
-> > > >
-> > > > "riscv: qspinlock: errata: Enable qspinlock for T-HEAD processors" =
-still
-> > > > uses the errata framework to detect the presence of the stronger fo=
-rward
-> > > > progress guarantee in v11.
-> > > Oh, thx for pointing it out. I could replace it with this:
-> > >
-> > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > > index 88690751f2ee..4be92766d3e3 100644
-> > > --- a/arch/riscv/kernel/setup.c
-> > > +++ b/arch/riscv/kernel/setup.c
-> > > @@ -310,7 +310,8 @@ static void __init riscv_spinlock_init(void)
-> > >  {
-> > >  #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
-> > >         if (!enable_qspinlock_key &&
-> > > -           (sbi_get_firmware_id() !=3D SBI_EXT_BASE_IMPL_ID_KVM)) {
-> > > +           (sbi_get_firmware_id() !=3D SBI_EXT_BASE_IMPL_ID_KVM) &&
-> > > +           (sbi_get_mvendorid() !=3D THEAD_VENDOR_ID)) {
-> > >                 static_branch_disable(&combo_qspinlock_key);
-> > >                 pr_info("Ticket spinlock: enabled\n");
-> > >         } else {
-> >
-> > As I said on v11, I am opposed to feature probing using mvendorid & Co,
-> > partially due to the exact sort of check here to see if the kernel is
-> > running as a KVM guest. IMO, whether a platform has this stronger
-
-> KVM can't use any fairness lock, so forcing it using a Test-Set lock
-> or paravirt qspinlock is the right way. KVM is not a vendor platform.
-
-My point is that KVM should be telling the guest what additional features
-it is capable of using, rather than the kernel making some assumptions
-based on$vendorid etc that are invalid when the kernel is running as a
-KVM guest.
-If the mvendorid etc related assumptions were dropped, the kernel would
-then default away from your qspinlock & there'd not be a need to
-special-case KVM AFAICT.
-
-> > guarantee needs to be communicated by firmware, using ACPI or DT.
-> > I made some comments on v11, referring similar discussion about the
-> > thead vector stuff. Please go take a look at that.
-> I prefer forcing T-HEAD processors using qspinlock, but if all people
-> thought it must be in the ACPI or DT, I would compromise. Then, I
-> would delete the qspinlock cmdline param patch and move it into DT.
+On Sun, 2023-09-10 at 04:28 -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 >=20
-> By the way, what's the kind of DT format? How about:
-
-I added the new "riscv,isa-extensions" property in part to make
-communicating vendor extensions like this easier. Please try to use
-that. "qspinlock" is software configuration though, the vendor extension
-should focus on the guarantee of strong forward progress, since that is
-the non-standard aspect of your IP.
-
-A commandline property may still be desirable, to control the locking
-method used, since the DT should be a description of the hardware, not
-for configuring software policy in your operating system.
-
-Thanks,
-Conor.
-
->         cpus {
->                 #address-cells =3D <1>;
->                 #size-cells =3D <0>;
-> +              qspinlock;
->                 cpu0: cpu@0 {
->                         compatible =3D "sifive,bullet0", "riscv";
->                         device_type =3D "cpu";
->                         i-cache-block-size =3D <64>;
->                         i-cache-sets =3D <128>;
+> The arch_spinlock_t of qspinlock has contained the atomic_t val, which
+> satisfies the ticket-lock requirement. Thus, unify the arch_spinlock_t
+> into qspinlock_types.h. This is the preparation for the next combo
+> spinlock.
 >=20
-> --
-> Best Regards
->  Guo Ren
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> ---
+>  include/asm-generic/spinlock.h       | 14 +++++++-------
+>  include/asm-generic/spinlock_types.h | 12 ++----------
+>  2 files changed, 9 insertions(+), 17 deletions(-)
+>=20
+> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinloc=
+k.h
+> index 90803a826ba0..4773334ee638 100644
+> --- a/include/asm-generic/spinlock.h
+> +++ b/include/asm-generic/spinlock.h
+> @@ -32,7 +32,7 @@
+> =20
+>  static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+>  {
+> -	u32 val =3D atomic_fetch_add(1<<16, lock);
+> +	u32 val =3D atomic_fetch_add(1<<16, &lock->val);
+>  	u16 ticket =3D val >> 16;
+> =20
+>  	if (ticket =3D=3D (u16)val)
+> @@ -46,31 +46,31 @@ static __always_inline void arch_spin_lock(arch_spinl=
+ock_t *lock)
+>  	 * have no outstanding writes due to the atomic_fetch_add() the extra
+>  	 * orderings are free.
+>  	 */
+> -	atomic_cond_read_acquire(lock, ticket =3D=3D (u16)VAL);
+> +	atomic_cond_read_acquire(&lock->val, ticket =3D=3D (u16)VAL);
+>  	smp_mb();
+>  }
+> =20
+>  static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
+>  {
+> -	u32 old =3D atomic_read(lock);
+> +	u32 old =3D atomic_read(&lock->val);
+> =20
+>  	if ((old >> 16) !=3D (old & 0xffff))
+>  		return false;
+> =20
+> -	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc *=
+/
+> +	return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC, for =
+RCsc */
+>  }
+> =20
+>  static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+>  {
+>  	u16 *ptr =3D (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
+> -	u32 val =3D atomic_read(lock);
+> +	u32 val =3D atomic_read(&lock->val);
+> =20
+>  	smp_store_release(ptr, (u16)val + 1);
+>  }
+> =20
+>  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock=
+)
+>  {
+> -	u32 val =3D lock.counter;
+> +	u32 val =3D lock.val.counter;
+> =20
+>  	return ((val >> 16) =3D=3D (val & 0xffff));
+>  }
 
---GbfQjpg1lIhwJuEz
-Content-Type: application/pgp-signature; name="signature.asc"
+This one seems to be different in torvalds/master, but I suppose it's becau=
+se of
+the requirement patches I have not merged.
 
------BEGIN PGP SIGNATURE-----
+> @@ -84,7 +84,7 @@ static __always_inline int arch_spin_is_locked(arch_spi=
+nlock_t *lock)
+> =20
+>  static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>  {
+> -	u32 val =3D atomic_read(lock);
+> +	u32 val =3D atomic_read(&lock->val);
+> =20
+>  	return (s16)((val >> 16) - (val & 0xffff)) > 1;
+>  }
+> diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/s=
+pinlock_types.h
+> index 8962bb730945..f534aa5de394 100644
+> --- a/include/asm-generic/spinlock_types.h
+> +++ b/include/asm-generic/spinlock_types.h
+> @@ -3,15 +3,7 @@
+>  #ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
+>  #define __ASM_GENERIC_SPINLOCK_TYPES_H
+> =20
+> -#include <linux/types.h>
+> -typedef atomic_t arch_spinlock_t;
+> -
+> -/*
+> - * qrwlock_types depends on arch_spinlock_t, so we must typedef that bef=
+ore the
+> - * include.
+> - */
+> -#include <asm/qrwlock_types.h>
+> -
+> -#define __ARCH_SPIN_LOCK_UNLOCKED	ATOMIC_INIT(0)
+> +#include <asm-generic/qspinlock_types.h>
+> +#include <asm-generic/qrwlock_types.h>
+> =20
+>  #endif /* __ASM_GENERIC_SPINLOCK_TYPES_H */
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZP8NqwAKCRB4tDGHoIJi
-0ldAAP9GGcetHG7gYZ4HG1QKhxMohQaaxgboYx7iHBroM1TWOQD/ZjZA5Wijf1OK
-1IInfX9naDCgcUU+DJfxo1FhU6ifVAA=
-=zWg1
------END PGP SIGNATURE-----
+FWIW, LGTM:
 
---GbfQjpg1lIhwJuEz--
+Reviewed-by: Leonardo Bras <leobras@redhat.com>
+
+
+Just a suggestion: In this patch I could see a lot of usage changes to
+arch_spinlock_t, and only at the end I could see the actual change in the .=
+h
+file.
+
+In cases like this, it looks nicer to see the .h file first.
+
+I recently found out about this git diff.orderFile option, which helps to
+achieve exactly this.
+
+I use the following git.orderfile, adapted from qemu:
+
+###########################################################################=
+#
+#
+# order file for git, to produce patches which are easier to review
+# by diffing the important stuff like interface changes first.
+#
+# one-off usage:
+#   git diff -O scripts/git.orderfile ...
+#
+# add to git config:
+#   git config diff.orderFile scripts/git.orderfile
+#
+
+MAINTAINERS
+
+# Documentation
+Documentation/*
+*.rst
+*.rst.inc
+
+# build system
+Kbuild
+Makefile*
+*.mak
+
+# semantic patches
+*.cocci
+
+# headers
+*.h
+*.h.inc
+
+# code
+*.c
+*.c.inc
+
+

@@ -2,184 +2,204 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9956ECA550A
-	for <linux-csky@archiver.kernel.org>; Wed, 13 Sep 2023 08:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECF85CA5512
+	for <linux-csky@archiver.kernel.org>; Wed, 13 Sep 2023 09:11:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239127AbjIMI4X (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
-        Wed, 13 Sep 2023 04:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
+        id S234918AbjIMJLq (ORCPT <rfc822;linux-csky@archiver.kernel.org>);
+        Wed, 13 Sep 2023 05:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239147AbjIMI4S (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 04:56:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E43691997
-        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694595329;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7IDrq/ZjwAliy/cuqJYdam/hL0PUOvTA7Mi9bsbloig=;
-        b=JKs3WTmSXcBe/bxOKMjbp9YPNMsqlNzAG7DscGuV1j7H+ISud821T1S5zuj1ZtzLuldzg1
-        V1lw9spRuP+jJKdIKt3F3KvZwxHt5rDBld3DMZxb8q2ubVDov1xMyEsv5DY7Xrm1fKJ7Ul
-        vkEc56H4lAhZeSC0GiiJTdrLKlH4Dv0=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-504-_yZJ1932P_qEe5DeSMyvGg-1; Wed, 13 Sep 2023 04:55:27 -0400
-X-MC-Unique: _yZJ1932P_qEe5DeSMyvGg-1
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a741f4790fso7723587b6e.0
-        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:55:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694595326; x=1695200126;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7IDrq/ZjwAliy/cuqJYdam/hL0PUOvTA7Mi9bsbloig=;
-        b=w5hGUff223OskDTrY4qHvlrsizqFTb9ablqh5S+d+P/afc1TO3cViH9iJQ2qn5WVMx
-         jpihMb0EFMoxDF3cX16Spi+eD2pwhCdyM43k2UnzYIOEQeCplTPAneLYoHPi7ecDTOpK
-         Eie1IHQxKSD6sM7tdnlUJ/yjkHC1vcdRZoTKm25Vp2l0NXl3923bAujZJfkmb1eeE7gH
-         HpgGpTZd8/E5Y8Mrvm8D5gbCdEkePsgOxO1CIEjnYZxJtQVBaD9UdnVs1iKxBxUbVpLi
-         YHOj4Wsi8+mRJt8hngaOcyM7HeWY+ppu6XLlViB4QRsvsA4AbWhosaZcpB/cOXmYEqH7
-         Z+vA==
-X-Gm-Message-State: AOJu0Yz/Xh9IhbpL4Ghq7ciBYT8fKKymT7dYfs0gO77F1gHfXTvQzpii
-        9ByDLEqM8PY+dsY8IBZcanjrw96WjgSD4/Aq4rcpj9MSKDwk1Tej0kjZL79NigPyIfDEl7apy2v
-        Zio4KhFHXyF/OBFJ/fCOWmg==
-X-Received: by 2002:a05:6808:616:b0:3a8:83df:d5a4 with SMTP id y22-20020a056808061600b003a883dfd5a4mr1851061oih.59.1694595326802;
-        Wed, 13 Sep 2023 01:55:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGKPVssIlImig5nXmhpkcsDQ7KpqCHiahCisjz+0XwI28OTqJEh/HnL6zXhYAXW7+m311Y1Pw==
-X-Received: by 2002:a05:6808:616:b0:3a8:83df:d5a4 with SMTP id y22-20020a056808061600b003a883dfd5a4mr1851051oih.59.1694595326594;
-        Wed, 13 Sep 2023 01:55:26 -0700 (PDT)
-Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id az19-20020a056830459300b006c21f11dcecsm647356otb.49.2023.09.13.01.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 01:55:26 -0700 (PDT)
-Date:   Wed, 13 Sep 2023 05:55:16 -0300
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>, paul.walmsley@sifive.com,
-        anup@brainfault.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, palmer@rivosinc.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 04/17] locking/qspinlock: Improve xchg_tail for
- number of cpus >= 16k
-Message-ID: <ZQF49GIZoFceUGYH@redhat.com>
-References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-5-guoren@kernel.org>
- <f091ead0-99b9-b30a-a295-730ce321ac60@redhat.com>
- <CAJF2gTSbUUdLhN8PFdFzQd0M1T2MVOL1cdZn46WKq1S8MuQYHw@mail.gmail.com>
- <06714da1-d566-766f-7a13-a3c93b5953c4@redhat.com>
- <CAJF2gTQ3Q7f+FGorVTR66c6TGWsSeeKVvLF+LH1_m3kSHrm0yA@mail.gmail.com>
+        with ESMTP id S239293AbjIMJLe (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 05:11:34 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052E019B4;
+        Wed, 13 Sep 2023 02:11:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 950DBC433C8;
+        Wed, 13 Sep 2023 09:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694596290;
+        bh=H3CwHEhNAyk3n0UEs1hZGB7AhfptCwREoqm5y63roFw=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+        b=uNRdoHOM4Yy9XfI0S4sYj9kdaC7LNMOK9NsSNCJ2QaOJN3NAg41eArEg9vdpIPeO2
+         jRejQzWuJcEGHJ3Z+BrJaaHm/TYbXsaNJ8y+1No37kaY/NXSPVLRNmLhD2pafcVuJp
+         eDxGqPPW+2WJOkZ9+WJdneYd52dtWk5xg+sKiySZxiyaq/i9uac+L7PmyGHqNE8BTp
+         kyhRDDkg+l8JooozVeUPPvNuBppDrekDV/1BBGj8uxlw/eZZLYkBo4lM+wFh8Vvf/q
+         Fs1W4tZ1qjML4CxWegQ2k3O37VHHzhq4j8YZV4HweKF7r9nVJv/amgSLV1Z8BwoyJO
+         Rsw1vcuckhsaw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 750A5CA5512;
+        Wed, 13 Sep 2023 09:11:30 +0000 (UTC)
+From:   Joel Granados via B4 Relay 
+        <devnull+j.granados.samsung.com@kernel.org>
+Date:   Wed, 13 Sep 2023 11:10:55 +0200
+Subject: [PATCH v2 1/8] S390: Remove now superfluous sentinel elem from
+ ctl_table arrays
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTQ3Q7f+FGorVTR66c6TGWsSeeKVvLF+LH1_m3kSHrm0yA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230913-jag-sysctl_remove_empty_elem_arch-v2-1-d1bd13a29bae@samsung.com>
+References: <20230913-jag-sysctl_remove_empty_elem_arch-v2-0-d1bd13a29bae@samsung.com>
+In-Reply-To: <20230913-jag-sysctl_remove_empty_elem_arch-v2-0-d1bd13a29bae@samsung.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>, willy@infradead.org,
+        josh@joshtriplett.org, Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Guo Ren <guoren@kernel.org>, Alexey Gladkov <legion@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-csky@vger.kernel.org,
+        Joel Granados <j.granados@samsung.com>
+X-Mailer: b4 0.13-dev-86aa5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3546;
+ i=j.granados@samsung.com; h=from:subject:message-id;
+ bh=8t5/t1UjTEoh22RD6/LMKGBxaNMtKZTo1ZzOcM0O9Sw=;
+ b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBlAXy+z4yFdhLr6WiP8tCwA73LCgzUl2LQiBp3e
+ 8KfCXp5Hk+JAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZQF8vgAKCRC6l81St5ZB
+ T39XC/9Mr0P1F54PQlvniX0Mim7ddNKhNbGsP6rW1ZMhAbdUlffUIxwQ8UlkH15xP2veXT1xfkX
+ O7XQyq0gSlQFWR0PyvUepJ1bFb/hnmYZkJH5zaSQIAz3rHfdAc0f0ubHWxtHjtNYWyRsbREJMCS
+ /gl6GTsxm3eY252GIpPraCKkT8N0yU+z1nyUtDQRFMJB/zvLQ5muqx+kotHeDESp4flWjMH53WG
+ O7DYFpGOicrA6I7m/qCMlW206LeXYlKG1zChV+MCe9MZW+3ZGUavN0fdFH6B9YNji2Nb0ajxYyB
+ GgHX/gnRkpzdcFfP3o+f4EZ+BvRXYX1ZEWuBoc1RwOjYJActxmszhoc8il1vppycayQbRHi84nS
+ VTw9RvfEpqqh+M/1xHFqen11ims6drclhmBdD2ehR/Tu49WqDnCKYzkyldsuZ0KqCnZybNrBtKa
+ l75k/c45RHjB2Wz4IFls7jNHsNIScK2oeV1y2vSx4XZtkSG1l9v0PgnkyPwZ6z9aoOAwA=
+X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
+ fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
+X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with auth_id=70
+X-Original-From: Joel Granados <j.granados@samsung.com>
+Reply-To: <j.granados@samsung.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 09:10:08AM +0800, Guo Ren wrote:
-> On Mon, Sep 11, 2023 at 9:03 PM Waiman Long <longman@redhat.com> wrote:
-> >
-> > On 9/10/23 23:09, Guo Ren wrote:
-> > > On Mon, Sep 11, 2023 at 10:35 AM Waiman Long <longman@redhat.com> wrote:
-> > >>
-> > >> On 9/10/23 04:28, guoren@kernel.org wrote:
-> > >>> From: Guo Ren <guoren@linux.alibaba.com>
-> > >>>
-> > >>> The target of xchg_tail is to write the tail to the lock value, so
-> > >>> adding prefetchw could help the next cmpxchg step, which may
-> > >>> decrease the cmpxchg retry loops of xchg_tail. Some processors may
-> > >>> utilize this feature to give a forward guarantee, e.g., RISC-V
-> > >>> XuanTie processors would block the snoop channel & irq for several
-> > >>> cycles when prefetch.w instruction (from Zicbop extension) retired,
-> > >>> which guarantees the next cmpxchg succeeds.
-> > >>>
-> > >>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > >>> Signed-off-by: Guo Ren <guoren@kernel.org>
-> > >>> ---
-> > >>>    kernel/locking/qspinlock.c | 5 ++++-
-> > >>>    1 file changed, 4 insertions(+), 1 deletion(-)
-> > >>>
-> > >>> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-> > >>> index d3f99060b60f..96b54e2ade86 100644
-> > >>> --- a/kernel/locking/qspinlock.c
-> > >>> +++ b/kernel/locking/qspinlock.c
-> > >>> @@ -223,7 +223,10 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
-> > >>>     */
-> > >>>    static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
-> > >>>    {
-> > >>> -     u32 old, new, val = atomic_read(&lock->val);
-> > >>> +     u32 old, new, val;
-> > >>> +
-> > >>> +     prefetchw(&lock->val);
-> > >>> +     val = atomic_read(&lock->val);
-> > >>>
-> > >>>        for (;;) {
-> > >>>                new = (val & _Q_LOCKED_PENDING_MASK) | tail;
-> > >> That looks a bit weird. You pre-fetch and then immediately read it. How
-> > >> much performance gain you get by this change alone?
-> > >>
-> > >> Maybe you can define an arch specific primitive that default back to
-> > >> atomic_read() if not defined.
-> > > Thx for the reply. This is a generic optimization point I would like
-> > > to talk about with you.
-> > >
-> > > First, prefetchw() makes cacheline an exclusive state and serves for
-> > > the next cmpxchg loop semantic, which writes the idx_tail part of
-> > > arch_spin_lock. The atomic_read only makes cacheline in the shared
-> > > state, which couldn't give any guarantee for the next cmpxchg loop
-> > > semantic. Micro-architecture could utilize prefetchw() to provide a
-> > > strong forward progress guarantee for the xchg_tail, e.g., the T-HEAD
-> > > XuanTie processor would hold the exclusive cacheline state until the
-> > > next cmpxchg write success.
-> > >
-> > > In the end, Let's go back to the principle: the xchg_tail is an atomic
-> > > swap operation that contains write eventually, so giving a prefetchw()
-> > > at the beginning is acceptable for all architectures..
-> > > ••••••••••••
-> >
-> > I did realize afterward that prefetchw gets the cacheline in exclusive
-> > state. I will suggest you mention that in your commit log as well as
-> > adding a comment about its purpose in the code.
-> Okay, I would do that in v12, thx.
+From: Joel Granados <j.granados@samsung.com>
 
-I would suggest adding a snippet from the ISA Extenstion doc:
+This commit comes at the tail end of a greater effort to remove the
+empty elements at the end of the ctl_table arrays (sentinels) which will
+reduce the overall build time size of the kernel and run time memory
+bloat by ~64 bytes per sentinel (further information Link :
+https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
-"A prefetch.w instruction indicates to hardware that the cache block whose 
-effective address is the sum of the base address specified in rs1 and the  
-sign-extended offset encoded in imm[11:0], where imm[4:0] equals 0b00000, 
-is likely to be accessed by a data write (i.e. store) in the near future."
+Remove the sentinel element from appldata_table, s390dbf_table,
+topology_ctl_table, cmm_table and page_table_sysctl. Reduced the memory
+allocation in appldata_register_ops by 1 effectively removing the
+sentinel from ops->ctl_table.
 
-Other than that,
-Reviewed-by: Leonardo Bras <leobras@redhat.com>
+This removal is safe because register_sysctl_sz and register_sysctl use
+the array size in addition to checking for the sentinel.
 
+Tested-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Joel Granados <j.granados@samsung.com>
+---
+ arch/s390/appldata/appldata_base.c | 6 ++----
+ arch/s390/kernel/debug.c           | 3 +--
+ arch/s390/kernel/topology.c        | 3 +--
+ arch/s390/mm/cmm.c                 | 3 +--
+ arch/s390/mm/pgalloc.c             | 3 +--
+ 5 files changed, 6 insertions(+), 12 deletions(-)
 
-> 
-> >
-> > Thanks,
-> > Longman
-> >
-> > >> Cheers,
-> > >> Longman
-> > >>
-> > >
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
+diff --git a/arch/s390/appldata/appldata_base.c b/arch/s390/appldata/appldata_base.c
+index 3b0994625652..872a644b1fd1 100644
+--- a/arch/s390/appldata/appldata_base.c
++++ b/arch/s390/appldata/appldata_base.c
+@@ -62,8 +62,7 @@ static struct ctl_table appldata_table[] = {
+ 		.procname	= "interval",
+ 		.mode		= S_IRUGO | S_IWUSR,
+ 		.proc_handler	= appldata_interval_handler,
+-	},
+-	{ },
++	}
+ };
+ 
+ /*
+@@ -351,8 +350,7 @@ int appldata_register_ops(struct appldata_ops *ops)
+ 	if (ops->size > APPLDATA_MAX_REC_SIZE)
+ 		return -EINVAL;
+ 
+-	/* The last entry must be an empty one */
+-	ops->ctl_table = kcalloc(2, sizeof(struct ctl_table), GFP_KERNEL);
++	ops->ctl_table = kcalloc(1, sizeof(struct ctl_table), GFP_KERNEL);
+ 	if (!ops->ctl_table)
+ 		return -ENOMEM;
+ 
+diff --git a/arch/s390/kernel/debug.c b/arch/s390/kernel/debug.c
+index a85e0c3e7027..150e2bfff0b3 100644
+--- a/arch/s390/kernel/debug.c
++++ b/arch/s390/kernel/debug.c
+@@ -977,8 +977,7 @@ static struct ctl_table s390dbf_table[] = {
+ 		.maxlen		= sizeof(int),
+ 		.mode		= S_IRUGO | S_IWUSR,
+ 		.proc_handler	= s390dbf_procactive,
+-	},
+-	{ }
++	}
+ };
+ 
+ static struct ctl_table_header *s390dbf_sysctl_header;
+diff --git a/arch/s390/kernel/topology.c b/arch/s390/kernel/topology.c
+index 68adf1de8888..9dcfac416669 100644
+--- a/arch/s390/kernel/topology.c
++++ b/arch/s390/kernel/topology.c
+@@ -635,8 +635,7 @@ static struct ctl_table topology_ctl_table[] = {
+ 		.procname	= "topology",
+ 		.mode		= 0644,
+ 		.proc_handler	= topology_ctl_handler,
+-	},
+-	{ },
++	}
+ };
+ 
+ static int __init topology_init(void)
+diff --git a/arch/s390/mm/cmm.c b/arch/s390/mm/cmm.c
+index f47515313226..8937aa7090b3 100644
+--- a/arch/s390/mm/cmm.c
++++ b/arch/s390/mm/cmm.c
+@@ -331,8 +331,7 @@ static struct ctl_table cmm_table[] = {
+ 		.procname	= "cmm_timeout",
+ 		.mode		= 0644,
+ 		.proc_handler	= cmm_timeout_handler,
+-	},
+-	{ }
++	}
+ };
+ 
+ #ifdef CONFIG_CMM_IUCV
+diff --git a/arch/s390/mm/pgalloc.c b/arch/s390/mm/pgalloc.c
+index 07fc660a24aa..e8cecd31715f 100644
+--- a/arch/s390/mm/pgalloc.c
++++ b/arch/s390/mm/pgalloc.c
+@@ -29,8 +29,7 @@ static struct ctl_table page_table_sysctl[] = {
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+-	},
+-	{ }
++	}
+ };
+ 
+ static int __init page_table_register_sysctl(void)
+
+-- 
+2.30.2
 

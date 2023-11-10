@@ -1,56 +1,56 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4708115C5
-	for <linux-csky@vger.kernel.org>; Fri, 10 Nov 2023 03:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49751859
+	for <linux-csky@vger.kernel.org>; Fri, 10 Nov 2023 03:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OFdj44xq"
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783BD468C
-	for <linux-csky@vger.kernel.org>; Thu,  9 Nov 2023 19:35:51 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b5345Xd4"
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5861C4686
+	for <linux-csky@vger.kernel.org>; Thu,  9 Nov 2023 19:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699587350;
+	s=mimecast20190719; t=1699587444;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=x8WQrDz3BrUoKfY/uV/CbjAH9j1WTdOdEvBMB5Ml9tk=;
-	b=OFdj44xqUo5zv+73SqGjbHOMu1b1K3H8FyC6puIbWDHsm4CvChgrdqO7JOijDpUoekpjU8
-	EsxADa76GP+2mkITBbLeSe2JWj31fG1F7HiQWtukjcCR1ZEyDZnCOERsuUBZpnog8UzT+b
-	nxLPEPs7z0lcx3qtfifJyPpi7rakuPE=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=pROeszy9ePncz4nZyjZpb065/8N1ucMk0OODbP+hams=;
+	b=b5345Xd4CfAHxovucD90DpRX2u+HjGodmOo2tM1PmGl9pbs2YS6YMFg3bqB0yoWOn1BbbP
+	kSRaQ7GbD/VFxoBBbMZmqlPSaliyNc6mf939PPMsN/5At0ps8De3tzo/lvpMo0Zeyv3N1Z
+	QtstkZ2hLbue4IfyLhwRBcqnee8hqNw=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-262-sLRntAblPHqkUShBYGfhlQ-1; Thu, 09 Nov 2023 22:35:48 -0500
-X-MC-Unique: sLRntAblPHqkUShBYGfhlQ-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6bc52d2c204so44682a34.0
-        for <linux-csky@vger.kernel.org>; Thu, 09 Nov 2023 19:35:48 -0800 (PST)
+ us-mta-389-CZQk9zHHPPmKnUPFp4t6Dw-1; Thu, 09 Nov 2023 22:37:23 -0500
+X-MC-Unique: CZQk9zHHPPmKnUPFp4t6Dw-1
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3b3ecd1be0bso67902b6e.0
+        for <linux-csky@vger.kernel.org>; Thu, 09 Nov 2023 19:37:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699587348; x=1700192148;
+        d=1e100.net; s=20230601; t=1699587442; x=1700192242;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x8WQrDz3BrUoKfY/uV/CbjAH9j1WTdOdEvBMB5Ml9tk=;
-        b=lPITz8X37p4jby+B9zv4EofNcycwxfSDYTRFP9Ck6r5KZ8NDsYzw+bmrtXK04g9PZ0
-         r0X3hcZ1pcuB3LAVzEHuq9p+jZ42Q5icYqg7SH1BjQ9ox5UPYpgtgaGuIS5yncrt/zrQ
-         Z4oX6/WS5ssao+++tYr8EribMqd/68wZnG11rEgz/zeUDvsJhYGjDz0DeaGH4WPWcfpw
-         6e7KU5Lnrg3MMVB6xky7EJldBPoQvCk8zX6XiE6WfAc5B8HBFGU+LI5FQ5QG9P7Hf9iI
-         hpanw3L6dm3JG7Qk9XrcI7voUPuAsWONrhGuEfPI9dsNNyu6f1vYI83wMe6hJQnYawpl
-         4ZdA==
-X-Gm-Message-State: AOJu0YwuVOqL5Amja0O3h6OtCzlDC1zu6japhBdyJiKpA+zAmpxVWSLC
-	6gpCubAyEh8cks/yk0OInX4hx7PpwWUuzFfBesxCU+NayPfSSSSOwpK3Yo01oAS2oWij4rfmYFA
-	ku55/ryrzqcWIskL8TNh43Q==
-X-Received: by 2002:a05:6870:468d:b0:1d6:4c63:7ba9 with SMTP id a13-20020a056870468d00b001d64c637ba9mr8173645oap.3.1699587348151;
-        Thu, 09 Nov 2023 19:35:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG0g1U5gqarx8cH0olNuMl9/UtKi0J1uyvc150ksgK2KoqY7BLV3KVCaBNiaCGerDe5ChRrSA==
-X-Received: by 2002:a05:6870:468d:b0:1d6:4c63:7ba9 with SMTP id a13-20020a056870468d00b001d64c637ba9mr8173626oap.3.1699587347881;
-        Thu, 09 Nov 2023 19:35:47 -0800 (PST)
+        bh=pROeszy9ePncz4nZyjZpb065/8N1ucMk0OODbP+hams=;
+        b=Jfgt0X0XXBgm68YtgAhTkk/cHS6eA9i1tGRitYtUITW3Y1AbkNQSRUw4uGcODZD4+n
+         IdH0AKb0aX+2qt6+SeolcQpYdAKPrW5G6I4BhABjn3kpu0aW3YxqgWQ+6taAUD4QtBpd
+         PfKugp4Uorr/d8+vh7wlhX+O+XbDyCF0GOnDUz1JmOtCLIcG12sINshXio0sZ1ghr+nv
+         1DJzjVv6BZdv/hrHlIHBNm0/sOAtvXYOo8TfMTweMLkrq+bWvKyQX9qbOglJd0TRHCYf
+         QVWkff7tEpbMlzUKOdrXUPEl89d27D+YtHXzsL/Q627KVCJhSLVRCF5fZ+XGP4Ru79nO
+         TyZQ==
+X-Gm-Message-State: AOJu0Yxps5L+R+1uaVxuMfosJpSiMLGWSrxr2NcdwmvREw7pvcKs/6HC
+	Eu3mdPkGZlwrgBCEp6XdPCbX7re4jZLrgnKy6hn5EPP3eDy3uDrt/msV/V7YsdiGHtpZGAWcRAV
+	Zshl63rLOmi9RBl0v1Aq6qg==
+X-Received: by 2002:a05:6808:199c:b0:3a9:e8e2:579d with SMTP id bj28-20020a056808199c00b003a9e8e2579dmr8276258oib.2.1699587442428;
+        Thu, 09 Nov 2023 19:37:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFPdXOyaUAzV6aldemEymWFIQu5uK8SS6EoZEeBtta4Ue7SEB3JH44cFaCIyyqf1iZkLKsTPg==
+X-Received: by 2002:a05:6808:199c:b0:3a9:e8e2:579d with SMTP id bj28-20020a056808199c00b003a9e8e2579dmr8276228oib.2.1699587442206;
+        Thu, 09 Nov 2023 19:37:22 -0800 (PST)
 Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id gu6-20020a056a004e4600b0068fe7e07190sm11450826pfb.3.2023.11.09.19.35.42
+        by smtp.gmail.com with ESMTPSA id e8-20020a63d948000000b005a9b20408a7sm5370547pgj.23.2023.11.09.19.37.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 19:35:47 -0800 (PST)
-Message-ID: <534c2679-6a2b-455f-d60c-2f80207ef118@redhat.com>
-Date: Fri, 10 Nov 2023 11:35:40 +0800
+        Thu, 09 Nov 2023 19:37:21 -0800 (PST)
+Message-ID: <fd78bb81-1f83-13a4-ec37-3fe0cd040ec0@redhat.com>
+Date: Fri, 10 Nov 2023 11:37:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -59,8 +59,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH RFC 12/22] drivers: base: Print a warning instead of
- panic() when register_cpu() fails
+Subject: Re: [PATCH RFC 14/22] arm64: convert to arch_cpu_is_hotpluggable()
 Content-Language: en-US
 To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
  linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
@@ -72,65 +71,46 @@ To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
 Cc: Salil Mehta <salil.mehta@huawei.com>,
  Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
  justin.he@arm.com, James Morse <james.morse@arm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
 References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JLg-00CTxd-31@rmk-PC.armlinux.org.uk>
+ <E1r0JLq-00CTxq-CF@rmk-PC.armlinux.org.uk>
 From: Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <E1r0JLg-00CTxd-31@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1r0JLq-00CTxq-CF@rmk-PC.armlinux.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 11/7/23 18:30, Russell King (Oracle) wrote:
-> From: James Morse <james.morse@arm.com>
+> Convert arm64 to use the arch_cpu_is_hotpluggable() helper rather than
+> arch_register_cpu().
 > 
-> loongarch, mips, parisc, riscv and sh all print a warning if
-> register_cpu() returns an error. Architectures that use
-> GENERIC_CPU_DEVICES call panic() instead.
-> 
-> Errors in this path indicate something is wrong with the firmware
-> description of the platform, but the kernel is able to keep running.
-> 
-> Downgrade this to a warning to make it easier to debug this issue.
-> 
-> This will allow architectures that switching over to GENERIC_CPU_DEVICES
-> to drop their warning, but keep the existing behaviour.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 > ---
->   drivers/base/cpu.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
+>   arch/arm64/kernel/setup.c | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> index 221ffbeb1c9b..82b6a76125f5 100644
-> --- a/drivers/base/cpu.c
-> +++ b/drivers/base/cpu.c
-> @@ -551,14 +551,15 @@ void __weak arch_unregister_cpu(int num)
->   
->   static void __init cpu_dev_register_generic(void)
->   {
-> -	int i;
-> +	int i, ret;
->   
->   	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
->   		return;
->   
->   	for_each_present_cpu(i) {
-> -		if (arch_register_cpu(i))
-> -			panic("Failed to register CPU device");
-> +		ret = arch_register_cpu(i);
-> +		if (ret)
-> +			pr_warn("register_cpu %d failed (%d)\n", i, ret);
->   	}
+> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+> index 165bd2c0dd5a..42c690bb2d60 100644
+> --- a/arch/arm64/kernel/setup.c
+> +++ b/arch/arm64/kernel/setup.c
+> @@ -402,13 +402,9 @@ static inline bool cpu_can_disable(unsigned int cpu)
+>   	return false;
 >   }
 >   
+> -int arch_register_cpu(int num)
+> +bool arch_cpu_is_hotpluggable(int num)
+>   {
+> -	struct cpu *cpu = &per_cpu(cpu_devices, num);
+> -
+> -	cpu->hotpluggable = cpu_can_disable(num);
+> -
+> -	return register_cpu(cpu, num);
+> +	return cpu_can_disable(num);
+>   }
+>   
+>   static void dump_kernel_offset(void)
 
 -- 
 Shaoqin

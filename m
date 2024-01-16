@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE831F51F;
-	Tue, 16 Jan 2024 01:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FBC1CD20;
+	Tue, 16 Jan 2024 01:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aD+cWlto"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AEAC433F1;
-	Tue, 16 Jan 2024 01:04:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHv0THGo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DE2C433F1;
+	Tue, 16 Jan 2024 01:05:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705367076;
+	s=k20201202; t=1705367146;
 	bh=4Rgd6pj6ZzHj+h/R371GlQqWUydY+bynAeaxfKNSS8w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aD+cWltoW9RendeciKgnR7IKr3X3L02qsi6pyVVQuxoQzFV4ZmZ+bqN+BnMAkqSBA
-	 UailrtA6ofEYPXJHJwY88tdnSkp5ju5H0bFbOJN69wg18WzuaKs2qq0eF/gupdm6pf
-	 GsKvu2fj6eXTHAV4PzqWK8dAWMXq0YGOaz78JJFg6vex9jQVBozBSY2qd/pw//M+Mi
-	 X1QJouIAvzyxqhXcpuowRU6WRN3VXAeUQVtXCOa1Q+jO0V6SD/e2rWaiyeMIaj7JwC
-	 pPRHnQdJOmQecFodCvj/aMqCKps+YRkVnPWRi0UiDFuMTMmhCOIh+zqVz+SArjBwEM
-	 nH1eA9r+soSIQ==
+	b=qHv0THGo6+yaZOc81ByELgjysey93RrsW0B070TZ6Re3EP11Lgf/vE4TR7g4CzWhn
+	 wJ+F27M1+9a0A9VmE9wwROTxd8t78FUdWXx+kwoxkDhEMbLTr4XGiVRCQX/AsioXMK
+	 HmbyK8B4fPd39tX6K3n9kBc7dKWO4ihE+fUQAfjG+HnU/jlMrfRcTURCkk3IZmqUI9
+	 Eg0Y7Bg59mBO7Wgja1BwGs3t7x2CjvtT7nkOhg7AM3J6l/9PoGpEPven+zO/medb8J
+	 w/FNZypQQQlVcSmG6DlDpdAykSM19BaEBFm2NP5YeqRUvYUB4opiQOB/Dw8fjmJmaK
+	 aIDQkYAkBL5dg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -44,12 +44,12 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-riscv@lists.infradead.org,
 	linux-s390@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 02/21] arch: consolidate arch_irq_work_raise prototypes
-Date: Mon, 15 Jan 2024 20:03:39 -0500
-Message-ID: <20240116010422.217925-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 02/19] arch: consolidate arch_irq_work_raise prototypes
+Date: Mon, 15 Jan 2024 20:04:57 -0500
+Message-ID: <20240116010532.218428-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116010422.217925-1-sashal@kernel.org>
-References: <20240116010422.217925-1-sashal@kernel.org>
+In-Reply-To: <20240116010532.218428-1-sashal@kernel.org>
+References: <20240116010532.218428-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7
+X-stable-base: Linux 6.6.12
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>

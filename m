@@ -1,179 +1,163 @@
-Received: from flow8-smtp.messagingengine.com (flow8-smtp.messagingengine.com [103.168.172.143])
+Received: from smtpout42.security-mail.net (smtpout42.security-mail.net [85.31.212.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264631B2536;
-	Mon,  9 Sep 2024 09:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725875231; cv=none; b=c6CwM0GEWzgxO2iwG7AloAj3zgCG6DKmavV7IN9ZpH+2fK0pnhVw9H1DWMWbXWC+LUVsquZtniHdOKYSNHSREatV8ZQ3XQORQpv/RgsetZbwV9exzduXg40Qekh1i1HcKBDutLp6fFJnYCFtG2Mu3i/cmKWdPS+snQQQxY3U8v4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725875231; c=relaxed/simple;
-	bh=lNwIR+xwbUxOSrIXTaBwVx4ar9uDyirb5m/6fHAwWXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qEu935tA4JqTNIWUtUVHEBBaBmIqMbqWGRisU7t2HW5FJM8JK5sJV+snmQLkb1RWy/zFFOAjKPY7Xco2fUMIwrm6dft3AxPoMMCQBKEBtx1tJZ7Sz+x5zXySbUGES//1c9QCdV79l170snMTW6vaC2ActHRviAJYtHg0TC17ZsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lBPc6O4v; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bHZrriof; arc=none smtp.client-ip=103.168.172.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568ED1B6525
+	for <linux-csky@vger.kernel.org>; Mon,  9 Sep 2024 13:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=85.31.212.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725888745; cv=fail; b=ZKMLqqct37N+f94tmiqB3ntoCl72eJ/IQKm6uGyuCaTFX2tpJVqrwsCcE2WV1HClDyUIMA3IhEYdT0agsA1QJnxCQhh5vaYTkrVe2BJbucsh5oB335K3z3oZ2RbUE9MS84Tn7Dj4YgRR6qpkV1pMe5kwczixjFwcMI5KWDi+v1g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725888745; c=relaxed/simple;
+	bh=xWgMObqrjkTD9YxOl5xlHQi1Bwef7/jeXXrsnrr8HWg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b0x4eA7JThQDwUy9jAYlC0A1nv3q2ytxP2Pz+QSBwRCIUTe90DOQ9lcp6k6q4Mp0Slti/qYPRPH+qSTHmy/L2nt+Im9QXVxKcC3DwhHkxXyyK30DQj1fMlotwB9XCunbJQONpHzz0OxdPh+oETrS3yTaUq3YbCFuNUTPHWw9mRA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com; spf=pass smtp.mailfrom=kalrayinc.com; dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=kEGstJQY; dkim=fail (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=cViN3yAy reason="signature verification failed"; arc=fail smtp.client-ip=85.31.212.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kalrayinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lBPc6O4v";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bHZrriof"
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailflow.phl.internal (Postfix) with ESMTP id EE18E2001DE;
-	Mon,  9 Sep 2024 05:47:07 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Mon, 09 Sep 2024 05:47:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1725875227; x=
-	1725882427; bh=BPa+t0OgPawOKIqR0T18RRhFI6N40wyPm8P4uVOmsYQ=; b=l
-	BPc6O4vkdjuFdPUQx/GWkjNHlfzM1blnQCFwmbYPk3ohfiJXU2katsOTsV/itMcP
-	I0kFE8ETPJ7hYqbwvzxprTbBjV24twDtCgKPsbHt0/ZHZgZkTCtITsYA91OWMeS8
-	5ToMm7yZ59k8mTdDcR+nlGo7XFtpVtWiKkfNQzQcNR2Cwplo4kvqxS3wcvBhIMzq
-	l/H2k3IBsAOTWMbejZoEwAqhKho3zUo2Tzq9tr+gfJoIIaoekqpRpDt3QN8JX7OA
-	E/W1pu07hhdoy+toDNG55B8/dOiDpeuBZgt2ZAU2x0NcUUZvZdVWPyco45pIDl67
-	hdfqVF2AGsJXsfUNyZ8LA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1725875227; x=1725882427; bh=BPa+t0OgPawOKIqR0T18RRhFI6N4
-	0wyPm8P4uVOmsYQ=; b=bHZrriofaN4DC5WZCdXMUPXMz+etATu4nCBewnpqNsaw
-	FVV5NMsyoUF6Jr7J9/iQwdiQiVwufXFxL1xjmZ3ZTXtwAs7Xd47X8IK5kCeLH5Zx
-	gbn/t616nSUZyaLl27+WADgQM/2MzJLc4Dt9sX2YGuJzO5P9+Fe74Y2Sd9Q3QFL+
-	dR5RgCUMgdOfG/W5lQhba6p1V2wWv2l/tjStQSEN1k6fYC7IwDuKE+6kI4GRhDg3
-	Rwju+/48bdXwh3AMr3yD5uJoXxgqonm3AeH6u6SgW6lpschh0v4d93IkcQHj1qUP
-	wuiKGnPJX2TLpvB6TTW/yB3cxzohBLwQqOOJm56rNw==
-X-ME-Sender: <xms:GMTeZkb4ykAOR_EMJb8_tDn0TMOZFONau-MwujjLNHRr-Wkqt2dSUQ>
-    <xme:GMTeZva1-M1im4Jp1LIjaav2rAfFhxsHMXAhODt7T02hM4BuADB0ZzL__nLHdiiBz
-    SSxNINKU_xZ_uRM6kI>
-X-ME-Received: <xmr:GMTeZu_ViDBBY4wFBsBlNsC4hDIPt8FmsrKwqowsMOAkJLYpv49F3w-i-FZSYdAC09X5zA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeijecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffrtefo
-    kffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsuc
-    dlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddttddvnecuhfhr
-    ohhmpedfmfhirhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuh
-    htvghmohhvrdhnrghmvgeqnecuggftrfgrthhtvghrnhepleetudegtdfgheduudfhteel
-    ieeuvddtheeijeejudefjeefgeettedutdeggfdunecuffhomhgrihhnpehkvghrnhgvlh
-    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvgdpnhgspghrtghpthhtohepheejpd
-    hmohguvgepshhmthhpohhuthdprhgtphhtthhopegthhgrrhhlihgvsehrihhvohhsihhn
-    tgdrtghomhdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtoheprh
-    hitghhrghrugdrhhgvnhguvghrshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohep
-    ihhnkhesjhhurhgrshhsihgtrdhprghrkhdrmhhsuhdrrhhupdhrtghpthhtohepmhgrth
-    htshhtkeeksehgmhgrihhlrdgtohhmpdhrtghpthhtohepvhhguhhpthgrsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehlihhnuhigsegrrhhmlhhinhhugidrohhrghdruhhkpd
-    hrtghpthhtohepghhuohhrvghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegthhgv
-    nhhhuhgrtggriheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:GMTeZuo8r1nq-l9Iy1GG6lbrKIDlKAUfTYSJNOcMHx7SoM3_DQR_3Q>
-    <xmx:GMTeZvrvUvANLRDy_9LJ18nIkHenEaJwEIED0prbXl6sE_8pVNQDOQ>
-    <xmx:GMTeZsRlSV4fkIBrTLkTKBp6pnJALT50swFC-8I2Ke2cX1KpAQISKA>
-    <xmx:GMTeZvr9-1ECM5FvQVeumcsYIs50J0UTzC6J0l-CHe5sOz5eneb3pw>
-    <xmx:G8TeZngmbMM6nDA0aBg4nycXlZwqiuUgtwXCgxP4Ok8DOYuuB710QBwh>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 9 Sep 2024 05:46:47 -0400 (EDT)
-Date: Mon, 9 Sep 2024 12:46:42 +0300
-From: "Kirill A. Shutemov" <kirill@shutemov.name>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- 	Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- 	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- 	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, 	WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- 	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, 	Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- 	Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>,
- 	Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- 	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- 	Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- 	Yoshinori Sato <ysato@users.sourceforge.jp>,
- Rich Felker <dalias@libc.org>,
- 	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>,
- 	Andreas Larsson <andreas@gaisler.com>,
- Thomas Gleixner <tglx@linutronix.de>, 	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
- 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, 	Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- 	Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>,
- 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
- 	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org,
- 	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, 	linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- 	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, 	linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-Message-ID: <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
- <Ztnp3OAIRz/daj7s@ghost>
+	dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="kEGstJQY";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="cViN3yAy"
+Received: from localhost (localhost [127.0.0.1])
+	by fx302.security-mail.net (Postfix) with ESMTP id EF5EFBFBE0
+	for <linux-csky@vger.kernel.org>; Mon, 09 Sep 2024 15:32:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalrayinc.com;
+	s=sec-sig-email; t=1725888736;
+	bh=xWgMObqrjkTD9YxOl5xlHQi1Bwef7/jeXXrsnrr8HWg=;
+	h=From:To:Cc:Subject:Date;
+	b=kEGstJQYTZZI/BJ6uaZwluYygCOUQ41MWcTMT9AOIGSscjHa67HRCHYNLt3b0iZH3
+	 Sa3faF/G6hJeJMKQot5Pbo25n9PIusjEUr8Ra7U1dy2eb+WtouEmdEfFOSP59l4Eaz
+	 vKt0Yd74BEgEdejNMxiBbG9SxgUW1eSui1dEnR8k=
+Received: from fx302 (localhost [127.0.0.1]) by fx302.security-mail.net
+ (Postfix) with ESMTP id C41A4BFECF; Mon, 09 Sep 2024 15:32:15 +0200 (CEST)
+Received: from PR0P264CU014.outbound.protection.outlook.com
+ (mail-francecentralazlp17012051.outbound.protection.outlook.com
+ [40.93.76.51]) by fx302.security-mail.net (Postfix) with ESMTPS id
+ 30350BF7CC; Mon, 09 Sep 2024 15:32:14 +0200 (CEST)
+Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:118::6)
+ by MR1P264MB2580.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:35::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.23; Mon, 9 Sep
+ 2024 13:32:12 +0000
+Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::6fc2:2c8c:edc1:f626]) by PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::6fc2:2c8c:edc1:f626%4]) with mapi id 15.20.7939.022; Mon, 9 Sep 2024
+ 13:32:11 +0000
+X-Secumail-id: <bde6.66def8de.2f1c6.1>
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kgLjDJzpq4u1Ub907w07NscrwUINNykmzzpHrsLkAg3i9cHO19IixIKuHUgwpnqkK7QNpoHaTF4W/DChTYz6hyek9HVZyQs2zTEahg85dD9V7EyQgBgIcEmJa5n1VoQhVapTl37MM1MCTOKIru9UlslVMdCufNNmQYEsyxiQwUH9jdrc4zImdMyT6QMW4UzbnzS+wGquO2Vm36ojBxRTo+KYyufA9FIHwGOZTgp/vShpWbrPZsQc1zOns66bFF22w9hi/xcs1iSa0q/flYnu97TA6b6m2hQSHDknMMBHu4vDf2pk4nDgh4DKGH5NWrUsr7dwlXf1UKmrEqW1yj1s9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microsoft.com; s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TSz+b4HEG8Mlm6Ys8z+Vo2Swu87k+bkYlFDwl21bWHQ=;
+ b=TYe8CoGONvufU64hNCIS0NjlLnuJI2P+MQgXoyWqQLAp8ONp4VQhckgypK4SRbzQxsGnZwA+e9gisJ42hqmRE/IrpyVIEtlex7na9cw1Z9wYwfsRbxYjuNL/Ot+KHVFMDeEKYohxxz/K8HmFJjJ3p4agK+aZANrgO3D7YCaZAdpV31wsidMCgP30tLSDWjOQNrq9kZqprUHAjakQU9Rili3rHjmExEqRPSuhnkQW/4zFUkEcfcks9nNWfMGyugUTRXyTxrYEAT2jRbfx3ImahAQdzHQclfwflejkIwkmxej4i3f+H2d8tTt+f3hDFh7IMjePgjn+HFB3+U71JaNFtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kalrayinc.com; dmarc=pass action=none
+ header.from=kalrayinc.com; dkim=pass header.d=kalrayinc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalrayinc.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TSz+b4HEG8Mlm6Ys8z+Vo2Swu87k+bkYlFDwl21bWHQ=;
+ b=cViN3yAy8yQqs4iUMiNCxwWadF0b5YEETdxo8qB31vNTZp/W4TZ+lutH5p/pQ671qWud8Yx4srMz7WQYnDWaMVL1aN8OKcX1+cWWNhLVWr/jF5Xs6QqjZ2x/RdmwQCub+5dgvRn/OSvOJV3mcb+pWoB+Hq28mkuicSgi1K8fgsa5BZ8zg/Y2AwrAarwWzNmtXGuy9EB8mofMvLZgu7CUAipkQkZmQ7CedGkL8NziORB0MgXw05QY/pM6W58oKRK/r49tc2rRfF/3kTK2YpHZ/b/0tEek6zeB68mVdmvSkMFd5gA8YUt9iE2y22VBhOnw+y4ZvROB/XtigVJ4TQ2y+w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kalrayinc.com;
+From: Julian Vetter <jvetter@kalrayinc.com>
+To: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren
+ <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-csky@vger.kernel.org, loongarch@lists.linux.dev, Yann Sionneau
+ <ysionneau@kalrayinc.com>, Julian Vetter <jvetter@kalrayinc.com>
+Subject: [PATCH v2 0/4] Consolidate IO memcpy functions
+Date: Mon,  9 Sep 2024 15:31:55 +0200
+Message-ID: <20240909133159.2024688-1-jvetter@kalrayinc.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PR0P264CA0106.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:100:19::22) To PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:118::6)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ztnp3OAIRz/daj7s@ghost>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAYP264MB3766:EE_|MR1P264MB2580:EE_
+X-MS-Office365-Filtering-Correlation-Id: a7915e7e-0107-406b-83d7-08dcd0d3cf86
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|52116014|376014|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info: J0hg5uKHJDcM179kn375cJ8zwI4Jd6XmGwLv52Q6O/U6JP00Ee2nVHIhTHjcsRybn+MSCY1nkkERE1FSRa/RzpzqQ7g9svJp96feSyFQSwhlkC6v+Xu81lQGenpVwRw5UpSwuIkueW7H23lzBMc8z6Q+ZnUSIgEzulVQ50MqnulUiR0h3ZeDIWO2v1oJaw5ymJvzpJjEJ1Z+qgS4K/rV8EOSUn7JData+VtYpMUqLUIisn9JeV4wTheM7bE977eLNxROAyfnGqFk/G0fLgqD3K7OPuADg+F3V09RZVlaGUeUkZ/CXMUE5HkX1CyPP3PQZvAHItdAQTgnzp7u0lTtITUpGZmqsCuSc/RN7OOd0ginWSVIAA3mjYn9wjjRqKelTolD7A+Blt1c4nkEB6KaAo0oNm/K+Uyex7Eoc0TSgPExKB0iNutTciiEqsSdHXAoUbKrqoTmjEa/6AdCPw5q+9iXMnicskhBQELosU/7mt+JgP2JezzGIL2e7ohUsocBhQNPbLe/MV/SG8eaVJdG+AYzzrT4hvALJDjCdUuHWBbZodGkparIthitDJk1gVGntINT2zhdUFJYkxZJ6cwNwJWPKU0EsQIDjSOKwufnSho718iealeWcCq7hcyiblteeDCVC+2D9dK/iDrgOiuHBxDHUWfR395i5213wqdD9D4hKmLCUOZUzCT4HQNwKDSP+L0M5bpH0j9n0SgG+mgB4gnoJ7sK4dCy5VQ2qP75kTPagdDabeZHhLlBi8fapFfp3z2ZNf4+qiTSnizNfm3VQjIT0oQ2XTC0pDTp0Y3KPF6ojh0IAboI4r541JeatpHSLFnssnrDsKH5o6UEJbGtK3YxABvMTgtTsZUP5ZPf6RVeXpTvJaFj7jG7BOLAQwcLojKThuWojut8D7+KC6BrxyG7MTD5lNhDJYgmaxhgAfdL4CQ+VJWIAizwo0SbIi/6PZy
+ z9pE5azGBd5DfTNjjZE5ixkhhXRIRPkcLtEAF8zLnLHhwSzEX/z1m77+B1V+D9h8SRGNFyAQmAUXUVX/9Ky6oDq2jMqZaeZMhvx20TUsNeOOAxScc8n0dJMINOCAI7ryExyLoCm+UinoyQuBb7QM/udxPOdQp4dx3vdavwBp5udrvmQUwxRISQQL015T6lrD2aWja+j42tgGhdBkQX5PJO3eGRlMHr6ArqZEqb+FxVA9bbJ/H94T5EPgY3akpX7gzULfk+KGJa5S2UE+ArSuYZMQ3tVexOcU3VPoGsZx1G7KnEKmZC66QerEiHMX4D7UkSHBnHTN1I3e6eCx4YFV1HvBPS4HiEnFCA8YWWpVTwJ4dVZgPup1JiM0QS/PiyKvHwv20CaqKe7T4zLTvEX6QJNsdd4stUgBNjZ0jSKwVXjdUjqPUglRx4J3VZSgc+IHkYYGxdkJ+Tj0mpqlEXA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(52116014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: Mvi7xupC6Xedx5cqH2xSME7s/y02nNI0nL0j+91Ycfrq49zyeKPLi0AjWaJGPRaCc80s/gwegLR3KzE4oV9f1YYlNGaJnVwB+yL9IoeLaETH34rc74Jfkpgqm1+iyC1X5m+Q/AJwxLqUvYLPLbxevTtdSkZ9C69Io5fu2AWIy52TrfHnT7ezQmjRTKk4ldPQwpGfPK35TJ8ew/NAMcz8ynrkIErGpPoLkkjqhJWvUpuCqloAClZRsggCmDr98gkCblgXUx94WBFEKTwJEvuHYdfqy4gzyC3k1b4WdBQoDFkL4Gu5eHajKuv8ikuKJGKpoZDo0hAzkDA9cIcMtPEw1O6Cx8q5OFEJWzjmBtgqnVob57sSNSETJ4+FbaEUSSqKgRNO2opu05iIrUss/wx6L+MdXfyMNlNUreUrzLIrFW+FTNNiRqgD6RszGi7HnacW8kwzedwYs+Z+XmldHqmJ0152J3u672thgC60mefhBBki5YQdq0e86puSz0xeJMiXxfzyi3Ow5JmvqdboP76CrL6ZJ2I5gYTD0y9Vm+6HCL5Oy1pER3kPCuMIHc4WILWGgf/DYkq4SFGjefQmKYS1NNN3qeJAl/jnTlEdb+HYQHBLOvCTFySGhlD5J8cqCEE3Ph8ywACeApuQMgb/sSGzewB2FfK4CwLhm4mO24vIQHLWlAnKogp0xQklPBWbCcsdiALmZ/rR/XEsLr1S/dQ4Mm2MWhXtQ0O4nt3BJYcy0hu3LrvWqscJKxC5+NtyfF5VA1I/6rFkVIOP/kN1RJussS3tgp9PwQ1c8SSD1UjtbzeADZ9Mi1TVHlsDQW6wGDB0Z/wnImz+PLMhY9Ajj12goayz04I/7v07e+sFNnBhx9VGaRfIYWa79jBVapn/z1O5ERsLRzVL13PJco2ByR663NAU3s3OAEWQCIdDnd8BLoJEufZn7nykij0F206UHKcT
+ YXF9BakB7s+T4gqVMQJnhZEYc+tiYhzUkURk62Gi99NctM4DfdZP/KSMM2gO422x2SmD+8YGJPrlnB0L87uSWUpymqLtjXusbmYPIMdWna2nMeEA7H1/PhB2YbwikG74aVLMEs3b8T1kmVpCZ17naUSGiHNjfr1j/1duhzYsvkKakuqbAPbr6ncxj3LUiJMNeQX9ZADJcqyMsTUnY9fi74KtUsfQT4xhUH9frk3L3RYQjzBu/nuG++TdkNTIGtS1uxcHNJAkUf+T/oWyvtg45Ql2NfejCbFFEv2jZJy/8kTZk9ewWn1XW6+9JfNkWse7xVRuQnn9jMFqsBNFFXu7rZAmwq1NBRJ+ls1yyhLreQFpa3xjIdKjoyB/Mx5ZwZwxhJYlbRM6CExKJt2klYosBYJzKQ4TvVPMMjzRDmhnvVsPzsJAD+vkK/tsKb11OCYsxl7328Hx8mBLaQKiLd9RfPWD4v32dhlJUT/QurBmw9YXIFjnqX8zOlLcg4ANh9CI2hOy1sPZoqM3m14vUZG2t5yPtvTZX2QQQkUe2fB3ew8kgfWfUg6DRiFvC9vHRHOFfLEF0nRi+G0tngQaiveXaWCptV1o380z2FYZIKrsJFvhiT/r/Bu2jZEh5777196b
+X-OriginatorOrg: kalrayinc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7915e7e-0107-406b-83d7-08dcd0d3cf86
+X-MS-Exchange-CrossTenant-AuthSource: PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2024 13:32:11.9350
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8931925d-7620-4a64-b7fe-20afd86363d3
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fHlRDdWRMFOelnautyCU2StIsI1jFtZJbaOvlmW6yHa6UbRzct/5iG4dKUpdkiBZrdNpNQRkR/H9P4J0iLXAZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2580
+Content-Type: text/plain; charset=utf-8
+X-ALTERMIMEV2_out: done
 
-On Thu, Sep 05, 2024 at 10:26:52AM -0700, Charlie Jenkins wrote:
-> On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
-> > On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
-> > > Some applications rely on placing data in free bits addresses allocated
-> > > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> > > address returned by mmap to be less than the 48-bit address space,
-> > > unless the hint address uses more than 47 bits (the 48th bit is reserved
-> > > for the kernel address space).
-> > > 
-> > > The riscv architecture needs a way to similarly restrict the virtual
-> > > address space. On the riscv port of OpenJDK an error is thrown if
-> > > attempted to run on the 57-bit address space, called sv57 [1].  golang
-> > > has a comment that sv57 support is not complete, but there are some
-> > > workarounds to get it to mostly work [2].
+Thank you for your feedback Arnd. In regards to the filename, etc. I
+went with the first route and created a new file called io_copy.c.
+Although, I'm not sure if it's a good idea to create yet another file
+that serves a limited purpose. But I'm a bit afraid to add the
+functions to iomap_copy.c because there is no common consus in the
+architecture code about memcpy_{from,to}io. Some specify it with
+_memcpy_xx, some directly with memcpy_xx, and another bunch uses
+__memcpy_xx. So, if we want to merge it with iomap_copy.c, I would need
+to export the __memcpy_xx symbols for all architectures that don't want
+to use the "generic" memcpy_xx functions for now or rename their given
+implementation to __memcpy_xx, right? But if you think it's better to
+merge the two, I will have another look and modify the code for all
+remaining architectures as well.
 
-I also saw libmozjs crashing with 57-bit address space on x86.
+Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
 
-> > > These applications work on x86 because x86 does an implicit 47-bit
-> > > restriction of mmap() address that contain a hint address that is less
-> > > than 48 bits.
-> > > 
-> > > Instead of implicitly restricting the address space on riscv (or any
-> > > current/future architecture), a flag would allow users to opt-in to this
-> > > behavior rather than opt-out as is done on other architectures. This is
-> > > desirable because it is a small class of applications that do pointer
-> > > masking.
+---
+Changes for v2:
+- Renamed io.c -> io_copy.c
+- Updated flag to 'GENERIC_IO_COPY'
+- Replaced pointer dereferences by 'put_unaligned()'/'get_unaligned()'
+- Replaced '#ifdef CONFIG_64BIT' by 'if(IS_ENABLED(CONFIG_64BIT))'
+- Removed '__raw_{read,write}_native' and replaced by
+  'if(IS_ENABLED(CONFIG_64BIT))' -> '__raw_write{l,q}'
+---
+Julian Vetter (4):
+  Consolidate __memcpy_{to,from}io and __memset_io into a single lib
+  Use generic io memcpy functions on the arm64 architecture
+  Use generic io memcpy functions on the csky architecture
+  Use generic io memcpy functions on the loongarch architecture
 
-You reiterate the argument about "small class of applications". But it
-makes no sense to me.
-
-With full address space by default, this small class of applications is
-going to *broken* unless they would handle RISC-V case specifically.
-
-On other hand, if you limit VA to 128TiB by default (like many
-architectures do[1]) everything would work without intervention.
-And if an app needs wider address space it would get it with hint opt-in,
-because it is required on x86-64 anyway. Again, no RISC-V-specific code.
-
-I see no upside with your approach. Just worse user experience.
-
-[1] See va_high_addr_switch test case in https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/mm/Makefile#n115
+ arch/arm64/Kconfig             |   1 +
+ arch/arm64/kernel/io.c         |  87 ---------------------------
+ arch/csky/Kconfig              |   1 +
+ arch/csky/kernel/Makefile      |   2 +-
+ arch/csky/kernel/io.c          |  91 ----------------------------
+ arch/loongarch/Kconfig         |   1 +
+ arch/loongarch/kernel/Makefile |   2 +-
+ arch/loongarch/kernel/io.c     |  94 -----------------------------
+ lib/Kconfig                    |   3 +
+ lib/Makefile                   |   1 +
+ lib/io_copy.c                  | 107 +++++++++++++++++++++++++++++++++
+ 11 files changed, 116 insertions(+), 274 deletions(-)
+ delete mode 100644 arch/csky/kernel/io.c
+ delete mode 100644 arch/loongarch/kernel/io.c
+ create mode 100644 lib/io_copy.c
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.34.1
+
+
+
+
+

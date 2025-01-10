@@ -1,267 +1,275 @@
-Received: from mail-lj1-f202.google.com (mail-lj1-f202.google.com [209.85.208.202])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03C424B222
-	for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 18:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7CA213E77
+	for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 19:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736534927; cv=none; b=GNHroZZdMitRj1+khFNZp532HeLywJPuarGhCdd8vxgi84vRe7XDOvL3w5oQS/bCFhRqSHS9c+t7T8KJbOG8le5p2dNxRpkHev1SE7YXEJO/JFrV7t8r/dIm8l5UE1Iu+10hGnzqx87vsmsaTThcT5kePGIGzJSiuLcJmJtkeVc=
+	t=1736537468; cv=none; b=Q01kF6Iye4On8J9TLLlvJyCVJf44yRigY8zOqWlrISS3VkQIkYCBF1nAKs1XTp356x3miFs3gvlFQQ+Rj10gW9A07yH23keKkqwaqrDMP2gSuNIlUWAP4QnV7Ir8DCDv2g7XCcWYbW7vEE2rRZXLM2XDlb0V3vs8Wetcutn47EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736534927; c=relaxed/simple;
-	bh=Ua0Eznh6vBIqJokkBKNt1xiE4aA9cS4fZDm05XjqWbo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZUlY9le6QuecnRYBgXkUXun9d2itUtPI0Nev1NEOHjT/cYafQGTL5HgR5fQhhJJ2MfcPBP+7zQXpMxtVVCoMQWY9YK8VM3J2B8ieNFWa9xSNdvLnzkiBeLDjORRlY8bzH5OwwDDAgbtlazX1CEua8YbHGjQzJWbR2rhMsQwBAR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VNRNoxRl; arc=none smtp.client-ip=209.85.208.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1736537468; c=relaxed/simple;
+	bh=cCIVRRQWwHdObE52/2AeeqNAiuegHaviOd3IMjq/QRo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aLcS8R3+gQiSNDADZIauQgbMARFlA0AMBR9b+NRmKUFMaRMGtsM5Ea7u4hJD8yTkSLXGuJbPc2pZUXfNDdJHSwthZBQN5giL11TjGGCCCnZ/ZZMlS6uIWT8oIHAku4iR1nAbqBraU4qGtC4LFcdsM1/wdNQSGFwj6i69TUIGfdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=tSu2E6MA; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VNRNoxRl"
-Received: by mail-lj1-f202.google.com with SMTP id 38308e7fff4ca-301e3d7adceso12192001fa.3
-        for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 10:48:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="tSu2E6MA"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21619108a6bso41589435ad.3
+        for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 11:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736534924; x=1737139724; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGrdWVEeU4Ptbj/O5LlMCmxq+nbCGI8+4U1HKBQ0dew=;
-        b=VNRNoxRlWjGojqIQZWnZDT7vm+h4LccMSkeJfVyIda85F4w+066BvU7urPOalv/Ia3
-         d3X67q8jkBMPIvPU7LVGJ0+P5jgVJvL+GgBZ58BbdPwlsv6nXvoMr8FEVYyxyXFyQEZY
-         BAupIh8JNOlJa7IPzuUFAq43CvT0EfN6Aed6Ldo59cEMIGSA25s7FKrr/3pqhSv2jSw8
-         587CCCOX6ffT3Ihuud5WaRGJmhaO6GQaDzPg8H2G+/E8fyWHp/PvGw/3ToS1wEddO6rz
-         QkSRGxFsHOw6yS1/1d0CeoM1gvilgR1gDmL4HzG/I0OUMVLRHmGshEaqVAQaVPz8WrZe
-         +Y2A==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1736537465; x=1737142265; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T624wPcrhS1JgwTBcPosmdXx4gdcuulJGOQvqM6CtCw=;
+        b=tSu2E6MApWWyRAjxThkZm6dBGIpcVvlkndK1huEUSPlaSuauaq88exVzi50fOJABSo
+         JQ0oPPUa3COfjtA+6kmCOR+cibNzw7HT5j12XuAdIO1UFcelO7Uzsou5ntmkrDakWaJV
+         tD//deniHkeE6jNJxaKe7DcwEA9pLfsvlAjQWllk8xOhSIFRqQPOg2cwnPeNjGPzADEg
+         YMOo7rGGYJRTGu8CkDVyNLA3wtO3r8rTB5wJp4OpoOuppAyBsdMwa0e7NhO6mrgYtQnX
+         Weu1u8Yu+YjpQxpzeBAcPZIbm1inGgEaF+eeQEcxnORM8t5M8jW3a1HZrrVzj/SrFoAj
+         f7Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736534924; x=1737139724;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGrdWVEeU4Ptbj/O5LlMCmxq+nbCGI8+4U1HKBQ0dew=;
-        b=BcWVwGTZ1zFTF53Xxe8rbeY0eEqBptoaEzyOa7Ly3xJjYGgi80VTP4z0V61f69zHMw
-         rF5OWTPcSO10xtS7AnbU+4C5pmCUR9BKIPqwADZ01FxKvmCOw+x5rGI5vT+AERBwr5is
-         b4IkzLaenf7XPgfYrPiOBSbRgDmOas6L4GWO98DhRTI5pchXOYlW7/0CHPHXHn7ubDjT
-         sGVAq9d68B3YqWLL0UsJb+tl2VVJqdVMj3uy/8+ZsDRg+Og7EY7sMkQRSVhx+Y6rbtDS
-         REy8mabgrbNELvm4/keeOQTMy15mD0QLy2uTQefD+sZoP0oLBpCmcWnWAvqmzsv+KOH5
-         +BfA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRYWQVf5voxqZBEtsVFbZiB/cVFDBqqd3y2klwkSIwSTsSn6hzdw2zgYVyQMFkJC78tg8DzVXdYzMg@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIW/yE8ziAbwTzM7wHWBTwcNKcsY96ybROln8bBUA25lA9wR4j
-	xQO8mAiuU06iPCvORCPpdpmhgwhgr5XapMCwJSCrGQcX9lDMplFCJn2Ml+EqxOcLpy0CY6iVSJM
-	8JkXmyJj+oA==
-X-Google-Smtp-Source: AGHT+IEgsXbDoolH8oLFMalWBy0djT9uJM60zMy+Lo0ErgHawFZLEGOSZUiE5P0d6bxzOZZfpK4Vh92Jd6K16A==
-X-Received: from wmrn43.prod.google.com ([2002:a05:600c:502b:b0:434:a9bd:e68c])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4f81:b0:434:f1d5:1453 with SMTP id 5b1f17b1804b1-436e2531ec8mr120237105e9.0.1736534506703;
- Fri, 10 Jan 2025 10:41:46 -0800 (PST)
-Date: Fri, 10 Jan 2025 18:40:53 +0000
-In-Reply-To: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+        d=1e100.net; s=20230601; t=1736537465; x=1737142265;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T624wPcrhS1JgwTBcPosmdXx4gdcuulJGOQvqM6CtCw=;
+        b=TdoyajWS0X/wprRSXAp7uLhr2GlzLFS96vNX/syj89IT7rXFRP2puAiMh9s2N48MKV
+         PEic7NXC/nKMaxW13Q36XcRooPyPe3TWLN7x5Y5vRoox3hTRTTaz2fCbTK/4hv76DkCk
+         eYU9aNv9WzEIlqvKnkNEgGPb5CEvIXU8p7bTenQiR9uSuYCfof7jGqovIuuSD55YzmZc
+         62ag4fkRUoDdEj/d5pqqhnISVBYlUkpiNUrpzvYl0rD8c5BWJqCNSNpxODfPDS2xawJq
+         ed6HXTpTw8Q1fgOFmUCcW3ZNTcXsPvJelgHiuaGH1WvBwn9zMB1ketG3EV91gjArhKmm
+         Er2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXT+tQDNMzMy9c57JmQjJvzIUBGWXU6C8dIYYDLoYCOsbYHQ2Jl2HUeXQw8LOxAWskYyJi3eXjMJj8S@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQzT8KFXWDVhWkLYXmCHXSkzPgOv62b0514f36GZWza+gJgpSd
+	Lfy6jscTamtZDzrGRpZD/w600lopfYCDNQqRRosXZREBGhHzXTJsbTP4nH51hWU=
+X-Gm-Gg: ASbGncveTi1bUFCrNZ1QK5pL1XbwEXw/wH22LcBUTMB2AD1XEgztqa5vxSF8Psh/XeL
+	46nOxn0WJWdxeDH0nkJE5hQYUL4Za+gWGU71L14PbyAWsPmZpAnS/6QrdQzIYp6WXf/UhtNGLPz
+	VHaJ5stwP+PWNvckGKnBs2fYDC9D2qMs8ROLZUFi+6BH3urdTOoTOqIn/dnfuBNb0XW3lQdOZBU
+	wSAtCRZu0dei7PcUrnH5cks2sflOgbil0jsT61BdTwE+bnf1rQi
+X-Google-Smtp-Source: AGHT+IEre0AsdJDUsGl4k/O1aF6vQLIHA3Knu3Spyy4azSMvw1UNUQEJLtptbRCNfCZV9aZHSRvhEg==
+X-Received: by 2002:a17:903:124f:b0:215:83e1:99ff with SMTP id d9443c01a7336-21a83f63f68mr150756545ad.27.1736537464834;
+        Fri, 10 Jan 2025 11:31:04 -0800 (PST)
+Received: from ghost ([2601:647:6700:64d0:4bc7:d274:c14b:fde8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219a94sm16883985ad.129.2025.01.10.11.31.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 11:31:04 -0800 (PST)
+Date: Fri, 10 Jan 2025 11:31:01 -0800
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Jonathan Corbet <corbet@lwn.net>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 00/16] perf tools: Use generic syscall scripts for all
+ archs
+Message-ID: <Z4F1dXQLPGZ3JFI5@ghost>
+References: <20250108-perf_syscalltbl-v6-0-7543b5293098@rivosinc.com>
+ <Z3_ybwWW3QZvJ4V6@x1>
+ <Z4AoFA974kauIJ9T@ghost>
+ <Z4A2Y269Ffo0ERkS@x1>
+ <Z4BEygdXmofWBr0-@x1>
+ <Z4BVK3D7sN-XYg2o@ghost>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
-X-Mailer: b4 0.15-dev
-Message-ID: <20250110-asi-rfc-v2-v2-27-8419288bc805@google.com>
-Subject: [PATCH RFC v2 27/29] mm: asi: Add some mitigations on address space transitions
-From: Brendan Jackman <jackmanb@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Chris Zankel <chris@zankel.net>, 
-	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mike Rapoport <rppt@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-efi@vger.kernel.org, 
-	Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z4BVK3D7sN-XYg2o@ghost>
 
-Here we ASI actually starts becoming a real exploit mitigation,
+On Thu, Jan 09, 2025 at 03:00:59PM -0800, Charlie Jenkins wrote:
+> On Thu, Jan 09, 2025 at 06:51:06PM -0300, Arnaldo Carvalho de Melo wrote:
+> > On Thu, Jan 09, 2025 at 05:49:42PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > BTW this series is already pushed out to perf-tools-next:
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/log/?h=perf-tools-next
+> > 
+> > Hey, now I noticed that with this latest version we see:
+> > 
+> > ⬢ [acme@toolbox perf-tools-next]$ m
+> > make: Entering directory '/home/acme/git/perf-tools-next/tools/perf'
+> >   BUILD:   Doing 'make -j28' parallel build
+> > Warning: Kernel ABI header differences:
+> >   diff -u tools/arch/arm64/include/uapi/asm/unistd.h arch/arm64/include/uapi/asm/unistd.h
+> > 
+> > Auto-detecting system features:
+> > ...                                   libdw: [ on  ]
+> > ...                                   glibc: [ on  ]
+> > ...                                  libbfd: [ on  ]
+> > ...                          libbfd-buildid: [ on  ]
+> > ...                                  libelf: [ on  ]
+> > ...                                 libnuma: [ on  ]
+> > ...                  numa_num_possible_cpus: [ on  ]
+> > ...                                 libperl: [ on  ]
+> > ...                               libpython: [ on  ]
+> > ...                               libcrypto: [ on  ]
+> > ...                               libunwind: [ on  ]
+> > ...                             libcapstone: [ on  ]
+> > ...                               llvm-perf: [ on  ]
+> > ...                                    zlib: [ on  ]
+> > ...                                    lzma: [ on  ]
+> > ...                               get_cpuid: [ on  ]
+> > ...                                     bpf: [ on  ]
+> > ...                                  libaio: [ on  ]
+> > ...                                 libzstd: [ on  ]
+> > 
+> >    /home/acme/git/perf-tools-next/tools/perf/scripts/syscalltbl.sh  --abis common,32,i386 /home/acme/git/perf-tools-next/tools/perf/arch/x86/entry/syscalls/syscall_32.tbl /tmp/build/perf-tools-next/arch/x86/include/generated/asm/syscalls_32.h
+> >    /home/acme/git/perf-tools-next/tools/perf/scripts/syscalltbl.sh  --abis common,64 /home/acme/git/perf-tools-next/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl /tmp/build/perf-tools-next/arch/x86/include/generated/asm/syscalls_64.h
+> >   GEN     /tmp/build/perf-tools-next/common-cmds.h
+> >   GEN     /tmp/build/perf-tools-next/arch/arm64/include/generated/asm/sysreg-defs.h
+> >   PERF_VERSION = 6.13.rc2.gd73982c39183
+> >   GEN     perf-archive
+> >   GEN     perf-iostat
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> > 
+> > 
+> > While with the previous one we would see something like SYSCALLTBL as
+> > the step name, like we have GEN, MKDIR, etc, can you take a look?
+> 
+> Ooh okay I see, the quiet commands were being ignored as-is. We could
+> add the lines to handle this to Makefile.syscalls, but I think the
+> better solution is to move the lines from Makefile.build to
+> Makefile.perf to be more generically available. Here is a patch for
+> that. I also added the comment from the kernel Makefile describing what
+> this does.
+> 
+> From 8dcec7f5d937ede3d33c687573dc2f1654ddc59e Mon Sep 17 00:00:00 2001
+> From: Charlie Jenkins <charlie@rivosinc.com>
+> Date: Thu, 9 Jan 2025 14:36:40 -0800
+> Subject: [PATCH] perf tools: Expose quiet/verbose variables in Makefile.perf
+> 
+> The variables to make builds silent/verbose live inside
+> tools/build/Makefile.build. Move those variables to the top-level
+> Makefile.perf to be generally available.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  tools/build/Makefile.build | 20 --------------------
+>  tools/perf/Makefile.perf   | 37 ++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 36 insertions(+), 21 deletions(-)
+> 
+> diff --git a/tools/build/Makefile.build b/tools/build/Makefile.build
+> index 5fb3fb3d97e0..e710ed67a1b4 100644
+> --- a/tools/build/Makefile.build
+> +++ b/tools/build/Makefile.build
+> @@ -12,26 +12,6 @@
+>  PHONY := __build
+>  __build:
+>  
+> -ifeq ($(V),1)
+> -  quiet =
+> -  Q =
+> -else
+> -  quiet=quiet_
+> -  Q=@
+> -endif
+> -
+> -# If the user is running make -s (silent mode), suppress echoing of commands
+> -# make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
+> -ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> -short-opts := $(firstword -$(MAKEFLAGS))
+> -else
+> -short-opts := $(filter-out --%,$(MAKEFLAGS))
+> -endif
+> -
+> -ifneq ($(findstring s,$(short-opts)),)
+> -  quiet=silent_
+> -endif
+> -
+>  build-dir := $(srctree)/tools/build
+>  
+>  # Define $(fixdep) for dep-cmd function
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index a449d0015536..55d6ce9ea52f 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -161,12 +161,47 @@ export VPATH
+>  SOURCE := $(shell ln -sf $(srctree)/tools/perf $(OUTPUT)/source)
+>  endif
+>  
+> +# Beautify output
+> +# ---------------------------------------------------------------------------
+> +#
+> +# Most of build commands in Kbuild start with "cmd_". You can optionally define
+> +# "quiet_cmd_*". If defined, the short log is printed. Otherwise, no log from
+> +# that command is printed by default.
+> +#
+> +# e.g.)
+> +#    quiet_cmd_depmod = DEPMOD  $(MODLIB)
+> +#          cmd_depmod = $(srctree)/scripts/depmod.sh $(DEPMOD) $(KERNELRELEASE)
+> +#
+> +# A simple variant is to prefix commands with $(Q) - that's useful
+> +# for commands that shall be hidden in non-verbose mode.
+> +#
+> +#    $(Q)$(MAKE) $(build)=scripts/basic
+> +#
+> +# To put more focus on warnings, be less verbose as default
+> +# Use 'make V=1' to see the full commands
+> +
+>  ifeq ($(V),1)
+> +  quiet =
+>    Q =
+>  else
+> -  Q = @
+> +  quiet=quiet_
+> +  Q=@
+>  endif
+>  
+> +# If the user is running make -s (silent mode), suppress echoing of commands
+> +# make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
+> +ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> +short-opts := $(firstword -$(MAKEFLAGS))
+> +else
+> +short-opts := $(filter-out --%,$(MAKEFLAGS))
+> +endif
+> +
+> +ifneq ($(findstring s,$(short-opts)),)
+> +  quiet=silent_
+> +endif
+> +
+> +export quiet Q
+> +
+>  # Do not use make's built-in rules
+>  # (this improves performance and avoids hard-to-debug behaviour);
+>  MAKEFLAGS += -r
+> -- 
+> 2.34.1
+> 
+> 
+> - Charlie
 
-On CPUs with L1TF, flush L1D when the ASI data taints say so.
+Let me know how you want to handle this, I can send this out as a
+separate patch if that's better.
 
-On all CPUs, do some general branch predictor clearing
-whenever the control taints say so.
+- Charlie
 
-This policy is very much just a starting point for discussion.
-Primarily it's a vague gesture at the fact that there is leeway
-in how ASI is used: it can be used to target CPU-specific issues (as
-is the case for L1TF here), or it can be used as a fairly broad
-mitigation (asi_maybe_flush_control() mitigates several known
-Spectre-style attacks and very likely also some unknown ones).
-
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
- arch/x86/include/asm/nospec-branch.h |  2 ++
- arch/x86/kvm/vmx/vmx.c               |  1 +
- arch/x86/lib/l1tf.c                  |  2 ++
- arch/x86/lib/retpoline.S             | 10 ++++++++++
- arch/x86/mm/asi.c                    | 29 +++++++++++++++++++++--------
- 5 files changed, 36 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index 96b410b1d4e841eb02f53a4691ee794ceee4ad2c..4582fb1fb42f6fd226534012d969ed13085e943a 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -614,6 +614,8 @@ static __always_inline void mds_idle_clear_cpu_buffers(void)
- 		mds_clear_cpu_buffers();
- }
- 
-+extern void fill_return_buffer(void);
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_X86_NOSPEC_BRANCH_H_ */
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index b1a02f27b3abce0ef6ac448b66bef2c653a52eef..a532783caaea97291cd92a2e2cac617f74f76c7e 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6635,6 +6635,7 @@ int vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
- 	return ret;
- }
- 
-+/* Must be reentrant, for use by vmx_post_asi_enter. */
- static noinstr void vmx_l1d_flush(struct kvm_vcpu *vcpu)
- {
- 	/*
-diff --git a/arch/x86/lib/l1tf.c b/arch/x86/lib/l1tf.c
-index c474f18ae331c8dfa7a029c457dd3cf75bebf808..ffe1c3d0ef43ff8f1781f2e446aed041f4ce3179 100644
---- a/arch/x86/lib/l1tf.c
-+++ b/arch/x86/lib/l1tf.c
-@@ -46,6 +46,8 @@ EXPORT_SYMBOL(l1tf_flush_setup);
-  *  - may or may not work on other CPUs.
-  *
-  * Don't call unless l1tf_flush_setup() has returned successfully.
-+ *
-+ * Must be reentrant, for use by ASI.
-  */
- noinstr void l1tf_flush(void)
- {
-diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
-index 391059b2c6fbc4a571f0582c7c4654147a930cef..6d126fff6bf839889086fe21464d8af07316d7e5 100644
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -396,3 +396,13 @@ SYM_CODE_END(__x86_return_thunk)
- EXPORT_SYMBOL(__x86_return_thunk)
- 
- #endif /* CONFIG_MITIGATION_RETHUNK */
-+
-+.pushsection .noinstr.text, "ax"
-+SYM_CODE_START(fill_return_buffer)
-+	UNWIND_HINT_FUNC
-+	ENDBR
-+	__FILL_RETURN_BUFFER(%_ASM_AX,RSB_CLEAR_LOOPS)
-+	RET
-+SYM_CODE_END(fill_return_buffer)
-+__EXPORT_THUNK(fill_return_buffer)
-+.popsection
-diff --git a/arch/x86/mm/asi.c b/arch/x86/mm/asi.c
-index 1e9dc568e79e8686a4dbf47f765f2c2535d025ec..f10f6614b26148e5ba423d8a44f640674573ee40 100644
---- a/arch/x86/mm/asi.c
-+++ b/arch/x86/mm/asi.c
-@@ -10,6 +10,7 @@
- 
- #include <asm/cmdline.h>
- #include <asm/cpufeature.h>
-+#include <asm/l1tf.h>
- #include <asm/page.h>
- #include <asm/pgalloc.h>
- #include <asm/mmu_context.h>
-@@ -38,6 +39,8 @@ struct asi __asi_global_nonsensitive = {
- 	.mm = &init_mm,
- };
- 
-+static bool do_l1tf_flush __ro_after_init;
-+
- static inline bool asi_class_id_valid(enum asi_class_id class_id)
- {
- 	return class_id >= 0 && class_id < ASI_MAX_NUM_CLASSES;
-@@ -361,6 +364,15 @@ static int __init asi_global_init(void)
- 	asi_clone_pgd(asi_global_nonsensitive_pgd, init_mm.pgd,
- 		      VMEMMAP_START + (1UL << PGDIR_SHIFT));
- 
-+	if (boot_cpu_has_bug(X86_BUG_L1TF)) {
-+		int err = l1tf_flush_setup();
-+
-+		if (err)
-+			pr_warn("Failed to setup L1TF flushing for ASI (%pe)", ERR_PTR(err));
-+		else
-+			do_l1tf_flush = true;
-+	}
-+
- #ifdef CONFIG_PM_SLEEP
- 	register_syscore_ops(&asi_syscore_ops);
- #endif
-@@ -512,10 +524,12 @@ static __always_inline void maybe_flush_control(struct asi *next_asi)
- 	if (!taints)
- 		return;
- 
--	/*
--	 * This is where we'll do the actual dirty work of clearing uarch state.
--	 * For now we just pretend, clear the taints.
--	 */
-+	/* Clear normal indirect branch predictions, if we haven't */
-+	if (cpu_feature_enabled(X86_FEATURE_IBPB))
-+		__wrmsr(MSR_IA32_PRED_CMD, PRED_CMD_IBPB, 0);
-+
-+	fill_return_buffer();
-+
- 	this_cpu_and(asi_taints, ~ASI_TAINTS_CONTROL_MASK);
- }
- 
-@@ -536,10 +550,9 @@ static __always_inline void maybe_flush_data(struct asi *next_asi)
- 	if (!taints)
- 		return;
- 
--	/*
--	 * This is where we'll do the actual dirty work of clearing uarch state.
--	 * For now we just pretend, clear the taints.
--	 */
-+	if (do_l1tf_flush)
-+		l1tf_flush();
-+
- 	this_cpu_and(asi_taints, ~ASI_TAINTS_DATA_MASK);
- }
- 
-
--- 
-2.47.1.613.gc27f4b7a9f-goog
-
+> 
+> > 
+> > All is out there in perf-tools-next.
+> > 
+> > - Arnaldo

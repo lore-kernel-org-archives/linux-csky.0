@@ -1,392 +1,198 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3157C18CBF2
-	for <linux-csky@vger.kernel.org>; Tue,  4 Mar 2025 07:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082F024C667
+	for <linux-csky@vger.kernel.org>; Wed,  5 Mar 2025 13:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741071915; cv=none; b=hvfJsNqvrG6c0KS5k4LMmRRYf2xDJOeQNS8WOwmia3NnNuy6MrDUFP3c5F3lk1nAAmLGWY60kzHiaJSCe6dLHhXQWIXP3cJQa3T17dL/iha9Ybc07efe+Xq/IHZoIz/yozPTEqGHR82jxi/VaPZASRAUjIC8IDzstNMudxpt27Y=
+	t=1741180363; cv=none; b=hqCYkc+h4ZxsVrnPDIZN8kyqMBOsOiID6fqCC9SfTxshHrCEADwpr87zxRIjEgKkeXbTBI9RbPzuwqtAeQgyC4u6mPOsrXQUdZjEYGh0EkYn931mD25BsPNs67Y7fQ1XGa250jO9/APsYYsmY6tQYaqi4ihvnPhM5FjfA30IN4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741071915; c=relaxed/simple;
-	bh=gJwcbqZGmwr0Xx2FUFlQA5X6ML1A5+VhLhXfaq+gc/s=;
+	s=arc-20240116; t=1741180363; c=relaxed/simple;
+	bh=niOkZ3yknjy6O15SgZEu1bTRkBCDN86QkzY45J5nUU4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=kLM1dqmHOV+ipGNekS9id1TD967SJS/8b1/M32w2aEc0tq11PvgDS5ZUJK+6B8UXdm2omysttvJEEFm7CiAvg/NdgEgnHjh0HRZ0X+qQfWpIoiI7cnVhfjFyjXk1CTcMV2tQqRWOVdeabp5VL7vFX06BBX9PFxaW0eEwnjJ+iXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U7bzAOd0; arc=none smtp.client-ip=209.85.214.170
+	 To:Cc:Content-Type; b=DVxISFedINmvHoSK9T0A87Ea7KI91svMJ+Smfn9WyO48jQ2eJsa6AhoSaTo9XCXRZwb/FaKnwvGmyVU5lYTinY1EqNERec5TE7jk2B0x9ZGX5pYL+CMstlKlpB1TT/M5+ezOmjCzyR7uUL7nmuz5+a+Sr5cCGWred2jZ14cRXOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bQnGzWp1; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U7bzAOd0"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-223722270b7so82515ad.1
-        for <linux-csky@vger.kernel.org>; Mon, 03 Mar 2025 23:05:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bQnGzWp1"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4750a85a0ddso210581cf.1
+        for <linux-csky@vger.kernel.org>; Wed, 05 Mar 2025 05:12:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741071911; x=1741676711; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L3JvR8FxNRL+cWCmstDYOjM+Qki5xIGZoD4vNYEAWLw=;
-        b=U7bzAOd0AQa74JJ3SGVVTJzXPJyVqvp27CzsWD04jaskwKZ5AexurnixVrrbl9JXza
-         QnUxwVU449m/e7/DwAC20CL1utyVBTgdH28WD9VFyirUTT08xQ8MEVK4qFkd3d+fPhgq
-         /XW+y1/f+z7FdsCxLwvmrTPQoXR6RLvZM35gr6Ig7pUfKlzuwTzVKPdQMQ9GD8i+5etm
-         zj1764q9jm6PDIMho0t2ebxmtzrR4vT6c8KFREccn7fPDJo2ii9JOgH7mLOTaTV4Vayd
-         MRPFLh/o6UnYe9M8X5XEq588kuzYxr3bmvRGx+ERceS7MyXYo/N9M2ws5oGuFaApcKZT
-         ZMhQ==
+        d=google.com; s=20230601; t=1741180358; x=1741785158; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iOdrgfnKDo0adnIeWCzGbGdt+czcdG3OGWY151PLQj4=;
+        b=bQnGzWp1S5Lnz9b7S+X9iWyT1enphmYxyeyJwj5VVMYJnObuLGzhvMkG9uBL3XQ78b
+         Zo3JrmBI4ko2x+OO+iOQpQBqfBgjcS472wlJfVY900sBa3almRwnfbIdcWBcdXKwsieo
+         7k0oWhWF732whbIyH4GNsIMNo9o7b80aqltg+jU0O65LkiOSm3+oSVpH3YoRptaQnRij
+         NWBaZfEqos2npnT6v52bnbTpKCy19r6KPYKzleLdok7ZrEkR9SnnqDT5T6ABVfKQ+2Iz
+         NKN7Fajx9PPEYnKJdu5XQV9dDUNkJGUpIwD5ACAowRHjrTqUH64V59DpzL+Y1S7JzlY8
+         4rYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741071911; x=1741676711;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L3JvR8FxNRL+cWCmstDYOjM+Qki5xIGZoD4vNYEAWLw=;
-        b=E1v0idiGL6hLAi25qgN68noSBAl3QIrOQRAHls3EnYVLEeLNvsPgRgbl18DCf9uIlJ
-         0X5XKVJFazDEvHYZEbi9SmQA0CioVU3dFMUkvvv7l763jcFGuYMj78UtshRuGTzlOipK
-         pDSpH37GoJCMIAdJ/jTq6QF7xwF2yf9+Rdt438me/CV/ycdUSBlfdA9Esap2KPZxmgRH
-         WLr9nsvAQYOoPSJ4c4x/dIWy9eYPUGV3C9qZmF309w5sW84uw+DsOc+GGXlpe6hzNh4E
-         0GbYsL94+u8VKb0nNKa18/Uq4++59WHAClUyHu4ye7EcnEx2EL3j7cO0TH857avjmvxY
-         tobg==
-X-Forwarded-Encrypted: i=1; AJvYcCWInRvRWyhpXlFa7UvCr4GOXCg+7kF2dxS2P2kO2ZGIgQ04X+MgUVEoYg+6f1iFASuhYafkTs6JCFJW@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDjzLaj6S8J2NHGNN5mEmwaXHFfQCVFVzH9j8eh7iQ+UGHEoNn
-	fXaO4n6TSkVcZfU+2KueF7Yxb3R4lLmQlV7p3HjzokVRNicmFH7Nzl/aJWE3iyIVRHKALebkmbI
-	0J2eJjDjWdFB6Ov+TeGHu7qhhA69UdQCw4piP
-X-Gm-Gg: ASbGnctsMPyVj9RFpGOu2guRs4b8PusfoMNn1XI64qzsjCluBrm2dAdvf1BYMCFd5Ob
-	vheN4T3TZ1blvFqqZ97udAYD43hOh0hkcEE53RJ4HLGQCmiGeva5JoT2gIjQEHvYbGS8HjLHbQD
-	21RhFVciGA0+oKzT2DZ/dhQc47suI=
-X-Google-Smtp-Source: AGHT+IEupcRqM8Vq6ECdiZG2rhJ+zCRym7mbbPqUL8mmzRnQN6EceWTSYAPo5ifpC6pvsOBjVYM/bwyz/L3Nbkb46ok=
-X-Received: by 2002:a17:903:44d:b0:215:7ced:9d66 with SMTP id
- d9443c01a7336-223d9e003f4mr1996995ad.10.1741071910980; Mon, 03 Mar 2025
- 23:05:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741180358; x=1741785158;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iOdrgfnKDo0adnIeWCzGbGdt+czcdG3OGWY151PLQj4=;
+        b=fFfzFDnTVy+iBgMxxYbv3MYM/nAXUeW+1YTk6ZrKptJ8E4aXSirTr2nv4fgOaSOcCm
+         b2FpcpLp2BLbLCnSnXxj2cf74dRBTcogmZPhWQaC09O1dVuiRu3QBzX0utVFTSHroE9J
+         SJuE0hgZDCGSJIE3vJ6c7N14voOcSjM6LSt8Y/MViFfixgnYUXHDWjZgwqZZva0V+7bb
+         CvidQIo94Rd7hRowzj11uLff2NLP1BOn5xn/ahVxexTB336TdHFLYERGxDky2eTjVroh
+         +AeKPzoiDOukK3AwDaWi+/qB5vRbOWyahQFAJq6RirFo3T/TmheWXw81TG1S9Hpndstx
+         zLIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUwnuxKRwo2HMgHnZtLJTTmDbGrf5Sv8IBdcY0QyJ32Kk8RozePtGy/y06E5rf374rXCfDmS9IfPEm@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7fvOxpaKVWooRrzpG2GDj4qrubIf8pr2RoE44Fc7CtFdrC1QV
+	P8QsxQOs4ZoOd3nMNgGEN3FjLwk6IlXKSlyCVs4bPgQPoyVUI0hB1N38xuImEw/ic9BPqvCb056
+	OgCS29mvgtaZiBKGdgorhwDrJvzqNOfeqRry3
+X-Gm-Gg: ASbGncussomEY3RwNV9NXf4TIUcuOnxg7Au3Zu28JhhCTV7rM2y/CIt0e9XLi4crr5q
+	yWJZ091EjQJmTUppGtaeP4NaV6ZTwtePGtqvEICTB+XCWBesbRSdCz5D/bKbKRjypSKZ/AyMVJn
+	QGuwJ7MRqUDpVmSp/1lL1kXe6foY2mLyDVgczz8Bb6wBZrACsxO+2uxvEx
+X-Google-Smtp-Source: AGHT+IFIn6b7M1PNu9NZZ9KBzOuRO4deZPOixhL9M73rMvQkDHUtfUtYPha+8DdwHlmaLHcT+urAybKKpNAnQK1YFdU=
+X-Received: by 2002:a05:622a:110b:b0:471:f560:27dc with SMTP id
+ d75a77b69052e-4750cae2127mr2406081cf.27.1741180357471; Wed, 05 Mar 2025
+ 05:12:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250304050305.901167-1-irogers@google.com>
-In-Reply-To: <20250304050305.901167-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 3 Mar 2025 23:04:59 -0800
-X-Gm-Features: AQ5f1Joy4icIYuqqbyMmGmOFRwOYLjNzkqxRwWJFEbT-XwnCdO9iuvX_ulJO_CQ
-Message-ID: <CAP-5=fXFoawZnRD22iSev5FQnx3oyFOhrPf=gZbk84qGtr9NFA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] perf: Support multiple system call tables in the build
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
+References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+ <20250110-asi-rfc-v2-v2-2-8419288bc805@google.com> <Z8K2B3WJoICVbDj3@kernel.org>
+In-Reply-To: <Z8K2B3WJoICVbDj3@kernel.org>
+From: Brendan Jackman <jackmanb@google.com>
+Date: Wed, 5 Mar 2025 14:12:25 +0100
+X-Gm-Features: AQ5f1JrEWoe__i5J-gwzMxiuWZ9pJYk4XLPMWAQuPYUSu5vOhjZQNejm22RSyYE
+Message-ID: <CA+i-1C06Sunj0BmFON=MbWBK6ZDt_=K4P3BHChRBYyxXqEkQ2g@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 02/29] x86: Create CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
+	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Chris Zankel <chris@zankel.net>, 
+	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, guoren <guoren@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-riscv@lists.infradead.org, 
-	Arnd Bergmann <arnd@arndb.de>
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-efi@vger.kernel.org, 
+	Junaid Shahid <junaids@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 3, 2025 at 9:04=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
-e:
+On Sat, Mar 01, 2025 at 09:23:51AM +0200, Mike Rapoport wrote:
+> Hi Brendan,
 >
-> This work builds on the clean up of system call tables and removal of
-> libaudit by Charlie Jenkins <charlie@rivosinc.com>.
+> On Fri, Jan 10, 2025 at 06:40:28PM +0000, Brendan Jackman wrote:
+> > Currently a nop config. Keeping as a separate commit for easy review of
+> > the boring bits. Later commits will use and enable this new config.
+> >
+> > This config is only added for non-UML x86_64 as other architectures do
+> > not yet have pending implementations. It also has somewhat artificial
+> > dependencies on !PARAVIRT and !KASAN which are explained in the Kconfig
+> > file.
+> >
+> > Co-developed-by: Junaid Shahid <junaids@google.com>
+> > Signed-off-by: Junaid Shahid <junaids@google.com>
+> > Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> > ---
+> >  arch/alpha/include/asm/Kbuild      |  1 +
+> >  arch/arc/include/asm/Kbuild        |  1 +
+> >  arch/arm/include/asm/Kbuild        |  1 +
+> >  arch/arm64/include/asm/Kbuild      |  1 +
+> >  arch/csky/include/asm/Kbuild       |  1 +
+> >  arch/hexagon/include/asm/Kbuild    |  1 +
+> >  arch/loongarch/include/asm/Kbuild  |  3 +++
+> >  arch/m68k/include/asm/Kbuild       |  1 +
+> >  arch/microblaze/include/asm/Kbuild |  1 +
+> >  arch/mips/include/asm/Kbuild       |  1 +
+> >  arch/nios2/include/asm/Kbuild      |  1 +
+> >  arch/openrisc/include/asm/Kbuild   |  1 +
+> >  arch/parisc/include/asm/Kbuild     |  1 +
+> >  arch/powerpc/include/asm/Kbuild    |  1 +
+> >  arch/riscv/include/asm/Kbuild      |  1 +
+> >  arch/s390/include/asm/Kbuild       |  1 +
+> >  arch/sh/include/asm/Kbuild         |  1 +
+> >  arch/sparc/include/asm/Kbuild      |  1 +
+> >  arch/um/include/asm/Kbuild         |  2 +-
+> >  arch/x86/Kconfig                   | 14 ++++++++++++++
+> >  arch/xtensa/include/asm/Kbuild     |  1 +
+> >  include/asm-generic/asi.h          |  5 +++++
+> >  22 files changed, 41 insertions(+), 1 deletion(-)
 >
-> The system call table in perf trace is used to map system call numbers
-> to names and vice versa. Prior to these changes, a single table
-> matching the perf binary's build was present. The table would be
-> incorrect if tracing say a 32-bit binary from a 64-bit version of
-> perf, the names and numbers wouldn't match.
->
-> Change the build so that a single system call file is built and the
-> potentially multiple tables are identifiable from the ELF machine type
-> of the process being examined. To determine the ELF machine type, the
-> executable's maps are searched and the associated DSOs ELF headers are
-> read. When this fails and when live, /proc/pid/exe's ELF header is
-> read. Fallback to using the perf's binary type when unknown.
->
-> Remove some runtime types used by the system call tables and make
-> equivalents generated at build time.
->
-> v4: Add reading the e_machine from the thread's maps dsos, only read
->     from /proc/pid/exe on failure and when live as requested by
->     Namhyung. Add patches to add dso comments and remove unused
->     dso_data variables that are unused without libunwind.
+> I don't think this all is needed. You can put asi.h with stubs used outside
+> of arch/x86 in include/linux and save you the hassle of updating every
+> architecture.
 
-This has allowed `perf trace record` (not just perf trace) to work
-with binaries with an e_machine that doesn't match that of the perf
-binary. An example:
-
-Before:
-```
-$ file ./a.out
-a.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV),
-dynamically linked, interpreter /lib/ld-linux.so.2
-, BuildID[sha1]=3D3fcd28f85a27a3108941661a91dbc675c06868f9, for
-GNU/Linux 3.2.0, not stripped
-$ perf trace record -- ./a.out
 ...
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.059 MB perf.data (60 samples) ]
-$ perf trace -i perf.data
-         ? (         ): a.out/914959  ... [continued]: munmap())
-                                    =3D 0
-    0.019 ( 0.001 ms): a.out/914959 recvfrom(ubuf: 0x2, size:
-4160602092, flags: DONTROUTE|CTRUNC|TRUNC|DONTWAIT|EOR|>
-    0.034 ( 0.002 ms): a.out/914959 lgetxattr(name: 0x2000, value:
-0x3, size: 34)                         =3D 4160352256
-    0.043 ( 0.002 ms): a.out/914959 dup2(oldfd: -134405940, newfd: 4)
-                                   =3D -1 ENOENT>
-    0.047 ( 0.009 ms): a.out/914959 preadv(fd: 4294967196, vec:
-0xf7fce47f, vlen: 557056, pos_h: 4160602092) =3D 3
-    0.058 ( 0.004 ms): a.out/914959 lgetxattr(name: 0x1b5c2, value:
-0x1, size: 2)                         =3D 4160237568
-    0.063 ( 0.000 ms): a.out/914959 lstat(filename: 0x3, statbuf:
-0x1b5c2)                                =3D 0
-    0.071 ( 0.006 ms): a.out/914959 preadv(fd: 4294967196, vec:
-0xf7f9f3e0, vlen: 557056, pos_h: 4160602092) =3D 3
-    0.078 ( 0.001 ms): a.out/914959 close(fd: 3)
-                                   =3D 512
-    0.082 ( 0.002 ms): a.out/914959 lgetxattr(name: 0x23f8d0, value:
-0x1, size: 2050)                     =3D 4157878272
-    0.084 ( 0.006 ms): a.out/914959 lgetxattr(pathname: 0xf7d66000,
-name: 0x18b000, value: 0x5, size: 2066) =3D 4158021>
-    0.091 ( 0.002 ms): a.out/914959 lgetxattr(pathname: 0xf7ef1000,
-name: 0x85000, value: 0x1, size: 2066) =3D 41596395>
-    0.093 ( 0.003 ms): a.out/914959 lgetxattr(pathname: 0xf7f76000,
-name: 0x3000, value: 0x3, size: 2066) =3D 4160184320
-    0.099 ( 0.002 ms): a.out/914959 lgetxattr(pathname: 0xf7f79000,
-name: 0x98d0, value: 0x3, size: 50)   =3D 4160196608
-    0.106 ( 0.000 ms): a.out/914959 lstat(filename: 0x3)
-                                   =3D 0
-    0.112 ( 0.001 ms): a.out/914959 mq_timedreceive(mqdes: 4287979520,
-u_msg_ptr: 0xf7f9fbb0, u_msg_prio: 0xf7fdbfec,>
-    0.113 ( 0.000 ms): a.out/914959 mkdirat(dfd: -134609624, pathname:
-0xf7fdc910, mode: IFSOCK|ISUID|IRUSR|IWGRP|0xf>
-    0.114 ( 0.000 ms): a.out/914959 process_vm_writev(pid: -134609620,
-lvec: 0xc, liovcnt: 4160604432, rvec: 0xf7fa04>
-    0.154 ( 0.003 ms): a.out/914959 capget(header: 4160184320,
-dataptr: 8192)                             =3D 0
-    0.158 ( 0.002 ms): a.out/914959 capget(header: 1448792064,
-dataptr: 4096)                             =3D 0
-    0.163 ( 0.002 ms): a.out/914959 capget(header: 4160593920,
-dataptr: 8192)                             =3D 0
-    0.171 ( 0.001 ms): a.out/914959 getxattr(pathname: 0x3, name:
-0xff955fe4, value: 0xf7f77e14, size: 1) =3D 0
-    0.179 ( 0.005 ms): a.out/914959 fchmod(fd: -134729728, mode:
-IFLNK|IFIFO|ISGID|IRWXU|IWOTH|0x10000)   =3D 0
-    0.193 ( 0.008 ms): a.out/914959 preadv(fd: 4294967196, vec:
-0x565ac008, pos_h: 4160192020)            =3D 3
-    0.202 ( 0.007 ms): a.out/914959 close(fd: 3)
-                                   =3D 1436
-    0.209 ( 0.017 ms): a.out/914959 stat(filename: 0x1, statbuf:
-0xff9552fc)                              =3D 1436
-    0.234 (1000.083 ms): a.out/914959 readlinkat(buf: 0xff955224,
-bufsiz: 4287975964)                       =3D 0
-```
 
-After:
-```
-$ file ./a.out
-a.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV),
-dynamically linked, interpreter /lib/ld-linux.so.2
-, BuildID[sha1]=3D3fcd28f85a27a3108941661a91dbc675c06868f9, for
-GNU/Linux 3.2.0, not stripped
-$ perf trace record -- ./a.out
+> If you expect other architectures might implement ASI the config would better
+> fit into init/Kconfig or mm/Kconfig and in arch/x86/Kconfig will define
+> ARCH_HAS_MITIGATION_ADDRESS_SPACE_ISOLATION.
+
 ...
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.059 MB perf.data (60 samples) ]
-$ perf trace -i perf.data
-        ? (         ): a.out/908002  ... [continued]: execve())
-                                   =3D 0
-    0.019 ( 0.001 ms): a.out/908002 brk()
-                                   =3D 0x57680000
-    0.041 ( 0.003 ms): a.out/908002 access(filename: 0xf7f0b0cc, mode:
-R)                                 =3D -1 ENOENT>
-    0.046 ( 0.008 ms): a.out/908002 openat(dfd: CWD, filename:
-0xf7f0747f, flags: RDONLY|CLOEXEC|LARGEFILE) =3D 3
-    0.055 ( 0.001 ms): a.out/908002 statx(dfd: 3, filename:
-0xf7f080f6, flags: NO_AUTOMOUNT|EMPTY_PATH, mask: TYPE|MO>
-    0.061 ( 0.000 ms): a.out/908002 close(fd: 3)
-                                   =3D 0
-    0.070 ( 0.006 ms): a.out/908002 openat(dfd: CWD, filename:
-0xf7ed83e0, flags: RDONLY|CLOEXEC|LARGEFILE) =3D 3
-    0.077 ( 0.001 ms): a.out/908002 read(fd: 3, buf: 0xff80ea50,
-count: 512)                              =3D 512
-    0.079 ( 0.001 ms): a.out/908002 statx(dfd: 3, filename:
-0xf7f080f6, flags: NO_AUTOMOUNT|EMPTY_PATH, mask: TYPE|MO>
-    0.104 ( 0.000 ms): a.out/908002 close(fd: 3)
-                                   =3D 0
-    0.112 ( 0.000 ms): a.out/908002 set_tid_address(tidptr:
-0xf7ed9528)                                   =3D 908002 (a>
-    0.113 ( 0.000 ms): a.out/908002 set_robust_list(head: 0xf7ed952c,
-len: 12)                            =3D 0 (swappe>
-    0.114 ( 0.001 ms): a.out/908002 rseq(rseq: 0xf7ed9960, rseq_len:
-32, sig: 1392848979)                 =3D 0 (swappe>
-    0.153 ( 0.003 ms): a.out/908002 mprotect(start: 0xf7eaf000, len:
-8192, prot: READ)                    =3D 0
-    0.158 ( 0.002 ms): a.out/908002 mprotect(start: 0x565ef000, len:
-4096, prot: READ)                    =3D 0
-    0.163 ( 0.002 ms): a.out/908002 mprotect(start: 0xf7f13000, len:
-8192, prot: READ)                    =3D 0
-    0.177 ( 0.005 ms): a.out/908002 munmap(addr: 0xf7ebc000, len:
-112066)                                 =3D 0
-    0.189 ( 0.009 ms): a.out/908002 openat(dfd: CWD, filename:
-0x565ee008)                                =3D 3
-    0.198 ( 0.006 ms): a.out/908002 read(fd: 3, buf: 0xff80e56c,
-count: 4096)                             =3D 1436
-    0.205 ( 0.017 ms): a.out/908002 write(fd: 1, buf: , count: 1436)
-                                   =3D 1436
-    0.229 (1000.201 ms): a.out/908002 clock_nanosleep(rqtp:
-0xff80e494, rmtp: 0xff80e48c)                   =3D 0
- 1000.486 (         ): a.out/908002 exit_group()
-```
 
-Thanks,
-Ian
+> > +++ b/include/asm-generic/asi.h
+> > @@ -0,0 +1,5 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __ASM_GENERIC_ASI_H
+> > +#define __ASM_GENERIC_ASI_H
+> > +
+> > +#endif
+>
+> IMHO it should be include/linux/asi.h, with something like
+>
+> #infdef __LINUX_ASI_H
+> #define __LINUX_ASI_H
+>
+> #ifdef CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
+>
+> #include <asm/asi.h>
+>
+> #else /* CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION */
+>
+> /* stubs for functions used outside arch/ */
+>
+> #endif /* CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION */
+>
+> #endif /* __LINUX_ASI_H */
 
-> v3: Add Charlie's reviewed-by tags. Incorporate feedback from Arnd
->     Bergmann <arnd@arndb.de> on additional optional column and MIPS
->     system call numbering. Rebase past Namhyung's global system call
->     statistics and add comments that they don't yet support an
->     e_machine other than EM_HOST.
->
-> v2: Change the 1 element cache for the last table as suggested by
->     Howard Chu, add Howard's reviewed-by tags.
->     Add a comment and apology to Charlie for not doing better in
->     guiding:
->     https://lore.kernel.org/all/20250114-perf_syscall_arch_runtime-v1-1-5=
-b304e408e11@rivosinc.com/
->     After discussion on v1 and he agreed this patch series would be
->     the better direction.
->
-> Ian Rogers (11):
->   perf dso: Move libunwind dso_data variables into ifdef
->   perf dso: kernel-doc for enum dso_binary_type
->   perf syscalltbl: Remove syscall_table.h
->   perf trace: Reorganize syscalls
->   perf syscalltbl: Remove struct syscalltbl
->   perf dso: Add support for reading the e_machine type for a dso
->   perf thread: Add support for reading the e_machine type for a thread
->   perf trace beauty: Add syscalltbl.sh generating all system call tables
->   perf syscalltbl: Use lookup table containing multiple architectures
->   perf build: Remove Makefile.syscalls
->   perf syscalltbl: Mask off ABI type for MIPS system calls
->
->  tools/perf/Makefile.perf                      |  10 +-
->  tools/perf/arch/alpha/entry/syscalls/Kbuild   |   2 -
->  .../alpha/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/alpha/include/syscall_table.h |   2 -
->  tools/perf/arch/arc/entry/syscalls/Kbuild     |   2 -
->  .../arch/arc/entry/syscalls/Makefile.syscalls |   3 -
->  tools/perf/arch/arc/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm/entry/syscalls/Kbuild     |   4 -
->  .../arch/arm/entry/syscalls/Makefile.syscalls |   2 -
->  tools/perf/arch/arm/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm64/entry/syscalls/Kbuild   |   3 -
->  .../arm64/entry/syscalls/Makefile.syscalls    |   6 -
->  tools/perf/arch/arm64/include/syscall_table.h |   8 -
->  tools/perf/arch/csky/entry/syscalls/Kbuild    |   2 -
->  .../csky/entry/syscalls/Makefile.syscalls     |   3 -
->  tools/perf/arch/csky/include/syscall_table.h  |   2 -
->  .../perf/arch/loongarch/entry/syscalls/Kbuild |   2 -
->  .../entry/syscalls/Makefile.syscalls          |   3 -
->  .../arch/loongarch/include/syscall_table.h    |   2 -
->  tools/perf/arch/mips/entry/syscalls/Kbuild    |   2 -
->  .../mips/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/mips/include/syscall_table.h  |   2 -
->  tools/perf/arch/parisc/entry/syscalls/Kbuild  |   3 -
->  .../parisc/entry/syscalls/Makefile.syscalls   |   6 -
->  .../perf/arch/parisc/include/syscall_table.h  |   8 -
->  tools/perf/arch/powerpc/entry/syscalls/Kbuild |   3 -
->  .../powerpc/entry/syscalls/Makefile.syscalls  |   6 -
->  .../perf/arch/powerpc/include/syscall_table.h |   8 -
->  tools/perf/arch/riscv/entry/syscalls/Kbuild   |   2 -
->  .../riscv/entry/syscalls/Makefile.syscalls    |   4 -
->  tools/perf/arch/riscv/include/syscall_table.h |   8 -
->  tools/perf/arch/s390/entry/syscalls/Kbuild    |   2 -
->  .../s390/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/s390/include/syscall_table.h  |   2 -
->  tools/perf/arch/sh/entry/syscalls/Kbuild      |   2 -
->  .../arch/sh/entry/syscalls/Makefile.syscalls  |   4 -
->  tools/perf/arch/sh/include/syscall_table.h    |   2 -
->  tools/perf/arch/sparc/entry/syscalls/Kbuild   |   3 -
->  .../sparc/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/sparc/include/syscall_table.h |   8 -
->  tools/perf/arch/x86/entry/syscalls/Kbuild     |   3 -
->  .../arch/x86/entry/syscalls/Makefile.syscalls |   6 -
->  tools/perf/arch/x86/include/syscall_table.h   |   8 -
->  tools/perf/arch/xtensa/entry/syscalls/Kbuild  |   2 -
->  .../xtensa/entry/syscalls/Makefile.syscalls   |   4 -
->  .../perf/arch/xtensa/include/syscall_table.h  |   2 -
->  tools/perf/builtin-trace.c                    | 290 +++++++++++-------
->  tools/perf/scripts/Makefile.syscalls          |  61 ----
->  tools/perf/scripts/syscalltbl.sh              |  86 ------
->  tools/perf/trace/beauty/syscalltbl.sh         | 274 +++++++++++++++++
->  tools/perf/util/dso.c                         |  54 ++++
->  tools/perf/util/dso.h                         |  56 ++++
->  tools/perf/util/syscalltbl.c                  | 148 ++++-----
->  tools/perf/util/syscalltbl.h                  |  22 +-
->  tools/perf/util/thread.c                      |  80 +++++
->  tools/perf/util/thread.h                      |  14 +-
->  56 files changed, 756 insertions(+), 509 deletions(-)
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/alpha/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arm/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/arm64/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/csky/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Makefile.sys=
-calls
->  delete mode 100644 tools/perf/arch/loongarch/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/mips/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Makefile.syscal=
-ls
->  delete mode 100644 tools/perf/arch/parisc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Makefile.sysca=
-lls
->  delete mode 100644 tools/perf/arch/powerpc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/riscv/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/s390/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/sh/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/sparc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/x86/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Makefile.syscal=
-ls
->  delete mode 100644 tools/perf/arch/xtensa/include/syscall_table.h
->  delete mode 100644 tools/perf/scripts/Makefile.syscalls
->  delete mode 100755 tools/perf/scripts/syscalltbl.sh
->  create mode 100755 tools/perf/trace/beauty/syscalltbl.sh
->
-> --
-> 2.48.1.711.g2feabab25a-goog
->
+Thanks Mike! That does indeed look way tidier. I'll try to adopt it.

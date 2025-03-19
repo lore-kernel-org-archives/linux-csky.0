@@ -1,57 +1,57 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFD625178A
-	for <linux-csky@vger.kernel.org>; Wed, 19 Mar 2025 05:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F472528F8
+	for <linux-csky@vger.kernel.org>; Wed, 19 Mar 2025 05:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742360894; cv=none; b=bZHymSY48oRrFkJyM8vpnEidnyBCXO1TH+s3zvQ0GURFDyyJNyydYEpBmp9Sm8YoQxgmFUck5Ym3gbiLsnDCvWsL5atKurlCfS+j39zHY/DPAAOZ8BjwpNrvaW9n4CIuMZsO/YtjHt3fp+XnzC5AZzVVJJiVgoto1hmsG98pvlw=
+	t=1742360898; cv=none; b=kTsLHy63vDITBl89g0D6XrimmUG2K4J+SWPYr3hyFr+4uABSfN+2qaLbIRnAqNXPGeadrQpB2cBfOVNBgT5QY4c0KHZWshXHT/8nxd1zvArvME4QHJ/RKx34EQyBjGXjmuJy9ZxEQR+kAq5xUKh1eKPtgFKy58wJe3eE1dynewo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742360894; c=relaxed/simple;
-	bh=3uu7CB6A8C3yWHCi12pQmud6FUTrY1STEruRjCdoigM=;
+	s=arc-20240116; t=1742360898; c=relaxed/simple;
+	bh=tSOlzIg1yXOwUyw6zWCMnGwqLZhjjUkDbEkMOcp7FiY=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=qA3eghNMNE47qj7hGb6hu2she/+sTqSb3TxbiaICtJIKLpTGpCCbSEkvlBa56Z0bkk1f2WMCntGzAXYAPa6t/MIrhw1YSACvEhRXq3gHoJGacMy/hzJy1jsT58vgV5weSf/M8CRXnPz6co+N7VyxJjkTuLljSwyzOplB5YcEO6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0SeleJNv; arc=none smtp.client-ip=209.85.128.202
+	 To:Content-Type; b=dS9pwMtdbNatOAKdzSFsFsuCDQ41/CXdb+GZxcUQdWFFVgo7FE/TFvFg3+f3WJ/wFx+RAsL2T6kucikIERuxK9ZCPD/zgNY0NYu9zLurB02uaj6zR66zT1/GuVYxY51R5FUTVcNLmxkyglS1tlbD6+yMTjklAwjvJFkF29JF+Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s714uWxu; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0SeleJNv"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6fed889e353so102181067b3.3
-        for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 22:08:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s714uWxu"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6f27dd44f86so86920397b3.0
+        for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 22:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742360891; x=1742965691; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1742360896; x=1742965696; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ncdSM+lbXMb9xe65qVg6II6RWpGKh15ceN/q8SVr8Hw=;
-        b=0SeleJNvxxWnXXSrOY/Xgfr6Zax5pF4XwRqQRai5S1/gVjgztBe1yxwoB0q2d6Ef00
-         pedwSaPGfjf18aydB51XZQ7zxDgfOGXSC7L++reIRvqm75+9oqrylEcdZ3Pr+8AH8dTR
-         MzgD9o/IkscTFHUCjGiTLmKYBjaNrlSVmV2hkmhvNfAV57Sifmy2Zjt2KdtpApMyogl6
-         ogaHKTPiVsaJidy7hHRB6e6pYSRp5+5gVJ2bugvtJpgiQNdUnPN32OZQtRfC/HMESj5B
-         e/uETKpygwoC2osce+jkhe5NiHJJhymcDVDXkcQ/j6WdALh7pBWf7QYD+mAOI7PyvY0K
-         HtXg==
+        bh=y38GESo485gGDIFJ1xMbGn6kWCzBk3/syJLY+zfYrVg=;
+        b=s714uWxuhF3pTlhV44GX3YgG/HhG8jtQv+CQJQokWHeM++q0E5estCCtU2madufD53
+         SZMwWHm0DRiARV3I1U556Y3TLAiHwfB3Rs4fAg83bIuwhOnBjYIUbX8MkDM2FIomdT5R
+         63kFygiCzpda8COv65Lf3dTw515mN6wJzMAnQ0M/ihvnaHtZBa70+iiT5Cfnlit+QS2y
+         jcTqw+w8ZPkwhzWFJuF7VBGhTx4dA7NM+7dOWquoBqdApGiTM5mRSzsu9ZNyf3i91I5U
+         nOOjQT6tGoMMcg+FuA+gq6Q+hdGti89OwRoOOU9OvcoCI3SwPFkMDSN1dYppy2Ijkm2Y
+         /kBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742360891; x=1742965691;
+        d=1e100.net; s=20230601; t=1742360896; x=1742965696;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncdSM+lbXMb9xe65qVg6II6RWpGKh15ceN/q8SVr8Hw=;
-        b=kdxLKrw8pj9QVRT25CHuT2oz5fOlrDs+Cp5WIsH85ti6BR+2N1CQPMB2k1w+U1Eq/Y
-         RYTbKuxSEkwWEcnWwQXqkh0sO0YITdOG/wSfsBcUoWzBlQrTqz+e/56MU6u4mpQvicb5
-         8WXrypBg8ptd53A38IYEVj1zLyJQ92XUeisDb0uFqOd5TchZ3zXWUWfEyPVFY1wTDXUX
-         4iMkJUSVGMUJYNNxm4AZZNH/xO8wpIhDS2UiYd0ilUamODV1AUMD8xKTh49OyJGHBYlz
-         4wiL4wqngMOk8NGT6ldmyO7k69yzJKDgEN7SMJK4nDmOMMLkli4GMjb4/LTxfpOKu0ts
-         WRoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5NSnFRYehkoobalwifzVr63MbVnNkeZjDvVzGN3tUzdD0f4ZnjcAOLH3qQpRItIxjU4QyuBb3vsvI@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa6UB3gMZpeoeLfrYnQkpvDd6sT3Np6AMyyfurREVnc9sBMyQK
-	wLG0uzXvtptSQZCUQzZrPkz+Pie7wHeqK5ByPq0Pl9gGhLlMLvNAn4E+plAEYxlYklhciLPpY7c
-	h7v7tDA==
-X-Google-Smtp-Source: AGHT+IE7t62G3L9y/1w7Zr4bPbVHFfW94O8jbx7xn/oloQNZ3Xii0SOFszp47Hze8CWLQYL2UBnV/ggmaf2X
+        bh=y38GESo485gGDIFJ1xMbGn6kWCzBk3/syJLY+zfYrVg=;
+        b=taChiUWEZa/DUNfHYJcAPomUsnz+lOp0shMbqWwXY0D0KdJksE0IzmtHrGMO35W/A2
+         6NBJ2u5SVYCJGNAG1sbS0lPP1QPRmU+BEmpr0u1WaeCGI7oB3JAvlRA5ac2RxElONdc2
+         pTDVvjVLAQrWdpYgAgh/UOjKL8zL3gyjSm8xN5gJICR2ln14RSQobAoa5xe3KaFIm0Dy
+         g7q+OotUYsqh7qyX1kFZ0MzQ7bl10kbs0dpCBTufl4JV/RI0jzTsEnGw0SAdpjOmS1Nd
+         ao5y0zcZCDwAaRbZxOMmTvXT1twL8NM2AxFntuysmbhmfNhIsJ5Qf2/dUanF9txe4vBO
+         83Dw==
+X-Forwarded-Encrypted: i=1; AJvYcCXa+bnEcmLScQtVCju7km2DsSW3pW9XeVeZg024uBkirtoFOttFo8L3WIMAmg2ewnqEfcRSxQhRw40E@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym+XSFcqpOb1X5ChM9JTZGv10bKvpBhFHrNOm4YII+/w0BWLYy
+	hXwVFlRcP+cypG4YfEJc1S9C84F5SNrhqHvSGCgB6GdgFS4XrFJUQXlZhoqyDi7gSbDcB5K/J5c
+	KRGyxAw==
+X-Google-Smtp-Source: AGHT+IFPFakwCyr0uM1/sz8X8s9dtQflbQjZm9fJ42RkwL6er5xIYEKy4XS6bbEhodJ8Ew/JRCn4+wa1XjLm
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:8a11:10b5:af90:6031])
- (user=irogers job=sendgmr) by 2002:a05:690c:6501:b0:6ff:1fac:c4fd with SMTP
- id 00721157ae682-7009bf39905mr12697b3.2.1742360891193; Tue, 18 Mar 2025
- 22:08:11 -0700 (PDT)
-Date: Tue, 18 Mar 2025 22:07:38 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:d8e:b0:6fe:e77c:7741 with SMTP id
+ 00721157ae682-7009c211810mr6127b3.8.1742360896116; Tue, 18 Mar 2025 22:08:16
+ -0700 (PDT)
+Date: Tue, 18 Mar 2025 22:07:40 -0700
 In-Reply-To: <20250319050741.269828-1-irogers@google.com>
-Message-Id: <20250319050741.269828-12-irogers@google.com>
+Message-Id: <20250319050741.269828-14-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250319050741.269828-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.rc1.451.g8f38331e32-goog
-Subject: [PATCH v7 11/14] perf syscalltbl: Mask off ABI type for MIPS system calls
+Subject: [PATCH v7 13/14] perf trace: Fix BTF memory leak
 From: Ian Rogers <irogers@google.com>
 To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -80,36 +80,28 @@ To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 
-Arnd Bergmann described that MIPS system calls don't necessarily start
-from 0 as an ABI prefix is applied:
-https://lore.kernel.org/lkml/8ed7dfb2-1e4d-4aa4-a04b-0397a89365d1@app.fastmail.com/
-When decoding the "id" (aka system call number) for MIPS ignore values
-greater-than 1000.
+Add missing btf__free in trace__exit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/syscalltbl.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/perf/builtin-trace.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/perf/util/syscalltbl.c b/tools/perf/util/syscalltbl.c
-index 4e6018e2e0b3..67a8ec10e9e4 100644
---- a/tools/perf/util/syscalltbl.c
-+++ b/tools/perf/util/syscalltbl.c
-@@ -46,6 +46,14 @@ const char *syscalltbl__name(int e_machine, int id)
- {
- 	const struct syscalltbl *table = find_table(e_machine);
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index a5f31472980b..1d4ad5d19b10 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -5339,6 +5339,10 @@ static void trace__exit(struct trace *trace)
+ 		zfree(&trace->syscalls.table);
+ 	}
+ 	zfree(&trace->perfconfig_events);
++#ifdef HAVE_LIBBPF_SUPPORT
++	btf__free(trace->btf);
++	trace->btf = NULL;
++#endif
+ }
  
-+	if (e_machine == EM_MIPS && id > 1000) {
-+		/*
-+		 * MIPS may encode the N32/64/O32 type in the high part of
-+		 * syscall number. Mask this off if present. See the values of
-+		 * __NR_N32_Linux, __NR_64_Linux, __NR_O32_Linux and __NR_Linux.
-+		 */
-+		id = id % 1000;
-+	}
- 	if (table && id >= 0 && id < table->num_to_name_len)
- 		return table->num_to_name[id];
- 	return NULL;
+ #ifdef HAVE_BPF_SKEL
 -- 
 2.49.0.rc1.451.g8f38331e32-goog
 

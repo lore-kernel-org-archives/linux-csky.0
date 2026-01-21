@@ -1,53 +1,53 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B6A44E050
-	for <linux-csky@vger.kernel.org>; Tue, 20 Jan 2026 19:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1DE244665
+	for <linux-csky@vger.kernel.org>; Wed, 21 Jan 2026 02:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768937868; cv=none; b=OfgP1OkelivSO5xYom3FE6H6+K9oNtBtOxDpvq+q2FeU5tOEI/pjep7dHESY4n+WpS2zaRRZKFBU41Xk/RSBqr6mxumhsX4l5gDDQyhYGPb9c/k8CQpuPApguaJZEWX98TFeyWm9if/VSNBMHU2uBdx//n3j7MIdSdK7ekW54zM=
+	t=1768961863; cv=none; b=gcqEwudinDIanfzgTKYliQDWMxeRIoFaHuae45varUpiIlpjA8urlo5kvNz0wvORoC5mJibrQ1zb5/LPNMVFC9Vu37WYDYqppr3KKZ1xUpAeL6AtoemK3EirPKnIki4XLTYQAGLGZz0RIMrlpmauXyzROfny+QUdsEIBk1Slb9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768937868; c=relaxed/simple;
-	bh=xRX3c8/jJWu7kXR4SMTMSE7D+MsWKpvJrh83qCFH1YQ=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=Dy+aExOEAutpMrJBkQe4NYpDYFU1QevSlxFiQPqz5YE7QlKM9WoDXgbqMwM0OfsGW84xtBPzyLv4+Noe39OSgKQPTuuop7Q4bfFLT+QNIj3GJiN1DPI5SJUIepksF/Ejv2FtVcgwWs6Trd4kVAZwZFGcceqg0ljgwgpljEEk6mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lxdBMJuk; arc=none smtp.client-ip=74.125.82.74
+	s=arc-20240116; t=1768961863; c=relaxed/simple;
+	bh=cksDpaaSOHP4dHmC9iILRRvmDN9k5CYu60rMp5127xo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=BCDiTtJA4gTRVcl6wQQ/fnMFPYL2hluJnHiWOma1Ng2sYca8uiZyaHYjIeTofFYg+WwIvFLSU/NkLaK7iSjr5hjwYuvkO1gLz444gRGsFWiVtwXIXJIIkb5cFKzAeRSSiJMuLrSjeoq132n/ojnlspl+p5dNRqu2T5aE7y0KZeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HruEHcA2; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lxdBMJuk"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-121b1cb8377so9323283c88.0
-        for <linux-csky@vger.kernel.org>; Tue, 20 Jan 2026 11:37:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HruEHcA2"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b70d8095daso624540eec.1
+        for <linux-csky@vger.kernel.org>; Tue, 20 Jan 2026 18:17:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768937862; x=1769542662; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1768961860; x=1769566660; darn=vger.kernel.org;
         h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=G4PXsjOGmmF0tp8XVeqAaq0yeQLCr/0MZyVOC/9kIQY=;
-        b=lxdBMJukZ0lhqAfZwiOYdJ2SEzONeIp8CFe4yM5ZUDtDIUDX3VW63+KbCyczj4tT6y
-         IINUH5j/ERXFPg01Awdeq+araaQq8Az9MZK9jOxdedGLxpZZp5zlG6PHUe8EniK0uEwW
-         ReQalEJlm/ugOz7JojZatVhQPZsc9de97hDMHV1cKCj4MKXToEQJ9xQuTCG0dY9JZ0s7
-         nmxOnO6OxH1gqnPYpdtnzP6mnkG6n5/2p7H/ji2OAt9bmUfl3oCIRF3Tit85kGeYagFM
-         Wozu+eQwiBti8C5HRr1JVFAAoW6r+SKeGQdoYptCUYlk9UgEbvT1w4QPrG6RbLrkfmLO
-         jiaQ==
+        bh=1KtlT1K2oWdKUb2onAeC4KkqX9C8HDRXf3/BK/XtjGw=;
+        b=HruEHcA2Tk7xiXPwBBWC7VCKpYHYEHiWWOKPWGQGpouOQ6tIUAytyFEetp4SYNoHyW
+         wAm62nP1vzV/4v1SAawMP9XigT32eMNpGhA7GQ4l7wIAm9nCEJ2Ih14oxH/xF3lbjqMe
+         BQqZxQlTfb5hQdINqsQVAiPWnlt98ALeAQqevKgxL+pzPeO2kdRnpqrFCh2bf9qe3Zy/
+         yIwIqDbZWE1Cak9JtMVSbLMvhhDDyK2kMWmz6oFUi49X0/BSwiAlU2ICSjMWe2sWuxNs
+         trJ01SKvf/JvVI/EIPAMS/J28c//SFPM4htLXVwJ5cnuSZeUAxoueJcu5LH8yv40NgOz
+         ygnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768937862; x=1769542662;
+        d=1e100.net; s=20230601; t=1768961860; x=1769566660;
         h=to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=G4PXsjOGmmF0tp8XVeqAaq0yeQLCr/0MZyVOC/9kIQY=;
-        b=DIwGNL6y6FWTT4BqhUCKXD565ocSCymwr5hsijAdanGY88v461SUMU8ywOWNvfBPR8
-         lHfKmW41LtOP/igu9ARQdmAX0YU+TbuPtEbzsaDZtiqQym/IJTJxC/3K224RRVtETYqn
-         v3bIZ+wj0jECLLrRZITQ9iOei4bNvttUr4Zjsg5jNp21aLL5MJZ3laUtsgckVh5M0S44
-         PiNkwXi2AHEPKke/AYgImx0L6q7Mh5NriZhTz78xXijFASiJ3bA4uQCt72NL8+7ATZ5x
-         197JiEp2tYXIBMsT8cYB+MACqbo05v+MkgM20UQtKextnLi2vPOFKroBgskGNw5cVuQi
-         3Ptw==
-X-Forwarded-Encrypted: i=1; AJvYcCXKrXgLL9xIDtkR1lLhmY2OMuXi36CH5WgK68fWAoVfKGx1dmf0tQ0xwq5yg0S2KkkIieHq99QrdQzq@vger.kernel.org
-X-Gm-Message-State: AOJu0YziVVGn878e3I4DK746ngqWLD9MG31c5D++xM5MQTgfE0rChCU0
-	kgoraeFXeasQ75M32y0bCZmn9qHUKTQbeDV54KZ6mpvKwCB1sv+20ulYotrTWgmQX586OED8B4j
-	RAOZYf8s6wQ==
-X-Received: from dlbcj30.prod.google.com ([2002:a05:7022:699e:b0:11b:b756:3e9b])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:4394:b0:11c:ec20:ea1f
- with SMTP id a92af1059eb24-1246aabebb7mr2429584c88.33.1768937862357; Tue, 20
- Jan 2026 11:37:42 -0800 (PST)
-Date: Tue, 20 Jan 2026 11:37:37 -0800
+        bh=1KtlT1K2oWdKUb2onAeC4KkqX9C8HDRXf3/BK/XtjGw=;
+        b=ULHNVVfGhBLV2pe4y7IGFWN2Do2WO7yinVyCnwZwGBpQApzCpPv4GUFX+xYUkAtvcx
+         gP90lD0Hllm/nZJwdARxHyMQk9kSthb+rVJfZdgc8U/rayZTIYiizIKD5sNuNX4AjjZO
+         Bryr+KmvVovpOebXgi/ysR7DYo9dCZ0NE3LloMwC2neLs74oEHNtTKYClwWPa3FiuDsW
+         Ita4X70qIfxD9LSIzT8/vybnC99ELxlU8O0lbNOL9YxKr6m/l7PfV/0l4bIyzVBabcMw
+         W/hIbt+3dKdNYOcXAcme0psa/DNVvE/2UeMiZFrslB9Am2acefnENmTCF2Z36ZXAHd5v
+         W03w==
+X-Forwarded-Encrypted: i=1; AJvYcCWB1JuwGJR7EBDXfMqasItuOU63+JuVg1Ms0tTYEWq2U5JrvZQF2onW0/KYkaSbAUwGEuvyZOcq68oq@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGzg3i92Ci8GQ7BEx62R1vcLv3lR1OUC3jNnA+lkTunYgRI+LQ
+	WNL+dPDKgk5v1qS46T8pOL+vDRu4EpFT8Axq4SblcYOgRk+ktEgchykAeGoSeUG+JubB+XWqXtQ
+	OJuag93HZBg==
+X-Received: from dlbeg7.prod.google.com ([2002:a05:7022:f87:b0:120:5f59:867])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:3d0d:b0:2a4:3593:dde0
+ with SMTP id 5a478bee46e88-2b6b46e7cf6mr11117283eec.13.1768961860027; Tue, 20
+ Jan 2026 18:17:40 -0800 (PST)
+Date: Tue, 20 Jan 2026 18:17:35 -0800
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -55,8 +55,8 @@ List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260120193737.3513656-1-irogers@google.com>
-Subject: [PATCH v1] perf regs: Refactor use of arch__sample_reg_masks to perf_reg_name
+Message-ID: <20260121021735.3625244-1-irogers@google.com>
+Subject: [PATCH v2] perf regs: Refactor use of arch__sample_reg_masks to perf_reg_name
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
@@ -90,6 +90,9 @@ declarations.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
+v2: Correct the setting of reg mask for registers that need >1 bit set
+    like XMMs.
+
 The idea for this patch came up in conversation with Dapeng Mi to
 avoid additional functions and tables for x86 APX support:
 https://lore.kernel.org/lkml/CAP-5=fWOsvAXuu8qx0tk9q8j8BoXPMJB3Gxto+iu6wf06i4cVA@mail.gmail.com/
@@ -105,15 +108,15 @@ https://lore.kernel.org/lkml/20260117052849.2205545-1-irogers@google.com/
  tools/perf/arch/csky/util/perf_regs.c         |   9 --
  tools/perf/arch/loongarch/util/perf_regs.c    |   9 --
  tools/perf/arch/mips/util/perf_regs.c         |   9 --
- tools/perf/arch/powerpc/util/perf_regs.c      |  68 -----------
+ tools/perf/arch/powerpc/util/perf_regs.c      |  68 ----------
  tools/perf/arch/riscv/util/perf_regs.c        |   9 --
  tools/perf/arch/s390/util/perf_regs.c         |   9 --
- tools/perf/arch/x86/util/perf_regs.c          |  47 --------
+ tools/perf/arch/x86/util/perf_regs.c          |  47 -------
  .../util/arm64-frame-pointer-unwind-support.c |   3 +-
- tools/perf/util/parse-regs-options.c          | 114 +++++++++++-------
+ tools/perf/util/parse-regs-options.c          | 116 +++++++++++-------
  tools/perf/util/perf_regs.c                   |   9 --
  tools/perf/util/perf_regs.h                   |  12 --
- 14 files changed, 79 insertions(+), 287 deletions(-)
+ 14 files changed, 81 insertions(+), 287 deletions(-)
 
 diff --git a/tools/perf/arch/arm/util/perf_regs.c b/tools/perf/arch/arm/util/perf_regs.c
 index f94a0210c7b7..03a5bc0cf64c 100644
@@ -520,10 +523,10 @@ index 958afe8b821e..858ce2b01812 100644
  {
  	struct regs_dump *regs;
 diff --git a/tools/perf/util/parse-regs-options.c b/tools/perf/util/parse-regs-options.c
-index cda1c620968e..d3a429f2477f 100644
+index cda1c620968e..c0d0ef9fd495 100644
 --- a/tools/perf/util/parse-regs-options.c
 +++ b/tools/perf/util/parse-regs-options.c
-@@ -5,15 +5,52 @@
+@@ -5,15 +5,54 @@
  #include <string.h>
  #include <stdio.h>
  #include "util/debug.h"
@@ -551,8 +554,10 @@ index cda1c620968e..d3a429f2477f 100644
 +	fputc('\n', fp);
 +}
 +
-+static int name_to_perf_reg(const char *to_match, uint64_t mask)
++static uint64_t name_to_perf_reg_mask(const char *to_match, uint64_t mask)
 +{
++	uint64_t reg_mask = 0;
++
 +	for (int reg = 0; reg < 64; reg++) {
 +		const char *name;
 +
@@ -564,9 +569,9 @@ index cda1c620968e..d3a429f2477f 100644
 +			continue;
 +
 +		if (!strcasecmp(to_match, name))
-+			return reg;
++			reg_mask |= 1ULL << reg;
 +	}
-+	return -1;
++	return reg_mask;
 +}
 +
  static int
@@ -577,7 +582,7 @@ index cda1c620968e..d3a429f2477f 100644
  	char *s, *os = NULL, *p;
  	int ret = -1;
  	uint64_t mask;
-@@ -27,50 +64,41 @@ __parse_regs(const struct option *opt, const char *str, int unset, bool intr)
+@@ -27,50 +66,41 @@ __parse_regs(const struct option *opt, const char *str, int unset, bool intr)
  	if (*mode)
  		return -1;
  
@@ -627,7 +632,7 @@ index cda1c620968e..d3a429f2477f 100644
 +	if (!str)
 +		return -1;
 +
-+	mask = intr ? arch__intr_reg_mask(): arch__user_reg_mask();
++	mask = intr ? arch__intr_reg_mask() : arch__user_reg_mask();
 +
 +	/* because str is read-only */
 +	s = os = strdup(str);
@@ -635,7 +640,7 @@ index cda1c620968e..d3a429f2477f 100644
 +		return -1;
 +
 +	for (;;) {
-+		int reg;
++		uint64_t reg_mask;
 +
 +		p = strchr(s, ',');
 +		if (p)
@@ -645,14 +650,14 @@ index cda1c620968e..d3a429f2477f 100644
 +			list_perf_regs(stderr, mask);
 +			goto error;
 +		}
-+		reg = name_to_perf_reg(s, mask);
-+		if (reg < 0) {
++
++		reg_mask = name_to_perf_reg_mask(s, mask);
++		if (reg_mask == 0) {
 +			ui__warning("Unknown register \"%s\", check man page or run \"perf record %s?\"\n",
 +				s, intr ? "-I" : "--user-regs=");
 +			goto error;
  		}
-+
-+		*mode |= 1ULL << reg;
++		*mode |= reg_mask;
 +
 +		if (!p)
 +			break;

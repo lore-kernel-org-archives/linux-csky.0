@@ -1,54 +1,54 @@
 Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE18B34F27C
-	for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 21:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F0E33A9CB
+	for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 21:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769117740; cv=none; b=cZAtWWUPLQ59oBrUqmhYg0SCUdKfuPro38KVlybj76uox/U6oeUlncj5pSdeSonjTeqY0nOT21sfr/g2DaV/wvThHYULSiZqmGrw88QCef7Hps791T09HiBV7lPrnkhTRZtrIDyDK02ZwVsMH762CrVcgpux+XPK+uztkyzTrSU=
+	t=1769117742; cv=none; b=AU4PWTG7BohpPOG8233o7lU26L/A7pOUvHRy4lm7vutA+oVj/GfJJpY0W4bHuhlmEhDSWE5Se1572nHgBNuo/IpjVxhDvkABRRwzwejtOg7on6UsDuGd3GGcp5iAKAtRM/4lrx22x4eFCjf+K5bxRGWE4uiYHKLykD/F5zh7R2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769117740; c=relaxed/simple;
-	bh=ANN7VbZ/Xm6UtamlT5mlRTMZ4rnilmOIpmNJZRsm4WY=;
+	s=arc-20240116; t=1769117742; c=relaxed/simple;
+	bh=KR5+2EshErmuRybWcBELHd/O8khmGf6P5Bg86ngz38E=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=ULZ1GHlUeUlLRPq7/8YNjg1I34J666UlwYlUXSvIkGtx8Dwp/TT6ftXq7oxE92n84o0d7ShrOqqCie0RRGiaQQOQFPNumTGfpxGSuB03XpSJTlWWmje8/Pc2/EZZUNtClo2SVxbkZc3Wssto0Y30/n9pHqOn8UkesrLQp5z+ybg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yjP30E4F; arc=none smtp.client-ip=74.125.82.201
+	 To:Content-Type; b=RnvD6Btbz13Y5DeA6UFFDqgks67vPGFhGv1k1bQLRy7m33G+l7pMVc6yeamQIYtuEiQmrUi2oeA5W/iImquR0GFkdScJirVSkT9ynwA6OSvIFkNU5G8pqQMvrDWvv15xFdEVPthkYVzmzgCfTYLnmElZlrtyeI/2w1E8XEmDsqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ptx4KyC9; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yjP30E4F"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b7174ab5faso6513783eec.1
-        for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 13:35:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ptx4KyC9"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b72a9a9715so4557325eec.1
+        for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 13:35:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769117727; x=1769722527; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1769117735; x=1769722535; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LBuhE4G4GBsctT6JHyOVnLTy18pSFx2hMEt8LFslTxA=;
-        b=yjP30E4FemFDUS5/KQ5Y8AUCx/pFuUCiBPLmG/D0BK2Z6qSkudyTrEBJTxOcqt/DbX
-         kWOll5CIGN60KmBjPkad5rrSSKd51v8Lp4iIxb9LrVmkA0rRfZ2J43tYfzn8OSqJGBdx
-         89o/f6ppM3JH3+RQ3wKkREbFM9nv14efkMr57GNmP3P78flHrKP1fJv6t1fSjnjmf2yz
-         3DUd06e4EGlUWGkMftcNB9QKCN+nuk1Lr4jCf0IQ7bgz4wrP+0Q4ElGsqM5KmkXUxyOP
-         10M1oRsU34+zTv76hrniRIgLd4aDel1yp39jUTTFbRLHNNnTDGa5OY1bjwW4SCkOGeGK
-         CPnQ==
+        bh=LJvCENf9OUao4NjSk9nvAVIfxbnn+tkq0I5XRhSJkfA=;
+        b=ptx4KyC9YqbKKN1hWD02roKtoCjpmDJotFIn0Y9KpzRtS9nTBDqmAiXR+JgcE6vKmO
+         XP2i6cBjvLIhgXxAcRciXknUDpGvM5oEZNF1dEWVB/IUwlJuCDnOIH8J8+dXmwQkWeb/
+         8HXg5nyP3sf7BbHdurmrT4h+wAndulYmrbzEUkVP55xJV4+OnDd5c84WwxEPTUT1FpwF
+         H/pTgLrBayTf5OlcJvv0gdZ0pRFAXDaM/TKJzrseASLicwiAkI243jkzmQBiG3v1NQ10
+         er8CsWnwd8D69vO56w0dfrgwMbMn1IN7yv88ay+Zx+n98JrvUfDK0qxoHuoBV2QkG6sd
+         Cy+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769117727; x=1769722527;
+        d=1e100.net; s=20230601; t=1769117735; x=1769722535;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LBuhE4G4GBsctT6JHyOVnLTy18pSFx2hMEt8LFslTxA=;
-        b=ofqRiOdYwkXR/vEjxMAZiQscDzzuHg02sAZ+M2vTiTluM4ILatPwtBEXkMBhICoBIa
-         9td7UBbvooOm7pQ2LU7xfGCS4koRVaYbgZlTYBaTCbEFOG9GNiPMlm+Qc+jAqiK48Qk1
-         cCvwgJNG4UXxG4MvT/SAIFaJ/pXh8R/9+Vk5FKx2xTHYwa5cAhJF9223G+Xw34Dy+cWB
-         91T63H5VFXtW6gZaa1pkAoqRxl7oa9Y+r+BuvrZG/e4lrRPIOkz2T3mIIBEVFqv7RK6g
-         CCspB/vVZN6OteOey7ZbFdL9hAFU1c2GkicIt838PIBkZ9r5xA7KdmBWaSWdTg/IpAH3
-         xhbw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBvFKB8wKri+IG1x6OQk0k4nV7fpAdLf47sds5uzJQOvY0EeVkms1eh+XJo04knQcon7zdGIXLGVcD@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPF7nIY40TG9zzdNgD+gqPPpsV25T9RrXKbzZtf9GVY0QwSwHW
-	Jrz4igJURJ2WO3VVtBB+Z5cS+amlo1eWlTjrXmeGuAxVKfurm+mTdoDVekSTAVjD+sz1/lUnUrX
-	f3oTSU7yS+A==
-X-Received: from dycro21.prod.google.com ([2002:a05:693c:2b15:b0:2b7:880:7a40])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:6ca8:b0:2ac:1e9f:a0ed
- with SMTP id 5a478bee46e88-2b739b7437cmr522257eec.25.1769117726697; Thu, 22
- Jan 2026 13:35:26 -0800 (PST)
-Date: Thu, 22 Jan 2026 13:35:06 -0800
+        bh=LJvCENf9OUao4NjSk9nvAVIfxbnn+tkq0I5XRhSJkfA=;
+        b=ZUcQhm2C93HTmarh0noQupW5sWorXSgiqQZ75WstH4sCtiXz6dJJZng7ZGJch3lTZr
+         PHoL9PRZUzw95RkXXfZnydV06HgY9Bt9k8bIxAhwESFbAR1+4R3Yuyia67av2fObS+qC
+         QDy0FC0TibnQKMW50XR+DHFGshm4yMf57Jkhpa9jZTUsUpm6GANtmvsf+hXdHtgXiRTf
+         0EM56gyQIQ4IOPDXImjJTGtDR6Y8Jgrc1mOOdCOaooAuKVXrNsauuESSyP9ksBwqksox
+         ZzDvj23mP80LMxrk4HLz4Nerk2ZmVoj5yUbwAGPlyvfl7f2yuGravmvYzB0UPPaKv2TQ
+         TGzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWddiEWhMKLFcYBeqRQZw3GwnmNnNVrtJ9D85PHLDvJiHTFWg4yvMirQeVNV+uHWkUGIrJ72dE9ekBN@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdN/Fk8mQGLu3DmUZhYqIbr7M1fLGjZEJQeLwe7xR7ytOsF2+S
+	mkSrERr3cTsBuoZqdGg0s0btJ6iFr2wBZDLDfZHn9TQbmDe1dui7FFOt2FweyJbUqk7/jnxJVI3
+	m82SpkjV9Ww==
+X-Received: from dybdr40.prod.google.com ([2002:a05:7300:b2a8:b0:2ab:9e42:f552])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:5707:b0:2ae:55ac:3ff6
+ with SMTP id 5a478bee46e88-2b739964db9mr421136eec.1.1769117735061; Thu, 22
+ Jan 2026 13:35:35 -0800 (PST)
+Date: Thu, 22 Jan 2026 13:35:10 -0800
 In-Reply-To: <20260122213516.671089-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260122213516.671089-1-irogers@google.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260122213516.671089-3-irogers@google.com>
-Subject: [PATCH v3 02/12] perf annotate: Fix args leak of map_symbol
+Message-ID: <20260122213516.671089-7-irogers@google.com>
+Subject: [PATCH v3 06/12] perf disasm: Constify use of struct ins
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -82,375 +82,267 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-map_symbol__exit needs calling on an annotate_args.ms, however, rather
-than introduce proper reference count handling to symbol__annotate
-just switch to passing the map_symbol pointer parameter around, making
-the puts the caller's responsibility.
-
-Fix a number of cases to ensure the map in a map_symbol has a
-reference count increment and add the then necessary map_symbol_exits.
+The struct ins holds variables that are read but not written, except
+during some initialization. Change most uses to be for a "const struct
+ins *" version to capture this immutability. So the x86__instructions
+can be const pre-sort it and make the sorted variable true.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
-Fixes: 56e144fe9826 ("perf mem_info: Add and use map_symbol__exit and addr_map_symbol__exit")
 ---
- .../arch/loongarch/annotate/instructions.c    | 14 ++++----
- tools/perf/arch/s390/annotate/instructions.c  | 11 +++---
- tools/perf/util/annotate.c                    |  2 +-
- tools/perf/util/capstone.c                    | 14 ++++----
- tools/perf/util/disasm.c                      | 36 ++++++++++---------
- tools/perf/util/disasm.h                      |  2 +-
- tools/perf/util/llvm.c                        |  6 ++--
- 7 files changed, 47 insertions(+), 38 deletions(-)
+ tools/perf/arch/arm64/annotate/instructions.c |  2 +-
+ tools/perf/arch/x86/annotate/instructions.c   | 26 +++++++++++----
+ tools/perf/util/disasm.c                      | 32 ++++++++++---------
+ tools/perf/util/disasm.h                      |  4 +--
+ 4 files changed, 40 insertions(+), 24 deletions(-)
 
-diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/perf/arch/loongarch/annotate/instructions.c
-index 70262d5f1444..1c3abb43c8d7 100644
---- a/tools/perf/arch/loongarch/annotate/instructions.c
-+++ b/tools/perf/arch/loongarch/annotate/instructions.c
-@@ -10,9 +10,7 @@ static int loongarch_call__parse(struct arch *arch, struct ins_operands *ops, st
- {
- 	char *c, *endptr, *tok, *name;
- 	struct map *map = ms->map;
--	struct addr_map_symbol target = {
--		.ms = { .map = map, },
--	};
-+	struct addr_map_symbol target;
- 
- 	c = strchr(ops->raw, '#');
- 	if (c++ == NULL)
-@@ -38,12 +36,16 @@ static int loongarch_call__parse(struct arch *arch, struct ins_operands *ops, st
- 	if (ops->target.name == NULL)
- 		return -1;
- 
--	target.addr = map__objdump_2mem(map, ops->target.addr);
-+	target = (struct addr_map_symbol) {
-+		.ms = { .map = map__get(map), },
-+		.addr = map__objdump_2mem(map, ops->target.addr),
-+	};
- 
- 	if (maps__find_ams(ms->maps, &target) == 0 &&
- 	    map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
- 		ops->target.sym = target.ms.sym;
- 
-+	addr_map_symbol__exit(&target);
- 	return 0;
+diff --git a/tools/perf/arch/arm64/annotate/instructions.c b/tools/perf/arch/arm64/annotate/instructions.c
+index 363af2f55122..44db33854dba 100644
+--- a/tools/perf/arch/arm64/annotate/instructions.c
++++ b/tools/perf/arch/arm64/annotate/instructions.c
+@@ -60,7 +60,7 @@ static int arm64_mov__parse(const struct arch *arch __maybe_unused,
+ 	return -1;
  }
  
-@@ -58,7 +60,7 @@ static int loongarch_jump__parse(struct arch *arch, struct ins_operands *ops, st
- 	struct map *map = ms->map;
- 	struct symbol *sym = ms->sym;
- 	struct addr_map_symbol target = {
--		.ms = { .map = map, },
-+		.ms = { .map = map__get(map), },
- 	};
- 	const char *c = strchr(ops->raw, '#');
- 	u64 start, end;
-@@ -90,7 +92,7 @@ static int loongarch_jump__parse(struct arch *arch, struct ins_operands *ops, st
- 	} else {
- 		ops->target.offset_avail = false;
+-static int mov__scnprintf(struct ins *ins, char *bf, size_t size,
++static int mov__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			  struct ins_operands *ops, int max_ins_name);
+ 
+ static const struct ins_ops arm64_mov_ops = {
+diff --git a/tools/perf/arch/x86/annotate/instructions.c b/tools/perf/arch/x86/annotate/instructions.c
+index 24b388bacdae..ffca3029388b 100644
+--- a/tools/perf/arch/x86/annotate/instructions.c
++++ b/tools/perf/arch/x86/annotate/instructions.c
+@@ -7,7 +7,7 @@
+  * So this table should not have entries with the suffix unless it's
+  * a complete different instruction than ones without the suffix.
+  */
+-static struct ins x86__instructions[] = {
++static const struct ins x86__instructions[] = {
+ 	{ .name = "adc",	.ops = &mov_ops,  },
+ 	{ .name = "add",	.ops = &mov_ops,  },
+ 	{ .name = "addsd",	.ops = &mov_ops,  },
+@@ -19,9 +19,9 @@ static struct ins x86__instructions[] = {
+ 	{ .name = "btr",	.ops = &mov_ops,  },
+ 	{ .name = "bts",	.ops = &mov_ops,  },
+ 	{ .name = "call",	.ops = &call_ops, },
++	{ .name = "cmovae",	.ops = &mov_ops,  },
+ 	{ .name = "cmovbe",	.ops = &mov_ops,  },
+ 	{ .name = "cmove",	.ops = &mov_ops,  },
+-	{ .name = "cmovae",	.ops = &mov_ops,  },
+ 	{ .name = "cmp",	.ops = &mov_ops,  },
+ 	{ .name = "cmpxch",	.ops = &mov_ops,  },
+ 	{ .name = "cmpxchg",	.ops = &mov_ops,  },
+@@ -73,23 +73,23 @@ static struct ins x86__instructions[] = {
+ 	{ .name = "movaps",	.ops = &mov_ops,  },
+ 	{ .name = "movdqa",	.ops = &mov_ops,  },
+ 	{ .name = "movdqu",	.ops = &mov_ops,  },
++	{ .name = "movsb",	.ops = &mov_ops,  },
+ 	{ .name = "movsd",	.ops = &mov_ops,  },
++	{ .name = "movsl",	.ops = &mov_ops,  },
+ 	{ .name = "movss",	.ops = &mov_ops,  },
+-	{ .name = "movsb",	.ops = &mov_ops,  },
+ 	{ .name = "movsw",	.ops = &mov_ops,  },
+-	{ .name = "movsl",	.ops = &mov_ops,  },
+ 	{ .name = "movupd",	.ops = &mov_ops,  },
+ 	{ .name = "movups",	.ops = &mov_ops,  },
+ 	{ .name = "movzb",	.ops = &mov_ops,  },
+-	{ .name = "movzw",	.ops = &mov_ops,  },
+ 	{ .name = "movzl",	.ops = &mov_ops,  },
++	{ .name = "movzw",	.ops = &mov_ops,  },
+ 	{ .name = "mulsd",	.ops = &mov_ops,  },
+ 	{ .name = "mulss",	.ops = &mov_ops,  },
+ 	{ .name = "nop",	.ops = &nop_ops,  },
+ 	{ .name = "or",		.ops = &mov_ops,  },
+ 	{ .name = "orps",	.ops = &mov_ops,  },
+-	{ .name = "pand",	.ops = &mov_ops,  },
+ 	{ .name = "paddq",	.ops = &mov_ops,  },
++	{ .name = "pand",	.ops = &mov_ops,  },
+ 	{ .name = "pcmpeqb",	.ops = &mov_ops,  },
+ 	{ .name = "por",	.ops = &mov_ops,  },
+ 	{ .name = "rcl",	.ops = &mov_ops,  },
+@@ -202,6 +202,20 @@ static int x86__annotate_init(struct arch *arch, char *cpuid)
+ 		if (x86__cpuid_parse(arch, cpuid))
+ 			err = SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_CPUID_PARSING;
  	}
--
-+	addr_map_symbol__exit(&target);
- 	return 0;
- }
- 
-diff --git a/tools/perf/arch/s390/annotate/instructions.c b/tools/perf/arch/s390/annotate/instructions.c
-index c61193f1e096..626e6d2cbc81 100644
---- a/tools/perf/arch/s390/annotate/instructions.c
-+++ b/tools/perf/arch/s390/annotate/instructions.c
-@@ -6,9 +6,7 @@ static int s390_call__parse(struct arch *arch, struct ins_operands *ops,
- {
- 	char *endptr, *tok, *name;
- 	struct map *map = ms->map;
--	struct addr_map_symbol target = {
--		.ms = { .map = map, },
--	};
-+	struct addr_map_symbol target;
- 
- 	tok = strchr(ops->raw, ',');
- 	if (!tok)
-@@ -36,12 +34,17 @@ static int s390_call__parse(struct arch *arch, struct ins_operands *ops,
- 
- 	if (ops->target.name == NULL)
- 		return -1;
--	target.addr = map__objdump_2mem(map, ops->target.addr);
 +
-+	target = (struct addr_map_symbol) {
-+		.ms = { .map = map__get(map), },
-+		.addr = map__objdump_2mem(map, ops->target.addr),
-+	};
- 
- 	if (maps__find_ams(ms->maps, &target) == 0 &&
- 	    map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
- 		ops->target.sym = target.ms.sym;
- 
-+	addr_map_symbol__exit(&target);
- 	return 0;
- }
- 
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index cc7764455faf..791d60f97c23 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -1031,7 +1031,7 @@ int symbol__annotate(struct map_symbol *ms, struct evsel *evsel,
- 		return 0;
- 
- 	args.arch = arch;
--	args.ms = *ms;
-+	args.ms = ms;
- 
- 	if (notes->src == NULL) {
- 		notes->src = annotated_source__new();
-diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-index be5fd44b1f9d..2c7feab61b7b 100644
---- a/tools/perf/util/capstone.c
-+++ b/tools/perf/util/capstone.c
-@@ -143,7 +143,7 @@ static void print_capstone_detail(cs_insn *insn, char *buf, size_t len,
- 				  struct annotate_args *args, u64 addr)
- {
- 	int i;
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct symbol *sym;
- 
- 	/* TODO: support more architectures */
-@@ -222,7 +222,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
- {
- #ifdef HAVE_LIBCAPSTONE_SUPPORT
- 	struct annotation *notes = symbol__annotation(sym);
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct dso *dso = map__dso(map);
- 	u64 start = map__rip_2objdump(map, sym->start);
- 	u64 offset;
-@@ -256,7 +256,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
- 	args->line = disasm_buf;
- 	args->line_nr = 0;
- 	args->fileloc = NULL;
--	args->ms.sym = sym;
-+	args->ms->sym = sym;
- 
- 	dl = disasm_line__new(args);
- 	if (dl == NULL)
-@@ -268,7 +268,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
- 	    !strcmp(args->options->disassembler_style, "att"))
- 		disassembler_style = true;
- 
--	if (capstone_init(maps__machine(args->ms.maps), &handle, is_64bit, disassembler_style) < 0)
-+	if (capstone_init(maps__machine(args->ms->maps), &handle, is_64bit, disassembler_style) < 0)
- 		goto err;
- 
- 	needs_cs_close = true;
-@@ -345,7 +345,7 @@ int symbol__disassemble_capstone_powerpc(const char *filename __maybe_unused,
- {
- #ifdef HAVE_LIBCAPSTONE_SUPPORT
- 	struct annotation *notes = symbol__annotation(sym);
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct dso *dso = map__dso(map);
- 	struct nscookie nsc;
- 	u64 start = map__rip_2objdump(map, sym->start);
-@@ -382,7 +382,7 @@ int symbol__disassemble_capstone_powerpc(const char *filename __maybe_unused,
- 	    !strcmp(args->options->disassembler_style, "att"))
- 		disassembler_style = true;
- 
--	if (capstone_init(maps__machine(args->ms.maps), &handle, is_64bit, disassembler_style) < 0)
-+	if (capstone_init(maps__machine(args->ms->maps), &handle, is_64bit, disassembler_style) < 0)
- 		goto err;
- 
- 	needs_cs_close = true;
-@@ -408,7 +408,7 @@ int symbol__disassemble_capstone_powerpc(const char *filename __maybe_unused,
- 	args->line = disasm_buf;
- 	args->line_nr = 0;
- 	args->fileloc = NULL;
--	args->ms.sym = sym;
-+	args->ms->sym = sym;
- 
- 	dl = disasm_line__new(args);
- 	if (dl == NULL)
++#ifndef NDEBUG
++	{
++		static bool sorted_check;
++
++		if (!sorted_check) {
++			for (size_t i = 0; i < arch->nr_instructions - 1; i++) {
++				assert(strcmp(arch->instructions[i].name,
++					      arch->instructions[i + 1].name) <= 0);
++			}
++			sorted_check = true;
++		}
++	}
++#endif
+ 	arch->e_machine = EM_X86_64;
+ 	arch->e_flags = 0;
+ 	arch->initialized = true;
 diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-index 50b9433f3f8e..924429142631 100644
+index 9bc9b1de98db..2793697ce75c 100644
 --- a/tools/perf/util/disasm.c
 +++ b/tools/perf/util/disasm.c
-@@ -269,9 +269,7 @@ static int call__parse(struct arch *arch, struct ins_operands *ops, struct map_s
- {
- 	char *endptr, *tok, *name;
- 	struct map *map = ms->map;
--	struct addr_map_symbol target = {
--		.ms = { .map = map, },
--	};
-+	struct addr_map_symbol target;
+@@ -43,9 +43,9 @@ static const struct ins_ops ret_ops;
+ static const struct ins_ops load_store_ops;
+ static const struct ins_ops arithmetic_ops;
  
- 	ops->target.addr = strtoull(ops->raw, &endptr, 16);
+-static int jump__scnprintf(struct ins *ins, char *bf, size_t size,
++static int jump__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			   struct ins_operands *ops, int max_ins_name);
+-static int call__scnprintf(struct ins *ins, char *bf, size_t size,
++static int call__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			   struct ins_operands *ops, int max_ins_name);
  
-@@ -296,12 +294,16 @@ static int call__parse(struct arch *arch, struct ins_operands *ops, struct map_s
- 	if (ops->target.name == NULL)
+ static void ins__sort(struct arch *arch);
+@@ -66,7 +66,8 @@ static int arch__grow_instructions(struct arch *arch)
+ 		goto grow_from_non_allocated_table;
+ 
+ 	new_nr_allocated = arch->nr_instructions_allocated + 128;
+-	new_instructions = realloc(arch->instructions, new_nr_allocated * sizeof(struct ins));
++	new_instructions = realloc((void *)arch->instructions,
++				   new_nr_allocated * sizeof(struct ins));
+ 	if (new_instructions == NULL)
  		return -1;
- find_target:
--	target.addr = map__objdump_2mem(map, ops->target.addr);
-+	target = (struct addr_map_symbol) {
-+		.ms = { .map = map__get(map), },
-+		.addr = map__objdump_2mem(map, ops->target.addr),
-+	};
  
- 	if (maps__find_ams(ms->maps, &target) == 0 &&
- 	    map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
- 		ops->target.sym = target.ms.sym;
+@@ -93,7 +94,7 @@ static int arch__associate_ins_ops(struct arch *arch, const char *name, const st
+ 	    arch__grow_instructions(arch))
+ 		return -1;
  
-+	addr_map_symbol__exit(&target);
- 	return 0;
+-	ins = &arch->instructions[arch->nr_instructions];
++	ins = (struct ins *)&arch->instructions[arch->nr_instructions];
+ 	ins->name = strdup(name);
+ 	if (!ins->name)
+ 		return -1;
+@@ -146,6 +147,7 @@ static struct arch architectures[] = {
+ 		.init = x86__annotate_init,
+ 		.instructions = x86__instructions,
+ 		.nr_instructions = ARRAY_SIZE(x86__instructions),
++		.sorted_instructions = true,
+ 		.insn_suffix = "bwlq",
+ 		.objdump =  {
+ 			.comment_char = '#',
+@@ -241,13 +243,13 @@ static void ins_ops__delete(struct ins_operands *ops)
+ 	zfree(&ops->target.name);
+ }
  
- indirect_call:
-@@ -366,7 +368,7 @@ static int jump__parse(struct arch *arch, struct ins_operands *ops, struct map_s
- 	struct map *map = ms->map;
- 	struct symbol *sym = ms->sym;
- 	struct addr_map_symbol target = {
--		.ms = { .map = map, },
-+		.ms = { .map = map__get(map), },
- 	};
- 	const char *c = strchr(ops->raw, ',');
- 	u64 start, end;
-@@ -440,7 +442,7 @@ static int jump__parse(struct arch *arch, struct ins_operands *ops, struct map_s
- 	} else {
- 		ops->target.offset_avail = false;
- 	}
--
-+	addr_map_symbol__exit(&target);
+-static int ins__raw_scnprintf(struct ins *ins, char *bf, size_t size,
++static int ins__raw_scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			      struct ins_operands *ops, int max_ins_name)
+ {
+ 	return scnprintf(bf, size, "%-*s %s", max_ins_name, ins->name, ops->raw);
+ }
+ 
+-static int ins__scnprintf(struct ins *ins, char *bf, size_t size,
++static int ins__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			  struct ins_operands *ops, int max_ins_name)
+ {
+ 	if (ins->ops->scnprintf)
+@@ -319,7 +321,7 @@ static int call__parse(const struct arch *arch, struct ins_operands *ops, struct
+ 	goto find_target;
+ }
+ 
+-static int call__scnprintf(struct ins *ins, char *bf, size_t size,
++static int call__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			   struct ins_operands *ops, int max_ins_name)
+ {
+ 	if (ops->target.sym)
+@@ -446,7 +448,7 @@ static int jump__parse(const struct arch *arch, struct ins_operands *ops, struct
  	return 0;
  }
  
-@@ -1046,7 +1048,7 @@ static size_t disasm_line_size(int nr)
- struct disasm_line *disasm_line__new(struct annotate_args *args)
+-static int jump__scnprintf(struct ins *ins, char *bf, size_t size,
++static int jump__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			   struct ins_operands *ops, int max_ins_name)
  {
- 	struct disasm_line *dl = NULL;
--	struct annotation *notes = symbol__annotation(args->ms.sym);
-+	struct annotation *notes = symbol__annotation(args->ms->sym);
- 	int nr = notes->src->nr_events;
+ 	const char *c;
+@@ -551,7 +553,7 @@ static int lock__parse(const struct arch *arch, struct ins_operands *ops, struct
+ 	return 0;
+ }
  
- 	dl = zalloc(disasm_line_size(nr));
-@@ -1064,7 +1066,7 @@ struct disasm_line *disasm_line__new(struct annotate_args *args)
- 		} else if (disasm_line__parse(dl->al.line, &dl->ins.name, &dl->ops.raw) < 0)
- 			goto out_free_line;
- 
--		disasm_line__init_ins(dl, args->arch, &args->ms);
-+		disasm_line__init_ins(dl, args->arch, args->ms);
- 	}
- 
- 	return dl;
-@@ -1119,7 +1121,7 @@ static int symbol__parse_objdump_line(struct symbol *sym,
- 				      struct annotate_args *args,
- 				      char *parsed_line, int *line_nr, char **fileloc)
+-static int lock__scnprintf(struct ins *ins, char *bf, size_t size,
++static int lock__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			   struct ins_operands *ops, int max_ins_name)
  {
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct annotation *notes = symbol__annotation(sym);
- 	struct disasm_line *dl;
- 	char *tmp;
-@@ -1151,7 +1153,7 @@ static int symbol__parse_objdump_line(struct symbol *sym,
- 	args->line    = parsed_line;
- 	args->line_nr = *line_nr;
- 	args->fileloc = *fileloc;
--	args->ms.sym  = sym;
-+	args->ms->sym  = sym;
+ 	int printed;
+@@ -680,7 +682,7 @@ static int mov__parse(const struct arch *arch, struct ins_operands *ops,
+ 	return -1;
+ }
  
- 	dl = disasm_line__new(args);
- 	(*line_nr)++;
-@@ -1169,12 +1171,14 @@ static int symbol__parse_objdump_line(struct symbol *sym,
- 	if (dl->ins.ops && ins__is_call(&dl->ins) && !dl->ops.target.sym) {
- 		struct addr_map_symbol target = {
- 			.addr = dl->ops.target.addr,
--			.ms = { .map = map, },
-+			.ms = { .map = map__get(map), },
- 		};
- 
--		if (!maps__find_ams(args->ms.maps, &target) &&
-+		if (!maps__find_ams(args->ms->maps, &target) &&
- 		    target.ms.sym->start == target.al_addr)
- 			dl->ops.target.sym = target.ms.sym;
-+
-+		addr_map_symbol__exit(&target);
- 	}
- 
- 	annotation_line__add(&dl->al, &notes->src->source);
-@@ -1338,7 +1342,7 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
- 					struct annotate_args *args)
+-static int mov__scnprintf(struct ins *ins, char *bf, size_t size,
++static int mov__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			   struct ins_operands *ops, int max_ins_name)
  {
- 	struct annotation *notes = symbol__annotation(sym);
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct dso *dso = map__dso(map);
- 	u64 start = map__rip_2objdump(map, sym->start);
- 	u64 end = map__rip_2objdump(map, sym->end);
-@@ -1375,7 +1379,7 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
- 	args->line = disasm_buf;
- 	args->line_nr = 0;
- 	args->fileloc = NULL;
--	args->ms.sym = sym;
-+	args->ms->sym = sym;
+ 	return scnprintf(bf, size, "%-*s %s,%s", max_ins_name, ins->name,
+@@ -699,7 +701,7 @@ static const struct ins_ops mov_ops = {
+ #define	ADD_ZERO_EXT_XO_FORM	202
+ #define	SUB_ZERO_EXT_XO_FORM	200
  
- 	dl = disasm_line__new(args);
- 	if (dl == NULL)
-@@ -1501,7 +1505,7 @@ static int symbol__disassemble_objdump(const char *filename, struct symbol *sym,
- 				       struct annotate_args *args)
+-static int arithmetic__scnprintf(struct ins *ins, char *bf, size_t size,
++static int arithmetic__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 		struct ins_operands *ops, int max_ins_name)
  {
- 	struct annotation_options *opts = &annotate_opts;
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct dso *dso = map__dso(map);
- 	char *command;
- 	FILE *file;
-@@ -1644,7 +1648,7 @@ static int symbol__disassemble_objdump(const char *filename, struct symbol *sym,
- int symbol__disassemble(struct symbol *sym, struct annotate_args *args)
+ 	return scnprintf(bf, size, "%-*s %s", max_ins_name, ins->name,
+@@ -743,7 +745,7 @@ static const struct ins_ops arithmetic_ops = {
+ 	.scnprintf = arithmetic__scnprintf,
+ };
+ 
+-static int load_store__scnprintf(struct ins *ins, char *bf, size_t size,
++static int load_store__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 		struct ins_operands *ops, int max_ins_name)
  {
- 	struct annotation_options *options = args->options;
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct dso *dso = map__dso(map);
- 	char symfs_filename[PATH_MAX];
- 	bool delete_extract = false;
+ 	return scnprintf(bf, size, "%-*s %s", max_ins_name, ins->name,
+@@ -806,7 +808,7 @@ static int dec__parse(const struct arch *arch __maybe_unused, struct ins_operand
+ 	return 0;
+ }
+ 
+-static int dec__scnprintf(struct ins *ins, char *bf, size_t size,
++static int dec__scnprintf(const struct ins *ins, char *bf, size_t size,
+ 			   struct ins_operands *ops, int max_ins_name)
+ {
+ 	return scnprintf(bf, size, "%-*s %s", max_ins_name, ins->name,
+@@ -818,7 +820,7 @@ static const struct ins_ops dec_ops = {
+ 	.scnprintf = dec__scnprintf,
+ };
+ 
+-static int nop__scnprintf(struct ins *ins __maybe_unused, char *bf, size_t size,
++static int nop__scnprintf(const struct ins *ins __maybe_unused, char *bf, size_t size,
+ 			  struct ins_operands *ops __maybe_unused, int max_ins_name)
+ {
+ 	return scnprintf(bf, size, "%-*s", max_ins_name, "nop");
+@@ -866,7 +868,7 @@ static void ins__sort(struct arch *arch)
+ {
+ 	const int nmemb = arch->nr_instructions;
+ 
+-	qsort(arch->instructions, nmemb, sizeof(struct ins), ins__cmp);
++	qsort((void *)arch->instructions, nmemb, sizeof(struct ins), ins__cmp);
+ }
+ 
+ static const struct ins_ops *__ins__find(const struct arch *arch, const char *name,
 diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-index d2cb555e4a3b..a3ea9d676281 100644
+index dc5233f2a773..4f5c9a985786 100644
 --- a/tools/perf/util/disasm.h
 +++ b/tools/perf/util/disasm.h
-@@ -97,7 +97,7 @@ struct ins_ops {
+@@ -19,7 +19,7 @@ struct disasm_line;
  
- struct annotate_args {
- 	struct arch		  *arch;
--	struct map_symbol	  ms;
-+	struct map_symbol	  *ms;
- 	struct annotation_options *options;
- 	s64			  offset;
- 	char			  *line;
-diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
-index 2ebf1f5f65bf..4ada9a10bd93 100644
---- a/tools/perf/util/llvm.c
-+++ b/tools/perf/util/llvm.c
-@@ -118,7 +118,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
- {
- #ifdef HAVE_LIBLLVM_SUPPORT
- 	struct annotation *notes = symbol__annotation(sym);
--	struct map *map = args->ms.map;
-+	struct map *map = args->ms->map;
- 	struct dso *dso = map__dso(map);
- 	u64 start = map__rip_2objdump(map, sym->start);
- 	/* Malloc-ed buffer containing instructions read from disk. */
-@@ -184,7 +184,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
- 	args->line = disasm_buf;
- 	args->line_nr = 0;
- 	args->fileloc = NULL;
--	args->ms.sym = sym;
-+	args->ms->sym = sym;
+ struct arch {
+ 	const char	*name;
+-	struct ins	*instructions;
++	const struct ins	*instructions;
+ 	size_t		nr_instructions;
+ 	size_t		nr_instructions_allocated;
+ 	const struct ins_ops  *(*associate_instruction_ops)(struct arch *arch, const char *name);
+@@ -91,7 +91,7 @@ struct ins_ops {
+ 	void (*free)(struct ins_operands *ops);
+ 	int (*parse)(const struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
+ 			struct disasm_line *dl);
+-	int (*scnprintf)(struct ins *ins, char *bf, size_t size,
++	int (*scnprintf)(const struct ins *ins, char *bf, size_t size,
+ 			 struct ins_operands *ops, int max_ins_name);
+ };
  
- 	dl = disasm_line__new(args);
- 	if (dl == NULL)
-@@ -242,7 +242,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
- 					 &line_storage_len);
- 		args->line_nr = 0;
- 		args->fileloc = NULL;
--		args->ms.sym = sym;
-+		args->ms->sym = sym;
- 
- 		llvm_addr2line(filename, pc, &args->fileloc,
- 			       (unsigned int *)&args->line_nr, false, NULL);
 -- 
 2.52.0.457.g6b5491de43-goog
 

@@ -1,54 +1,54 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3241B480950
-	for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 07:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFC3451049
+	for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 07:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769067115; cv=none; b=shXphQ6858UyIFkGrxZcoP5EEXJJoht1wzxjUeGwmPMOEkVFefdVwvrTnanIzXgrW/GP1el73MiYscCZl1oyfhnqhlq6VGQQEbr2HSU5s2GX+nY6um1bIERoBduRowl3ouaKdNgn1tF6B56ckwoXEfLE4hHIymkjm50NlxOZz1w=
+	t=1769067117; cv=none; b=qnI83dzyYDo2ZBIEWsdiNiFECCH0zerOOvygI6enmwWV+dtNIK/MwsN4Iwn3Lu3wjw2n60E10eFf8xKbcIUKiTdfayrPtN0asNYebbUZXj2n4rofGWdhRwMj1MfROgTOjosAI+s1Jw+irE6Xo5qXB7K1RFbS7Ld2aKZ7fVbdBtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769067115; c=relaxed/simple;
-	bh=sGYJ80zb+odIeZsPqSh9Z6jfiKodLGQ+R7PjMI4z2k4=;
+	s=arc-20240116; t=1769067117; c=relaxed/simple;
+	bh=p/53skaYkxw3FbY6a+zG/VnxhoQiWrk9vg0CARtxbUo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=TjF6sghnAstkt5haAB76HsLvReCYjPOsmsZPxBKJYcpDL0PjJ7ntdTEpF4yL3x9Q7htPTO1kLs09JLFYrfMiB1DDk5AXORjcl5sFfWZ9aasyWjuWFnEOhTJpY44hnp9RGFUJH0Z/2GQtnl+HnMzdj4tbaK9VRwfaIxQZBd2eqpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lvv/q45C; arc=none smtp.client-ip=74.125.82.201
+	 To:Content-Type; b=SG5gMfOWkd+rk3lU/0xv6hLrmGypRX6SbcmIuj7OxXSdl/z66JbFePXaLGLD6pRv8xp81Pz3dxTsdZTSROMsRYpt2ufbYYrQch3rQCltgsz5TVgR1yvxQqZ2VRDs8CIOpQkO6AIdOBAlvi8EX3K9sMh9S5aRbFMRuTFaHXHhOQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SwAVxdMy; arc=none smtp.client-ip=74.125.82.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lvv/q45C"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b715b26fc3so949469eec.1
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SwAVxdMy"
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-121b1cb8377so1458309c88.0
         for <linux-csky@vger.kernel.org>; Wed, 21 Jan 2026 23:31:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769067102; x=1769671902; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1769067105; x=1769671905; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eELKbKMV3ddq32Z1Vp6GPW9GgpbguHI2Z4sdCa/Txxg=;
-        b=lvv/q45COOnO6UQSiU7UnZtQIB7+rMS2lqEDFbMVXtNeZJ8YORp2iJOxhPZK/5dh5+
-         SLA6gcLMsNcoh1wRUVfzK7IQyg6jz/k0uVi7zlIH6QbYEI8qbQ3oK1TJRlS/5Ibvj2sb
-         qZn+r16Vb1p3TRTHon3CInfN57HSzvKf12mtJoXT1XrHr62f+MK1i48iA8w1M3+fe/hA
-         v5KdlxI1+rIFPC/sWY/X4X0MCNBOyFPzYWn2j/HttZhsymJ26gWDYzQTo/otYHoq0fB6
-         mlG47HGQtpzW/9QTSztYkSgER8qO4f2ILX/W8yN2ZlQTn80XPEqq/HYWwagVfBXtzN2L
-         Jm4w==
+        bh=RuAcUlfLOH+Nmb5IOvdzZq6066CfyPFp8FPVv/E64Q8=;
+        b=SwAVxdMyCSAc9RqvV05wFwSmWg0RGGbatx8oKkUF9aq0s2kDjuqTupnCriZf+oBMA9
+         sfjeuDYPoZmRUKNfINrs9uLOfLL2EYqXb45EuWQgzVUnFRebln8PO8bsre4SKFTYMQ0a
+         /DekiWPmQv/TvsyLEkvLErZF86Uj4fUjqnYxDUXaffcg48zELxlnrUXqZxQvba/O/4x7
+         lTO9PS92hUeXrjXlvBpoq/3fLsoz03oyr95iTALhvbCYFS6EL2wdYsPbCgdgJndW/lJw
+         S2I3khfXdWw4HOpF1XT1BSIOlFEl38jk0hGkot/kUb0RGhdlqakqwSXDvkyt0MMwqT87
+         wDfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769067102; x=1769671902;
+        d=1e100.net; s=20230601; t=1769067105; x=1769671905;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eELKbKMV3ddq32Z1Vp6GPW9GgpbguHI2Z4sdCa/Txxg=;
-        b=and1Kh1c1pEXfuY9JnKWqV7yzeiNI+EqcWA7T/MVG9oxT2WntJMs7zQoTTlfAcoBK8
-         E+IbtiYNCvS7fqlJw1EFVNnd6XCH0xJcxitf7cp5SEqUGGV/X+tK2itMH6IujSLRdvsD
-         k6wDCWxD9BwvMnIUKt6V/kf2tCEkSvxqTwUdrXcm4iCIpYi4e74CrQPyxdGzn8Nb6ECT
-         uikeRu/M6/zcpZA6Qk+6B4sihyvUwZprR6iilVFB/+EKMjpLqwqLTpUrfJ+HR7yX4wXo
-         A286UTWj3vVenTvEf87bQAP4g2gtIQKS0xg/Sa1vEI0IxTIP4yD1XgLCX8284rzc7Kas
-         C/NA==
-X-Forwarded-Encrypted: i=1; AJvYcCWSjXPQHB0Ont3JaWyxDkr68anZMZ6s0t32NJ2GyrcsfRjoK+/ifuS6dBxDvsweRuNXeTPy4wBxQvON@vger.kernel.org
-X-Gm-Message-State: AOJu0YybYn58NzU+pVLd8gmdq6bkJbcXzLUp7bvWegDIW1ac39UMVECW
-	S6P9Ot/NvrXVm76Kt4iXhYZdogtta0x4P6HFlrx2/f3TRVIYMnzDipbsQ8xD+QbOeXjJ/PrAdl8
-	2a/D9Y6yD7g==
-X-Received: from dlbcm36.prod.google.com ([2002:a05:7022:68a4:b0:123:2821:f02])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:2d94:b0:2b1:7486:3a06
- with SMTP id 5a478bee46e88-2b6fd74750dmr4713049eec.18.1769067101320; Wed, 21
- Jan 2026 23:31:41 -0800 (PST)
-Date: Wed, 21 Jan 2026 23:31:22 -0800
+        bh=RuAcUlfLOH+Nmb5IOvdzZq6066CfyPFp8FPVv/E64Q8=;
+        b=euK9qiUiAMFSdjmlfWc+H/nBY1rCI6eqpiHRcuBzzqSJl/u+tR4+iq2UIYN+ZOzcfS
+         iz6YCW3NuF4hgVLbBDNtgAquLGR6kL/C/FbKGgCEihHD8rldCft1T5o7G0y3pdmSUnHF
+         g2Hrp5IXGtoxsG72bdBGj1l7/Q4+9JAMQf7M1VN/QM3yDWjMy6CDtNpxBEuszRNDS2Eu
+         pJHizPKGU+6vy0T36KM+OhQxUeq7RI76lI/n/O2sX6PEVtgCXMFUW6zMKFTEBQQT/Xuu
+         HtObAbi1SulOYFjKCTVQgyimw5DsFOnRlC4pVaHOSKlzywDZ+PJzj+jpG066BD1ZtSlt
+         094w==
+X-Forwarded-Encrypted: i=1; AJvYcCXXKz972TwVq9/YGfhx5WLn8mnnVmXbnd/SwYbaEYkyBkSftpQ6lBzcGrob/5pJr2EbZjcsgXi+gaSV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+gbay05YKKAS71g+WqRVSXt2w01vcUS8UTxWTNs5wkd84OEmq
+	aGJ7eHMdFsEW67ur7aFNgoB5anrVee1HasxAskMCZcQnjI1cL6pvxIxDYiuqTzqbZS+q7pheu3E
+	U26j/jAp88w==
+X-Received: from dlbep12.prod.google.com ([2002:a05:7022:108c:b0:11e:64d:cd3b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:eacf:b0:11a:fec5:d005
+ with SMTP id a92af1059eb24-1246a95600emr5252743c88.10.1769067104935; Wed, 21
+ Jan 2026 23:31:44 -0800 (PST)
+Date: Wed, 21 Jan 2026 23:31:24 -0800
 In-Reply-To: <20260122073127.375139-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -58,9 +58,9 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260122073127.375139-1-irogers@google.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260122073127.375139-7-irogers@google.com>
-Subject: [PATCH v1 06/11] perf disasm: Rework the string arch__is to use the
- ELF machine
+Message-ID: <20260122073127.375139-9-irogers@google.com>
+Subject: [PATCH v1 08/11] perf disasm: Refactor ins__is_call/jump to avoid
+ exposing arch ins_ops
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -83,233 +83,117 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add new arch__is_x86 and arch__is_powerpc functions that avoid string
-comparisons and use the ELF machine. Remove arch__is that is no longer
-used.
+Add booleans indicating whether and ins_ops are call or jump and
+return it. This avoids exposing loongarch and s390 ins_ops for the
+sake of matching.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/annotate-data.c | 10 +++++-----
- tools/perf/util/annotate.c      | 16 ++++++++--------
- tools/perf/util/capstone.c      |  2 +-
- tools/perf/util/disasm.c        | 15 ++++++++++-----
- tools/perf/util/disasm.h        |  3 ++-
- tools/perf/util/llvm.c          |  2 +-
- 6 files changed, 27 insertions(+), 21 deletions(-)
+ tools/perf/util/annotate-arch/annotate-loongarch.c | 6 ++++--
+ tools/perf/util/annotate-arch/annotate-s390.c      | 3 ++-
+ tools/perf/util/disasm.c                           | 6 ++++--
+ tools/perf/util/disasm.h                           | 5 ++---
+ 4 files changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index edfcd6e9df9c..44fbd41e3845 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -165,7 +165,7 @@ static void init_type_state(struct type_state *state, const struct arch *arch)
- 	memset(state, 0, sizeof(*state));
- 	INIT_LIST_HEAD(&state->stack_vars);
- 
--	if (arch__is(arch, "x86")) {
-+	if (arch__is_x86(arch)) {
- 		state->regs[0].caller_saved = true;
- 		state->regs[1].caller_saved = true;
- 		state->regs[2].caller_saved = true;
-@@ -526,7 +526,7 @@ static enum type_match_result check_variable(struct data_loc_info *dloc,
- 		needs_pointer = false;
- 	else if (reg == dloc->fbreg || is_fbreg)
- 		needs_pointer = false;
--	else if (arch__is(dloc->arch, "x86") && reg == X86_REG_SP)
-+	else if (arch__is_x86(dloc->arch) && reg == X86_REG_SP)
- 		needs_pointer = false;
- 
- 	/* Get the type of the variable */
-@@ -1071,7 +1071,7 @@ static void delete_var_types(struct die_var_type *var_types)
- /* should match to is_stack_canary() in util/annotate.c */
- static void setup_stack_canary(struct data_loc_info *dloc)
- {
--	if (arch__is(dloc->arch, "x86")) {
-+	if (arch__is_x86(dloc->arch)) {
- 		dloc->op->segment = INSN_SEG_X86_GS;
- 		dloc->op->imm = true;
- 		dloc->op->offset = 40;
-@@ -1311,7 +1311,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 
- 		/* Direct this-cpu access like "%gs:0x34740" */
- 		if (dloc->op->segment == INSN_SEG_X86_GS && dloc->op->imm &&
--		    arch__is(dloc->arch, "x86")) {
-+		    arch__is_x86(dloc->arch)) {
- 			pr_debug_dtp("this-cpu var");
- 
- 			addr = dloc->op->offset;
-@@ -1397,7 +1397,7 @@ static enum type_match_result find_data_type_insn(struct data_loc_info *dloc,
- 
- static int arch_supports_insn_tracking(struct data_loc_info *dloc)
- {
--	if ((arch__is(dloc->arch, "x86")) || (arch__is(dloc->arch, "powerpc")))
-+	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)))
- 		return 1;
+diff --git a/tools/perf/util/annotate-arch/annotate-loongarch.c b/tools/perf/util/annotate-arch/annotate-loongarch.c
+index 4bd651b63652..b95ae5d6657f 100644
+--- a/tools/perf/util/annotate-arch/annotate-loongarch.c
++++ b/tools/perf/util/annotate-arch/annotate-loongarch.c
+@@ -55,9 +55,10 @@ static int loongarch_call__parse(const struct arch *arch, struct ins_operands *o
  	return 0;
  }
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index 132af2556aec..79702072568b 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -2474,7 +2474,7 @@ static int extract_reg_offset(const struct arch *arch, const char *str,
- 	 * %gs:0x18(%rbx).  In that case it should skip the part.
- 	 */
- 	if (*str == arch->objdump.register_char) {
--		if (arch__is(arch, "x86")) {
-+		if (arch__is_x86(arch)) {
- 			/* FIXME: Handle other segment registers */
- 			if (!strncmp(str, "%gs:", 4))
- 				op_loc->segment = INSN_SEG_X86_GS;
-@@ -2571,7 +2571,7 @@ int annotate_get_insn_location(const struct arch *arch, struct disasm_line *dl,
- 		op_loc->reg2 = -1;
  
- 		if (insn_str == NULL) {
--			if (!arch__is(arch, "powerpc"))
-+			if (!arch__is_powerpc(arch))
- 				continue;
- 		}
- 
-@@ -2580,7 +2580,7 @@ int annotate_get_insn_location(const struct arch *arch, struct disasm_line *dl,
- 		 * required fields for op_loc, ie reg1, reg2, offset from the
- 		 * raw instruction.
- 		 */
--		if (arch__is(arch, "powerpc")) {
-+		if (arch__is_powerpc(arch)) {
- 			op_loc->mem_ref = mem_ref;
- 			op_loc->multi_regs = multi_regs;
- 			get_powerpc_regs(dl->raw.raw_insn, !i, op_loc);
-@@ -2591,7 +2591,7 @@ int annotate_get_insn_location(const struct arch *arch, struct disasm_line *dl,
- 		} else {
- 			char *s, *p = NULL;
- 
--			if (arch__is(arch, "x86")) {
-+			if (arch__is_x86(arch)) {
- 				/* FIXME: Handle other segment registers */
- 				if (!strncmp(insn_str, "%gs:", 4)) {
- 					op_loc->segment = INSN_SEG_X86_GS;
-@@ -2675,7 +2675,7 @@ static struct annotated_item_stat *annotate_data_stat(struct list_head *head,
- 
- static bool is_stack_operation(const struct arch *arch, struct disasm_line *dl)
- {
--	if (arch__is(arch, "x86")) {
-+	if (arch__is_x86(arch)) {
- 		if (!strncmp(dl->ins.name, "push", 4) ||
- 		    !strncmp(dl->ins.name, "pop", 3) ||
- 		    !strncmp(dl->ins.name, "call", 4) ||
-@@ -2689,7 +2689,7 @@ static bool is_stack_operation(const struct arch *arch, struct disasm_line *dl)
- static bool is_stack_canary(const struct arch *arch, struct annotated_op_loc *loc)
- {
- 	/* On x86_64, %gs:40 is used for stack canary */
--	if (arch__is(arch, "x86")) {
-+	if (arch__is_x86(arch)) {
- 		if (loc->segment == INSN_SEG_X86_GS && loc->imm &&
- 		    loc->offset == 40)
- 			return true;
-@@ -2704,7 +2704,7 @@ static bool is_stack_canary(const struct arch *arch, struct annotated_op_loc *lo
-  */
- static bool is_address_gen_insn(const struct arch *arch, struct disasm_line *dl)
- {
--	if (arch__is(arch, "x86")) {
-+	if (arch__is_x86(arch)) {
- 		if (!strncmp(dl->ins.name, "lea", 3))
- 			return true;
- 	}
-@@ -2847,7 +2847,7 @@ __hist_entry__get_data_type(struct hist_entry *he, const struct arch *arch,
- 		}
- 
- 		/* This CPU access in kernel - pretend PC-relative addressing */
--		if (dso__kernel(map__dso(ms->map)) && arch__is(arch, "x86") &&
-+		if (dso__kernel(map__dso(ms->map)) && arch__is_x86(arch) &&
- 		    op_loc->segment == INSN_SEG_X86_GS && op_loc->imm) {
- 			dloc.var_addr = op_loc->offset;
- 			op_loc->reg1 = DWARF_REG_PC;
-diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-index 2c7feab61b7b..ce06cfd253ef 100644
---- a/tools/perf/util/capstone.c
-+++ b/tools/perf/util/capstone.c
-@@ -147,7 +147,7 @@ static void print_capstone_detail(cs_insn *insn, char *buf, size_t len,
- 	struct symbol *sym;
- 
- 	/* TODO: support more architectures */
--	if (!arch__is(args->arch, "x86"))
-+	if (!arch__is_x86(args->arch))
- 		return;
- 
- 	if (insn->detail == NULL)
-diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-index 7cfea3419041..bc6cc7a60e3c 100644
---- a/tools/perf/util/disasm.c
-+++ b/tools/perf/util/disasm.c
-@@ -228,9 +228,14 @@ const struct arch *arch__find(const char *name)
- 	return bsearch(name, architectures, nmemb, sizeof(struct arch), arch__key_cmp);
- }
- 
--bool arch__is(const struct arch *arch, const char *name)
-+bool arch__is_x86(const struct arch *arch)
- {
--	return !strcmp(arch->name, name);
-+	return arch->e_machine == EM_386 || arch->e_machine == EM_X86_64;
-+}
-+
-+bool arch__is_powerpc(const struct arch *arch)
-+{
-+	return arch->e_machine == EM_PPC || arch->e_machine == EM_PPC64;
- }
- 
- static void ins_ops__delete(struct ins_operands *ops)
-@@ -877,7 +882,7 @@ static const struct ins_ops *__ins__find(const struct arch *arch, const char *na
- 	struct ins *ins;
- 	const int nmemb = arch->nr_instructions;
- 
--	if (arch__is(arch, "powerpc")) {
-+	if (arch__is_powerpc(arch)) {
- 		/*
- 		 * For powerpc, identify the instruction ops
- 		 * from the opcode using raw_insn.
-@@ -1066,7 +1071,7 @@ struct disasm_line *disasm_line__new(struct annotate_args *args)
- 		goto out_delete;
- 
- 	if (args->offset != -1) {
--		if (arch__is(args->arch, "powerpc")) {
-+		if (arch__is_powerpc(args->arch)) {
- 			if (disasm_line__parse_powerpc(dl, args) < 0)
- 				goto out_free_line;
- 		} else if (disasm_line__parse(dl->al.line, &dl->ins.name, &dl->ops.raw) < 0)
-@@ -1698,7 +1703,7 @@ int symbol__disassemble(struct symbol *sym, struct annotate_args *args)
- 	 * and typeoff, disassemble to mnemonic notation is not required in
- 	 * case of powerpc.
- 	 */
--	if (arch__is(args->arch, "powerpc")) {
-+	if (arch__is_powerpc(args->arch)) {
- 		extern const char *sort_order;
- 
- 		if (sort_order && !strstr(sort_order, "sym")) {
-diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-index 4f5c9a985786..db7f1ee3d8e7 100644
---- a/tools/perf/util/disasm.h
-+++ b/tools/perf/util/disasm.h
-@@ -106,7 +106,8 @@ struct annotate_args {
+-const struct ins_ops loongarch_call_ops = {
++static const struct ins_ops loongarch_call_ops = {
+ 	.parse	   = loongarch_call__parse,
+ 	.scnprintf = call__scnprintf,
++	.is_call   = true,
  };
  
- const struct arch *arch__find(const char *name);
--bool arch__is(const struct arch *arch, const char *name);
-+bool arch__is_x86(const struct arch *arch);
-+bool arch__is_powerpc(const struct arch *arch);
+ static int loongarch_jump__parse(const struct arch *arch, struct ins_operands *ops,
+@@ -104,9 +105,10 @@ static int loongarch_jump__parse(const struct arch *arch, struct ins_operands *o
+ 	return 0;
+ }
  
- const struct ins_ops *ins__find(const struct arch *arch, const char *name, struct disasm_line *dl);
+-const struct ins_ops loongarch_jump_ops = {
++static const struct ins_ops loongarch_jump_ops = {
+ 	.parse	   = loongarch_jump__parse,
+ 	.scnprintf = jump__scnprintf,
++	.is_jump   = true,
+ };
  
-diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
-index 4ada9a10bd93..0d126d233c01 100644
---- a/tools/perf/util/llvm.c
-+++ b/tools/perf/util/llvm.c
-@@ -146,7 +146,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
- 		return errno;
+ static
+diff --git a/tools/perf/util/annotate-arch/annotate-s390.c b/tools/perf/util/annotate-arch/annotate-s390.c
+index c1d06caa5f77..6d1a1da277e2 100644
+--- a/tools/perf/util/annotate-arch/annotate-s390.c
++++ b/tools/perf/util/annotate-arch/annotate-s390.c
+@@ -54,9 +54,10 @@ static int s390_call__parse(const struct arch *arch, struct ins_operands *ops,
+ 	return 0;
+ }
  
- 	init_llvm();
--	if (arch__is(args->arch, "x86")) {
-+	if (arch__is_x86(args->arch)) {
- 		const char *triplet = is_64bit ? "x86_64-pc-linux" : "i686-pc-linux";
+-const struct ins_ops s390_call_ops = {
++static const struct ins_ops s390_call_ops = {
+ 	.parse	   = s390_call__parse,
+ 	.scnprintf = call__scnprintf,
++	.is_call   = true,
+ };
  
- 		disasm = LLVMCreateDisasm(triplet, &storage, /*tag_type=*/0,
+ static int s390_mov__parse(const struct arch *arch __maybe_unused,
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index c732b015f2e8..bc5323ecb5da 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -315,11 +315,12 @@ int call__scnprintf(const struct ins *ins, char *bf, size_t size,
+ const struct ins_ops call_ops = {
+ 	.parse	   = call__parse,
+ 	.scnprintf = call__scnprintf,
++	.is_call   = true,
+ };
+ 
+ bool ins__is_call(const struct ins *ins)
+ {
+-	return ins->ops == &call_ops || ins->ops == &s390_call_ops || ins->ops == &loongarch_call_ops;
++	return ins->ops && ins->ops->is_call;
+ }
+ 
+ /*
+@@ -469,11 +470,12 @@ const struct ins_ops jump_ops = {
+ 	.free	   = jump__delete,
+ 	.parse	   = jump__parse,
+ 	.scnprintf = jump__scnprintf,
++	.is_jump   = true,
+ };
+ 
+ bool ins__is_jump(const struct ins *ins)
+ {
+-	return ins->ops == &jump_ops || ins->ops == &loongarch_jump_ops;
++	return ins->ops && ins->ops->is_jump;
+ }
+ 
+ static int comment__symbol(char *raw, char *comment, u64 *addrp, char **namep)
+diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
+index 83503c5075f9..b6a2a30fdf27 100644
+--- a/tools/perf/util/disasm.h
++++ b/tools/perf/util/disasm.h
+@@ -93,6 +93,8 @@ struct ins_ops {
+ 			struct disasm_line *dl);
+ 	int (*scnprintf)(const struct ins *ins, char *bf, size_t size,
+ 			 struct ins_operands *ops, int max_ins_name);
++	bool is_jump;
++	bool is_call;
+ };
+ 
+ struct annotate_args {
+@@ -139,9 +141,6 @@ bool ins__is_fused(const struct arch *arch, const char *ins1, const char *ins2);
+ bool ins__is_ret(const struct ins *ins);
+ bool ins__is_lock(const struct ins *ins);
+ 
+-extern const struct ins_ops s390_call_ops;
+-extern const struct ins_ops loongarch_call_ops;
+-extern const struct ins_ops loongarch_jump_ops;
+ const struct ins_ops *check_ppc_insn(struct disasm_line *dl);
+ 
+ struct disasm_line *disasm_line__new(struct annotate_args *args);
 -- 
 2.52.0.457.g6b5491de43-goog
 

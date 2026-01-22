@@ -1,54 +1,54 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CF6478E5B
-	for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 07:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8AA481A8A
+	for <linux-csky@vger.kernel.org>; Thu, 22 Jan 2026 07:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769067107; cv=none; b=ia9tFIry4K2DKEfa1lE7eN6aG9fdPuR9/YhFPGTS4bglNxEzTcLLmk4nhy5CqpRUz1iRcUpqz6HpPdsWIg+Qo5ZpsrA4z3EdPNg51znLu0rrBlkIy/RGsbTv4xxqO6djEvMwj1aHcFA/5BwnWq1RjJZlhHeVTKiwukCWhpd2eZM=
+	t=1769067107; cv=none; b=lkkD7/rq5um3raNqyCPAcq13/686t/ajDetQlKAnyKSUvGHfqf2Xlm2k3j2FhfvmrI7gDNLkLySsHGAcbqyzhb0T9BEGjjznLIpiVNfcsK9e8BfoESk02OKfzx5FMzkkvCgqot9kXF2VO771vh3THCCkfNw9hZvT62RW4Z6XuEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769067107; c=relaxed/simple;
-	bh=WqOiFcX/heg3IGph3C/ogbRzFLpcL0diaA21e5ry5lo=;
+	bh=Z2Z1CNYL+JGQpEAglddwhhjQLplFdYsGvVBBauh3Bto=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=UPDg5tS0uSvAXvxxiz5QWRXcoVBXHsE0DVqGVK/pNIGqC+EUWwBrW1KajraQJ0bp2r6nhkIQ+h26NWnzsgo+kKBchMucQcg4FhwkUWVt1bTA4rawRMNxOVwhn7jlgtglIBOABjlYy/GAyIhdRt+gEB7LvtMtjZzF65xDeiHaz7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=22z2F6bI; arc=none smtp.client-ip=74.125.82.202
+	 To:Content-Type; b=q83qf5gH8QacUgvAC4ovFeHj9FJd3eIElxojToC7zg4FQVJvvepsX2uwMROOFDQdbZvGPkQBCHSiFH+Pv8L2UQDCfMLHdwN/4rurEux5fWCcnLFQqNKpU5iFhaM0S5tFVyAoQpXiIulyaDoN+yJYhnpanXD5FQ6gPjECIf/4dQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mmYt/0ty; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="22z2F6bI"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2b6f0b345e3so3840819eec.0
-        for <linux-csky@vger.kernel.org>; Wed, 21 Jan 2026 23:31:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mmYt/0ty"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b72c11c64dso1163094eec.1
+        for <linux-csky@vger.kernel.org>; Wed, 21 Jan 2026 23:31:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769067092; x=1769671892; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1769067096; x=1769671896; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DnbHjkP7sr2MY8dvLIuI6wPgadGKGFiX6WTYohRo5Kw=;
-        b=22z2F6bInp6cZhvQ9Em21c3XK/Yk+8bxjkaGoHOr+ypQIMd5qS6M8YmO/ig4cTtQA5
-         UKsY4BqUMT4kSZOvGIpH2bJRvZ6hgpPf3XJixF4OtNHqDwjK55UWPlkj6pcw3dz5gUOV
-         TcoAsOSNTlGUTOHNUn4wItzdpmMIOUY6z7BoKdUzoLVBFXv7XSgR/4zW7qk+U5xYvLvP
-         zXfjy3KmjHNtznRpcbnYN3pq6ggvdT6g3mzciVKGCcOqmWzQDxxCHIPrU8wO+52JZyTH
-         voQBqvQvlIfsPHU/XqOKYb62o1jr19O6PnVPv5J0DysTs82jFGRaRl5fzLbQWE9YjCLk
-         JHIA==
+        bh=JZ50YiJoEVxCgYjte6CjV+ls97az2nN7mWUZv3Wr1mA=;
+        b=mmYt/0tyeETjxqJVC3Rv/Bcu/5XryV+pJ8ktPapvzqp8EJHaqFQpqTxY1/DwQ8wnma
+         7fLcD20bRvG9UsKcayKXTRzTdi1PVN4W6JPfLQQRBBsAgT/0Tthk1EVksf341asTT7vM
+         8wJXqyVanqejESqkf74iQ7RvWQw6Z7kvlt9Xto2S3YeFnweWsvS2jkoCdQB3J3mei2JA
+         SNkP98AKD/wPbr8ps/in/O8qOyKrX2y/hZLyapB1aXYKpFVeg+RYCmflYuu/oIKSnLo2
+         XfrzcBo/HTGE/wP7/vOpvA+6rjJuZCm+2qZIFU7SzmDyonWk++2PgDIAV/WfRc03svyr
+         pWjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769067092; x=1769671892;
+        d=1e100.net; s=20230601; t=1769067096; x=1769671896;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DnbHjkP7sr2MY8dvLIuI6wPgadGKGFiX6WTYohRo5Kw=;
-        b=tenAmEPdVMd9G7dX0htKN/roXRA6eybVokytGMfWGNSbSQq/amxJwTLL5bdlUoD8nZ
-         26TscFWma92blMYg9enQ3fJXgQ/vJjJJu+QErk9/sbwJ19ySmP+kZ8wWARpVoiBILQmO
-         plhhv5Jd1MiWe0YiP7M044tFGS+XXdcbCHu0q3CViWTw/hoxe6CDoZ623HkSokgI3Qjh
-         JGoQCS+uN6QayXlqmX7cjZQ3bDZVRNgoP7868acmcdHS1BDsevQgBEUw1Pb4KTn0MhYe
-         /y3a0IY1/KKWjHockP0VheqqYdrvAGRK8ucPohUiTw+Ha+uCIU8PnDN4MFH8TdGI09U6
-         EGWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJmbu6J/qbASJUT0HLPIRtCuHfMb9db5ZvQc+VqsVCPAz4T7N58w+qXgq0EmPI4t9VzmkOnJnVZSkw@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGROuLLOR7mmtgAN6lu3fVZKcyt19setdowCdIl0HYJKfwmF8D
-	3qBzoYvEEXXOe5kC57Hx+xQASL3f5Jl8+liqcDWBrn4bjc08wOFJmrsCZcxRN/DGoA1755Zovwu
-	NuptgIUpDyQ==
-X-Received: from dlg15.prod.google.com ([2002:a05:7022:78f:b0:11f:330d:ed15])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:225:b0:11b:f056:a1b3
- with SMTP id a92af1059eb24-1244a728dc0mr16430933c88.11.1769067091900; Wed, 21
- Jan 2026 23:31:31 -0800 (PST)
-Date: Wed, 21 Jan 2026 23:31:17 -0800
+        bh=JZ50YiJoEVxCgYjte6CjV+ls97az2nN7mWUZv3Wr1mA=;
+        b=XWm9FbsiOEcJN5mRXJMA5eMZuF6UzgD4SkA57RhSFRxV5IOjQQkrl+taztsViJLEi7
+         V4rDSgSGBWb2gOjx1hyRVLqJkWAwdxwd2kVBufCkm1YjdwC/VWd9LmscexS7JlIiReE0
+         Owt2OwOgnSdpLT30a1UIBZLrELG59omgIBYu9+Eqf8ROK4hjvECYDR3eX2ejE+u0RwGO
+         AsBQ6G+Ci1v02CxXGvNhj9099Y2JV6HJFyQz0HSj+wIRB4p6V0rEEcC7ZWVHjP21nMxk
+         W+gg3/VVVHvMi8dp71VDhHMFXQUVk6E3kszqZP0mE8mbk2AqKe2azhsh4JJNK50cd0vE
+         LE/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUioAulpga6m1u3tQI0PJuJ4vEjPbIVLIV6gOQwQxI0Tnx5sHil4il2qhnlvlhBngLnWNcg9YTJt51f@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFZ4x1Uhi7iU/Woy2iXrwQj+45/eJiIo4LpaMutcF0xFoaWaer
+	4lOx88sz+k+TAqobIdOdXwnbhwuTZdhzrbvPnzmVZ0AbE5jvET1IODEEbUIQ6wShUgwfA0BBvBr
+	bvwb4nevOOA==
+X-Received: from dll12.prod.google.com ([2002:a05:7022:20c:b0:123:17b9:69c2])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:f86:b0:11c:b397:2657
+ with SMTP id a92af1059eb24-1246aa90798mr5597076c88.22.1769067095464; Wed, 21
+ Jan 2026 23:31:35 -0800 (PST)
+Date: Wed, 21 Jan 2026 23:31:19 -0800
 In-Reply-To: <20260122073127.375139-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260122073127.375139-1-irogers@google.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260122073127.375139-2-irogers@google.com>
-Subject: [PATCH v1 01/11] perf maps: Fix reference count leak in maps__find_ams
+Message-ID: <20260122073127.375139-4-irogers@google.com>
+Subject: [PATCH v1 03/11] perf disasm: Constify use of struct arch
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -82,28 +82,522 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-ams and so ams->ms.map is an in argument, however, it is also
-overwritten. As a map is reference counted, ensure a map__put is done
-before overwriting it.
+The struct arch holds variables that are read but not written, except
+during some initialization. Change most uses to be for a "const struct
+arch *" version to capture this immutability.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
-Fixes: 42fd623b58db ("perf maps: Get map before returning in maps__find")
 ---
- tools/perf/util/maps.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/arch/arm64/annotate/instructions.c |  2 +-
+ .../arch/loongarch/annotate/instructions.c    | 12 ++++--
+ tools/perf/arch/s390/annotate/instructions.c  |  7 ++--
+ tools/perf/arch/x86/annotate/instructions.c   |  4 +-
+ tools/perf/ui/browsers/annotate.c             |  2 +-
+ tools/perf/util/annotate-data.c               |  2 +-
+ tools/perf/util/annotate-data.h               |  2 +-
+ tools/perf/util/annotate.c                    | 28 ++++++-------
+ tools/perf/util/annotate.h                    | 10 ++---
+ tools/perf/util/disasm.c                      | 42 ++++++++++---------
+ tools/perf/util/disasm.h                      | 14 +++----
+ 11 files changed, 67 insertions(+), 58 deletions(-)
 
-diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
-index 8ccc46d515b6..4092211cff62 100644
---- a/tools/perf/util/maps.c
-+++ b/tools/perf/util/maps.c
-@@ -708,6 +708,7 @@ int maps__find_ams(struct maps *maps, struct addr_map_symbol *ams)
- 	if (ams->addr < map__start(ams->ms.map) || ams->addr >= map__end(ams->ms.map)) {
- 		if (maps == NULL)
- 			return -1;
-+		map__put(ams->ms.map);
- 		ams->ms.map = maps__find(maps, ams->addr);
- 		if (ams->ms.map == NULL)
- 			return -1;
+diff --git a/tools/perf/arch/arm64/annotate/instructions.c b/tools/perf/arch/arm64/annotate/instructions.c
+index 16cb62d40bd9..5099fa36180d 100644
+--- a/tools/perf/arch/arm64/annotate/instructions.c
++++ b/tools/perf/arch/arm64/annotate/instructions.c
+@@ -10,7 +10,7 @@ struct arm64_annotate {
+ 		jump_insn;
+ };
+ 
+-static int arm64_mov__parse(struct arch *arch __maybe_unused,
++static int arm64_mov__parse(const struct arch *arch __maybe_unused,
+ 			    struct ins_operands *ops,
+ 			    struct map_symbol *ms __maybe_unused,
+ 			    struct disasm_line *dl __maybe_unused)
+diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/perf/arch/loongarch/annotate/instructions.c
+index 70262d5f1444..4ca4fb6bbcf9 100644
+--- a/tools/perf/arch/loongarch/annotate/instructions.c
++++ b/tools/perf/arch/loongarch/annotate/instructions.c
+@@ -5,8 +5,10 @@
+  * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+  */
+ 
+-static int loongarch_call__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
+-		struct disasm_line *dl __maybe_unused)
++static int loongarch_call__parse(const struct arch *arch, struct ins_operands *ops,
++				 struct map_symbol *ms,
++				 struct disasm_line *dl __maybe_unused)
++
+ {
+ 	char *c, *endptr, *tok, *name;
+ 	struct map *map = ms->map;
+@@ -52,8 +54,10 @@ static struct ins_ops loongarch_call_ops = {
+ 	.scnprintf = call__scnprintf,
+ };
+ 
+-static int loongarch_jump__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
+-		struct disasm_line *dl __maybe_unused)
++static int loongarch_jump__parse(const struct arch *arch, struct ins_operands *ops,
++				 struct map_symbol *ms,
++				 struct disasm_line *dl __maybe_unused)
++
+ {
+ 	struct map *map = ms->map;
+ 	struct symbol *sym = ms->sym;
+diff --git a/tools/perf/arch/s390/annotate/instructions.c b/tools/perf/arch/s390/annotate/instructions.c
+index c61193f1e096..8d66c0ea3810 100644
+--- a/tools/perf/arch/s390/annotate/instructions.c
++++ b/tools/perf/arch/s390/annotate/instructions.c
+@@ -1,8 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/compiler.h>
+ 
+-static int s390_call__parse(struct arch *arch, struct ins_operands *ops,
+-			    struct map_symbol *ms, struct disasm_line *dl __maybe_unused)
++static int s390_call__parse(const struct arch *arch, struct ins_operands *ops,
++			    struct map_symbol *ms,
++			    struct disasm_line *dl __maybe_unused)
+ {
+ 	char *endptr, *tok, *name;
+ 	struct map *map = ms->map;
+@@ -50,7 +51,7 @@ static struct ins_ops s390_call_ops = {
+ 	.scnprintf = call__scnprintf,
+ };
+ 
+-static int s390_mov__parse(struct arch *arch __maybe_unused,
++static int s390_mov__parse(const struct arch *arch __maybe_unused,
+ 			   struct ins_operands *ops,
+ 			   struct map_symbol *ms __maybe_unused,
+ 			   struct disasm_line *dl __maybe_unused)
+diff --git a/tools/perf/arch/x86/annotate/instructions.c b/tools/perf/arch/x86/annotate/instructions.c
+index 803f9351a3fb..24b388bacdae 100644
+--- a/tools/perf/arch/x86/annotate/instructions.c
++++ b/tools/perf/arch/x86/annotate/instructions.c
+@@ -119,7 +119,7 @@ static struct ins x86__instructions[] = {
+ 	{ .name = "xorps",	.ops = &mov_ops, },
+ };
+ 
+-static bool amd__ins_is_fused(struct arch *arch, const char *ins1,
++static bool amd__ins_is_fused(const struct arch *arch, const char *ins1,
+ 			      const char *ins2)
+ {
+ 	if (strstr(ins2, "jmp"))
+@@ -142,7 +142,7 @@ static bool amd__ins_is_fused(struct arch *arch, const char *ins1,
+ 	return false;
+ }
+ 
+-static bool intel__ins_is_fused(struct arch *arch, const char *ins1,
++static bool intel__ins_is_fused(const struct arch *arch, const char *ins1,
+ 				const char *ins2)
+ {
+ 	if (arch->family != 6 || arch->model < 0x1e || strstr(ins2, "jmp"))
+diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+index 36aca8d6d003..3df61cd46652 100644
+--- a/tools/perf/ui/browsers/annotate.c
++++ b/tools/perf/ui/browsers/annotate.c
+@@ -30,7 +30,7 @@ struct annotate_browser {
+ 	struct rb_root		    entries;
+ 	struct rb_node		   *curr_hot;
+ 	struct annotation_line	   *selection;
+-	struct arch		   *arch;
++	const struct arch	   *arch;
+ 	/*
+ 	 * perf top can delete hist_entry anytime.  Callers should make sure
+ 	 * its lifetime.
+diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+index 07cf9c334be0..edfcd6e9df9c 100644
+--- a/tools/perf/util/annotate-data.c
++++ b/tools/perf/util/annotate-data.c
+@@ -160,7 +160,7 @@ bool has_reg_type(struct type_state *state, int reg)
+ 	return (unsigned)reg < ARRAY_SIZE(state->regs);
+ }
+ 
+-static void init_type_state(struct type_state *state, struct arch *arch)
++static void init_type_state(struct type_state *state, const struct arch *arch)
+ {
+ 	memset(state, 0, sizeof(*state));
+ 	INIT_LIST_HEAD(&state->stack_vars);
+diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
+index 869307c7f130..9b222869e42d 100644
+--- a/tools/perf/util/annotate-data.h
++++ b/tools/perf/util/annotate-data.h
+@@ -117,7 +117,7 @@ extern struct annotated_data_type canary_type;
+  */
+ struct data_loc_info {
+ 	/* These are input field, should be filled by caller */
+-	struct arch *arch;
++	const struct arch *arch;
+ 	struct thread *thread;
+ 	struct map_symbol *ms;
+ 	u64 ip;
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index 791d60f97c23..132af2556aec 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -761,7 +761,7 @@ static int disasm_line__print(struct disasm_line *dl, u64 start, int addr_fmt_wi
+ }
+ 
+ static struct annotated_data_type *
+-__hist_entry__get_data_type(struct hist_entry *he, struct arch *arch,
++__hist_entry__get_data_type(struct hist_entry *he, const struct arch *arch,
+ 			    struct debuginfo *dbg, struct disasm_line *dl,
+ 			    int *type_offset);
+ 
+@@ -980,11 +980,11 @@ void symbol__calc_percent(struct symbol *sym, struct evsel *evsel)
+ 	annotation__calc_percent(notes, evsel, symbol__size(sym));
+ }
+ 
+-int evsel__get_arch(struct evsel *evsel, struct arch **parch)
++int evsel__get_arch(struct evsel *evsel, const struct arch **parch)
+ {
+ 	struct perf_env *env = evsel__env(evsel);
+ 	const char *arch_name = perf_env__arch(env);
+-	struct arch *arch;
++	const struct arch *arch;
+ 	int err;
+ 
+ 	if (!arch_name) {
+@@ -999,7 +999,7 @@ int evsel__get_arch(struct evsel *evsel, struct arch **parch)
+ 	}
+ 
+ 	if (arch->init) {
+-		err = arch->init(arch, env ? env->cpuid : NULL);
++		err = arch->init((struct arch *)arch, env ? env->cpuid : NULL);
+ 		if (err) {
+ 			pr_err("%s: failed to initialize %s arch priv area\n",
+ 			       __func__, arch->name);
+@@ -1010,14 +1010,14 @@ int evsel__get_arch(struct evsel *evsel, struct arch **parch)
+ }
+ 
+ int symbol__annotate(struct map_symbol *ms, struct evsel *evsel,
+-		     struct arch **parch)
++		     const struct arch **parch)
+ {
+ 	struct symbol *sym = ms->sym;
+ 	struct annotation *notes = symbol__annotation(sym);
+ 	struct annotate_args args = {
+ 		.options	= &annotate_opts,
+ 	};
+-	struct arch *arch = NULL;
++	const struct arch *arch = NULL;
+ 	int err, nr;
+ 
+ 	err = evsel__get_arch(evsel, &arch);
+@@ -2204,7 +2204,7 @@ void annotation_line__write(struct annotation_line *al, struct annotation *notes
+ }
+ 
+ int symbol__annotate2(struct map_symbol *ms, struct evsel *evsel,
+-		      struct arch **parch)
++		      const struct arch **parch)
+ {
+ 	struct symbol *sym = ms->sym;
+ 	struct annotation *notes = symbol__annotation(sym);
+@@ -2457,7 +2457,7 @@ int annotate_check_args(void)
+  * to revisit the format when it handles different architecture.
+  * Fills @reg and @offset when return 0.
+  */
+-static int extract_reg_offset(struct arch *arch, const char *str,
++static int extract_reg_offset(const struct arch *arch, const char *str,
+ 			      struct annotated_op_loc *op_loc)
+ {
+ 	char *p;
+@@ -2538,7 +2538,7 @@ static int extract_reg_offset(struct arch *arch, const char *str,
+  *                              # dst_reg1 = rbx, dst_reg2 = rcx, dst_mem = 1
+  *                              # dst_multi_regs = 1, dst_offset = 8
+  */
+-int annotate_get_insn_location(struct arch *arch, struct disasm_line *dl,
++int annotate_get_insn_location(const struct arch *arch, struct disasm_line *dl,
+ 			       struct annotated_insn_loc *loc)
+ {
+ 	struct ins_operands *ops;
+@@ -2673,7 +2673,7 @@ static struct annotated_item_stat *annotate_data_stat(struct list_head *head,
+ 	return istat;
+ }
+ 
+-static bool is_stack_operation(struct arch *arch, struct disasm_line *dl)
++static bool is_stack_operation(const struct arch *arch, struct disasm_line *dl)
+ {
+ 	if (arch__is(arch, "x86")) {
+ 		if (!strncmp(dl->ins.name, "push", 4) ||
+@@ -2686,7 +2686,7 @@ static bool is_stack_operation(struct arch *arch, struct disasm_line *dl)
+ 	return false;
+ }
+ 
+-static bool is_stack_canary(struct arch *arch, struct annotated_op_loc *loc)
++static bool is_stack_canary(const struct arch *arch, struct annotated_op_loc *loc)
+ {
+ 	/* On x86_64, %gs:40 is used for stack canary */
+ 	if (arch__is(arch, "x86")) {
+@@ -2702,7 +2702,7 @@ static bool is_stack_canary(struct arch *arch, struct annotated_op_loc *loc)
+  * Returns true if the instruction has a memory operand without
+  * performing a load/store
+  */
+-static bool is_address_gen_insn(struct arch *arch, struct disasm_line *dl)
++static bool is_address_gen_insn(const struct arch *arch, struct disasm_line *dl)
+ {
+ 	if (arch__is(arch, "x86")) {
+ 		if (!strncmp(dl->ins.name, "lea", 3))
+@@ -2791,7 +2791,7 @@ void debuginfo_cache__delete(void)
+ }
+ 
+ static struct annotated_data_type *
+-__hist_entry__get_data_type(struct hist_entry *he, struct arch *arch,
++__hist_entry__get_data_type(struct hist_entry *he, const struct arch *arch,
+ 			    struct debuginfo *dbg, struct disasm_line *dl,
+ 			    int *type_offset)
+ {
+@@ -2895,7 +2895,7 @@ struct annotated_data_type *hist_entry__get_data_type(struct hist_entry *he)
+ {
+ 	struct map_symbol *ms = &he->ms;
+ 	struct evsel *evsel = hists_to_evsel(he->hists);
+-	struct arch *arch;
++	const struct arch *arch;
+ 	struct disasm_line *dl;
+ 	struct annotated_data_type *mem_type;
+ 	struct annotated_item_stat *istat;
+diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+index d4990bff29a7..58eaf4b2fa65 100644
+--- a/tools/perf/util/annotate.h
++++ b/tools/perf/util/annotate.h
+@@ -202,7 +202,7 @@ struct annotation_write_ops {
+ struct annotation_print_data {
+ 	struct hist_entry *he;
+ 	struct evsel *evsel;
+-	struct arch *arch;
++	const struct arch *arch;
+ 	struct debuginfo *dbg;
+ 	/* save data type info keyed by al->offset */
+ 	struct hashmap *type_hash;
+@@ -441,10 +441,10 @@ void symbol__annotate_zero_histograms(struct symbol *sym);
+ 
+ int symbol__annotate(struct map_symbol *ms,
+ 		     struct evsel *evsel,
+-		     struct arch **parch);
++		     const struct arch **parch);
+ int symbol__annotate2(struct map_symbol *ms,
+ 		      struct evsel *evsel,
+-		      struct arch **parch);
++		      const struct arch **parch);
+ 
+ enum symbol_disassemble_errno {
+ 	SYMBOL_ANNOTATE_ERRNO__SUCCESS		= 0,
+@@ -546,7 +546,7 @@ struct annotated_insn_loc {
+ 	     i++, op_loc++)
+ 
+ /* Get detailed location info in the instruction */
+-int annotate_get_insn_location(struct arch *arch, struct disasm_line *dl,
++int annotate_get_insn_location(const struct arch *arch, struct disasm_line *dl,
+ 			       struct annotated_insn_loc *loc);
+ 
+ /* Returns a data type from the sample instruction (if any) */
+@@ -586,5 +586,5 @@ int annotation_br_cntr_entry(char **str, int br_cntr_nr, u64 *br_cntr,
+ 			     int num_aggr, struct evsel *evsel);
+ int annotation_br_cntr_abbr_list(char **str, struct evsel *evsel, bool header);
+ 
+-int evsel__get_arch(struct evsel *evsel, struct arch **parch);
++int evsel__get_arch(struct evsel *evsel, const struct arch **parch);
+ #endif	/* __PERF_ANNOTATE_H */
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index 96c78b01e17a..d41a0f96a6f6 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -213,7 +213,7 @@ static void arch__sort(void)
+ 	qsort(architectures, nmemb, sizeof(struct arch), arch__cmp);
+ }
+ 
+-struct arch *arch__find(const char *name)
++const struct arch *arch__find(const char *name)
+ {
+ 	const int nmemb = ARRAY_SIZE(architectures);
+ 	static bool sorted;
+@@ -226,7 +226,7 @@ struct arch *arch__find(const char *name)
+ 	return bsearch(name, architectures, nmemb, sizeof(struct arch), arch__key_cmp);
+ }
+ 
+-bool arch__is(struct arch *arch, const char *name)
++bool arch__is(const struct arch *arch, const char *name)
+ {
+ 	return !strcmp(arch->name, name);
+ }
+@@ -256,7 +256,7 @@ static int ins__scnprintf(struct ins *ins, char *bf, size_t size,
+ 	return ins__raw_scnprintf(ins, bf, size, ops, max_ins_name);
+ }
+ 
+-bool ins__is_fused(struct arch *arch, const char *ins1, const char *ins2)
++bool ins__is_fused(const struct arch *arch, const char *ins1, const char *ins2)
+ {
+ 	if (!arch || !arch->ins_is_fused)
+ 		return false;
+@@ -264,7 +264,7 @@ bool ins__is_fused(struct arch *arch, const char *ins1, const char *ins2)
+ 	return arch->ins_is_fused(arch, ins1, ins2);
+ }
+ 
+-static int call__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
++static int call__parse(const struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
+ 		struct disasm_line *dl __maybe_unused)
+ {
+ 	char *endptr, *tok, *name;
+@@ -362,7 +362,7 @@ static inline const char *validate_comma(const char *c, struct ins_operands *ops
+ 	return c;
+ }
+ 
+-static int jump__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
++static int jump__parse(const struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
+ 		struct disasm_line *dl __maybe_unused)
+ {
+ 	struct map *map = ms->map;
+@@ -525,7 +525,7 @@ static int comment__symbol(char *raw, char *comment, u64 *addrp, char **namep)
+ 	return 0;
+ }
+ 
+-static int lock__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
++static int lock__parse(const struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
+ 		struct disasm_line *dl __maybe_unused)
+ {
+ 	ops->locked.ops = zalloc(sizeof(*ops->locked.ops));
+@@ -592,7 +592,7 @@ static struct ins_ops lock_ops = {
+  * But it doesn't care segment selectors like %gs:0x5678(%rcx), so just check
+  * the input string after 'memory_ref_char' if exists.
+  */
+-static bool check_multi_regs(struct arch *arch, const char *op)
++static bool check_multi_regs(const struct arch *arch, const char *op)
+ {
+ 	int count = 0;
+ 
+@@ -613,8 +613,9 @@ static bool check_multi_regs(struct arch *arch, const char *op)
+ 	return count > 1;
+ }
+ 
+-static int mov__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms __maybe_unused,
+-		struct disasm_line *dl __maybe_unused)
++static int mov__parse(const struct arch *arch, struct ins_operands *ops,
++		      struct map_symbol *ms __maybe_unused,
++		      struct disasm_line *dl __maybe_unused)
+ {
+ 	char *s = strchr(ops->raw, ','), *target, *comment, prev;
+ 
+@@ -719,7 +720,7 @@ static int arithmetic__scnprintf(struct ins *ins, char *bf, size_t size,
+  * - Add to Zero Extended XO-form ( Ex: addze, addzeo )
+  * - Subtract From Zero Extended XO-form ( Ex: subfze )
+  */
+-static int arithmetic__parse(struct arch *arch __maybe_unused, struct ins_operands *ops,
++static int arithmetic__parse(const struct arch *arch __maybe_unused, struct ins_operands *ops,
+ 		struct map_symbol *ms __maybe_unused, struct disasm_line *dl)
+ {
+ 	int opcode = PPC_OP(dl->raw.raw_insn);
+@@ -756,7 +757,7 @@ static int load_store__scnprintf(struct ins *ins, char *bf, size_t size,
+  * used by powerpc and since binary instruction code is used to
+  * extract opcode, regs and offset, no other parsing is needed here
+  */
+-static int load_store__parse(struct arch *arch __maybe_unused, struct ins_operands *ops,
++static int load_store__parse(const struct arch *arch __maybe_unused, struct ins_operands *ops,
+ 		struct map_symbol *ms __maybe_unused, struct disasm_line *dl __maybe_unused)
+ {
+ 	ops->source.mem_ref = true;
+@@ -776,8 +777,9 @@ static struct ins_ops load_store_ops = {
+ 	.scnprintf = load_store__scnprintf,
+ };
+ 
+-static int dec__parse(struct arch *arch __maybe_unused, struct ins_operands *ops, struct map_symbol *ms __maybe_unused,
+-		struct disasm_line *dl __maybe_unused)
++static int dec__parse(const struct arch *arch __maybe_unused, struct ins_operands *ops,
++		      struct map_symbol *ms __maybe_unused,
++		      struct disasm_line *dl __maybe_unused)
+ {
+ 	char *target, *comment, *s, prev;
+ 
+@@ -867,7 +869,8 @@ static void ins__sort(struct arch *arch)
+ 	qsort(arch->instructions, nmemb, sizeof(struct ins), ins__cmp);
+ }
+ 
+-static struct ins_ops *__ins__find(struct arch *arch, const char *name, struct disasm_line *dl)
++static struct ins_ops *__ins__find(const struct arch *arch, const char *name,
++				     struct disasm_line *dl)
+ {
+ 	struct ins *ins;
+ 	const int nmemb = arch->nr_instructions;
+@@ -885,8 +888,8 @@ static struct ins_ops *__ins__find(struct arch *arch, const char *name, struct d
+ 	}
+ 
+ 	if (!arch->sorted_instructions) {
+-		ins__sort(arch);
+-		arch->sorted_instructions = true;
++		ins__sort((struct arch *)arch);
++		((struct arch *)arch)->sorted_instructions = true;
+ 	}
+ 
+ 	ins = bsearch(name, arch->instructions, nmemb, sizeof(struct ins), ins__key_cmp);
+@@ -913,17 +916,18 @@ static struct ins_ops *__ins__find(struct arch *arch, const char *name, struct d
+ 	return ins ? ins->ops : NULL;
+ }
+ 
+-struct ins_ops *ins__find(struct arch *arch, const char *name, struct disasm_line *dl)
++struct ins_ops *ins__find(const struct arch *arch, const char *name, struct disasm_line *dl)
+ {
+ 	struct ins_ops *ops = __ins__find(arch, name, dl);
+ 
+ 	if (!ops && arch->associate_instruction_ops)
+-		ops = arch->associate_instruction_ops(arch, name);
++		ops = arch->associate_instruction_ops((struct arch *)arch, name);
+ 
+ 	return ops;
+ }
+ 
+-static void disasm_line__init_ins(struct disasm_line *dl, struct arch *arch, struct map_symbol *ms)
++static void disasm_line__init_ins(struct disasm_line *dl, const struct arch *arch,
++				    struct map_symbol *ms)
+ {
+ 	dl->ins.ops = ins__find(arch, dl->ins.name, dl);
+ 
+diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
+index a3ea9d676281..273a9c906514 100644
+--- a/tools/perf/util/disasm.h
++++ b/tools/perf/util/disasm.h
+@@ -30,7 +30,7 @@ struct arch {
+ 	unsigned int	model;
+ 	unsigned int	family;
+ 	int		(*init)(struct arch *arch, char *cpuid);
+-	bool		(*ins_is_fused)(struct arch *arch, const char *ins1,
++	bool		(*ins_is_fused)(const struct arch *arch, const char *ins1,
+ 					const char *ins2);
+ 	struct		{
+ 		char comment_char;
+@@ -89,14 +89,14 @@ struct ins_operands {
+ 
+ struct ins_ops {
+ 	void (*free)(struct ins_operands *ops);
+-	int (*parse)(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
++	int (*parse)(const struct arch *arch, struct ins_operands *ops, struct map_symbol *ms,
+ 			struct disasm_line *dl);
+ 	int (*scnprintf)(struct ins *ins, char *bf, size_t size,
+ 			 struct ins_operands *ops, int max_ins_name);
+ };
+ 
+ struct annotate_args {
+-	struct arch		  *arch;
++	const struct arch	  *arch;
+ 	struct map_symbol	  *ms;
+ 	struct annotation_options *options;
+ 	s64			  offset;
+@@ -105,14 +105,14 @@ struct annotate_args {
+ 	char			  *fileloc;
+ };
+ 
+-struct arch *arch__find(const char *name);
+-bool arch__is(struct arch *arch, const char *name);
++const struct arch *arch__find(const char *name);
++bool arch__is(const struct arch *arch, const char *name);
+ 
+-struct ins_ops *ins__find(struct arch *arch, const char *name, struct disasm_line *dl);
++struct ins_ops *ins__find(const struct arch *arch, const char *name, struct disasm_line *dl);
+ 
+ bool ins__is_call(const struct ins *ins);
+ bool ins__is_jump(const struct ins *ins);
+-bool ins__is_fused(struct arch *arch, const char *ins1, const char *ins2);
++bool ins__is_fused(const struct arch *arch, const char *ins1, const char *ins2);
+ bool ins__is_ret(const struct ins *ins);
+ bool ins__is_lock(const struct ins *ins);
+ 
 -- 
 2.52.0.457.g6b5491de43-goog
 

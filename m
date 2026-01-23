@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D332D0C66;
-	Fri, 23 Jan 2026 16:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1169B3EBF3D;
+	Fri, 23 Jan 2026 17:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769186869; cv=none; b=jscyuarNhlvF4J6UeaU27xOmmXT9Ikek7x4qsf4RQCGq2DPbX1ATe6Jht+a3QK/W3FOButrSD4oBDoWdgyxeH1BexYvWjvSxkcjqb80e9FdeqkTTZ1/PbHRnzb7p3LxIczsEqkmd83+pWlT6hIPdCq2VievtB6LiDuH2ObHdB7U=
+	t=1769190433; cv=none; b=BgughVGn+s7AO2p0SZgWhFv4LB3e3qHK8Ivk6JRkwujGocgge4Dbr4jFDBnY+BGYt3duIlswXKmjeitPo+K4sb2aYoFncDtfIIP49t++wYkdl4PY06ylVwT9kJ06RPlqI6mc2flpizAkDYrOaj+rSi/tJToJH/K7akMdXLoVoa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769186869; c=relaxed/simple;
-	bh=zveMAUf998ovbct5UpW7FmMJgR9EwAhf7mycVOrHXT0=;
+	s=arc-20240116; t=1769190433; c=relaxed/simple;
+	bh=Fvul9cTQTipTMlqs6XhjhLKNYQVXUkoZrLxvwUon1vQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jgeDTrekEVsQepxIAaRL0mC2b4zdxDb3takytIW0vkQF+nH9Sl9FasVrBjUy6BgqfcLl3JS5KXDz+y7BLVQRC1n3KaBxVLkbpDLW8IkxtfUyCXllSP+SnaKL+gNzYR57ndHswry6ptFTiwnX4UB+GeDpgx3bq5xTFbwTsVw+9a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tpCvrKvl; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=H7IXveq7dBKRXV7CGYDGKqAlpYTcEhAG/ubs+Xns+4Sx883e56n+w3mxWIJQl058/9NlByqP8BNvF7O4Iv8Dqb3qSWSJmG649v4ZjE35KCagtCjIMZgXiBR4CX3GI/jUWyTThL2TIvObjoKa1DBpcHj5HoOyxtQxtipONAvTRUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EnJs6i5c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tpCvrKvl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046ACC4CEF1;
-	Fri, 23 Jan 2026 16:47:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EnJs6i5c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E4DC4CEF1;
+	Fri, 23 Jan 2026 17:47:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769186868;
-	bh=zveMAUf998ovbct5UpW7FmMJgR9EwAhf7mycVOrHXT0=;
+	s=k20201202; t=1769190432;
+	bh=Fvul9cTQTipTMlqs6XhjhLKNYQVXUkoZrLxvwUon1vQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tpCvrKvle/wO3axQQk4cdWRkKypLm8st7IFY/YlpE8SKHScW1sSzzZR1zFMaANOQB
-	 8K5ipExhGsMSuT+EMrydSDXe1a29fmQARcfM0SQrrYjxA6RvUuMtkYd/PwRasYADkO
-	 FMVN1K53McrG3o1OnEFJOHZ8QK/2SDGXQTbGjlKjSa135KAqDoaHfmR402ZVpveUzv
-	 9TtRI4qoddL8mVW7AUxFgF9Vui8WHHIWT5UoV+k1WXKsirGrhA6QkZqjEuzshYDYrF
-	 X217jX9p4TVGQKEo/LKvtifEB/TSW+Ci6G5SGUh1TFuT3+Hrj94eMVSrxSjuRIYImK
-	 Z26OO/WncgeBg==
-Date: Fri, 23 Jan 2026 13:47:45 -0300
+	b=EnJs6i5cTHOlKaNlU87cLSBa8KHPBnahqPMdwuu7AmNbJl+0lAV32DFm2xxVfJ+s1
+	 M2VjiYN269iF/Fz1hKsagkuBCbTtBLNmI4o76vHdDNuWy/vP5qfM2NmJrjsyIOGpPz
+	 oTtEljWa8LRkKv211KZkl0aIhoPn1LelEFGMrNm/2rbvJtBG7YzZmU8K7BwP43X2yn
+	 1wBqL6mh9sWW8eYykQfWb4HzEVFhMmOcgdtcmohtx/ru/FspacPOjG336TlE1GCTPo
+	 coPzT9tMq0lspF7y77DhDjko2h+ZmGKtWz/GJJj+42BGTI1U9g+GPumXQVn5Jhy7gw
+	 sGkBR+CQRM/Lw==
+Date: Fri, 23 Jan 2026 14:47:09 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Ian Rogers <irogers@google.com>
-Cc: James Clark <james.clark@linaro.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
 	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
 	Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>,
 	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
@@ -57,11 +57,11 @@ Cc: James Clark <james.clark@linaro.org>,
 	linux-perf-users@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 00/12] perf annotate arch clean up
-Message-ID: <aXOmMc8W85u-AGxH@x1>
+Subject: Re: [PATCH v3 11/12] perf disasm: Refactor arch__find and
+ initialization of arch structs
+Message-ID: <aXO0Hao8t-McaAU3@x1>
 References: <20260122213516.671089-1-irogers@google.com>
- <1310a240-077a-49f6-b83a-a8a4fd52127b@linaro.org>
- <CAP-5=fWrJoej0XprvPmYg5qa7SRU2s3yeCF-hWgj+3MTdTZLzQ@mail.gmail.com>
+ <20260122213516.671089-12-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -71,33 +71,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fWrJoej0XprvPmYg5qa7SRU2s3yeCF-hWgj+3MTdTZLzQ@mail.gmail.com>
+In-Reply-To: <20260122213516.671089-12-irogers@google.com>
 
-On Fri, Jan 23, 2026 at 08:30:22AM -0800, Ian Rogers wrote:
-> On Fri, Jan 23, 2026 at 3:02 AM James Clark <james.clark@linaro.org> wrote:
-> > On 22/01/2026 9:35 pm, Ian Rogers wrote:
-> >
-> > Reviewed-by: James Clark <james.clark@linaro.org>
-> 
-> Thanks James!
-> 
-> Arnaldo, it'd be nice for this to land so I can look into addressing
-> the missing e_flags issue - namely, we should optionally read the
-> e_flags along with the e_machine so that we have a proper e_flags
-> value to make csky work properly (not an issue on anything else). At
-> the same time I think some of the e_machine should be made more robust
-> like with:
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/commit/tools/perf?h=perf-tools-next&id=e99d544c7f3691eb321c88fdbadf04b777c114c4
-> but here:
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/util/thread.c?h=perf-tools-next#n452
-> the code should probably be shared.
-> Anyway, this series does enough without adding all that to it and
-> waiting for more tags.
+On Thu, Jan 22, 2026 at 01:35:15PM -0800, Ian Rogers wrote:
+> Switch arch__find to using an ELF machine number rather than a
+> string. Rather than an array of fixed size arch structs turn the init
+> functions into new functions indexed by the ELF machine they
+> correspond to. This allows data to be stored with a struct arch with
+> the container_of trick, so the priv variable can be removed. Switch to
+> using the thread to find the arch rather than the evsel as the evsel
+> only has limited notions of the running thread upon which disassembly
+> is performed. Factor out the e_machine and e_flags into their own
+> struct to make them easier to pass around.
 
-I just merged it and it is going on testing, I'll also check that fix
-for the inject callchain on hybrid since I noticed it failing here as
-well.
+Added:
 
-Thanks,
+⬢ [acme@toolbx perf-tools-next]$ git diff
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index 46740d1e58580004..4f60726247d62764 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -1,5 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include <ctype.h>
++#include <elf.h>
++#ifndef EF_CSKY_ABIMASK
++#define EF_CSKY_ABIMASK        0XF0000000
++#endif
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <inttypes.h>
 
-- Arnalod
+
+With:
+
+    [ Include elf.h for EM_CSKY and friends and also conditionally define EM_CSKY_ABIMASK for old distros ]
+

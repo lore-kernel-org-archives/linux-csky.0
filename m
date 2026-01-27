@@ -1,180 +1,180 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162B7221540
-	for <linux-csky@vger.kernel.org>; Tue, 27 Jan 2026 18:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769537325; cv=pass; b=HsZYhum3dWuzeor/LuhEQlUJDKS8WPJX8xRHJchcVJ6pNNbsTt+nnXU5x8s5YbYZB4/1ThneMprPhYz8JPwB4qVE8QwVozz/CRMYIM4BbpuWv6/tfjmacl7AGAY00knfhcQqXscabioUBxjVMJUml0zGm4RHXpbomoZMVc3smDQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769537325; c=relaxed/simple;
-	bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j2qNIO4GDNV6GQJ2+K78Fv4QIlY7hVEsAnINDuJC3TqwsSykVKv1kl37Jz9i46s1uEznf1DqH/1hKw5SYJaBZST6L6kmAZ9Pho7ezHiqFvWPVBDw/mqWQn5URbVFv5dKYW4hv/yjXq92uBUvlEUOUq6EcOza9Rf2RELwr65UVq4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=07XIoGWl; arc=pass smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600FF191484;
+	Tue, 27 Jan 2026 18:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769537498; cv=none; b=bom0NsDwjy3OAAPnEYc6HgxaDiteP6cVsyjOFaqR301ug7JVsmrOW+FpyLEzmQFPtqOR1rGZtP7IXBELM2XuHBa38vpkJxUAQMRR1HmqQhpNfXu9E+Ofn21NcKhwvSdBKdqkXguB8sEITd8zgJQYx1hQNInCiGuS+K+EUFhYnrU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769537498; c=relaxed/simple;
+	bh=esR6CFIdT2IldE04x541sMjzg2hM0kwiBu50M1Q4i6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JKYKnJI1aU7my69d+SKLZIwbuXM+tqKtWT6eqIJXJLo5+T1t80BZMH3NEFeZGnRLyX8UCm06eKWgnEOVshB56Qy9KG15PcfBvmunCb307d80LbMKHhoylEc5qzqgeaj9iGlLZrVzOppFDQ7SoW//QfvApm4ZBZ4AoDKYtZGxJsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ByaWjtsS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="07XIoGWl"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a885af8ee7so2315ad.1
-        for <linux-csky@vger.kernel.org>; Tue, 27 Jan 2026 10:08:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769537323; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LwkWryzNykq6Nwg5iEKGtZU/3HCOt2NRW4GefbD+pZhv8gWR70SB/4Lkr1ZyiXipNQ
-         oEHOqIb/u8/qudgscUkaa2Lj6VBqihKWoCMGCYcAaPG768wy7eYqMZBltnaCqRvGvQEL
-         3n7kSHD6UxdopkQZH7fel1aUwefzCOuqbUVbzkS/1jmNpmq4OW/NglUzis9YGzRycCQ1
-         PBOtjCukaWDx3B3F0oJ5RInyJDGpsFyxXkhhPiNnuLD+x2Y9Tp/32U1+d1OSGf5k5wOc
-         wuDAWDNiAjk1ABYhUAKjqOeYwFPELHvKEa+O+S/yhsK+A4WSlIYfiwml3pcFtktEoOcO
-         dxMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
-        fh=U+mWy3Qywirjf30tft6W1BxjZWEheqqBsvIHBDQ5whc=;
-        b=OYp6DfOqS+QgDZjUhOLyIoO6bwcGwBJV1BrhaEK2UHhidJwp+9/qM9PLdWB8UdsL4j
-         V1ee+Li9bttNrLzXg0SnznqwDHVNIQBTOI0tnbh/11W+mZg5tuk4bz/FV8jfOqh3nc+v
-         67crKjbbH1MPQWrb3q50HDH42dYQJaKYXkqjjjx20dBCFXkCH37RxHFmJSiaVy2Ui6VK
-         mYMwc/FRGbnNfj7PRU5MW0b9dSDeLMLN3XtRGgqceHMUOGRmLbhPUbUjHPPlckbID46S
-         on3NXStHgJWnKw37h0P7DY1hb/vFW3cmTKTbewPj5UyOVgVztNdKudiJJsULExsKr+rO
-         fACg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769537323; x=1770142123; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
-        b=07XIoGWlIyuaxHmzCvhBx2RQLcRXLNUrw8P3Yt3vrACpaB0jObYFwoREGnFGwYCyFb
-         GSZcZ8ZzmYBBgeaY2pJYLSuv/gwZ4768HSFavurN7luHms4A9w+wV5KsaRSjXGtE0sRW
-         yub2nNCP9+VUXVapxnI9vdt0QOI6lj2Yf6yfRGEkD6YERcS8qWyznxarEcVXOwjQX/2O
-         t7E8nB2uVcp2cpYlwlTNt4XZYWDIwJiNM4WriF3TPQnYbn8aDqZmDRuHiI7Te97rod52
-         bzU/0U+r9D/3P05LBjxcLYm30FuqmUrbtDifTOYBpTCy5syRuLoiHTPW8PW24pCjEctv
-         qqPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769537323; x=1770142123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
-        b=KviKPy4dvdg1ZjoaFwsdpUybNdZ1cNO/U0iZ8BwaK2agNnZ8b8IS+KbgOa0uU+x++2
-         V7sPJb/ainewsD3Bkb6XTvbUKzZZ2CrxEgL/HMIODS7T/cm3jeOXnFdHlOUtWol1i3UX
-         Oq9cZmd/p6Msr2uMBBQW6CLFYblSLhK59EVDnCvhiigHL98sZwSKE8eIco5W3P1rwNk3
-         +By+EQ8pamkGrAbJj0PBflFDKJpOhtbmJ4MQUEGWkmm30SCIRpJDYYFRtKlS9xE3di8l
-         BN0iQQUDUIQnP+ouBlfXRwSlN5aKic4CGMBShf40UiGcUZSEvxTEBi6H/s4CUWiRX8z0
-         7apw==
-X-Forwarded-Encrypted: i=1; AJvYcCX1MKFzWJpuErKpajL9KnUNyMj7iMiDPZ7uho59EJlgTG0n4G4X31Y3UrRm1qM3DGoaLm/1g2GAC/Ma@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNtzQoZbTT80i12qy08wu9kC4Qsc7E8hqMZZAu9DM9xlMWLL5d
-	bxr52sXFkT9NeMGAIpQ+zak3kTRInyicdjuMu3TUeYNUqiw9U2nxLbArzNZ2ATZHDZkCIBb4gj5
-	KvpnMU9vvix/T8a/UWFx0VLGcASWOFk/h0i9C9CeK
-X-Gm-Gg: AZuq6aLM1rhBkrp4OLq9EhYRe3CxFjl3ZoiHrP8yThH/QHk6K9ds3cUGgpOK4lg+HIa
-	qINp/GsdY95P7u71rE62D5+Q1ToxDPWgWY3Ohf7q9Tkj4VvjbrW2NO2Im10XVU1frLcSXRu7Efh
-	+8jtm3zH4cSd3FchU5k523V34WMWgtJjfUzT5BBr20+8ktdddqk6ryew2INwokPTQIpIvmj3FEh
-	ISbQPkX/G4UBOfBoBwCWHmNJUrPIrYIZgU+V2gbxCvba56S59PgFHSy+MoXCwvOuBNoHx9QltI+
-	aUjV9qvfT8HnEDjOn99s7AxD
-X-Received: by 2002:a17:902:d583:b0:2a7:6fd3:c11e with SMTP id
- d9443c01a7336-2a870b4f72fmr2715565ad.18.1769537323122; Tue, 27 Jan 2026
- 10:08:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ByaWjtsS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB4A5C116C6;
+	Tue, 27 Jan 2026 18:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769537498;
+	bh=esR6CFIdT2IldE04x541sMjzg2hM0kwiBu50M1Q4i6U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ByaWjtsSvwoLSW/kNH7xWLyVjxxz5GlRC8jYXsgV/gqb4/lcnR/DbPtvL6ZsfFpSk
+	 UMuJqyvtKtohQKsmQxoM99rDtG1O4GqRTw9ZhQsEmWLSfLiBrUcxYInGfM89HyeRgM
+	 CxuZITcoVajun6fKU8J38DnbH8BoWcjGzNDWtXdHngn0Bx8YWSVtKYdo5/nJpd1YVl
+	 JH22ZwPPk16pgnbMx9Vr3rouzXVb84WvDBKXKk6PK90HPv2OIOvHU6AimhWntYIXkX
+	 +GnE9E9QwmWlr81X+KXfieSH8beDfJtCHQfJLkjpSxZ2STIQw2Fz3NkhSNYKoguw1h
+	 QmmKWVv1yE1UQ==
+Date: Tue, 27 Jan 2026 20:11:19 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Andreas Larsson <andreas@gaisler.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@kernel.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Gleixner <tglx@kernel.org>, Vineet Gupta <vgupta@kernel.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>,
+	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH mm-unstable] arch, mm: consolidate empty_zero_page
+Message-ID: <aXj_x5CyUeys7ONM@kernel.org>
+References: <20260124095628.668870-1-rppt@kernel.org>
+ <2157220c-0394-40fa-9918-a8514171bd10@gaisler.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260117052849.2205545-23-irogers@google.com> <20260127174253.396766-1-serhei@serhei.io>
-In-Reply-To: <20260127174253.396766-1-serhei@serhei.io>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 27 Jan 2026 10:08:30 -0800
-X-Gm-Features: AZwV_QjigoQ4qTMNcTX7ebCm7Qdj2jAHNjthD9J6xiq7M99DqRJBY5IBrDFTDXk
-Message-ID: <CAP-5=fWFXnmZZ2vh_oJM6PWYiJvOV1Etx1+FLzWQUhv7WYC6jg@mail.gmail.com>
-Subject: Re: [PATCH v1 22/23] perf unwind-libdw: Don't discard loaded
- ELF/Dwarf after every unwind
-To: Serhei Makarov <serhei@serhei.io>
-Cc: acme@kernel.org, aditya.b1@linux.ibm.com, adrian.hunter@intel.com, 
-	ak@linux.intel.com, alex@ghiti.fr, aou@eecs.berkeley.edu, 
-	atrajeev@linux.ibm.com, ctshao@google.com, dvyukov@google.com, 
-	guoren@kernel.org, haibo1.xu@intel.com, howardchu95@gmail.com, 
-	james.clark@linaro.org, john.g.garry@oracle.com, jolsa@kernel.org, 
-	krzysztof.m.lopatowski@gmail.com, leo.yan@linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux@treblig.org, mark@klomp.org, 
-	mingo@redhat.com, namhyung@kernel.org, palmer@dabbelt.com, 
-	peterz@infradead.org, pjw@kernel.org, shimin.guo@skydio.com, slyich@gmail.com, 
-	stephen.s.brennan@oracle.com, thomas.falcon@intel.com, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2157220c-0394-40fa-9918-a8514171bd10@gaisler.com>
 
-On Tue, Jan 27, 2026 at 9:43=E2=80=AFAM Serhei Makarov <serhei@serhei.io> w=
-rote:
+Hi,
+
+On Tue, Jan 27, 2026 at 05:02:39PM +0100, Andreas Larsson wrote:
+> On 2026-01-24 10:56, Mike Rapoport wrote:
 >
-> > As removing the dwfl didn't prove possible, an alternative is to just n=
-ot discard the dwfl when the unwind ends. The dwfl is valid for a process u=
-nless a dso is loaded at the same address as a previous one. So keep the dw=
-fl with the maps, invalidate it if a map is removed (in case a new map repl=
-aces it) and recycle the dwfl in the unwinding code.
->
-> Relevant note:
->
-> I'm looking at whether elfutils libdwfl_stacktrace might further help wit=
-h these issues. The libdwfl_stacktrace library is currently shipped as an e=
-xperimental addon to libdwfl in elfutils 0.194, but I'm intending to stabil=
-ize the API this year. There's code for some analogous functions: translati=
-ng perf->dwarf register files, and caching Dwfl and Elf data to speed up un=
-winding across multiple processes. (Thus, if unwinding a collection of perf=
-_events from 16 processes that use libc, we don't need to load the CFI for =
-libc.so 16 times.)
->
-> I think once I've stabilized the libdwfl_stacktrace API and expanded the =
-register support to a larger set of perf-supported architectures, it makes =
-sense for me to author a corresponding set of patches for perf. I'll see if=
- it's worth adding more libdwflst functionality to elfutils 0.195 in antici=
-pation of this.
+> > Every architecture defines empty_zero_page that way or another, but for the
+> > most of them it is always a page aligned page in BSS and most definitions
+> > of ZERO_PAGE do virt_to_page(empty_zero_page).
+> 
+> Running this in an LDOM on an UltraSparc T4 sparc64, the entire LDOM
+> hangs after a while during boot.
+> 
+> > diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+> > index c2d19c9a9244..2bd99944176d 100644
+> > --- a/arch/sparc/mm/init_64.c
+> > +++ b/arch/sparc/mm/init_64.c
+> > @@ -177,9 +177,6 @@ extern unsigned long sparc_ramdisk_image64;
+> >  extern unsigned int sparc_ramdisk_image;
+> >  extern unsigned int sparc_ramdisk_size;
+> >  
+> > -struct page *mem_map_zero __read_mostly;
+> > -EXPORT_SYMBOL(mem_map_zero);
+> > -
+> >  unsigned int sparc64_highest_unlocked_tlb_ent __read_mostly;
+> >  
+> >  unsigned long sparc64_kern_pri_context __read_mostly;
+> > @@ -2506,18 +2503,6 @@ void __init mem_init(void)
+> >  	 */
+> >  	register_page_bootmem_info();
+> >  
+> > -	/*
+> > -	 * Set up the zero page, mark it reserved, so that page count
+> > -	 * is not manipulated when freeing the page from user ptes.
+> > -	 */
+> > -	mem_map_zero = alloc_pages(GFP_KERNEL|__GFP_ZERO, 0);
+> > -	if (mem_map_zero == NULL) {
+> > -		prom_printf("paging_init: Cannot alloc zero page.\n");
+> > -		prom_halt();
+> > -	}
+> > -	mark_page_reserved(mem_map_zero);
+> > -
+> > -
+> >  	if (tlb_type == cheetah || tlb_type == cheetah_plus)
+> >  		cheetah_ecache_flush_init();
+> >  }
+> 
+> This just removes the mark_page_reserved(mem_map_zero) without 
+> replacing it with something corresponding to that. Perhaps part
+> of the problem?
 
-Thanks Serhei, this would be really awesome! I've done my best wrt
-trying to optimize around libdwfl, but I wasn't able to have a single
-dwfl for the addr2line case with a dso and the stack unwinding code.
-Just to give too many details :-)
+I don't think so, empty_zero_page is in BSS now an it's reserved as a part
+of the kernel image.
 
-With addr2line we have the dso and an offset into the dso of some
-point in code. We want to get the symbol for that address and inline
-information. The "bias" notion in dwfl was something of a speed bump
-in writing that code and was broken in an early version:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
-t/tree/tools/perf/util/libdw.c?h=3Dperf-tools-next#n133
-Just documenting libdw/libdwfl addresses better to say whether a bias
-is or isn't necessary would be useful. Walking the inline information
-is also (strangely to me) done outside of libdw, which makes me wonder
-about support for things like partial compilation units:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
-t/tree/tools/perf/util/dwarf-aux.c?h=3Dperf-tools-next#n147
+I suspect that virt_to_page() does not work BSS symbols on sparc64. Can you
+please try with this patch:
 
-For the unwinding:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
-t/tree/tools/perf/util/unwind-libdw.c?h=3Dperf-tools-next#n407
-I experimented with failing each unwind step so that then I could take
-the return PC, make it an offset into a dso and reuse the dso dwfl.
-This breaks many asserts in libdwfl and so I gave it up.
+diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
+index 74ede706fb32..0578c5172d4e 100644
+--- a/arch/sparc/include/asm/pgtable_64.h
++++ b/arch/sparc/include/asm/pgtable_64.h
+@@ -22,6 +22,7 @@
+ #include <asm/adi.h>
+ #include <asm/page.h>
+ #include <asm/processor.h>
++#include <asm/vaddrs.h>
+ 
+ /* The kernel image occupies 0x4000000 to 0x6000000 (4MB --> 96MB).
+  * The page copy blockops can use 0x6000000 to 0x8000000.
+@@ -210,6 +211,11 @@ extern unsigned long _PAGE_CACHE;
+ extern unsigned long pg_iobits;
+ extern unsigned long _PAGE_ALL_SZ_BITS;
+ 
++extern unsigned long kern_base;
++#define ZERO_PAGE(vaddr)						   \
++	(virt_to_page(empty_zero_page + ((unsigned long)__va(kern_base)) - \
++		      ((unsigned long)KERNBASE)))
++
+ /* PFNs are real physical page numbers.  However, mem_map only begins to record
+  * per-page information starting at pfn_base.  This is to handle systems where
+  * the first physical page in the machine is at some huge physical address,
+diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+index 2bd99944176d..d2d724ba4f83 100644
+--- a/arch/sparc/mm/init_64.c
++++ b/arch/sparc/mm/init_64.c
+@@ -170,6 +170,8 @@ static void __init read_obp_memory(const char *property,
+ 
+ /* Kernel physical address base and size in bytes.  */
+ unsigned long kern_base __read_mostly;
++EXPORT_SYMBOL(kern_base);
++
+ unsigned long kern_size __read_mostly;
+ 
+ /* Initial ramdisk setup */
+ 
+> Cheers,
+> Andreas
 
-There's also the use of a dwfl for type profiling and probes in debuginfo:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
-t/tree/tools/perf/util/debuginfo.c?h=3Dperf-tools-next#n55
-
-For making the code generic we needed mapping functions between perf
-and dwarf numbering, as well as number and string mapping. A problem
-with the generic code was that if a register was encoded that libdwfl
-didn't support it broke libdwfl. This led to clipping the registers:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
-t/tree/tools/perf/util/dwarf-regs.c?h=3Dperf-tools-next#n157
-but this feels like code that's going to bitrot, cause elfutil version
-problems, etc.
-
-Something I noticed is that there was a reduction in crashes from
-0.192 to 0.194. I'm a little concerned that people may package perf
-without updating elfutils and witness crashes because of these recent
-perf changes. Hopefully distributions will move forward to 0.194 asap.
-
-Thanks,
-Ian
-
-> -- Serhei Makarov
+-- 
+Sincerely yours,
+Mike.

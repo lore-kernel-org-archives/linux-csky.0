@@ -1,134 +1,180 @@
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF175233149;
-	Tue, 27 Jan 2026 17:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769535816; cv=none; b=DGRTJjY4GfpUoHJ0a7wkRR6WmgR/P03TurVlYqphdRokBJSnT4dNnWDVmVOaMw6h74E95U6jwU8yFPZP1G5GFSXSC/B9fDtOmqLpCe5u5i6YnbpPLYOZNe1lZOq6RqP4rfvJq4TSGWgetCWoggkgFpMDzXCupuIwuKFP+ituQq8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769535816; c=relaxed/simple;
-	bh=rQ3uqbxArlD82rm1kTTeHgP3Ca521qNmsUHhaKMB6Tc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=prgqlTdgPHN2CUnzI0kDAzER2MwbszUQdWxYKDefVsRhp5hZy6puCAx0qmd/KR2Ob9TYfGNm+aLVxMJhRXHxV5I88OBEJ+vLwLlG4Ah0Q/Z0wiixTLDt+A4MJu6CNP5cvovyKOqj87qWU2CHUHmLl4uTI9QRSL9d1hS3ywAW9wU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=serhei.io; spf=pass smtp.mailfrom=serhei.io; dkim=pass (2048-bit key) header.d=serhei.io header.i=@serhei.io header.b=AJXBEeKk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FRmdgELe; arc=none smtp.client-ip=202.12.124.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=serhei.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=serhei.io
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162B7221540
+	for <linux-csky@vger.kernel.org>; Tue, 27 Jan 2026 18:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769537325; cv=pass; b=HsZYhum3dWuzeor/LuhEQlUJDKS8WPJX8xRHJchcVJ6pNNbsTt+nnXU5x8s5YbYZB4/1ThneMprPhYz8JPwB4qVE8QwVozz/CRMYIM4BbpuWv6/tfjmacl7AGAY00knfhcQqXscabioUBxjVMJUml0zGm4RHXpbomoZMVc3smDQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769537325; c=relaxed/simple;
+	bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j2qNIO4GDNV6GQJ2+K78Fv4QIlY7hVEsAnINDuJC3TqwsSykVKv1kl37Jz9i46s1uEznf1DqH/1hKw5SYJaBZST6L6kmAZ9Pho7ezHiqFvWPVBDw/mqWQn5URbVFv5dKYW4hv/yjXq92uBUvlEUOUq6EcOza9Rf2RELwr65UVq4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=07XIoGWl; arc=pass smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=serhei.io header.i=@serhei.io header.b="AJXBEeKk";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FRmdgELe"
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailflow.stl.internal (Postfix) with ESMTP id F20CC1300410;
-	Tue, 27 Jan 2026 12:43:32 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Tue, 27 Jan 2026 12:43:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=serhei.io; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1769535812; x=
-	1769543012; bh=rQ3uqbxArlD82rm1kTTeHgP3Ca521qNmsUHhaKMB6Tc=; b=A
-	JXBEeKk/Q356D1zWF2OTHz9HlU6wIYBJXLVWiszNJrdrffvoz2MFbrAjMD50AsIq
-	ifeZ7f4c0x19ijxJ5lTKu70aVkcIxknhtfMCp4aCEGHTwdoZaFdTWCmrKWH2+79U
-	qjfIoYcazDvNxEmhhV4A9s6Uz0AW/GfgvEXEPUcp9zYaAYXoR/KY6OnVDbtNtSV6
-	hAHmaGo29hiNPQAZw6Ae5DbCvpx/EfOOq38Wq9hHfGqj9zJ8FaLdz7e5MZ4draBq
-	/T8Vmpz7m5uhajyphuld2dAVt2dgofiz/Txbm1SsJEoTGIJU5lY6xTZ3aO2LYb9O
-	lDKr7GY2fObLnhDzYsYRg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1769535812; x=1769543012; bh=r
-	Q3uqbxArlD82rm1kTTeHgP3Ca521qNmsUHhaKMB6Tc=; b=FRmdgELeq3pT017oe
-	MiHeYPYQPyIReVrGSQoxz7ZABXhXc5HxTv54fRcfUJ2oB3HKueFpcxb7qP17u4l2
-	2TziSFwlFUQgVM7Jagzmwuujf6ND/Q92hQuUyidVhbBdGGCTRO8NTZkrvCtuOHAI
-	trK8JfcBFNWHwojMcKpUNxRgRTKhaqU2zLPlEP9c4QcKmMB58yyNG++2vDIad+BE
-	IBz1AqFF4b7ndwIfA2XDrurcuyJiltRedbeoLCubtwkP7gXNlzIVAxwhWtFqzsmr
-	soiP5MxHBirjwFH+3QomuXsEUcsWywzRO63730c6ZegGLgdps6rwpgyC1DGxx9nE
-	GI9lg==
-X-ME-Sender: <xms:Qvl4aZhCUGOoG5kC5D-HHpOhXJ-WxhEPPARCh_n0vi1CcGUmO4gxiQ>
-    <xme:Qvl4af5SD_wAmhJMCXRLhtBRfrLmB5K-wV2OPXqmJlDJ-JhWKgBWbysNbklnOaCkX
-    l8JEx4R-HI3aknzOq8i551QEkk24_Gp1nAi0H9V48R8E_pRMIZ2cQ>
-X-ME-Received: <xmr:Qvl4advG_ufoq8l9X0G8LZcO3fgGk8cRmu58Q5YPuXB0Fpy-95ptiJMFTa9D_GFWle3dhwY4J4It4GjLVkBCBQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduieduuddvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpefuvghrhhgvihcuofgrkhgrrhhovhcuoehsvghrhhgvihesshgv
-    rhhhvghirdhioheqnecuggftrfgrthhtvghrnheptdeuudfftdehgfetheehlefghefffe
-    egieekheefgfdufefgudeifefhvefgudeknecuvehluhhsthgvrhfuihiivgeptdenucfr
-    rghrrghmpehmrghilhhfrhhomhepshgvrhhhvghisehsvghrhhgvihdrihhopdhnsggprh
-    gtphhtthhopeefhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepihhrohhgvghr
-    shesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprggtmhgvsehkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopegrughithihrgdrsgdusehlihhnuhigrdhisghmrdgtohhmpdhrtghp
-    thhtoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtphhtthhope
-    grkheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegrlhgvgiesghhhihht
-    ihdrfhhrpdhrtghpthhtoheprghouhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprh
-    gtphhtthhopegrthhrrghjvggvvheslhhinhhugidrihgsmhdrtghomhdprhgtphhtthho
-    pegtthhshhgrohesghhoohhglhgvrdgtohhm
-X-ME-Proxy: <xmx:Qvl4acy1cH04rHlU2cxdH9PyrcA8QjQb6liH6SeoYVyYqnWq_4b3TA>
-    <xmx:Qvl4aWwl7x1gkczU8HsCUUNImOpruQNSyJGhziDOeN8hbN-ZI_oM0g>
-    <xmx:Qvl4aRiY_iDr_TdIhSOrPJYj22bjq7aLMxxWKNibpaTBYmjPK0FbvA>
-    <xmx:Qvl4aUjnjA1bBPCMy2wC_-H2p8DKVLkjg2eqtE6ZnAJtc1DLZctBXw>
-    <xmx:RPl4aeUujcDdEW4kYQe7ll4i21W8Nm0g3J1N_mS0buHiLGfO4labLlBv>
-Feedback-ID: i572946fc:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 27 Jan 2026 12:43:29 -0500 (EST)
-From: Serhei Makarov <serhei@serhei.io>
-To: irogers@google.com
-Cc: acme@kernel.org,
-	aditya.b1@linux.ibm.com,
-	adrian.hunter@intel.com,
-	ak@linux.intel.com,
-	alex@ghiti.fr,
-	aou@eecs.berkeley.edu,
-	atrajeev@linux.ibm.com,
-	ctshao@google.com,
-	dvyukov@google.com,
-	guoren@kernel.org,
-	haibo1.xu@intel.com,
-	howardchu95@gmail.com,
-	james.clark@linaro.org,
-	john.g.garry@oracle.com,
-	jolsa@kernel.org,
-	krzysztof.m.lopatowski@gmail.com,
-	leo.yan@linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux@treblig.org,
-	mark@klomp.org,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	palmer@dabbelt.com,
-	peterz@infradead.org,
-	pjw@kernel.org,
-	shimin.guo@skydio.com,
-	slyich@gmail.com,
-	stephen.s.brennan@oracle.com,
-	thomas.falcon@intel.com,
-	will@kernel.org
-Subject: Re: [PATCH v1 22/23] perf unwind-libdw: Don't discard loaded ELF/Dwarf  after every unwind
-Date: Tue, 27 Jan 2026 12:42:53 -0500
-Message-ID: <20260127174253.396766-1-serhei@serhei.io>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260117052849.2205545-23-irogers@google.com>
-References: <20260117052849.2205545-23-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="07XIoGWl"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a885af8ee7so2315ad.1
+        for <linux-csky@vger.kernel.org>; Tue, 27 Jan 2026 10:08:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769537323; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LwkWryzNykq6Nwg5iEKGtZU/3HCOt2NRW4GefbD+pZhv8gWR70SB/4Lkr1ZyiXipNQ
+         oEHOqIb/u8/qudgscUkaa2Lj6VBqihKWoCMGCYcAaPG768wy7eYqMZBltnaCqRvGvQEL
+         3n7kSHD6UxdopkQZH7fel1aUwefzCOuqbUVbzkS/1jmNpmq4OW/NglUzis9YGzRycCQ1
+         PBOtjCukaWDx3B3F0oJ5RInyJDGpsFyxXkhhPiNnuLD+x2Y9Tp/32U1+d1OSGf5k5wOc
+         wuDAWDNiAjk1ABYhUAKjqOeYwFPELHvKEa+O+S/yhsK+A4WSlIYfiwml3pcFtktEoOcO
+         dxMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
+        fh=U+mWy3Qywirjf30tft6W1BxjZWEheqqBsvIHBDQ5whc=;
+        b=OYp6DfOqS+QgDZjUhOLyIoO6bwcGwBJV1BrhaEK2UHhidJwp+9/qM9PLdWB8UdsL4j
+         V1ee+Li9bttNrLzXg0SnznqwDHVNIQBTOI0tnbh/11W+mZg5tuk4bz/FV8jfOqh3nc+v
+         67crKjbbH1MPQWrb3q50HDH42dYQJaKYXkqjjjx20dBCFXkCH37RxHFmJSiaVy2Ui6VK
+         mYMwc/FRGbnNfj7PRU5MW0b9dSDeLMLN3XtRGgqceHMUOGRmLbhPUbUjHPPlckbID46S
+         on3NXStHgJWnKw37h0P7DY1hb/vFW3cmTKTbewPj5UyOVgVztNdKudiJJsULExsKr+rO
+         fACg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769537323; x=1770142123; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
+        b=07XIoGWlIyuaxHmzCvhBx2RQLcRXLNUrw8P3Yt3vrACpaB0jObYFwoREGnFGwYCyFb
+         GSZcZ8ZzmYBBgeaY2pJYLSuv/gwZ4768HSFavurN7luHms4A9w+wV5KsaRSjXGtE0sRW
+         yub2nNCP9+VUXVapxnI9vdt0QOI6lj2Yf6yfRGEkD6YERcS8qWyznxarEcVXOwjQX/2O
+         t7E8nB2uVcp2cpYlwlTNt4XZYWDIwJiNM4WriF3TPQnYbn8aDqZmDRuHiI7Te97rod52
+         bzU/0U+r9D/3P05LBjxcLYm30FuqmUrbtDifTOYBpTCy5syRuLoiHTPW8PW24pCjEctv
+         qqPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769537323; x=1770142123;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1dOOo8NQ4DafD9XkbSs1ACU0adhfNmtPmDSYYCT0h1M=;
+        b=KviKPy4dvdg1ZjoaFwsdpUybNdZ1cNO/U0iZ8BwaK2agNnZ8b8IS+KbgOa0uU+x++2
+         V7sPJb/ainewsD3Bkb6XTvbUKzZZ2CrxEgL/HMIODS7T/cm3jeOXnFdHlOUtWol1i3UX
+         Oq9cZmd/p6Msr2uMBBQW6CLFYblSLhK59EVDnCvhiigHL98sZwSKE8eIco5W3P1rwNk3
+         +By+EQ8pamkGrAbJj0PBflFDKJpOhtbmJ4MQUEGWkmm30SCIRpJDYYFRtKlS9xE3di8l
+         BN0iQQUDUIQnP+ouBlfXRwSlN5aKic4CGMBShf40UiGcUZSEvxTEBi6H/s4CUWiRX8z0
+         7apw==
+X-Forwarded-Encrypted: i=1; AJvYcCX1MKFzWJpuErKpajL9KnUNyMj7iMiDPZ7uho59EJlgTG0n4G4X31Y3UrRm1qM3DGoaLm/1g2GAC/Ma@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNtzQoZbTT80i12qy08wu9kC4Qsc7E8hqMZZAu9DM9xlMWLL5d
+	bxr52sXFkT9NeMGAIpQ+zak3kTRInyicdjuMu3TUeYNUqiw9U2nxLbArzNZ2ATZHDZkCIBb4gj5
+	KvpnMU9vvix/T8a/UWFx0VLGcASWOFk/h0i9C9CeK
+X-Gm-Gg: AZuq6aLM1rhBkrp4OLq9EhYRe3CxFjl3ZoiHrP8yThH/QHk6K9ds3cUGgpOK4lg+HIa
+	qINp/GsdY95P7u71rE62D5+Q1ToxDPWgWY3Ohf7q9Tkj4VvjbrW2NO2Im10XVU1frLcSXRu7Efh
+	+8jtm3zH4cSd3FchU5k523V34WMWgtJjfUzT5BBr20+8ktdddqk6ryew2INwokPTQIpIvmj3FEh
+	ISbQPkX/G4UBOfBoBwCWHmNJUrPIrYIZgU+V2gbxCvba56S59PgFHSy+MoXCwvOuBNoHx9QltI+
+	aUjV9qvfT8HnEDjOn99s7AxD
+X-Received: by 2002:a17:902:d583:b0:2a7:6fd3:c11e with SMTP id
+ d9443c01a7336-2a870b4f72fmr2715565ad.18.1769537323122; Tue, 27 Jan 2026
+ 10:08:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260117052849.2205545-23-irogers@google.com> <20260127174253.396766-1-serhei@serhei.io>
+In-Reply-To: <20260127174253.396766-1-serhei@serhei.io>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 27 Jan 2026 10:08:30 -0800
+X-Gm-Features: AZwV_QjigoQ4qTMNcTX7ebCm7Qdj2jAHNjthD9J6xiq7M99DqRJBY5IBrDFTDXk
+Message-ID: <CAP-5=fWFXnmZZ2vh_oJM6PWYiJvOV1Etx1+FLzWQUhv7WYC6jg@mail.gmail.com>
+Subject: Re: [PATCH v1 22/23] perf unwind-libdw: Don't discard loaded
+ ELF/Dwarf after every unwind
+To: Serhei Makarov <serhei@serhei.io>
+Cc: acme@kernel.org, aditya.b1@linux.ibm.com, adrian.hunter@intel.com, 
+	ak@linux.intel.com, alex@ghiti.fr, aou@eecs.berkeley.edu, 
+	atrajeev@linux.ibm.com, ctshao@google.com, dvyukov@google.com, 
+	guoren@kernel.org, haibo1.xu@intel.com, howardchu95@gmail.com, 
+	james.clark@linaro.org, john.g.garry@oracle.com, jolsa@kernel.org, 
+	krzysztof.m.lopatowski@gmail.com, leo.yan@linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux@treblig.org, mark@klomp.org, 
+	mingo@redhat.com, namhyung@kernel.org, palmer@dabbelt.com, 
+	peterz@infradead.org, pjw@kernel.org, shimin.guo@skydio.com, slyich@gmail.com, 
+	stephen.s.brennan@oracle.com, thomas.falcon@intel.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> As removing the dwfl didn't prove possible, an alternative is to just not discard the dwfl when the unwind ends. The dwfl is valid for a process unless a dso is loaded at the same address as a previous one. So keep the dwfl with the maps, invalidate it if a map is removed (in case a new map replaces it) and recycle the dwfl in the unwinding code.
+On Tue, Jan 27, 2026 at 9:43=E2=80=AFAM Serhei Makarov <serhei@serhei.io> w=
+rote:
+>
+> > As removing the dwfl didn't prove possible, an alternative is to just n=
+ot discard the dwfl when the unwind ends. The dwfl is valid for a process u=
+nless a dso is loaded at the same address as a previous one. So keep the dw=
+fl with the maps, invalidate it if a map is removed (in case a new map repl=
+aces it) and recycle the dwfl in the unwinding code.
+>
+> Relevant note:
+>
+> I'm looking at whether elfutils libdwfl_stacktrace might further help wit=
+h these issues. The libdwfl_stacktrace library is currently shipped as an e=
+xperimental addon to libdwfl in elfutils 0.194, but I'm intending to stabil=
+ize the API this year. There's code for some analogous functions: translati=
+ng perf->dwarf register files, and caching Dwfl and Elf data to speed up un=
+winding across multiple processes. (Thus, if unwinding a collection of perf=
+_events from 16 processes that use libc, we don't need to load the CFI for =
+libc.so 16 times.)
+>
+> I think once I've stabilized the libdwfl_stacktrace API and expanded the =
+register support to a larger set of perf-supported architectures, it makes =
+sense for me to author a corresponding set of patches for perf. I'll see if=
+ it's worth adding more libdwflst functionality to elfutils 0.195 in antici=
+pation of this.
 
-Relevant note:
+Thanks Serhei, this would be really awesome! I've done my best wrt
+trying to optimize around libdwfl, but I wasn't able to have a single
+dwfl for the addr2line case with a dso and the stack unwinding code.
+Just to give too many details :-)
 
-I'm looking at whether elfutils libdwfl_stacktrace might further help with these issues. The libdwfl_stacktrace library is currently shipped as an experimental addon to libdwfl in elfutils 0.194, but I'm intending to stabilize the API this year. There's code for some analogous functions: translating perf->dwarf register files, and caching Dwfl and Elf data to speed up unwinding across multiple processes. (Thus, if unwinding a collection of perf_events from 16 processes that use libc, we don't need to load the CFI for libc.so 16 times.)
+With addr2line we have the dso and an offset into the dso of some
+point in code. We want to get the symbol for that address and inline
+information. The "bias" notion in dwfl was something of a speed bump
+in writing that code and was broken in an early version:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/util/libdw.c?h=3Dperf-tools-next#n133
+Just documenting libdw/libdwfl addresses better to say whether a bias
+is or isn't necessary would be useful. Walking the inline information
+is also (strangely to me) done outside of libdw, which makes me wonder
+about support for things like partial compilation units:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/util/dwarf-aux.c?h=3Dperf-tools-next#n147
 
-I think once I've stabilized the libdwfl_stacktrace API and expanded the register support to a larger set of perf-supported architectures, it makes sense for me to author a corresponding set of patches for perf. I'll see if it's worth adding more libdwflst functionality to elfutils 0.195 in anticipation of this.
+For the unwinding:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/util/unwind-libdw.c?h=3Dperf-tools-next#n407
+I experimented with failing each unwind step so that then I could take
+the return PC, make it an offset into a dso and reuse the dso dwfl.
+This breaks many asserts in libdwfl and so I gave it up.
 
--- Serhei Makarov
+There's also the use of a dwfl for type profiling and probes in debuginfo:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/util/debuginfo.c?h=3Dperf-tools-next#n55
+
+For making the code generic we needed mapping functions between perf
+and dwarf numbering, as well as number and string mapping. A problem
+with the generic code was that if a register was encoded that libdwfl
+didn't support it broke libdwfl. This led to clipping the registers:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/util/dwarf-regs.c?h=3Dperf-tools-next#n157
+but this feels like code that's going to bitrot, cause elfutil version
+problems, etc.
+
+Something I noticed is that there was a reduction in crashes from
+0.192 to 0.194. I'm a little concerned that people may package perf
+without updating elfutils and witness crashes because of these recent
+perf changes. Hopefully distributions will move forward to 0.194 asap.
+
+Thanks,
+Ian
+
+> -- Serhei Makarov

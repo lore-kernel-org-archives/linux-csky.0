@@ -1,50 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F6B346E7D;
-	Tue, 27 Jan 2026 12:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80EF30B53F;
+	Tue, 27 Jan 2026 16:02:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769517481; cv=none; b=tazL9OFqh4vagjr/G9F6C8v4W6uVU9TF2TOoW3+HvQh7wiaNza45g1/szHCaNehnCTC5PLVD0VYqG38w9nsjV+a+Wk8wCEqyV8+dVahUgVd+BkwZgUZscxzXiKmUkpLeQMhhVcTGdmBX/9v6AUIACCfxiyiXBLAynYr3l5Kn/sg=
+	t=1769529772; cv=none; b=WI15zEIFN5XjdNaPlo2fCtwNfqeCl+ftl5+0zlhL9lQ+pN1u9PxPT1lSClsAtwAcGN3LZy4xnSYAY4X4pQrLU9gutJVXQU3cLrSCOtiU97UGFWqsEOK94hkA4QDiwPJ+O59ZD3SC+lGoFDHXFJtawlsnQvw5jpyWMjuXahdjZt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769517481; c=relaxed/simple;
-	bh=klfkji3dA/BcUEdcu+FxnfdCOIEKdGDNWQxxFEl3RVo=;
+	s=arc-20240116; t=1769529772; c=relaxed/simple;
+	bh=ryzKYRbfcu3WHWMX8djpR6uvSuJDdabV/Aq6Tc+9sTs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GeDcNoNRVi8LXgtMptWPgZG5+w3jGAjSQeXJs6WB8Ne/Uh6KUR+Q2kZIWsoD0GReLaec/H3CQi3JZxZHElznF+/Wp+7DpVcEmsyjJexRlATpKQoPAo22HvCFqNcIrQIH3aaOXk9scysy2rsf1TPPqXF0jCOA6SlaCe/8wwP40lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YOqlorJa; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 In-Reply-To:Content-Type; b=SQ5ueUKOEx8IIfaZlVHYFB8qo+Jd5Fv0SgHbJdIDFAfahK+drrSjGd+aNLSuD78gkW7yx9n2t/UCd0Lf7mQFLahdRhOLzqHEMVdZY+FJ2q6ZFe2NoUdYpQONaU3162+EM3FWgmD4vm+mf17A3wwOddiI1T1BHgT6UkHhMU2zntk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=nF1rwIiB reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YOqlorJa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769517480; x=1801053480;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=klfkji3dA/BcUEdcu+FxnfdCOIEKdGDNWQxxFEl3RVo=;
-  b=YOqlorJayQI0YpOX5GuAk3afTYJmdYTtCx+NZ8Lu0KMM5LvK1dJNgO6p
-   TBVHJfPe5/RK+CioOTI2XJAZDkIYEFCdfSqtNaFfGghIYNfrkZxpTWajc
-   k9nMmkMBqvjpW9vgHtNioIAeVfjMRNP4yxwBG0eMTbO5OSVfesYzkpkhQ
-   9dW3ubz99WoTzYCrnQNB+wRFAa4TyneIqTMoTtTKcQpjQmGGxibByvvx0
-   mU++A50jLoORoMQWymNBGWBIuxz9R0hYJdtX5ts0hFq26RxdWfNBYlqhL
-   KBhCAJrafDYcr3jXyDUNkXWxMf8m4vY4HJEOqDehVRm6oI3gQgOx5h2eI
-   A==;
-X-CSE-ConnectionGUID: 0WsWxFc6SS2P8Nvi5QWC/Q==
-X-CSE-MsgGUID: YEswKibAT4+ODRdRIMI5hQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="70800473"
-X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
-   d="scan'208";a="70800473"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 04:37:59 -0800
-X-CSE-ConnectionGUID: XD0hjFQVSYCELvfSH4zETw==
-X-CSE-MsgGUID: i7897sFcR2+Dl89FbwtX+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
-   d="scan'208";a="207863450"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.240.14]) ([10.124.240.14])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 04:37:52 -0800
-Message-ID: <a97ff1d6-7712-4315-95ff-4079ffc752f7@linux.intel.com>
-Date: Tue, 27 Jan 2026 20:37:48 +0800
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="nF1rwIiB"
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4f0qtT3pH1z1DPkw;
+	Tue, 27 Jan 2026 17:02:41 +0100 (CET)
+Received: from [192.168.0.25] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by smtp.simply.com (Simply.com) with ESMTPSA id 4f0qtS1KPDz1DPkR;
+	Tue, 27 Jan 2026 17:02:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=simplycom2; t=1769529761;
+	bh=XjNhgAV5Uc7zjxVMNfRjSJ4NulgkiTn1O8FFUA42SJ4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=nF1rwIiBmdMccnC6GLsJ+1cTxVIoLNBWUK2hRgllWz+vqzG3zn6qSGadd3ql/fc/j
+	 wftmmd9opEasAb176XRKPUE8StMbl/6p+SplfVp5nf9nN1Js2h0Lp8VSMmtcQE30aH
+	 Bl1zEaQxtIRA2e3e+l06MPu18XvsS1MAwBqoUlTwwd2s8vpthHuAcTJvSs6AHdaqC9
+	 IvGbmsJblv3nhY89l91lTlG8IritYfepiywoeUokkcFJYOBd8jK3YPlU2kPdjCdp4y
+	 HkLZ042uE8RsQsy76g2JHghhGJKUQuKXN/sEzVbuaQAH2qMCw8MbIO603QZ3+XYxw6
+	 58WjXFSREqUIw==
+Message-ID: <2157220c-0394-40fa-9918-a8514171bd10@gaisler.com>
+Date: Tue, 27 Jan 2026 17:02:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -52,174 +44,124 @@ List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v2 1/3] perf arch: Update arch headers to use relative
- UAPI paths
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
- James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>,
- Guo Ren <guoren@kernel.org>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, Zide Chen <zide.chen@intel.com>,
- Falcon Thomas <thomas.falcon@intel.com>, Dapeng Mi <dapeng1.mi@intel.com>,
- Xudong Hao <xudong.hao@intel.com>
-References: <20260127070259.2720468-1-dapeng1.mi@linux.intel.com>
- <20260127070259.2720468-2-dapeng1.mi@linux.intel.com>
+Subject: Re: [PATCH mm-unstable] arch, mm: consolidate empty_zero_page
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>,
+ Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Magnus Lindholm <linmag7@gmail.com>, Matt Turner <mattst88@gmail.com>,
+ Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Richard Weinberger <richard@nod.at>,
+ Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>,
+ Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Vineet Gupta <vgupta@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+ Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+ linux-mm@kvack.org, x86@kernel.org
+References: <20260124095628.668870-1-rppt@kernel.org>
 Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20260127070259.2720468-2-dapeng1.mi@linux.intel.com>
+From: Andreas Larsson <andreas@gaisler.com>
+In-Reply-To: <20260124095628.668870-1-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-On 1/27/2026 3:02 PM, Dapeng Mi wrote:
-> The architectural specific headers perf_regs.h currently rely on the
-> host architecture's 'asm/perf_regs.h'. This can lead to compilation
-> inconsistencies or failures when including and building perf for a
-> target architecture that differs from the host's architecture.
->
-> Explicitly point to the UAPI headers within the tools source tree using
-> relative paths. This ensures that perf is always built against the
-> intended architecture.
->
-> No functional changes are intended.
->
-> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+On 2026-01-24 10:56, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Reduce 22 declarations of empty_zero_page to 3 and 23 declarations of
+> ZERO_PAGE() to 4.
+> 
+> Every architecture defines empty_zero_page that way or another, but for the
+> most of them it is always a page aligned page in BSS and most definitions
+> of ZERO_PAGE do virt_to_page(empty_zero_page).
+> 
+> Move Linus vetted x86 definition of empty_zero_page and ZERO_PAGE() to the
+> core MM and drop these definitions in architectures that do not implement
+> colored zero page (MIPS and s390).
+> 
+> ZERO_PAGE() remains a macro because turning it to a wrapper for a static
+> inline causes severe pain in header dependencies.
+> 
+> For the most part the change is mechanical, with these being noteworthy:
+> 
+> * alpha: aliased empty_zero_page with ZERO_PGE that was also used for boot
+>   parameters. Switching to a generic empty_zero_page removes the aliasing
+>   and keeps ZERO_PGE for boot parameters only
+> * arm64: uses __pa_symbol() in ZERO_PAGE() so that definition of
+>   ZERO_PAGE() is kept intact.
+> * m68k/parisc/sparc64/um: allocated empty_zero_page from memblock,
+>   although they do not support zero page coloring and having it in BSS
+>   will work fine.
+> * sh: used empty_zero_page for boot parameters at the very early boot.
+>   Rename the parameters page to boot_params_page and let sh use the generic
+>   empty_zero_page.
+> * hexagon: had an amusing comment about empty_zero_page
+> 
+> 	/* A handy thing to have if one has the RAM. Declared in head.S */
+> 
+>   that unfortunately had to go :)
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->  tools/perf/arch/arm/include/perf_regs.h       | 2 +-
->  tools/perf/arch/arm64/include/perf_regs.h     | 2 +-
->  tools/perf/arch/csky/include/perf_regs.h      | 1 +
->  tools/perf/arch/loongarch/include/perf_regs.h | 2 +-
->  tools/perf/arch/mips/include/perf_regs.h      | 2 +-
->  tools/perf/arch/powerpc/include/perf_regs.h   | 2 +-
->  tools/perf/arch/riscv/include/perf_regs.h     | 2 +-
->  tools/perf/arch/s390/include/perf_regs.h      | 2 +-
->  tools/perf/arch/x86/include/perf_regs.h       | 2 +-
->  9 files changed, 9 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/perf/arch/arm/include/perf_regs.h b/tools/perf/arch/arm/include/perf_regs.h
-> index 75ce1c370114..20c54766e3a0 100644
-> --- a/tools/perf/arch/arm/include/perf_regs.h
-> +++ b/tools/perf/arch/arm/include/perf_regs.h
-> @@ -4,7 +4,7 @@
->  
->  #include <stdlib.h>
->  #include <linux/types.h>
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/arm/include/uapi/asm/perf_regs.h"
->  
->  void perf_regs_load(u64 *regs);
->  
-> diff --git a/tools/perf/arch/arm64/include/perf_regs.h b/tools/perf/arch/arm64/include/perf_regs.h
-> index 58639ee9f7ea..372f2565a9dd 100644
-> --- a/tools/perf/arch/arm64/include/perf_regs.h
-> +++ b/tools/perf/arch/arm64/include/perf_regs.h
-> @@ -5,7 +5,7 @@
->  #include <stdlib.h>
->  #include <linux/types.h>
->  #define perf_event_arm_regs perf_event_arm64_regs
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/arm64/include/uapi/asm/perf_regs.h"
->  #undef perf_event_arm_regs
->  
->  void perf_regs_load(u64 *regs);
-> diff --git a/tools/perf/arch/csky/include/perf_regs.h b/tools/perf/arch/csky/include/perf_regs.h
-> index 076c7746c8a2..9520e6aa319e 100644
-> --- a/tools/perf/arch/csky/include/perf_regs.h
-> +++ b/tools/perf/arch/csky/include/perf_regs.h
-> @@ -7,6 +7,7 @@
->  #include <stdlib.h>
->  #include <linux/types.h>
->  #include <asm/perf_regs.h>
 
-Oops, the above line was not removed. Would remove it in next version.
+Running this in an LDOM on an UltraSparc T4 sparc64, the entire LDOM
+hangs after a while during boot.
 
 
-> +#include "../../../../arch/csky/include/uapi/asm/perf_regs.h"
+> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+> index c2d19c9a9244..2bd99944176d 100644
+> --- a/arch/sparc/mm/init_64.c
+> +++ b/arch/sparc/mm/init_64.c
+> @@ -177,9 +177,6 @@ extern unsigned long sparc_ramdisk_image64;
+>  extern unsigned int sparc_ramdisk_image;
+>  extern unsigned int sparc_ramdisk_size;
 >  
->  #define PERF_REGS_MASK	((1ULL << PERF_REG_CSKY_MAX) - 1)
->  #define PERF_REGS_MAX	PERF_REG_CSKY_MAX
-> diff --git a/tools/perf/arch/loongarch/include/perf_regs.h b/tools/perf/arch/loongarch/include/perf_regs.h
-> index 45c799fa5330..b86078a55e90 100644
-> --- a/tools/perf/arch/loongarch/include/perf_regs.h
-> +++ b/tools/perf/arch/loongarch/include/perf_regs.h
-> @@ -4,7 +4,7 @@
+> -struct page *mem_map_zero __read_mostly;
+> -EXPORT_SYMBOL(mem_map_zero);
+> -
+>  unsigned int sparc64_highest_unlocked_tlb_ent __read_mostly;
 >  
->  #include <stdlib.h>
->  #include <linux/types.h>
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/loongarch/include/uapi/asm/perf_regs.h"
+>  unsigned long sparc64_kern_pri_context __read_mostly;
+> @@ -2506,18 +2503,6 @@ void __init mem_init(void)
+>  	 */
+>  	register_page_bootmem_info();
 >  
->  #define PERF_REGS_MAX PERF_REG_LOONGARCH_MAX
->  
-> diff --git a/tools/perf/arch/mips/include/perf_regs.h b/tools/perf/arch/mips/include/perf_regs.h
-> index 7082e91e0ed1..66655f0c4fea 100644
-> --- a/tools/perf/arch/mips/include/perf_regs.h
-> +++ b/tools/perf/arch/mips/include/perf_regs.h
-> @@ -4,7 +4,7 @@
->  
->  #include <stdlib.h>
->  #include <linux/types.h>
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/mips/include/uapi/asm/perf_regs.h"
->  
->  #define PERF_REGS_MAX PERF_REG_MIPS_MAX
->  
-> diff --git a/tools/perf/arch/powerpc/include/perf_regs.h b/tools/perf/arch/powerpc/include/perf_regs.h
-> index 1c66f6ba6773..22b492a3dd58 100644
-> --- a/tools/perf/arch/powerpc/include/perf_regs.h
-> +++ b/tools/perf/arch/powerpc/include/perf_regs.h
-> @@ -4,7 +4,7 @@
->  
->  #include <stdlib.h>
->  #include <linux/types.h>
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/powerpc/include/uapi/asm/perf_regs.h"
->  
->  void perf_regs_load(u64 *regs);
->  
-> diff --git a/tools/perf/arch/riscv/include/perf_regs.h b/tools/perf/arch/riscv/include/perf_regs.h
-> index d482edb413e5..89d5bbb8d2b8 100644
-> --- a/tools/perf/arch/riscv/include/perf_regs.h
-> +++ b/tools/perf/arch/riscv/include/perf_regs.h
-> @@ -6,7 +6,7 @@
->  
->  #include <stdlib.h>
->  #include <linux/types.h>
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/riscv/include/uapi/asm/perf_regs.h"
->  
->  #define PERF_REGS_MASK	((1ULL << PERF_REG_RISCV_MAX) - 1)
->  #define PERF_REGS_MAX	PERF_REG_RISCV_MAX
-> diff --git a/tools/perf/arch/s390/include/perf_regs.h b/tools/perf/arch/s390/include/perf_regs.h
-> index 130dfad2b96a..9c95589965fe 100644
-> --- a/tools/perf/arch/s390/include/perf_regs.h
-> +++ b/tools/perf/arch/s390/include/perf_regs.h
-> @@ -3,7 +3,7 @@
->  
->  #include <stdlib.h>
->  #include <linux/types.h>
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/s390/include/uapi/asm/perf_regs.h"
->  
->  void perf_regs_load(u64 *regs);
->  
-> diff --git a/tools/perf/arch/x86/include/perf_regs.h b/tools/perf/arch/x86/include/perf_regs.h
-> index f209ce2c1dd9..5495e5ca7cdc 100644
-> --- a/tools/perf/arch/x86/include/perf_regs.h
-> +++ b/tools/perf/arch/x86/include/perf_regs.h
-> @@ -4,7 +4,7 @@
->  
->  #include <stdlib.h>
->  #include <linux/types.h>
-> -#include <asm/perf_regs.h>
-> +#include "../../../../arch/x86/include/uapi/asm/perf_regs.h"
->  
->  void perf_regs_load(u64 *regs);
->  
+> -	/*
+> -	 * Set up the zero page, mark it reserved, so that page count
+> -	 * is not manipulated when freeing the page from user ptes.
+> -	 */
+> -	mem_map_zero = alloc_pages(GFP_KERNEL|__GFP_ZERO, 0);
+> -	if (mem_map_zero == NULL) {
+> -		prom_printf("paging_init: Cannot alloc zero page.\n");
+> -		prom_halt();
+> -	}
+> -	mark_page_reserved(mem_map_zero);
+> -
+> -
+>  	if (tlb_type == cheetah || tlb_type == cheetah_plus)
+>  		cheetah_ecache_flush_init();
+>  }
+
+This just removes the mark_page_reserved(mem_map_zero) without 
+replacing it with something corresponding to that. Perhaps part
+of the problem?
+
+Cheers,
+Andreas
+

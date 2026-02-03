@@ -1,93 +1,94 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E1B2F39A1
-	for <linux-csky@vger.kernel.org>; Tue,  3 Feb 2026 23:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7DA2ED87F
+	for <linux-csky@vger.kernel.org>; Tue,  3 Feb 2026 23:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770160007; cv=pass; b=NmtAKTjTR6aCy0KElO9rhzb6NAAPRMdLI70gNA6C1xu1hR0T+oPqCVJRILMlJehTcIilqvv4CbnmwWkgoZMtHjdIP5FtvxPMtah7JMJbmyCDaWbGxNRBwZIf+GQHfCwpCRY8HeO/JF7RLiPdArnl6j4Y+Fjf9tClHYX/wQ+MP0Y=
+	t=1770160139; cv=pass; b=WEOgG1XTZL46LANtsnNRhdicpHhQFr0yTW2sHpCPTcrg8ADITpar1ph1bMGjM5a4do9bX+cW01M2HCdEEN5leLWVE1vTCNRcUDQR4w1Ydch9Ww+jcnkhxVNcaifzR0lCrgA/mh3pK0N9/mJAA07vScDqIsNW6riUp1LTOYfUCk0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770160007; c=relaxed/simple;
-	bh=93ytCWhm+7HfW6uqJrrD6twD+UxPO31wPTRFzIBkefE=;
+	s=arc-20240116; t=1770160139; c=relaxed/simple;
+	bh=qx0tqvcwUUMob7KNupTP11AK5KZhBZq/wgLokmiVzCM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bshl9wtp2PS6kMxqVR4lvA+pqChX0Gc048E6c4V/F53MKujVI2VuqJH1BKSSV/nyxp9pvj7qP3zih67uZaIMfIPQ1GES4bC0yQofFscnjMYDxuY1XjoRW1KRFSuZYgyelE0lpEASdEfgbPoqUDChAnH1nObAjNMFkpqfyHaOG8Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KheWY9Nv; arc=pass smtp.client-ip=209.85.214.181
+	 To:Cc:Content-Type; b=o7IbT00d4vvOI/DOKLzTkUOL3u9i7mr0+Nluic1ym8jqsrD2BK865qgBhPH33h2GQLsovhK9GAIkRw+OgrtplffESpls25jQjVO9UljjKMZ9tQ3kbgsuy1T0YsojhcPv3gDqGISdC9skmYoEQnKzv0Bhc+jP+7cPMGhHJLk2898=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VzbO531z; arc=pass smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KheWY9Nv"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a885af8ee7so11715ad.1
-        for <linux-csky@vger.kernel.org>; Tue, 03 Feb 2026 15:06:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770160005; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VzbO531z"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a8e4ae61a0so11245ad.1
+        for <linux-csky@vger.kernel.org>; Tue, 03 Feb 2026 15:08:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770160135; cv=none;
         d=google.com; s=arc-20240605;
-        b=UpbDAhkgaOKMaJFpORVlI/FvlvO7rj7Tp3pbpzB9Sv+XXBmN2wuQZeT5yeBzKC8hSi
-         jGp13v6jyvOyharWN00SiWhlxsqwnnjeVSoTVfOKN6L8BkVoAe8UsgLvpdnbEZeuhsbj
-         L8KU+at8tL7za+DeLDjl9OUW7ROGR1SLoz3M5dfEmzLxtK+IR7n42anLLU3dyp9FoIlz
-         uKSprSaBDN6Y74y8sp410Epg4fHQd/PM5C/lA2b5H7NqFkjTwnZiEigYbxwnJAaprcut
-         jsPk80Hke3h71fPm38ejub5g3NGc8ZofaZZ98BfDvVGQDT821WvpdRDeNZoKwLAMttXw
-         U2yQ==
+        b=e53onExHqQchn3K9RHh3OJNjMtKvPiIFKZoTEpxipozlih4rmkGzVPl8+0A/5wLxU3
+         rRzfZat242M2kbyd5OS+n3fjzQsKQGQdacSBcFrcN3IkRg1f/t8y0V1nPaFNNgS5YFG9
+         eGYF+niTLgfSWxJ64oVVup90gXL8JNbrYz3vaveunEI4W1zeDvwjHrcTDcblsBUNePWf
+         LtsNd7/yhq5WhsfGvde0+xqUAqhB6s25w824GQ3wknVFqEJ/SL+GMEEkhZO+4P1Cn4ce
+         nj15G24/PB1s5F3O71p2K6HzV+c/TBjOOiAuKSHli3lMA8bB9dz7dcGbtMyAGVXNzsVS
+         vFIQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=WhW0Z5/bDcVlEnz8k3eYAJjeqv5PflWO94icC/kx//A=;
-        fh=kvT1SDo8zTRVf2zIwwgXkPTWnDxkiMwNCm63CraVoRs=;
-        b=G78ilhJgmolyBZIh6DIuLn/kVWHvF9PVgEGZ7z5FG1ACefW17HVk04AkaRVDyvLd6z
-         aishCdvH+KXT6RMCu5LtyCocFpms7OhE4ebYhINYaoYkkEP72hS7ohG45TpVKXg1xb5b
-         V1xe00kauE04TMvgnbVb7V2I+CsZKO59ScHDoKO6iwlwyOXPZ9Z1S548Ha6FHSJBzMyd
-         2o0anURdCfvp4SBeL/ytx95edgXC91W8A3qwb2iaBRuJYHPdHj19JZOIHZTYzBLWJPWg
-         X5AEpdnYEBoc6nU3zxM/k2rvNHAQMd82yV8OxRJs6Hg2UkaL3MklvfnDDFe2OQLt08/M
-         gSow==;
+        bh=ZqI9Ks2fD6CDcpOhzArtbrdrxy9q4Cz+9xddhASoNPU=;
+        fh=JD6HxNbQkChJLiSQhMD/r5MXt38HSE0MkakqEmJ8o8A=;
+        b=B/Eu7DVy8/kQJjtpQD7ZkFbgXY2pAoKSRjCBkqaCY8vG3wy8sey+/UmCJ9v6x34asD
+         4LB46AhjJbzlpTssv3JJseiUYkWwC9CJz61/FpleSEpV5K4VlyWDnxACnUqmdhEgB3kH
+         m2XOi1EHMBKyvkaCJMRE3XASZQsiy/yBAmnLYewJIxPB+5KRa8cawImSZGe3qcojt5H5
+         9G8KPcTMjOGBU4O+IByD+nrPRpjL9PP9dqgEqQTs7DH0J2/uXEHRztHG3K8HeprRNrJ7
+         70f//Qkt/8kyfd4lhAAx6rUfVedUIE4S267zDqtAPdMk2X83QO0PEb0zEYkJNXPMs2ZZ
+         D4SA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770160005; x=1770764805; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1770160135; x=1770764935; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WhW0Z5/bDcVlEnz8k3eYAJjeqv5PflWO94icC/kx//A=;
-        b=KheWY9Nv6hyOKrwUdJyXvPPlmnnPoFMV9MSo43gAd/JCQHRGhdqNb8AhuCubK3PawX
-         dkmbCEMgl7EMno2eiBfuQV3rXRIhjGbaYi4+dTMPPKazY0YA8h6owylAJt122sU3GueY
-         kbbUptKh5lLhPREUzp8LaSaJQkzBACZQ54uMmqshqgRhdqRrxVYw3DYh99eMHjgf4Kjc
-         oXxmfkZ0cEBMIg5F/TU5cbORPkzu9asdy0V2dCWuK68bDxPVan2GJFZTtOLgCkamA8dZ
-         y6ljD+9PFVAy6xJEf6LxTmtgwMHZxjJAuyzp9UYB/SWSLd5NaPlV9dLMudc/xsRphf0Z
-         99Zg==
+        bh=ZqI9Ks2fD6CDcpOhzArtbrdrxy9q4Cz+9xddhASoNPU=;
+        b=VzbO531zmS5bVaZcqLqqR9WSpRQdUNT64Gz52AELSoWUeXI34THmOKftJAtZRwYEc5
+         b8/AkpRWzKba7L0mzNIXZpw5DgCe1f0qHP5fQVinLv4TsRZId/eopEcBjFATj50J/y63
+         ohfFYIakVmASuAyDUHeVOynfe7Y1vQnzEamlca97N1yOHG07kBDRhx8ZgzZFpTiGHZih
+         Rj4lGiTh2QtXKFwGpb9sav9Hm4Wh5vG3khQm0p0vqbNY/euueQmKPW8ZgwK+ud+0AH/r
+         Y5jWbKjhP/Ycb8m12esI24o/GZx2U+VgID/E4uMj2jq/ig+AoLK4fog/Hi2MHvtBfwm2
+         MmDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770160005; x=1770764805;
+        d=1e100.net; s=20230601; t=1770160135; x=1770764935;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WhW0Z5/bDcVlEnz8k3eYAJjeqv5PflWO94icC/kx//A=;
-        b=Be5bUVhVIH52R9eIJsET0LzOEpi44kQkl11WclnE+5prM3NQWK6EmHP5fYXEfzEnWR
-         wLJU1TesXpaR7p9IpI3h/1xV0xJ5C3iEIPG69/y99Qb7caCgC6B0KeZjMHNFuw6DONL/
-         MJKF9zCS0wkAoFcxi2XzJjQufgJdisP2fcRNmwaqPk7K+zFQwiy+ClBSVLPFfbzLf7Qf
-         tjNVTEsp43bOGEp4Rfp8jpJ/BH3GVzpi9OLWjVNkGthRmuGPMK9lpmfhqJYt0G0OqK71
-         DK/L2vpkXDGpoWC3fvKPgrRFpCuiqudZ0+xESUHJh3QNbomWsa59VUOWmhyWesCuW2G3
-         sG6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWsimh0rhW+/5EydLshmJJdoY4VOOOuClA6cOAZYYErsOCPwQ2nqbJmcWnuso0wcg/cuNIeDG90VpYt@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2lSzSfRb/fRbGv8jEMZlk6KzJfZVJ9xV4cYG/bU3Pp9klBXOA
-	L54AnEozNv/gEcwku/mfu1PgrjqYfR+1itBqVaF+Lsqefgt3VnY2tARzBRJh2iUocXVArVzA2dg
-	4Tj/9qPnhBHQDYcrRxfbZ/DFUgAI9UuntktZhGE94
-X-Gm-Gg: AZuq6aLdauzPgx340wpetdKX25UrcTkG2r8N6y0I3q6dVLe5NGGsTPg1HSjYWeJAMJ8
-	Gpm0tKuWaq2iTdoP/CxFVyaLqUEQ2GaR9c4LT17YIFg1n92PDiiL7DdUbWy4iNWOnfpD5G8kD2g
-	AqC38sSnKoG4jMCx3aqFfVp5INYDuXc0huLF945Bih+DvmZr9ACaEwRn7vfaC/Vw4ukHOIv9c9t
-	xeO1/YN+SrLmBbNENzVwMC0Unqb6pb2dher0JPKjZRG2dOr40rwJdfTl3gGgtZLk6VwkpoSuctp
-	6EdDWiNen9u43clSAseA8LN1Yw==
-X-Received: by 2002:a17:902:e543:b0:2a7:7f07:340e with SMTP id
- d9443c01a7336-2a9344ae075mr1024005ad.4.1770160004714; Tue, 03 Feb 2026
- 15:06:44 -0800 (PST)
+        bh=ZqI9Ks2fD6CDcpOhzArtbrdrxy9q4Cz+9xddhASoNPU=;
+        b=lF0wnKKxBj4TRTOfqwRIDSIR0MLlk/jj1hWWWHkf3RIHdfctnHvpj8uZ73IIQ737Wt
+         leMciBILYgxJrkh8+IweR+X+v2A5nmTF9D82yRAUfFHb8pfoHYjQoLl9/HbcC5FU2c21
+         w9BblBQbQ+yK66WRjGaJgQI4hhsGoBEh2NQpW9DSR5TA6uY7iODjhdq47my2i0rTURX8
+         02oMS9xeI0EupVapPvwiEgKP20J+ViQSoejFwpGfAN8JV7St/dLGqHOlL5Pp69XTRmgi
+         Mx8krR1fYx/31yqkaB8O1XKOJg4LuD8QiQX/IkVeUp1FOerTTo/+X+nuij2wrxh/Ayk7
+         CFnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXT0qQJJfDKU2htjFUYGGddkyeTefwH1FOyQps2IVx8cq09RUYKks6IQbsxGc5gLZy3VzPBBSM/O2P3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzls/i9zG8v1ahS0m1Hvr+WDFb/SV+DEyxY6SlT95ppH/7SzCH2
+	a/ufNG1cGr9fi0Smy6DtjuTh506iN9vp3gyRtfG7aiviHxN8lgBcpQUdHSKna6nwdpP0lYuEVdV
+	I0dYi/G8N1BqZ2E/0KhdoHe2/NQ216lU61RynQVwC
+X-Gm-Gg: AZuq6aJFcXpeEVrFFOCiHVbyD7O+Xk28vo01zZ6LMgFJG0mhfNZ9QLmf0x0rTUF/AAy
+	aPaEJsUGhjTn+jC+YWFy29JPK57evfPSVdZnx+B1p660rQpetZLb0QCxvlG0oJzk/brJVQkDN4K
+	YPCNEJQtwbPtEILpXxIzBDAc303W2BbBpp/D0MQgTChKvQ4khhtx0NmxNM4mp+siI12JBgZ7WEr
+	syRPlTeB/Qvj2ZuNABSLUmkPPzCdO+FC1pt9Q8Nw3U/WYn9NbkZ+oRMK9b+So2ly+0VBWWbmh0v
+	v1Aipdq5xWNPvFzUCcZ4JJeyHQ==
+X-Received: by 2002:a17:902:e543:b0:29f:f71:a3b9 with SMTP id
+ d9443c01a7336-2a9357d109fmr455205ad.5.1770160134598; Tue, 03 Feb 2026
+ 15:08:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203024356.444942-1-dapeng1.mi@linux.intel.com> <20260203024356.444942-2-dapeng1.mi@linux.intel.com>
-In-Reply-To: <20260203024356.444942-2-dapeng1.mi@linux.intel.com>
+References: <20260203024356.444942-1-dapeng1.mi@linux.intel.com> <20260203024356.444942-4-dapeng1.mi@linux.intel.com>
+In-Reply-To: <20260203024356.444942-4-dapeng1.mi@linux.intel.com>
 From: Ian Rogers <irogers@google.com>
-Date: Tue, 3 Feb 2026 15:06:33 -0800
-X-Gm-Features: AZwV_QgPh6Zuh81ytCB2QhBaLQojIu2yqs-k71pIg-mHSzTgbaREXv2IKP173Cc
-Message-ID: <CAP-5=fU7V2KT6Ce+mk5YbyHggxvRfsoiSzZk4g0CYcNK4NGT2A@mail.gmail.com>
-Subject: Re: [Patch v3 1/4] perf regs: Fix abort for "-I" or "--user-regs" options
+Date: Tue, 3 Feb 2026 15:08:41 -0800
+X-Gm-Features: AZwV_Qi4wP4zHn_zyikfi_kOVWOB2ePG72mgbBl28EKmsM8ktSyosxQsfRGgoCM
+Message-ID: <CAP-5=fWS0ugSHpUDkiCmk3nrh0eK4KchtYg1cADRjCdent-u=w@mail.gmail.com>
+Subject: Re: [Patch v3 3/4] perf regs: Remove __weak attributive
+ arch__xxx_reg_mask() functions
 To: Dapeng Mi <dapeng1.mi@linux.intel.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -104,34 +105,28 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 2, 2026 at 6:47=E2=80=AFPM Dapeng Mi <dapeng1.mi@linux.intel.co=
+On Mon, Feb 2, 2026 at 6:48=E2=80=AFPM Dapeng Mi <dapeng1.mi@linux.intel.co=
 m> wrote:
 >
-> Fix an issue where the `perf` tool aborts unexpectedly when running the
-> following command:
+> Currently, some architecture-specific perf-regs functions, such as
+> arch__intr_reg_mask() and arch__user_reg_mask(), are defined with the
+> __weak attribute. This approach ensures that only functions matching
+> the architecture of the build/run host are compiled and executed,
+> reducing build time and binary size.
 >
-> ```
-> perf record -e cycles -I -- true
+> However, this __weak attribute restricts these functions to be called
+> only on the same architecture, preventing cross-architecture
+> functionality. For example, a perf.data file captured on x86 cannot be
+> parsed on an ARM platform.
 >
->  Usage: perf record [<options>] [<command>]
->     or: perf record [<options>] -- <command> [<options>]
+> To address this limitation, this patch removes the __weak attribute from
+> these perf-regs functions. The architecture-specific code is moved from
+> the arch/ directory to the util/perf-regs-arch/ directory. The
+> appropriate architectural functions are then called based on the EM_HOST.
 >
->     -I, --intr-regs[=3D<any register>]
->     sample selected machine registers on interrupt, use '-I?' to list reg=
-ister names
-> ```
+> No functional changes are intended.
 >
-> The usage of the `-I` or `--user-regs` options without specifying any
-> registers should default to sampling all general-purpose registers.
-> However, this currently causes an abnormal termination.
->
-> The issue was introduced by commit 3d06db9bad1a ("perf regs: Refactor
->  use of arch__sample_reg_masks() to perf_reg_name()"). This patch
-> resolves the problem, ensuring that the `-I` or `--user-regs` options
-> work as intended without causing an abort.
->
-> Fixes: 3d06db9bad1a ("perf regs: Refactor use of arch__sample_reg_masks()=
- to perf_reg_name()")
+> Suggested-by: Ian Rogers <irogers@google.com>
 > Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
 
 Reviewed-by: Ian Rogers <irogers@google.com>
@@ -140,45 +135,975 @@ Thanks,
 Ian
 
 > ---
->  tools/perf/util/parse-regs-options.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+>  tools/perf/arch/arm/util/Build                |  2 -
+>  tools/perf/arch/arm/util/perf_regs.c          | 13 ---
+>  tools/perf/arch/arm64/util/perf_regs.c        | 36 --------
+>  tools/perf/arch/csky/Build                    |  1 -
+>  tools/perf/arch/csky/util/Build               |  1 -
+>  tools/perf/arch/csky/util/perf_regs.c         | 13 ---
+>  tools/perf/arch/loongarch/util/Build          |  1 -
+>  tools/perf/arch/loongarch/util/perf_regs.c    | 13 ---
+>  tools/perf/arch/mips/util/Build               |  1 -
+>  tools/perf/arch/mips/util/perf_regs.c         | 13 ---
+>  tools/perf/arch/powerpc/util/perf_regs.c      | 47 -----------
+>  tools/perf/arch/riscv/include/perf_regs.h     |  7 +-
+>  tools/perf/arch/riscv/util/Build              |  1 -
+>  tools/perf/arch/riscv/util/perf_regs.c        | 13 ---
+>  tools/perf/arch/s390/util/Build               |  1 -
+>  tools/perf/arch/s390/util/perf_regs.c         | 13 ---
+>  tools/perf/arch/x86/util/perf_regs.c          | 48 -----------
+>  tools/perf/util/evsel.c                       |  4 +-
+>  tools/perf/util/parse-regs-options.c          |  2 +-
+>  .../util/perf-regs-arch/perf_regs_aarch64.c   | 53 +++++++++++-
+>  .../perf/util/perf-regs-arch/perf_regs_arm.c  |  7 +-
+>  .../perf/util/perf-regs-arch/perf_regs_csky.c |  7 +-
+>  .../util/perf-regs-arch/perf_regs_loongarch.c |  7 +-
+>  .../perf/util/perf-regs-arch/perf_regs_mips.c |  7 +-
+>  .../util/perf-regs-arch/perf_regs_powerpc.c   | 77 ++++++++++++++++-
+>  .../util/perf-regs-arch/perf_regs_riscv.c     |  7 +-
+>  .../perf/util/perf-regs-arch/perf_regs_s390.c |  7 +-
+>  .../perf/util/perf-regs-arch/perf_regs_x86.c  | 60 ++++++++++++-
+>  tools/perf/util/perf_regs.c                   | 84 ++++++++++++++++++-
+>  tools/perf/util/perf_regs.h                   | 22 ++++-
+>  30 files changed, 332 insertions(+), 236 deletions(-)
+>  delete mode 100644 tools/perf/arch/arm/util/perf_regs.c
+>  delete mode 100644 tools/perf/arch/csky/Build
+>  delete mode 100644 tools/perf/arch/csky/util/Build
+>  delete mode 100644 tools/perf/arch/csky/util/perf_regs.c
+>  delete mode 100644 tools/perf/arch/loongarch/util/perf_regs.c
+>  delete mode 100644 tools/perf/arch/mips/util/perf_regs.c
+>  delete mode 100644 tools/perf/arch/riscv/util/perf_regs.c
+>  delete mode 100644 tools/perf/arch/s390/util/perf_regs.c
 >
+> diff --git a/tools/perf/arch/arm/util/Build b/tools/perf/arch/arm/util/Bu=
+ild
+> index 3291f893b943..b94bf3c5279a 100644
+> --- a/tools/perf/arch/arm/util/Build
+> +++ b/tools/perf/arch/arm/util/Build
+> @@ -1,5 +1,3 @@
+> -perf-util-y +=3D perf_regs.o
+> -
+>  perf-util-$(CONFIG_LOCAL_LIBUNWIND)    +=3D unwind-libunwind.o
+>
+>  perf-util-y +=3D pmu.o auxtrace.o cs-etm.o
+> diff --git a/tools/perf/arch/arm/util/perf_regs.c b/tools/perf/arch/arm/u=
+til/perf_regs.c
+> deleted file mode 100644
+> index 03a5bc0cf64c..000000000000
+> --- a/tools/perf/arch/arm/util/perf_regs.c
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include "perf_regs.h"
+> -#include "../../../util/perf_regs.h"
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm=
+64/util/perf_regs.c
+> index 9bb768e1bea1..47f58eaba032 100644
+> --- a/tools/perf/arch/arm64/util/perf_regs.c
+> +++ b/tools/perf/arch/arm64/util/perf_regs.c
+> @@ -103,39 +103,3 @@ int arch_sdt_arg_parse_op(char *old_op, char **new_o=
+p)
+>
+>         return SDT_ARG_VALID;
+>  }
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       struct perf_event_attr attr =3D {
+> -               .type                   =3D PERF_TYPE_HARDWARE,
+> -               .config                 =3D PERF_COUNT_HW_CPU_CYCLES,
+> -               .sample_type            =3D PERF_SAMPLE_REGS_USER,
+> -               .disabled               =3D 1,
+> -               .exclude_kernel         =3D 1,
+> -               .sample_period          =3D 1,
+> -               .sample_regs_user       =3D PERF_REGS_MASK
+> -       };
+> -       int fd;
+> -
+> -       if (getauxval(AT_HWCAP) & HWCAP_SVE)
+> -               attr.sample_regs_user |=3D SMPL_REG_MASK(PERF_REG_ARM64_V=
+G);
+> -
+> -       /*
+> -        * Check if the pmu supports perf extended regs, before
+> -        * returning the register mask to sample.
+> -        */
+> -       if (attr.sample_regs_user !=3D PERF_REGS_MASK) {
+> -               event_attr_init(&attr);
+> -               fd =3D sys_perf_event_open(&attr, 0, -1, -1, 0);
+> -               if (fd !=3D -1) {
+> -                       close(fd);
+> -                       return attr.sample_regs_user;
+> -               }
+> -       }
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/csky/Build b/tools/perf/arch/csky/Build
+> deleted file mode 100644
+> index e63eabc2c8f4..000000000000
+> --- a/tools/perf/arch/csky/Build
+> +++ /dev/null
+> @@ -1 +0,0 @@
+> -perf-util-y +=3D util/
+> diff --git a/tools/perf/arch/csky/util/Build b/tools/perf/arch/csky/util/=
+Build
+> deleted file mode 100644
+> index 6b2d0e021b11..000000000000
+> --- a/tools/perf/arch/csky/util/Build
+> +++ /dev/null
+> @@ -1 +0,0 @@
+> -perf-util-y +=3D perf_regs.o
+> diff --git a/tools/perf/arch/csky/util/perf_regs.c b/tools/perf/arch/csky=
+/util/perf_regs.c
+> deleted file mode 100644
+> index 2cf7a54106e0..000000000000
+> --- a/tools/perf/arch/csky/util/perf_regs.c
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include "perf_regs.h"
+> -#include "../../util/perf_regs.h"
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/loongarch/util/Build b/tools/perf/arch/loong=
+arch/util/Build
+> index 0aa31986ecb5..0c958c8e0718 100644
+> --- a/tools/perf/arch/loongarch/util/Build
+> +++ b/tools/perf/arch/loongarch/util/Build
+> @@ -1,5 +1,4 @@
+>  perf-util-y +=3D header.o
+> -perf-util-y +=3D perf_regs.o
+>
+>  perf-util-$(CONFIG_LOCAL_LIBUNWIND) +=3D unwind-libunwind.o
+>  perf-util-$(CONFIG_LIBDW_DWARF_UNWIND) +=3D unwind-libdw.o
+> diff --git a/tools/perf/arch/loongarch/util/perf_regs.c b/tools/perf/arch=
+/loongarch/util/perf_regs.c
+> deleted file mode 100644
+> index 03a5bc0cf64c..000000000000
+> --- a/tools/perf/arch/loongarch/util/perf_regs.c
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include "perf_regs.h"
+> -#include "../../../util/perf_regs.h"
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/mips/util/Build b/tools/perf/arch/mips/util/=
+Build
+> index 691fa2051958..818b808a8247 100644
+> --- a/tools/perf/arch/mips/util/Build
+> +++ b/tools/perf/arch/mips/util/Build
+> @@ -1,2 +1 @@
+> -perf-util-y +=3D perf_regs.o
+>  perf-util-$(CONFIG_LOCAL_LIBUNWIND) +=3D unwind-libunwind.o
+> diff --git a/tools/perf/arch/mips/util/perf_regs.c b/tools/perf/arch/mips=
+/util/perf_regs.c
+> deleted file mode 100644
+> index 2cf7a54106e0..000000000000
+> --- a/tools/perf/arch/mips/util/perf_regs.c
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include "perf_regs.h"
+> -#include "../../util/perf_regs.h"
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/powerpc/util/perf_regs.c b/tools/perf/arch/p=
+owerpc/util/perf_regs.c
+> index 779073f7e992..93f929fc32e3 100644
+> --- a/tools/perf/arch/powerpc/util/perf_regs.c
+> +++ b/tools/perf/arch/powerpc/util/perf_regs.c
+> @@ -123,50 +123,3 @@ int arch_sdt_arg_parse_op(char *old_op, char **new_o=
+p)
+>
+>         return SDT_ARG_VALID;
+>  }
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       struct perf_event_attr attr =3D {
+> -               .type                   =3D PERF_TYPE_HARDWARE,
+> -               .config                 =3D PERF_COUNT_HW_CPU_CYCLES,
+> -               .sample_type            =3D PERF_SAMPLE_REGS_INTR,
+> -               .precise_ip             =3D 1,
+> -               .disabled               =3D 1,
+> -               .exclude_kernel         =3D 1,
+> -       };
+> -       int fd;
+> -       u32 version;
+> -       u64 extended_mask =3D 0, mask =3D PERF_REGS_MASK;
+> -
+> -       /*
+> -        * Get the PVR value to set the extended
+> -        * mask specific to platform.
+> -        */
+> -       version =3D (((mfspr(SPRN_PVR)) >>  16) & 0xFFFF);
+> -       if (version =3D=3D PVR_POWER9)
+> -               extended_mask =3D PERF_REG_PMU_MASK_300;
+> -       else if ((version =3D=3D PVR_POWER10) || (version =3D=3D PVR_POWE=
+R11))
+> -               extended_mask =3D PERF_REG_PMU_MASK_31;
+> -       else
+> -               return mask;
+> -
+> -       attr.sample_regs_intr =3D extended_mask;
+> -       attr.sample_period =3D 1;
+> -       event_attr_init(&attr);
+> -
+> -       /*
+> -        * check if the pmu supports perf extended regs, before
+> -        * returning the register mask to sample.
+> -        */
+> -       fd =3D sys_perf_event_open(&attr, 0, -1, -1, 0);
+> -       if (fd !=3D -1) {
+> -               close(fd);
+> -               mask |=3D extended_mask;
+> -       }
+> -       return mask;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/riscv/include/perf_regs.h b/tools/perf/arch/=
+riscv/include/perf_regs.h
+> index 89d5bbb8d2b8..af7a1b47bf66 100644
+> --- a/tools/perf/arch/riscv/include/perf_regs.h
+> +++ b/tools/perf/arch/riscv/include/perf_regs.h
+> @@ -10,10 +10,15 @@
+>
+>  #define PERF_REGS_MASK ((1ULL << PERF_REG_RISCV_MAX) - 1)
+>  #define PERF_REGS_MAX  PERF_REG_RISCV_MAX
+> +
+> +#if defined(__riscv_xlen)
+>  #if __riscv_xlen =3D=3D 64
+> -#define PERF_SAMPLE_REGS_ABI    PERF_SAMPLE_REGS_ABI_64
+> +#define PERF_SAMPLE_REGS_ABI   PERF_SAMPLE_REGS_ABI_64
+>  #else
+>  #define PERF_SAMPLE_REGS_ABI   PERF_SAMPLE_REGS_ABI_32
+>  #endif
+> +#else
+> +#define PERF_SAMPLE_REGS_ABI   PERF_SAMPLE_REGS_NONE
+> +#endif
+>
+>  #endif /* ARCH_PERF_REGS_H */
+> diff --git a/tools/perf/arch/riscv/util/Build b/tools/perf/arch/riscv/uti=
+l/Build
+> index 628b9ebd418b..da5b12e7f862 100644
+> --- a/tools/perf/arch/riscv/util/Build
+> +++ b/tools/perf/arch/riscv/util/Build
+> @@ -1,4 +1,3 @@
+> -perf-util-y +=3D perf_regs.o
+>  perf-util-y +=3D header.o
+>
+>  perf-util-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+> diff --git a/tools/perf/arch/riscv/util/perf_regs.c b/tools/perf/arch/ris=
+cv/util/perf_regs.c
+> deleted file mode 100644
+> index 2cf7a54106e0..000000000000
+> --- a/tools/perf/arch/riscv/util/perf_regs.c
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include "perf_regs.h"
+> -#include "../../util/perf_regs.h"
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/s390/util/Build b/tools/perf/arch/s390/util/=
+Build
+> index 5391d26fedd4..3b09c058e0ec 100644
+> --- a/tools/perf/arch/s390/util/Build
+> +++ b/tools/perf/arch/s390/util/Build
+> @@ -1,6 +1,5 @@
+>  perf-util-y +=3D header.o
+>  perf-util-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+> -perf-util-y +=3D perf_regs.o
+>
+>  perf-util-y +=3D machine.o
+>  perf-util-y +=3D pmu.o
+> diff --git a/tools/perf/arch/s390/util/perf_regs.c b/tools/perf/arch/s390=
+/util/perf_regs.c
+> deleted file mode 100644
+> index 2cf7a54106e0..000000000000
+> --- a/tools/perf/arch/s390/util/perf_regs.c
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include "perf_regs.h"
+> -#include "../../util/perf_regs.h"
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/arch/x86/util/perf_regs.c b/tools/perf/arch/x86/u=
+til/perf_regs.c
+> index a7ca4154fdf9..41141cebe226 100644
+> --- a/tools/perf/arch/x86/util/perf_regs.c
+> +++ b/tools/perf/arch/x86/util/perf_regs.c
+> @@ -233,51 +233,3 @@ int arch_sdt_arg_parse_op(char *old_op, char **new_o=
+p)
+>
+>         return SDT_ARG_VALID;
+>  }
+> -
+> -uint64_t arch__intr_reg_mask(void)
+> -{
+> -       struct perf_event_attr attr =3D {
+> -               .type                   =3D PERF_TYPE_HARDWARE,
+> -               .config                 =3D PERF_COUNT_HW_CPU_CYCLES,
+> -               .sample_type            =3D PERF_SAMPLE_REGS_INTR,
+> -               .sample_regs_intr       =3D PERF_REG_EXTENDED_MASK,
+> -               .precise_ip             =3D 1,
+> -               .disabled               =3D 1,
+> -               .exclude_kernel         =3D 1,
+> -       };
+> -       int fd;
+> -       /*
+> -        * In an unnamed union, init it here to build on older gcc versio=
+ns
+> -        */
+> -       attr.sample_period =3D 1;
+> -
+> -       if (perf_pmus__num_core_pmus() > 1) {
+> -               struct perf_pmu *pmu =3D NULL;
+> -               __u64 type =3D PERF_TYPE_RAW;
+> -
+> -               /*
+> -                * The same register set is supported among different hyb=
+rid PMUs.
+> -                * Only check the first available one.
+> -                */
+> -               while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D NULL) {
+> -                       type =3D pmu->type;
+> -                       break;
+> -               }
+> -               attr.config |=3D type << PERF_PMU_TYPE_SHIFT;
+> -       }
+> -
+> -       event_attr_init(&attr);
+> -
+> -       fd =3D sys_perf_event_open(&attr, 0, -1, -1, 0);
+> -       if (fd !=3D -1) {
+> -               close(fd);
+> -               return (PERF_REG_EXTENDED_MASK | PERF_REGS_MASK);
+> -       }
+> -
+> -       return PERF_REGS_MASK;
+> -}
+> -
+> -uint64_t arch__user_reg_mask(void)
+> -{
+> -       return PERF_REGS_MASK;
+> -}
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 5ac1a05601b1..a36528fd41c6 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -1055,13 +1055,13 @@ static void __evsel__config_callchain(struct evse=
+l *evsel, struct record_opts *o
+>                         evsel__set_sample_bit(evsel, REGS_USER);
+>                         evsel__set_sample_bit(evsel, STACK_USER);
+>                         if (opts->sample_user_regs &&
+> -                           DWARF_MINIMAL_REGS(e_machine) !=3D arch__user=
+_reg_mask()) {
+> +                           DWARF_MINIMAL_REGS(e_machine) !=3D perf_user_=
+reg_mask(EM_HOST)) {
+>                                 attr->sample_regs_user |=3D DWARF_MINIMAL=
+_REGS(e_machine);
+>                                 pr_warning("WARNING: The use of --call-gr=
+aph=3Ddwarf may require all the user registers, "
+>                                            "specifying a subset with --us=
+er-regs may render DWARF unwinding unreliable, "
+>                                            "so the minimal registers set =
+(IP, SP) is explicitly forced.\n");
+>                         } else {
+> -                               attr->sample_regs_user |=3D arch__user_re=
+g_mask();
+> +                               attr->sample_regs_user |=3D perf_user_reg=
+_mask(EM_HOST);
+>                         }
+>                         attr->sample_stack_user =3D param->dump_size;
+>                         attr->exclude_callchain_user =3D 1;
 > diff --git a/tools/perf/util/parse-regs-options.c b/tools/perf/util/parse=
 -regs-options.c
-> index 8dd35f50f644..b44b47d9059f 100644
+> index b44b47d9059f..c93c2f0c8105 100644
 > --- a/tools/perf/util/parse-regs-options.c
 > +++ b/tools/perf/util/parse-regs-options.c
-> @@ -66,12 +66,14 @@ __parse_regs(const struct option *opt, const char *st=
-r, int unset, bool intr)
+> @@ -66,7 +66,7 @@ __parse_regs(const struct option *opt, const char *str,=
+ int unset, bool intr)
 >         if (*mode)
 >                 return -1;
 >
-> -       /* str may be NULL in case no arg is passed to -I */
-> -       if (!str)
-> -               return -1;
-> -
->         mask =3D intr ? arch__intr_reg_mask() : arch__user_reg_mask();
+> -       mask =3D intr ? arch__intr_reg_mask() : arch__user_reg_mask();
+> +       mask =3D intr ? perf_intr_reg_mask(EM_HOST) : perf_user_reg_mask(=
+EM_HOST);
 >
-> +       /* str may be NULL in case no arg is passed to -I */
-> +       if (!str) {
-> +               *mode =3D mask;
-> +               return 0;
+>         /* str may be NULL in case no arg is passed to -I */
+>         if (!str) {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c b/tools/p=
+erf/util/perf-regs-arch/perf_regs_aarch64.c
+> index 9dcda80d310f..666874f625b6 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
+> @@ -1,7 +1,58 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#include <errno.h>
+> +#include <regex.h>
+> +#include <string.h>
+> +#include <sys/auxv.h>
+> +#include <linux/kernel.h>
+> +#include <linux/zalloc.h>
+>
+> +#include "../debug.h"
+> +#include "../event.h"
+>  #include "../perf_regs.h"
+> -#include "../../../arch/arm64/include/uapi/asm/perf_regs.h"
+> +#include "../../perf-sys.h"
+> +#include "../../arch/arm64/include/perf_regs.h"
+> +
+> +#define SMPL_REG_MASK(b) (1ULL << (b))
+> +
+> +#ifndef HWCAP_SVE
+> +#define HWCAP_SVE      (1 << 22)
+> +#endif
+> +
+> +uint64_t __perf_reg_mask_arm64(bool intr)
+> +{
+> +       struct perf_event_attr attr =3D {
+> +               .type                   =3D PERF_TYPE_HARDWARE,
+> +               .config                 =3D PERF_COUNT_HW_CPU_CYCLES,
+> +               .sample_type            =3D PERF_SAMPLE_REGS_USER,
+> +               .disabled               =3D 1,
+> +               .exclude_kernel         =3D 1,
+> +               .sample_period          =3D 1,
+> +               .sample_regs_user       =3D PERF_REGS_MASK
+> +       };
+> +       int fd;
+> +
+> +       if (intr)
+> +               return PERF_REGS_MASK;
+> +
+> +       if (getauxval(AT_HWCAP) & HWCAP_SVE)
+> +               attr.sample_regs_user |=3D SMPL_REG_MASK(PERF_REG_ARM64_V=
+G);
+> +
+> +       /*
+> +        * Check if the pmu supports perf extended regs, before
+> +        * returning the register mask to sample. Open the event
+> +        * on the perf process to check this.
+> +        */
+> +       if (attr.sample_regs_user !=3D PERF_REGS_MASK) {
+> +               event_attr_init(&attr);
+> +               fd =3D sys_perf_event_open(&attr, /*pid=3D*/0, /*cpu=3D*/=
+-1,
+> +                                        /*group_fd=3D*/-1, /*flags=3D*/0=
+);
+> +               if (fd !=3D -1) {
+> +                       close(fd);
+> +                       return attr.sample_regs_user;
+> +               }
+> +       }
+> +       return PERF_REGS_MASK;
+> +}
+>
+>  const char *__perf_reg_name_arm64(int id)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_arm.c b/tools/perf/=
+util/perf-regs-arch/perf_regs_arm.c
+> index e29d130a587a..184d6e248dfc 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_arm.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_arm.c
+> @@ -1,7 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+>  #include "../perf_regs.h"
+> -#include "../../../arch/arm/include/uapi/asm/perf_regs.h"
+> +#include "../../arch/arm/include/perf_regs.h"
+> +
+> +uint64_t __perf_reg_mask_arm(bool intr __maybe_unused)
+> +{
+> +       return PERF_REGS_MASK;
+> +}
+>
+>  const char *__perf_reg_name_arm(int id)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_csky.c b/tools/perf=
+/util/perf-regs-arch/perf_regs_csky.c
+> index 95808f93d45b..16cbd8303acf 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_csky.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_csky.c
+> @@ -9,7 +9,12 @@
+>  #include "../perf_regs.h"
+>  #undef __CSKYABIV2__
+>  #define __CSKYABIV2__ 1  // Always want the V2 register definitions.
+> -#include "../../arch/csky/include/uapi/asm/perf_regs.h"
+> +#include "../../arch/csky/include/perf_regs.h"
+> +
+> +uint64_t __perf_reg_mask_csky(bool intr __maybe_unused)
+> +{
+> +       return PERF_REGS_MASK;
+> +}
+>
+>  const char *__perf_reg_name_csky(int id, uint32_t e_flags)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_loongarch.c b/tools=
+/perf/util/perf-regs-arch/perf_regs_loongarch.c
+> index 043f97f4e3ac..478ee889afa1 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_loongarch.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_loongarch.c
+> @@ -1,7 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+>  #include "../perf_regs.h"
+> -#include "../../../arch/loongarch/include/uapi/asm/perf_regs.h"
+> +#include "../../arch/loongarch/include/perf_regs.h"
+> +
+> +uint64_t __perf_reg_mask_loongarch(bool intr __maybe_unused)
+> +{
+> +       return PERF_REGS_MASK;
+> +}
+>
+>  const char *__perf_reg_name_loongarch(int id)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_mips.c b/tools/perf=
+/util/perf-regs-arch/perf_regs_mips.c
+> index 793178fc3c78..c5a475f6ec64 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_mips.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_mips.c
+> @@ -1,7 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+>  #include "../perf_regs.h"
+> -#include "../../../arch/mips/include/uapi/asm/perf_regs.h"
+> +#include "../../arch/mips/include/perf_regs.h"
+> +
+> +uint64_t __perf_reg_mask_mips(bool intr __maybe_unused)
+> +{
+> +       return PERF_REGS_MASK;
+> +}
+>
+>  const char *__perf_reg_name_mips(int id)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c b/tools/p=
+erf/util/perf-regs-arch/perf_regs_powerpc.c
+> index 08636bb09a3a..f0a547ad809b 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
+> @@ -1,7 +1,82 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+> +#include <errno.h>
+> +#include <string.h>
+> +#include <regex.h>
+> +#include <linux/zalloc.h>
+> +
+> +#include "../debug.h"
+> +#include "../event.h"
+> +#include "../header.h"
+>  #include "../perf_regs.h"
+> -#include "../../../arch/powerpc/include/uapi/asm/perf_regs.h"
+> +#include "../../perf-sys.h"
+> +#include "../../arch/powerpc/util/utils_header.h"
+> +#include "../../arch/powerpc/include/perf_regs.h"
+> +
+> +#include <linux/kernel.h>
+> +
+> +#define PVR_POWER9             0x004E
+> +#define PVR_POWER10            0x0080
+> +#define PVR_POWER11            0x0082
+> +
+> +/*
+> + * mfspr is a POWERPC specific instruction, ensure it's only
+> + * built and called on POWERPC by guarding with __powerpc64__
+> + * or __powerpc__.
+> + */
+> +#if defined(__powerpc64__) && defined(__powerpc__)
+> +uint64_t __perf_reg_mask_powerpc(bool intr)
+> +{
+> +       struct perf_event_attr attr =3D {
+> +               .type                   =3D PERF_TYPE_HARDWARE,
+> +               .config                 =3D PERF_COUNT_HW_CPU_CYCLES,
+> +               .sample_type            =3D PERF_SAMPLE_REGS_INTR,
+> +               .precise_ip             =3D 1,
+> +               .disabled               =3D 1,
+> +               .exclude_kernel         =3D 1,
+> +       };
+> +       int fd;
+> +       u32 version;
+> +       u64 extended_mask =3D 0, mask =3D PERF_REGS_MASK;
+> +
+> +       if (!intr)
+> +               return PERF_REGS_MASK;
+> +
+> +       /*
+> +        * Get the PVR value to set the extended
+> +        * mask specific to platform.
+> +        */
+> +       version =3D (((mfspr(SPRN_PVR)) >>  16) & 0xFFFF);
+> +       if (version =3D=3D PVR_POWER9)
+> +               extended_mask =3D PERF_REG_PMU_MASK_300;
+> +       else if ((version =3D=3D PVR_POWER10) || (version =3D=3D PVR_POWE=
+R11))
+> +               extended_mask =3D PERF_REG_PMU_MASK_31;
+> +       else
+> +               return mask;
+> +
+> +       attr.sample_regs_intr =3D extended_mask;
+> +       attr.sample_period =3D 1;
+> +       event_attr_init(&attr);
+> +
+> +       /*
+> +        * Check if the pmu supports perf extended regs, before
+> +        * returning the register mask to sample. Open the event
+> +        * on the perf process to check this.
+> +        */
+> +       fd =3D sys_perf_event_open(&attr, /*pid=3D*/0, /*cpu=3D*/-1,
+> +                                /*group_fd=3D*/-1, /*flags=3D*/0);
+> +       if (fd !=3D -1) {
+> +               close(fd);
+> +               mask |=3D extended_mask;
+> +       }
+> +       return mask;
+> +}
+> +#else
+> +uint64_t __perf_reg_mask_powerpc(bool intr __maybe_unused)
+> +{
+> +       return PERF_REGS_MASK;
+> +}
+> +#endif
+>
+>  const char *__perf_reg_name_powerpc(int id)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_riscv.c b/tools/per=
+f/util/perf-regs-arch/perf_regs_riscv.c
+> index 337b687c655d..5b5f21fcba8c 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_riscv.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_riscv.c
+> @@ -1,7 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+>  #include "../perf_regs.h"
+> -#include "../../../arch/riscv/include/uapi/asm/perf_regs.h"
+> +#include "../../arch/riscv/include/perf_regs.h"
+> +
+> +uint64_t __perf_reg_mask_riscv(bool intr __maybe_unused)
+> +{
+> +       return PERF_REGS_MASK;
+> +}
+>
+>  const char *__perf_reg_name_riscv(int id)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_s390.c b/tools/perf=
+/util/perf-regs-arch/perf_regs_s390.c
+> index d69bba881080..c61df24edf0f 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_s390.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_s390.c
+> @@ -1,7 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+>  #include "../perf_regs.h"
+> -#include "../../../arch/s390/include/uapi/asm/perf_regs.h"
+> +#include "../../arch/s390/include/perf_regs.h"
+> +
+> +uint64_t __perf_reg_mask_s390(bool intr __maybe_unused)
+> +{
+> +       return PERF_REGS_MASK;
+> +}
+>
+>  const char *__perf_reg_name_s390(int id)
+>  {
+> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_x86.c b/tools/perf/=
+util/perf-regs-arch/perf_regs_x86.c
+> index 708954a9d35d..d573f9a9ca46 100644
+> --- a/tools/perf/util/perf-regs-arch/perf_regs_x86.c
+> +++ b/tools/perf/util/perf-regs-arch/perf_regs_x86.c
+> @@ -1,7 +1,65 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+> +#include <errno.h>
+> +#include <string.h>
+> +#include <regex.h>
+> +#include <linux/kernel.h>
+> +#include <linux/zalloc.h>
+> +
+> +#include "../debug.h"
+> +#include "../event.h"
+> +#include "../pmu.h"
+> +#include "../pmus.h"
+>  #include "../perf_regs.h"
+> -#include "../../../arch/x86/include/uapi/asm/perf_regs.h"
+> +#include "../../perf-sys.h"
+> +#include "../../arch/x86/include/perf_regs.h"
+> +
+> +uint64_t __perf_reg_mask_x86(bool intr)
+> +{
+> +       struct perf_event_attr attr =3D {
+> +               .type                   =3D PERF_TYPE_HARDWARE,
+> +               .config                 =3D PERF_COUNT_HW_CPU_CYCLES,
+> +               .sample_type            =3D PERF_SAMPLE_REGS_INTR,
+> +               .sample_regs_intr       =3D PERF_REG_EXTENDED_MASK,
+> +               .precise_ip             =3D 1,
+> +               .disabled               =3D 1,
+> +               .exclude_kernel         =3D 1,
+> +       };
+> +       int fd;
+> +
+> +       if (!intr)
+> +               return PERF_REGS_MASK;
+> +
+> +       /*
+> +        * In an unnamed union, init it here to build on older gcc versio=
+ns
+> +        */
+> +       attr.sample_period =3D 1;
+> +
+> +       if (perf_pmus__num_core_pmus() > 1) {
+> +               struct perf_pmu *pmu =3D NULL;
+> +               __u64 type =3D PERF_TYPE_RAW;
+> +
+> +               /*
+> +                * The same register set is supported among different hyb=
+rid PMUs.
+> +                * Only check the first available one.
+> +                */
+> +               while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D NULL) {
+> +                       type =3D pmu->type;
+> +                       break;
+> +               }
+> +               attr.config |=3D type << PERF_PMU_TYPE_SHIFT;
 > +       }
 > +
->         /* because str is read-only */
->         s =3D os =3D strdup(str);
->         if (!s)
-> @@ -104,9 +106,6 @@ __parse_regs(const struct option *opt, const char *st=
-r, int unset, bool intr)
->         }
->         ret =3D 0;
+> +       event_attr_init(&attr);
+> +       fd =3D sys_perf_event_open(&attr, /*pid=3D*/0, /*cpu=3D*/-1,
+> +                                /*group_fd=3D*/-1, /*flags=3D*/0);
+> +       if (fd !=3D -1) {
+> +               close(fd);
+> +               return (PERF_REG_EXTENDED_MASK | PERF_REGS_MASK);
+> +       }
+> +
+> +       return PERF_REGS_MASK;
+> +}
 >
-> -       /* default to all possible regs */
-> -       if (*mode =3D=3D 0)
-> -               *mode =3D mask;
->  error:
->         free(os);
->         return ret;
+>  const char *__perf_reg_name_x86(int id)
+>  {
+> diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
+> index 14b7be30ab20..4d9a286a0e56 100644
+> --- a/tools/perf/util/perf_regs.c
+> +++ b/tools/perf/util/perf_regs.c
+> @@ -13,14 +13,90 @@ int __weak arch_sdt_arg_parse_op(char *old_op __maybe=
+_unused,
+>         return SDT_ARG_SKIP;
+>  }
+>
+> -uint64_t __weak arch__intr_reg_mask(void)
+> +uint64_t perf_intr_reg_mask(uint16_t e_machine)
+>  {
+> -       return 0;
+> +       uint64_t mask =3D 0;
+> +
+> +       switch (e_machine) {
+> +       case EM_ARM:
+> +               mask =3D __perf_reg_mask_arm(/*intr=3D*/true);
+> +               break;
+> +       case EM_AARCH64:
+> +               mask =3D __perf_reg_mask_arm64(/*intr=3D*/true);
+> +               break;
+> +       case EM_CSKY:
+> +               mask =3D __perf_reg_mask_csky(/*intr=3D*/true);
+> +               break;
+> +       case EM_LOONGARCH:
+> +               mask =3D __perf_reg_mask_loongarch(/*intr=3D*/true);
+> +               break;
+> +       case EM_MIPS:
+> +               mask =3D __perf_reg_mask_mips(/*intr=3D*/true);
+> +               break;
+> +       case EM_PPC:
+> +       case EM_PPC64:
+> +               mask =3D __perf_reg_mask_powerpc(/*intr=3D*/true);
+> +               break;
+> +       case EM_RISCV:
+> +               mask =3D __perf_reg_mask_riscv(/*intr=3D*/true);
+> +               break;
+> +       case EM_S390:
+> +               mask =3D __perf_reg_mask_s390(/*intr=3D*/true);
+> +               break;
+> +       case EM_386:
+> +       case EM_X86_64:
+> +               mask =3D __perf_reg_mask_x86(/*intr=3D*/true);
+> +               break;
+> +       default:
+> +               pr_debug("Unknown ELF machine %d, interrupt sampling regi=
+ster mask will be empty.\n",
+> +                        e_machine);
+> +               break;
+> +       }
+> +
+> +       return mask;
+>  }
+>
+> -uint64_t __weak arch__user_reg_mask(void)
+> +uint64_t perf_user_reg_mask(uint16_t e_machine)
+>  {
+> -       return 0;
+> +       uint64_t mask =3D 0;
+> +
+> +       switch (e_machine) {
+> +       case EM_ARM:
+> +               mask =3D __perf_reg_mask_arm(/*intr=3D*/false);
+> +               break;
+> +       case EM_AARCH64:
+> +               mask =3D __perf_reg_mask_arm64(/*intr=3D*/false);
+> +               break;
+> +       case EM_CSKY:
+> +               mask =3D __perf_reg_mask_csky(/*intr=3D*/false);
+> +               break;
+> +       case EM_LOONGARCH:
+> +               mask =3D __perf_reg_mask_loongarch(/*intr=3D*/false);
+> +               break;
+> +       case EM_MIPS:
+> +               mask =3D __perf_reg_mask_mips(/*intr=3D*/false);
+> +               break;
+> +       case EM_PPC:
+> +       case EM_PPC64:
+> +               mask =3D __perf_reg_mask_powerpc(/*intr=3D*/false);
+> +               break;
+> +       case EM_RISCV:
+> +               mask =3D __perf_reg_mask_riscv(/*intr=3D*/false);
+> +               break;
+> +       case EM_S390:
+> +               mask =3D __perf_reg_mask_s390(/*intr=3D*/false);
+> +               break;
+> +       case EM_386:
+> +       case EM_X86_64:
+> +               mask =3D __perf_reg_mask_x86(/*intr=3D*/false);
+> +               break;
+> +       default:
+> +               pr_debug("Unknown ELF machine %d, user sampling register =
+mask will be empty.\n",
+> +                        e_machine);
+> +               break;
+> +       }
+> +
+> +       return mask;
+>  }
+>
+>  const char *perf_reg_name(int id, uint16_t e_machine, uint32_t e_flags)
+> diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
+> index ed7c1b1358fa..2b27139acadb 100644
+> --- a/tools/perf/util/perf_regs.h
+> +++ b/tools/perf/util/perf_regs.h
+> @@ -13,37 +13,55 @@ enum {
+>  };
+>
+>  int arch_sdt_arg_parse_op(char *old_op, char **new_op);
+> -uint64_t arch__intr_reg_mask(void);
+> -uint64_t arch__user_reg_mask(void);
+> +uint64_t perf_intr_reg_mask(uint16_t e_machine);
+> +uint64_t perf_user_reg_mask(uint16_t e_machine);
+>
+>  const char *perf_reg_name(int id, uint16_t e_machine, uint32_t e_flags);
+>  int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
+>  uint64_t perf_arch_reg_ip(uint16_t e_machine);
+>  uint64_t perf_arch_reg_sp(uint16_t e_machine);
+> +
+> +uint64_t __perf_reg_mask_arm64(bool intr);
+>  const char *__perf_reg_name_arm64(int id);
+>  uint64_t __perf_reg_ip_arm64(void);
+>  uint64_t __perf_reg_sp_arm64(void);
+> +
+> +uint64_t __perf_reg_mask_arm(bool intr);
+>  const char *__perf_reg_name_arm(int id);
+>  uint64_t __perf_reg_ip_arm(void);
+>  uint64_t __perf_reg_sp_arm(void);
+> +
+> +uint64_t __perf_reg_mask_csky(bool intr);
+>  const char *__perf_reg_name_csky(int id, uint32_t e_flags);
+>  uint64_t __perf_reg_ip_csky(void);
+>  uint64_t __perf_reg_sp_csky(void);
+> +
+> +uint64_t __perf_reg_mask_loongarch(bool intr);
+>  const char *__perf_reg_name_loongarch(int id);
+>  uint64_t __perf_reg_ip_loongarch(void);
+>  uint64_t __perf_reg_sp_loongarch(void);
+> +
+> +uint64_t __perf_reg_mask_mips(bool intr);
+>  const char *__perf_reg_name_mips(int id);
+>  uint64_t __perf_reg_ip_mips(void);
+>  uint64_t __perf_reg_sp_mips(void);
+> +
+> +uint64_t __perf_reg_mask_powerpc(bool intr);
+>  const char *__perf_reg_name_powerpc(int id);
+>  uint64_t __perf_reg_ip_powerpc(void);
+>  uint64_t __perf_reg_sp_powerpc(void);
+> +
+> +uint64_t __perf_reg_mask_riscv(bool intr);
+>  const char *__perf_reg_name_riscv(int id);
+>  uint64_t __perf_reg_ip_riscv(void);
+>  uint64_t __perf_reg_sp_riscv(void);
+> +
+> +uint64_t __perf_reg_mask_s390(bool intr);
+>  const char *__perf_reg_name_s390(int id);
+>  uint64_t __perf_reg_ip_s390(void);
+>  uint64_t __perf_reg_sp_s390(void);
+> +
+> +uint64_t __perf_reg_mask_x86(bool intr);
+>  const char *__perf_reg_name_x86(int id);
+>  uint64_t __perf_reg_ip_x86(void);
+>  uint64_t __perf_reg_sp_x86(void);
 > --
 > 2.34.1
 >

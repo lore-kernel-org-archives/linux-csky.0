@@ -1,206 +1,184 @@
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BEA30FC22;
-	Tue,  3 Feb 2026 10:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770113844; cv=none; b=P2Oj4NTax1ifzWAOAbuzWUoTwyZSgQ95GebKjAVKXU0F7Uy5BjLju5Pz3S1uUNJceXynfGzpSdjeUKLgnSpL/kH1Xogs0QcfHevc1dP2WPM/PYzXaerwZcpEB+iuQcE2u22KOOLfwM9E7EMPKPrmnrBfs7SLh4ix1R+Z0+SvdL0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770113844; c=relaxed/simple;
-	bh=Vc2QbSixSsb2ON81jWvWOUH8cSKvDtILixarN96mqWU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eCJebkMoil3S+dxK/eFiGeZ+gHXEwFagxIEJs2UNeZtCgA0N9yS91a3Re4pT86tWFGXbYi4/Xyo7+92DjKlc2An4yRlFB7cexmjdMFimAYoJ9mPsxwQyydaSJJgMwpChw7vcxJ6EX5cHxMhDRcKC2jWcHx2JDxg+GlahdP8LYKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=lUAE2uVq reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E1B2F39A1
+	for <linux-csky@vger.kernel.org>; Tue,  3 Feb 2026 23:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770160007; cv=pass; b=NmtAKTjTR6aCy0KElO9rhzb6NAAPRMdLI70gNA6C1xu1hR0T+oPqCVJRILMlJehTcIilqvv4CbnmwWkgoZMtHjdIP5FtvxPMtah7JMJbmyCDaWbGxNRBwZIf+GQHfCwpCRY8HeO/JF7RLiPdArnl6j4Y+Fjf9tClHYX/wQ+MP0Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770160007; c=relaxed/simple;
+	bh=93ytCWhm+7HfW6uqJrrD6twD+UxPO31wPTRFzIBkefE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bshl9wtp2PS6kMxqVR4lvA+pqChX0Gc048E6c4V/F53MKujVI2VuqJH1BKSSV/nyxp9pvj7qP3zih67uZaIMfIPQ1GES4bC0yQofFscnjMYDxuY1XjoRW1KRFSuZYgyelE0lpEASdEfgbPoqUDChAnH1nObAjNMFkpqfyHaOG8Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KheWY9Nv; arc=pass smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="lUAE2uVq"
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4f4ztd00Nsz1FDXZ;
-	Tue,  3 Feb 2026 11:17:13 +0100 (CET)
-Received: from [10.10.15.18] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by smtp.simply.com (Simply.com) with ESMTPSA id 4f4ztY1CK4z1DHbc;
-	Tue,  3 Feb 2026 11:17:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1770113832;
-	bh=bIz4RVwkv6KARy4MwQOhUdd22JeZFr0fFrNF7J4bRPM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=lUAE2uVqAzYhZ1sm97fYuqy+vlFYURoO/ESgRDOLYwoPcj+AJLYcKftxzXr+4y/HX
-	 2YOyDda3zoXt+26+AX8pMM7QHh5T+XJuM4W03HRzJukix5g8rdsb/fjilKm09oxzSx
-	 tBwy+nern6bg1a50/KfLMYddppMeG7txUbC4/AmsAXT1tuu3+smPwBXiUUqokjSpVv
-	 UUsrhLX04O7HNQNLLVmIA6iNk0y72m91fWDt4UXVjn71WutyJfQfTM3K8uFvvtoUBz
-	 jIXUHdgIYTlrZQBjHS4KV4lgMsEWYt8Uw9Kgk+K14XLmF28umAniXCSL8090kqia/S
-	 lC0jknJm/j/RQ==
-Message-ID: <ec965a79-dad8-4358-a8e9-ebc9f330b67b@gaisler.com>
-Date: Tue, 3 Feb 2026 11:17:08 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KheWY9Nv"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a885af8ee7so11715ad.1
+        for <linux-csky@vger.kernel.org>; Tue, 03 Feb 2026 15:06:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770160005; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UpbDAhkgaOKMaJFpORVlI/FvlvO7rj7Tp3pbpzB9Sv+XXBmN2wuQZeT5yeBzKC8hSi
+         jGp13v6jyvOyharWN00SiWhlxsqwnnjeVSoTVfOKN6L8BkVoAe8UsgLvpdnbEZeuhsbj
+         L8KU+at8tL7za+DeLDjl9OUW7ROGR1SLoz3M5dfEmzLxtK+IR7n42anLLU3dyp9FoIlz
+         uKSprSaBDN6Y74y8sp410Epg4fHQd/PM5C/lA2b5H7NqFkjTwnZiEigYbxwnJAaprcut
+         jsPk80Hke3h71fPm38ejub5g3NGc8ZofaZZ98BfDvVGQDT821WvpdRDeNZoKwLAMttXw
+         U2yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WhW0Z5/bDcVlEnz8k3eYAJjeqv5PflWO94icC/kx//A=;
+        fh=kvT1SDo8zTRVf2zIwwgXkPTWnDxkiMwNCm63CraVoRs=;
+        b=G78ilhJgmolyBZIh6DIuLn/kVWHvF9PVgEGZ7z5FG1ACefW17HVk04AkaRVDyvLd6z
+         aishCdvH+KXT6RMCu5LtyCocFpms7OhE4ebYhINYaoYkkEP72hS7ohG45TpVKXg1xb5b
+         V1xe00kauE04TMvgnbVb7V2I+CsZKO59ScHDoKO6iwlwyOXPZ9Z1S548Ha6FHSJBzMyd
+         2o0anURdCfvp4SBeL/ytx95edgXC91W8A3qwb2iaBRuJYHPdHj19JZOIHZTYzBLWJPWg
+         X5AEpdnYEBoc6nU3zxM/k2rvNHAQMd82yV8OxRJs6Hg2UkaL3MklvfnDDFe2OQLt08/M
+         gSow==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770160005; x=1770764805; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WhW0Z5/bDcVlEnz8k3eYAJjeqv5PflWO94icC/kx//A=;
+        b=KheWY9Nv6hyOKrwUdJyXvPPlmnnPoFMV9MSo43gAd/JCQHRGhdqNb8AhuCubK3PawX
+         dkmbCEMgl7EMno2eiBfuQV3rXRIhjGbaYi4+dTMPPKazY0YA8h6owylAJt122sU3GueY
+         kbbUptKh5lLhPREUzp8LaSaJQkzBACZQ54uMmqshqgRhdqRrxVYw3DYh99eMHjgf4Kjc
+         oXxmfkZ0cEBMIg5F/TU5cbORPkzu9asdy0V2dCWuK68bDxPVan2GJFZTtOLgCkamA8dZ
+         y6ljD+9PFVAy6xJEf6LxTmtgwMHZxjJAuyzp9UYB/SWSLd5NaPlV9dLMudc/xsRphf0Z
+         99Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770160005; x=1770764805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WhW0Z5/bDcVlEnz8k3eYAJjeqv5PflWO94icC/kx//A=;
+        b=Be5bUVhVIH52R9eIJsET0LzOEpi44kQkl11WclnE+5prM3NQWK6EmHP5fYXEfzEnWR
+         wLJU1TesXpaR7p9IpI3h/1xV0xJ5C3iEIPG69/y99Qb7caCgC6B0KeZjMHNFuw6DONL/
+         MJKF9zCS0wkAoFcxi2XzJjQufgJdisP2fcRNmwaqPk7K+zFQwiy+ClBSVLPFfbzLf7Qf
+         tjNVTEsp43bOGEp4Rfp8jpJ/BH3GVzpi9OLWjVNkGthRmuGPMK9lpmfhqJYt0G0OqK71
+         DK/L2vpkXDGpoWC3fvKPgrRFpCuiqudZ0+xESUHJh3QNbomWsa59VUOWmhyWesCuW2G3
+         sG6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWsimh0rhW+/5EydLshmJJdoY4VOOOuClA6cOAZYYErsOCPwQ2nqbJmcWnuso0wcg/cuNIeDG90VpYt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2lSzSfRb/fRbGv8jEMZlk6KzJfZVJ9xV4cYG/bU3Pp9klBXOA
+	L54AnEozNv/gEcwku/mfu1PgrjqYfR+1itBqVaF+Lsqefgt3VnY2tARzBRJh2iUocXVArVzA2dg
+	4Tj/9qPnhBHQDYcrRxfbZ/DFUgAI9UuntktZhGE94
+X-Gm-Gg: AZuq6aLdauzPgx340wpetdKX25UrcTkG2r8N6y0I3q6dVLe5NGGsTPg1HSjYWeJAMJ8
+	Gpm0tKuWaq2iTdoP/CxFVyaLqUEQ2GaR9c4LT17YIFg1n92PDiiL7DdUbWy4iNWOnfpD5G8kD2g
+	AqC38sSnKoG4jMCx3aqFfVp5INYDuXc0huLF945Bih+DvmZr9ACaEwRn7vfaC/Vw4ukHOIv9c9t
+	xeO1/YN+SrLmBbNENzVwMC0Unqb6pb2dher0JPKjZRG2dOr40rwJdfTl3gGgtZLk6VwkpoSuctp
+	6EdDWiNen9u43clSAseA8LN1Yw==
+X-Received: by 2002:a17:902:e543:b0:2a7:7f07:340e with SMTP id
+ d9443c01a7336-2a9344ae075mr1024005ad.4.1770160004714; Tue, 03 Feb 2026
+ 15:06:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH mm-unstable] arch, mm: consolidate empty_zero_page
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Borislav Petkov
- <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- "David S. Miller" <davem@davemloft.net>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>,
- Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Magnus Lindholm <linmag7@gmail.com>, Matt Turner <mattst88@gmail.com>,
- Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
- Palmer Dabbelt <palmer@dabbelt.com>, Richard Weinberger <richard@nod.at>,
- Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>,
- Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Vineet Gupta <vgupta@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
- linux-mm@kvack.org, x86@kernel.org
-References: <20260124095628.668870-1-rppt@kernel.org>
- <2157220c-0394-40fa-9918-a8514171bd10@gaisler.com>
- <aXj_x5CyUeys7ONM@kernel.org>
-Content-Language: en-US
-From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <aXj_x5CyUeys7ONM@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260203024356.444942-1-dapeng1.mi@linux.intel.com> <20260203024356.444942-2-dapeng1.mi@linux.intel.com>
+In-Reply-To: <20260203024356.444942-2-dapeng1.mi@linux.intel.com>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 3 Feb 2026 15:06:33 -0800
+X-Gm-Features: AZwV_QgPh6Zuh81ytCB2QhBaLQojIu2yqs-k71pIg-mHSzTgbaREXv2IKP173Cc
+Message-ID: <CAP-5=fU7V2KT6Ce+mk5YbyHggxvRfsoiSzZk4g0CYcNK4NGT2A@mail.gmail.com>
+Subject: Re: [Patch v3 1/4] perf regs: Fix abort for "-I" or "--user-regs" options
+To: Dapeng Mi <dapeng1.mi@linux.intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
+	Will Deacon <will@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Mike Leach <mike.leach@linaro.org>, Guo Ren <guoren@kernel.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, linux-perf-users@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Zide Chen <zide.chen@intel.com>, Falcon Thomas <thomas.falcon@intel.com>, 
+	Dapeng Mi <dapeng1.mi@intel.com>, Xudong Hao <xudong.hao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-01-27 19:11, Mike Rapoport wrote:
-> On Tue, Jan 27, 2026 at 05:02:39PM +0100, Andreas Larsson wrote:
->> On 2026-01-24 10:56, Mike Rapoport wrote:
->>
->>> Every architecture defines empty_zero_page that way or another, but for the
->>> most of them it is always a page aligned page in BSS and most definitions
->>> of ZERO_PAGE do virt_to_page(empty_zero_page).
->>
->> Running this in an LDOM on an UltraSparc T4 sparc64, the entire LDOM
->> hangs after a while during boot.
->>
->>> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
->>> index c2d19c9a9244..2bd99944176d 100644
->>> --- a/arch/sparc/mm/init_64.c
->>> +++ b/arch/sparc/mm/init_64.c
->>> @@ -177,9 +177,6 @@ extern unsigned long sparc_ramdisk_image64;
->>>  extern unsigned int sparc_ramdisk_image;
->>>  extern unsigned int sparc_ramdisk_size;
->>>  
->>> -struct page *mem_map_zero __read_mostly;
->>> -EXPORT_SYMBOL(mem_map_zero);
->>> -
->>>  unsigned int sparc64_highest_unlocked_tlb_ent __read_mostly;
->>>  
->>>  unsigned long sparc64_kern_pri_context __read_mostly;
->>> @@ -2506,18 +2503,6 @@ void __init mem_init(void)
->>>  	 */
->>>  	register_page_bootmem_info();
->>>  
->>> -	/*
->>> -	 * Set up the zero page, mark it reserved, so that page count
->>> -	 * is not manipulated when freeing the page from user ptes.
->>> -	 */
->>> -	mem_map_zero = alloc_pages(GFP_KERNEL|__GFP_ZERO, 0);
->>> -	if (mem_map_zero == NULL) {
->>> -		prom_printf("paging_init: Cannot alloc zero page.\n");
->>> -		prom_halt();
->>> -	}
->>> -	mark_page_reserved(mem_map_zero);
->>> -
->>> -
->>>  	if (tlb_type == cheetah || tlb_type == cheetah_plus)
->>>  		cheetah_ecache_flush_init();
->>>  }
->>
->> This just removes the mark_page_reserved(mem_map_zero) without 
->> replacing it with something corresponding to that. Perhaps part
->> of the problem?
-> 
-> I don't think so, empty_zero_page is in BSS now an it's reserved as a part
-> of the kernel image.
-> 
-> I suspect that virt_to_page() does not work BSS symbols on sparc64. Can you
-> please try with this patch:
-> 
-> diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
-> index 74ede706fb32..0578c5172d4e 100644
-> --- a/arch/sparc/include/asm/pgtable_64.h
-> +++ b/arch/sparc/include/asm/pgtable_64.h
-> @@ -22,6 +22,7 @@
->  #include <asm/adi.h>
->  #include <asm/page.h>
->  #include <asm/processor.h>
-> +#include <asm/vaddrs.h>
->  
->  /* The kernel image occupies 0x4000000 to 0x6000000 (4MB --> 96MB).
->   * The page copy blockops can use 0x6000000 to 0x8000000.
-> @@ -210,6 +211,11 @@ extern unsigned long _PAGE_CACHE;
->  extern unsigned long pg_iobits;
->  extern unsigned long _PAGE_ALL_SZ_BITS;
->  
-> +extern unsigned long kern_base;
-> +#define ZERO_PAGE(vaddr)						   \
-> +	(virt_to_page(empty_zero_page + ((unsigned long)__va(kern_base)) - \
-> +		      ((unsigned long)KERNBASE)))
+On Mon, Feb 2, 2026 at 6:47=E2=80=AFPM Dapeng Mi <dapeng1.mi@linux.intel.co=
+m> wrote:
+>
+> Fix an issue where the `perf` tool aborts unexpectedly when running the
+> following command:
+>
+> ```
+> perf record -e cycles -I -- true
+>
+>  Usage: perf record [<options>] [<command>]
+>     or: perf record [<options>] -- <command> [<options>]
+>
+>     -I, --intr-regs[=3D<any register>]
+>     sample selected machine registers on interrupt, use '-I?' to list reg=
+ister names
+> ```
+>
+> The usage of the `-I` or `--user-regs` options without specifying any
+> registers should default to sampling all general-purpose registers.
+> However, this currently causes an abnormal termination.
+>
+> The issue was introduced by commit 3d06db9bad1a ("perf regs: Refactor
+>  use of arch__sample_reg_masks() to perf_reg_name()"). This patch
+> resolves the problem, ensuring that the `-I` or `--user-regs` options
+> work as intended without causing an abort.
+>
+> Fixes: 3d06db9bad1a ("perf regs: Refactor use of arch__sample_reg_masks()=
+ to perf_reg_name()")
+> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+
+Reviewed-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
+
+> ---
+>  tools/perf/util/parse-regs-options.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/perf/util/parse-regs-options.c b/tools/perf/util/parse=
+-regs-options.c
+> index 8dd35f50f644..b44b47d9059f 100644
+> --- a/tools/perf/util/parse-regs-options.c
+> +++ b/tools/perf/util/parse-regs-options.c
+> @@ -66,12 +66,14 @@ __parse_regs(const struct option *opt, const char *st=
+r, int unset, bool intr)
+>         if (*mode)
+>                 return -1;
+>
+> -       /* str may be NULL in case no arg is passed to -I */
+> -       if (!str)
+> -               return -1;
+> -
+>         mask =3D intr ? arch__intr_reg_mask() : arch__user_reg_mask();
+>
+> +       /* str may be NULL in case no arg is passed to -I */
+> +       if (!str) {
+> +               *mode =3D mask;
+> +               return 0;
+> +       }
 > +
->  /* PFNs are real physical page numbers.  However, mem_map only begins to record
->   * per-page information starting at pfn_base.  This is to handle systems where
->   * the first physical page in the machine is at some huge physical address,
-> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
-> index 2bd99944176d..d2d724ba4f83 100644
-> --- a/arch/sparc/mm/init_64.c
-> +++ b/arch/sparc/mm/init_64.c
-> @@ -170,6 +170,8 @@ static void __init read_obp_memory(const char *property,
->  
->  /* Kernel physical address base and size in bytes.  */
->  unsigned long kern_base __read_mostly;
-> +EXPORT_SYMBOL(kern_base);
-> +
->  unsigned long kern_size __read_mostly;
->  
->  /* Initial ramdisk setup */
-Hi,
-
-Unfortunately, that does not help. The LDOM goes down in the same fashion.
-
-In QEMU, with or without this extra patch, I get this:
-
-[    3.310674] BUG: Bad page map in process mount  pte:ffffc800016436b0
-[    3.310778] pgd:027dc000 p4d:027dc000 pud:027d8000 pmd:0269a000
-[    3.311686] addr:000001000020a000 vm_flags:00100077 anon_vma:fffff80002688548 mapping:0000000000000000 index:8000105
-[    3.312449] file:(null) fault:0x0 mmap:0x0 mmap_prepare: 0x0 read_folio:0x0
-[    3.313622] CPU: 0 UID: 0 PID: 46 Comm: mount Not tainted 6.19.0-rc5-00269-g28acabacf9b0 #22 VOLUNTARY 
-[    3.314056] Call Trace:
-[    3.314182] [<00000000005e822c>] print_bad_page_map+0x10c/0x260
-[    3.314375] [<00000000005e9f30>] vm_normal_page+0x70/0x80
-[    3.314400] [<00000000005ea5a8>] unmap_page_range+0x4e8/0x13c0
-[    3.314421] [<00000000005eb54c>] unmap_vmas+0x2c/0x120
-[    3.314440] [<00000000005f781c>] exit_mmap+0xdc/0x440
-[    3.314457] [<000000000047193c>] mmput+0x3c/0x100
-[    3.314477] [<0000000000479e94>] do_exit+0x1f4/0xa00
-[    3.314494] [<000000000047a83c>] do_group_exit+0x1c/0xa0
-[    3.314511] [<0000000000489b28>] get_signal+0x8a8/0x8e0
-[    3.314529] [<000000000043be24>] do_notify_resume+0xa4/0x5a0
-[    3.314549] [<0000000000404b48>] __handle_signal+0xc/0x30
-[    3.314687] Disabling lock debugging due to kernel taint
-
-Cheers,
-Andreas
-
+>         /* because str is read-only */
+>         s =3D os =3D strdup(str);
+>         if (!s)
+> @@ -104,9 +106,6 @@ __parse_regs(const struct option *opt, const char *st=
+r, int unset, bool intr)
+>         }
+>         ret =3D 0;
+>
+> -       /* default to all possible regs */
+> -       if (*mode =3D=3D 0)
+> -               *mode =3D mask;
+>  error:
+>         free(os);
+>         return ret;
+> --
+> 2.34.1
+>

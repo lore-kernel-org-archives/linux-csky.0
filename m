@@ -1,1251 +1,211 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC512BEC5A
-	for <linux-csky@vger.kernel.org>; Tue,  3 Feb 2026 23:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770160304; cv=pass; b=LNGxFuQtohE+Lma4UGGBmVBntP6Gjl3+ocG6J08TI+eB7zKHmKpVjInhtGiyQVq8RqFoHkiJPZsPQRNXjOaL0lVe8mzvPj/0uLM8yU4NLCidzk0/nJXcK0kQoMsURnqqYuiU35+wYibQ9zV8fJUuisRnFVWAQ62ua+9R7ac6+mA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770160304; c=relaxed/simple;
-	bh=zg2at1MxXeniLrtCdnYIemmcN4TkexkiipHq3BPu3VI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mJPocVD3LePXkhE99Ci2wEs5+oRkorZ14Zv1UOYZ+lcPTojRo63LtHIYOeuPqXsSpRmZWSMQ7zw+YnDS7ohxeIsWrpHivgY2b5SXIbejE2ZQ5T/gdbOo47629AMGUA7TIbz97L3dJT27BuZJI7I/TrwaJq1mvQyKQz5y4HFQY8A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UxCyZAGa; arc=pass smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A53143901A;
+	Wed,  4 Feb 2026 20:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770238049; cv=none; b=R/wh6tKFy5o0UPjQVEwVqPNMt5TFFaDYU/BkpC5Coz/U1Bjczv1xH6iLxyff9TpL4Qg0JoYDJgqatEJQu2hyUsrpeD0r0bKYvWnKeXbcGUd/SocO0IoItWkdpozG5ZZ7pwVf9vTBZhGu7rQi3huKZCc2Oz635zH+4MRWxmGOJuE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770238049; c=relaxed/simple;
+	bh=M6F4r+8xqCKwYdWkmNuqBBLFmaH1X62wessV5kAOjaY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IVFtIOhxj3a9vSq46g7srbd08lCmD+L+nzHeKp5Y/ZSj1DEc8cHwgDxWsoqgn11e6/NtPEdjJaKo3BG/W+8cxrSWwFh809cy+xPSe9WuxsIaCoRMFRTeYKQx4qNAB++1DMaezDGv+ltE1URPaEDuFvADRsGqUYc4DLRlECJbgbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ceImbz8E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UxCyZAGa"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a76b39587aso14375ad.0
-        for <linux-csky@vger.kernel.org>; Tue, 03 Feb 2026 15:11:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770160300; cv=none;
-        d=google.com; s=arc-20240605;
-        b=dwSd5QqWchBLt5hduQb/obJhhqXPx3Q1gF/7bwXVkV4zB2AcMX7KtXnmV1qEGVI8xN
-         7wcYTtYeoz814aKbFtQF4PxxtFLe+5+SFrICCN1/WaBB0q7QibO2dVuBhYDTXmOZdefl
-         yerHuvqdCtgHKsjWQ8uOHLnha0PsOe1zfimia5Unh+BPlEcUCWURrwS2htYbNl6smNCL
-         SoXyNJBZAjEB2A181MkF1vZZKMSN6ZyB4TngK2/gN+22nv8IpCMOZqO/F6JytiqfjjGp
-         S4j0WaXqwUU6jmvgkoAQ1lyWIn87LRnHuDfuUc5ik5MnpP9zqkGqrxM/F4trgsdnIC93
-         p/qA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6xOWp5gWqHfEdQeiR72+ctqZueIYq58hlvtOXGu1t74=;
-        fh=qRVhPgsh2Afk+giOT1CHlUBHKz93BCsuN2v9OU9sPCE=;
-        b=FYx+/Qgc038OiFz8jznnq6q/9TxYw1GNn/cuqwN7AL3zombzN2vaM7oLeQ42BjB8Sr
-         t4m8bAeYRqsgfMb1Tyqzhs6/R4N6qBCCl2BCgpu5ho5JMXMYRtQfCovDBQ2Xric+DjLN
-         t8zAhX+dXLz7OatVf1+QRKC74+ocVG0rZxG5ShzIVr8YFZDMXkolyodVbUBxsUlhvKTc
-         eo2W7v0vAACSP9wyklQesYXm910BVqQBh0kbuOJJSFPIBmmSQFX4ijIj4CH3Y85n8RZ3
-         H8CxA+vSQ9Fq9Kfv9duvtxxWuurFiUzY8mSRNn8bmkcjUd/zhYOCjjV3AvNefh5ZDMVp
-         uhhA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770160300; x=1770765100; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6xOWp5gWqHfEdQeiR72+ctqZueIYq58hlvtOXGu1t74=;
-        b=UxCyZAGacoBJ6ORVMcOhXStWOzQM0bXSJUslABwHEXQMgZFr+S+Q5LXu6YPpGukTpw
-         GhtdsA7H2dICy3uo23V8U8HUZCC1KPoaLJJrkR2RukATrRnEVRFMfThN96fasMvFg8QK
-         j/xeworFpFfiFlJJ/wa8dgpULtawb2RjrFnq8ZF6w5JFFhb1FwwKanUo6j3kuMIwIbgC
-         hzLUQCnGCkSdI2Lz1zpFIejbGkU//hBRvUSdgMQmuVHKp62g9WKnjuGGpiG6s8CmEYcN
-         SHZDINAi+z7jG0fBAKKpS3ObqiG2oks95tR6YjLoqEMiSsmT3bagCxSYqDwVPJhyGo92
-         2S/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770160300; x=1770765100;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6xOWp5gWqHfEdQeiR72+ctqZueIYq58hlvtOXGu1t74=;
-        b=iSZG4TqKPzH3MmkITtmBgjhUrs4dIUpTEov8E4gikw7bhWt2GIOT92ghD6UYFDYQ02
-         F1qHFWl5t5C7m22xJOTWiQgll3dJrm0F2GeSGN5I6MOlE+4AIElaKUbA8t1XLoFYXIwb
-         Rm7GLQiEhb/lGmgpTLqJaQmbQkK6jTYiNHzZpOvzmzfrVaJDEOmR245snReOBrZaDXrb
-         vnS8LtlHlNl7Hh2POeoJVDpzp0zkHdzq8BUiUvuruyvP9vuPuRIQVUfWdWHL6natD7LK
-         t3hhxDqRTbyX+6SYs7TNOh0mnfD0YPQn3RHm+AaCF4LYnIm693Fp//OZS+s4CXntBPIh
-         BDNw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9Te9opQRM2dgvRxsj8oJ3cJQj87NO+xOvuTYd2oJ3buZhnf5PRvg++0TcJkZTitqve4TFyc/swLyj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqZAXuK3TBRBvJG7IpQV9m+r+UG0flMiHRbqEY3Gb67mNNKnhl
-	WskY9p7egpI7m8/XGYJfPN1GvYyuRoS1whrHYAx9img88MX4Ib1YMRF8WwqpdYAXSBP/bVs1FJl
-	SolRadnXG4V333laDwThP92BDU/b0KKUgwwxdcm/f
-X-Gm-Gg: AZuq6aLyRL/hS7xjJlUJfh7T2jYkbB5VZUm62bFWyVTVib8hjy3QxIKXCcr6R+WfIYo
-	S/2wY2y33d90LNqR4KPelsCNXqOX9rPcbLuru5wZwPCEWIW4UyFczGhlUyqcCpofrY4w6aTutYH
-	gWM/2C62zlpYxMXel8H/VwTNwHXpcgV0qX2iqRhFKf7Scj1KSsynVa2KdyrbhmVzIIB+s19nQ9H
-	4SIm14DZueOoTwNweAtnxbtEqGIrm+RFstsdzFDe8ZAZEkF2e8o/k3ErMEEcueafTTP5hpn/mZk
-	LpfVN3/01hbOOJKjn0fIvy5Aew==
-X-Received: by 2002:a17:902:cf11:b0:2a7:55a4:dc2f with SMTP id
- d9443c01a7336-2a935959c2emr469735ad.19.1770160299954; Tue, 03 Feb 2026
- 15:11:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ceImbz8E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6EFC4CEF7;
+	Wed,  4 Feb 2026 20:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770238049;
+	bh=M6F4r+8xqCKwYdWkmNuqBBLFmaH1X62wessV5kAOjaY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ceImbz8Ehfv99L+KpKZmE6O02UITPIW3Q3unzHK6ZvZ03KKVV9vd0o/zcMuSR8I/T
+	 H1Ir3pkRy/Ac8NihhmQc2XLTMSvLY7g8u6dkzpUWxLGR59JnhG3WFIY+0sjN6+ny7L
+	 OA5yX5VUcxDkJ35fbSlJkf7gZPNX9n4UDZ49V6CXYwaJng3pK5jMKjC8bZQ49jWrDJ
+	 mh81ww5c4mKrrXjIQs9nNyAtjUxe+jiJJyDGCyhHXV8PWeMF/uLi6iv05wTvaTDa01
+	 /w1na7IgsBIyj8KXiazPHDVq2pFYUxDfVF0755O+BReCpOPHi91jybdC/Nf+ItlP65
+	 sGqFAAkbH50Hw==
+Message-ID: <36511161-6fb0-4928-a0ed-9b5e03b50a27@kernel.org>
+Date: Wed, 4 Feb 2026 21:47:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203024356.444942-1-dapeng1.mi@linux.intel.com> <20260203024356.444942-5-dapeng1.mi@linux.intel.com>
-In-Reply-To: <20260203024356.444942-5-dapeng1.mi@linux.intel.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 3 Feb 2026 15:11:28 -0800
-X-Gm-Features: AZwV_QjkOGfhQVK8xGCWZdI9zKB4vdqvpMhZw-VaIzdWsD2eGfk9Oihe2OJ9oOg
-Message-ID: <CAP-5=fUy1=yckU_ogf+c-jLrbZeRBUarP0SpsrZSVNAQGrp0rA@mail.gmail.com>
-Subject: Re: [Patch v3 4/4] perf regs: Remove __weak attributive
- arch_sdt_arg_parse_op() function
-To: Dapeng Mi <dapeng1.mi@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
-	Will Deacon <will@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Mike Leach <mike.leach@linaro.org>, Guo Ren <guoren@kernel.org>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, linux-perf-users@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Zide Chen <zide.chen@intel.com>, Falcon Thomas <thomas.falcon@intel.com>, 
-	Dapeng Mi <dapeng1.mi@intel.com>, Xudong Hao <xudong.hao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH mm-unstable] arch, mm: consolidate empty_zero_page
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>,
+ Brian Cain <bcain@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Dinh Nguyen
+ <dinguyen@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+ Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Magnus Lindholm <linmag7@gmail.com>, Matt Turner <mattst88@gmail.com>,
+ Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Richard Weinberger <richard@nod.at>,
+ Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>,
+ Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Vineet Gupta <vgupta@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+ Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+ linux-mm@kvack.org, x86@kernel.org
+References: <20260124095628.668870-1-rppt@kernel.org>
+From: "David Hildenbrand (arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260124095628.668870-1-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 2, 2026 at 6:48=E2=80=AFPM Dapeng Mi <dapeng1.mi@linux.intel.co=
-m> wrote:
->
-> In line with the previous patch, the __weak arch_sdt_arg_parse_op()
-> function is removed. Architectural-specific implementations in the arch/
-> directory are now converted into sub-functions within the
-> util/perf-regs-arch/ directory. The perf_sdt_arg_parse_op() function
-> will call these sub-functions based on the EM_HOST.
->
-> This change enables cross-architecture calls to arch_sdt_arg_parse_op().
->
-> No functional changes are intended.
->
-> Suggested-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+On 1/24/26 10:56, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Reduce 22 declarations of empty_zero_page to 3 and 23 declarations of
+> ZERO_PAGE() to 4.
+> 
+> Every architecture defines empty_zero_page that way or another, but for the
+> most of them it is always a page aligned page in BSS and most definitions
+> of ZERO_PAGE do virt_to_page(empty_zero_page).
+> 
+> Move Linus vetted x86 definition of empty_zero_page and ZERO_PAGE() to the
+> core MM and drop these definitions in architectures that do not implement
+> colored zero page (MIPS and s390).
+> 
+> ZERO_PAGE() remains a macro because turning it to a wrapper for a static
+> inline causes severe pain in header dependencies.
 
-Reviewed-by: Ian Rogers <irogers@google.com>
+That's just what I wanted to ask after looking at it :)
 
-Thanks,
-Ian
+> 
+> For the most part the change is mechanical, with these being noteworthy:
+> 
+> * alpha: aliased empty_zero_page with ZERO_PGE that was also used for boot
+>    parameters. Switching to a generic empty_zero_page removes the aliasing
+>    and keeps ZERO_PGE for boot parameters only
+> * arm64: uses __pa_symbol() in ZERO_PAGE() so that definition of
+>    ZERO_PAGE() is kept intact.
+> * m68k/parisc/sparc64/um: allocated empty_zero_page from memblock,
+>    although they do not support zero page coloring and having it in BSS
+>    will work fine.
+> * sh: used empty_zero_page for boot parameters at the very early boot.
+>    Rename the parameters page to boot_params_page and let sh use the generic
+>    empty_zero_page.
+> * hexagon: had an amusing comment about empty_zero_page
+> 
+> 	/* A handy thing to have if one has the RAM. Declared in head.S */
+> 
+>    that unfortunately had to go :)
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-> ---
->  tools/perf/arch/arm64/util/Build              |   1 -
->  tools/perf/arch/arm64/util/perf_regs.c        | 105 --------
->  tools/perf/arch/powerpc/util/Build            |   1 -
->  tools/perf/arch/powerpc/util/perf_regs.c      | 125 ----------
->  tools/perf/arch/x86/util/Build                |   1 -
->  tools/perf/arch/x86/util/perf_regs.c          | 235 ------------------
->  .../util/perf-regs-arch/perf_regs_aarch64.c   |  86 +++++++
->  .../util/perf-regs-arch/perf_regs_powerpc.c   | 106 ++++++++
->  .../perf/util/perf-regs-arch/perf_regs_x86.c  | 221 ++++++++++++++++
->  tools/perf/util/perf_regs.c                   |  25 +-
->  tools/perf/util/perf_regs.h                   |   5 +-
->  tools/perf/util/probe-file.c                  |   3 +-
->  12 files changed, 441 insertions(+), 473 deletions(-)
->  delete mode 100644 tools/perf/arch/arm64/util/perf_regs.c
->  delete mode 100644 tools/perf/arch/powerpc/util/perf_regs.c
->  delete mode 100644 tools/perf/arch/x86/util/perf_regs.c
->
-> diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/uti=
-l/Build
-> index 0177af19cc00..bc12c35d06c8 100644
-> --- a/tools/perf/arch/arm64/util/Build
-> +++ b/tools/perf/arch/arm64/util/Build
-> @@ -8,6 +8,5 @@ perf-util-y +=3D header.o
->  perf-util-y +=3D hisi-ptt.o
->  perf-util-y +=3D machine.o
->  perf-util-y +=3D mem-events.o
-> -perf-util-y +=3D perf_regs.o
->  perf-util-y +=3D pmu.o
->  perf-util-y +=3D tsc.o
-> diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm=
-64/util/perf_regs.c
-> deleted file mode 100644
-> index 47f58eaba032..000000000000
-> --- a/tools/perf/arch/arm64/util/perf_regs.c
-> +++ /dev/null
-> @@ -1,105 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -#include <errno.h>
-> -#include <regex.h>
-> -#include <string.h>
-> -#include <sys/auxv.h>
-> -#include <linux/kernel.h>
-> -#include <linux/zalloc.h>
-> -
-> -#include "perf_regs.h"
-> -#include "../../../perf-sys.h"
-> -#include "../../../util/debug.h"
-> -#include "../../../util/event.h"
-> -#include "../../../util/perf_regs.h"
-> -
-> -#define SMPL_REG_MASK(b) (1ULL << (b))
-> -
-> -#ifndef HWCAP_SVE
-> -#define HWCAP_SVE      (1 << 22)
-> -#endif
-> -
-> -/* %xNUM */
-> -#define SDT_OP_REGEX1  "^(x[1-2]?[0-9]|3[0-1])$"
-> -
-> -/* [sp], [sp, NUM] */
-> -#define SDT_OP_REGEX2  "^\\[sp(, )?([0-9]+)?\\]$"
-> -
-> -static regex_t sdt_op_regex1, sdt_op_regex2;
-> -
-> -static int sdt_init_op_regex(void)
-> -{
-> -       static int initialized;
-> -       int ret =3D 0;
-> -
-> -       if (initialized)
-> -               return 0;
-> -
-> -       ret =3D regcomp(&sdt_op_regex1, SDT_OP_REGEX1, REG_EXTENDED);
-> -       if (ret)
-> -               goto error;
-> -
-> -       ret =3D regcomp(&sdt_op_regex2, SDT_OP_REGEX2, REG_EXTENDED);
-> -       if (ret)
-> -               goto free_regex1;
-> -
-> -       initialized =3D 1;
-> -       return 0;
-> -
-> -free_regex1:
-> -       regfree(&sdt_op_regex1);
-> -error:
-> -       pr_debug4("Regex compilation error.\n");
-> -       return ret;
-> -}
-> -
-> -/*
-> - * SDT marker arguments on Arm64 uses %xREG or [sp, NUM], currently
-> - * support these two formats.
-> - */
-> -int arch_sdt_arg_parse_op(char *old_op, char **new_op)
-> -{
-> -       int ret, new_len;
-> -       regmatch_t rm[5];
-> -
-> -       ret =3D sdt_init_op_regex();
-> -       if (ret < 0)
-> -               return ret;
-> -
-> -       if (!regexec(&sdt_op_regex1, old_op, 3, rm, 0)) {
-> -               /* Extract xNUM */
-> -               new_len =3D 2;    /* % NULL */
-> -               new_len +=3D (int)(rm[1].rm_eo - rm[1].rm_so);
-> -
-> -               *new_op =3D zalloc(new_len);
-> -               if (!*new_op)
-> -                       return -ENOMEM;
-> -
-> -               scnprintf(*new_op, new_len, "%%%.*s",
-> -                       (int)(rm[1].rm_eo - rm[1].rm_so), old_op + rm[1].=
-rm_so);
-> -       } else if (!regexec(&sdt_op_regex2, old_op, 5, rm, 0)) {
-> -               /* [sp], [sp, NUM] or [sp,NUM] */
-> -               new_len =3D 7;    /* + ( % s p ) NULL */
-> -
-> -               /* If the argument is [sp], need to fill offset '0' */
-> -               if (rm[2].rm_so =3D=3D -1)
-> -                       new_len +=3D 1;
-> -               else
-> -                       new_len +=3D (int)(rm[2].rm_eo - rm[2].rm_so);
-> -
-> -               *new_op =3D zalloc(new_len);
-> -               if (!*new_op)
-> -                       return -ENOMEM;
-> -
-> -               if (rm[2].rm_so =3D=3D -1)
-> -                       scnprintf(*new_op, new_len, "+0(%%sp)");
-> -               else
-> -                       scnprintf(*new_op, new_len, "+%.*s(%%sp)",
-> -                                 (int)(rm[2].rm_eo - rm[2].rm_so),
-> -                                 old_op + rm[2].rm_so);
-> -       } else {
-> -               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> -               return SDT_ARG_SKIP;
-> -       }
-> -
-> -       return SDT_ARG_VALID;
-> -}
-> diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/powerpc=
-/util/Build
-> index 5fd28ec713a4..43c3e7c450a3 100644
-> --- a/tools/perf/arch/powerpc/util/Build
-> +++ b/tools/perf/arch/powerpc/util/Build
-> @@ -1,6 +1,5 @@
->  perf-util-y +=3D header.o
->  perf-util-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
-> -perf-util-y +=3D perf_regs.o
->  perf-util-y +=3D mem-events.o
->  perf-util-y +=3D pmu.o
->  perf-util-y +=3D sym-handling.o
-> diff --git a/tools/perf/arch/powerpc/util/perf_regs.c b/tools/perf/arch/p=
-owerpc/util/perf_regs.c
-> deleted file mode 100644
-> index 93f929fc32e3..000000000000
-> --- a/tools/perf/arch/powerpc/util/perf_regs.c
-> +++ /dev/null
-> @@ -1,125 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -#include <errno.h>
-> -#include <string.h>
-> -#include <regex.h>
-> -#include <linux/zalloc.h>
-> -
-> -#include "perf_regs.h"
-> -#include "../../../util/perf_regs.h"
-> -#include "../../../util/debug.h"
-> -#include "../../../util/event.h"
-> -#include "../../../util/header.h"
-> -#include "../../../perf-sys.h"
-> -#include "utils_header.h"
-> -
-> -#include <linux/kernel.h>
-> -
-> -#define PVR_POWER9             0x004E
-> -#define PVR_POWER10            0x0080
-> -#define PVR_POWER11            0x0082
-> -
-> -/* REG or %rREG */
-> -#define SDT_OP_REGEX1  "^(%r)?([1-2]?[0-9]|3[0-1])$"
-> -
-> -/* -NUM(REG) or NUM(REG) or -NUM(%rREG) or NUM(%rREG) */
-> -#define SDT_OP_REGEX2  "^(\\-)?([0-9]+)\\((%r)?([1-2]?[0-9]|3[0-1])\\)$"
-> -
-> -static regex_t sdt_op_regex1, sdt_op_regex2;
-> -
-> -static int sdt_init_op_regex(void)
-> -{
-> -       static int initialized;
-> -       int ret =3D 0;
-> -
-> -       if (initialized)
-> -               return 0;
-> -
-> -       ret =3D regcomp(&sdt_op_regex1, SDT_OP_REGEX1, REG_EXTENDED);
-> -       if (ret)
-> -               goto error;
-> -
-> -       ret =3D regcomp(&sdt_op_regex2, SDT_OP_REGEX2, REG_EXTENDED);
-> -       if (ret)
-> -               goto free_regex1;
-> -
-> -       initialized =3D 1;
-> -       return 0;
-> -
-> -free_regex1:
-> -       regfree(&sdt_op_regex1);
-> -error:
-> -       pr_debug4("Regex compilation error.\n");
-> -       return ret;
-> -}
-> -
-> -/*
-> - * Parse OP and convert it into uprobe format, which is, +/-NUM(%gprREG)=
-.
-> - * Possible variants of OP are:
-> - *     Format          Example
-> - *     -------------------------
-> - *     NUM(REG)        48(18)
-> - *     -NUM(REG)       -48(18)
-> - *     NUM(%rREG)      48(%r18)
-> - *     -NUM(%rREG)     -48(%r18)
-> - *     REG             18
-> - *     %rREG           %r18
-> - *     iNUM            i0
-> - *     i-NUM           i-1
-> - *
-> - * SDT marker arguments on Powerpc uses %rREG form with -mregnames flag
-> - * and REG form with -mno-regnames. Here REG is general purpose register=
-,
-> - * which is in 0 to 31 range.
-> - */
-> -int arch_sdt_arg_parse_op(char *old_op, char **new_op)
-> -{
-> -       int ret, new_len;
-> -       regmatch_t rm[5];
-> -       char prefix;
-> -
-> -       /* Constant argument. Uprobe does not support it */
-> -       if (old_op[0] =3D=3D 'i') {
-> -               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> -               return SDT_ARG_SKIP;
-> -       }
-> -
-> -       ret =3D sdt_init_op_regex();
-> -       if (ret < 0)
-> -               return ret;
-> -
-> -       if (!regexec(&sdt_op_regex1, old_op, 3, rm, 0)) {
-> -               /* REG or %rREG --> %gprREG */
-> -
-> -               new_len =3D 5;    /* % g p r NULL */
-> -               new_len +=3D (int)(rm[2].rm_eo - rm[2].rm_so);
-> -
-> -               *new_op =3D zalloc(new_len);
-> -               if (!*new_op)
-> -                       return -ENOMEM;
-> -
-> -               scnprintf(*new_op, new_len, "%%gpr%.*s",
-> -                       (int)(rm[2].rm_eo - rm[2].rm_so), old_op + rm[2].=
-rm_so);
-> -       } else if (!regexec(&sdt_op_regex2, old_op, 5, rm, 0)) {
-> -               /*
-> -                * -NUM(REG) or NUM(REG) or -NUM(%rREG) or NUM(%rREG) -->
-> -                *      +/-NUM(%gprREG)
-> -                */
-> -               prefix =3D (rm[1].rm_so =3D=3D -1) ? '+' : '-';
-> -
-> -               new_len =3D 8;    /* +/- ( % g p r ) NULL */
-> -               new_len +=3D (int)(rm[2].rm_eo - rm[2].rm_so);
-> -               new_len +=3D (int)(rm[4].rm_eo - rm[4].rm_so);
-> -
-> -               *new_op =3D zalloc(new_len);
-> -               if (!*new_op)
-> -                       return -ENOMEM;
-> -
-> -               scnprintf(*new_op, new_len, "%c%.*s(%%gpr%.*s)", prefix,
-> -                       (int)(rm[2].rm_eo - rm[2].rm_so), old_op + rm[2].=
-rm_so,
-> -                       (int)(rm[4].rm_eo - rm[4].rm_so), old_op + rm[4].=
-rm_so);
-> -       } else {
-> -               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> -               return SDT_ARG_SKIP;
-> -       }
-> -
-> -       return SDT_ARG_VALID;
-> -}
-> diff --git a/tools/perf/arch/x86/util/Build b/tools/perf/arch/x86/util/Bu=
-ild
-> index 76127eefde8b..9713fe4d8467 100644
-> --- a/tools/perf/arch/x86/util/Build
-> +++ b/tools/perf/arch/x86/util/Build
-> @@ -2,7 +2,6 @@ perf-util-y +=3D header.o
->  perf-util-y +=3D tsc.o
->  perf-util-y +=3D pmu.o
->  perf-util-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
-> -perf-util-y +=3D perf_regs.o
->  perf-util-y +=3D topdown.o
->  perf-util-y +=3D machine.o
->  perf-util-y +=3D event.o
-> diff --git a/tools/perf/arch/x86/util/perf_regs.c b/tools/perf/arch/x86/u=
-til/perf_regs.c
-> deleted file mode 100644
-> index 41141cebe226..000000000000
-> --- a/tools/perf/arch/x86/util/perf_regs.c
-> +++ /dev/null
-> @@ -1,235 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -#include <errno.h>
-> -#include <string.h>
-> -#include <regex.h>
-> -#include <linux/kernel.h>
-> -#include <linux/zalloc.h>
-> -
-> -#include "perf_regs.h"
-> -#include "../../../perf-sys.h"
-> -#include "../../../util/perf_regs.h"
-> -#include "../../../util/debug.h"
-> -#include "../../../util/event.h"
-> -#include "../../../util/pmu.h"
-> -#include "../../../util/pmus.h"
-> -
-> -struct sdt_name_reg {
-> -       const char *sdt_name;
-> -       const char *uprobe_name;
-> -};
-> -#define SDT_NAME_REG(n, m) {.sdt_name =3D "%" #n, .uprobe_name =3D "%" #=
-m}
-> -#define SDT_NAME_REG_END {.sdt_name =3D NULL, .uprobe_name =3D NULL}
-> -
-> -static const struct sdt_name_reg sdt_reg_tbl[] =3D {
-> -       SDT_NAME_REG(eax, ax),
-> -       SDT_NAME_REG(rax, ax),
-> -       SDT_NAME_REG(al,  ax),
-> -       SDT_NAME_REG(ah,  ax),
-> -       SDT_NAME_REG(ebx, bx),
-> -       SDT_NAME_REG(rbx, bx),
-> -       SDT_NAME_REG(bl,  bx),
-> -       SDT_NAME_REG(bh,  bx),
-> -       SDT_NAME_REG(ecx, cx),
-> -       SDT_NAME_REG(rcx, cx),
-> -       SDT_NAME_REG(cl,  cx),
-> -       SDT_NAME_REG(ch,  cx),
-> -       SDT_NAME_REG(edx, dx),
-> -       SDT_NAME_REG(rdx, dx),
-> -       SDT_NAME_REG(dl,  dx),
-> -       SDT_NAME_REG(dh,  dx),
-> -       SDT_NAME_REG(esi, si),
-> -       SDT_NAME_REG(rsi, si),
-> -       SDT_NAME_REG(sil, si),
-> -       SDT_NAME_REG(edi, di),
-> -       SDT_NAME_REG(rdi, di),
-> -       SDT_NAME_REG(dil, di),
-> -       SDT_NAME_REG(ebp, bp),
-> -       SDT_NAME_REG(rbp, bp),
-> -       SDT_NAME_REG(bpl, bp),
-> -       SDT_NAME_REG(rsp, sp),
-> -       SDT_NAME_REG(esp, sp),
-> -       SDT_NAME_REG(spl, sp),
-> -
-> -       /* rNN registers */
-> -       SDT_NAME_REG(r8b,  r8),
-> -       SDT_NAME_REG(r8w,  r8),
-> -       SDT_NAME_REG(r8d,  r8),
-> -       SDT_NAME_REG(r9b,  r9),
-> -       SDT_NAME_REG(r9w,  r9),
-> -       SDT_NAME_REG(r9d,  r9),
-> -       SDT_NAME_REG(r10b, r10),
-> -       SDT_NAME_REG(r10w, r10),
-> -       SDT_NAME_REG(r10d, r10),
-> -       SDT_NAME_REG(r11b, r11),
-> -       SDT_NAME_REG(r11w, r11),
-> -       SDT_NAME_REG(r11d, r11),
-> -       SDT_NAME_REG(r12b, r12),
-> -       SDT_NAME_REG(r12w, r12),
-> -       SDT_NAME_REG(r12d, r12),
-> -       SDT_NAME_REG(r13b, r13),
-> -       SDT_NAME_REG(r13w, r13),
-> -       SDT_NAME_REG(r13d, r13),
-> -       SDT_NAME_REG(r14b, r14),
-> -       SDT_NAME_REG(r14w, r14),
-> -       SDT_NAME_REG(r14d, r14),
-> -       SDT_NAME_REG(r15b, r15),
-> -       SDT_NAME_REG(r15w, r15),
-> -       SDT_NAME_REG(r15d, r15),
-> -       SDT_NAME_REG_END,
-> -};
-> -
-> -/*
-> - * Perf only supports OP which is in  +/-NUM(REG)  form.
-> - * Here plus-minus sign, NUM and parenthesis are optional,
-> - * only REG is mandatory.
-> - *
-> - * SDT events also supports indirect addressing mode with a
-> - * symbol as offset, scaled mode and constants in OP. But
-> - * perf does not support them yet. Below are few examples.
-> - *
-> - * OP with scaled mode:
-> - *     (%rax,%rsi,8)
-> - *     10(%ras,%rsi,8)
-> - *
-> - * OP with indirect addressing mode:
-> - *     check_action(%rip)
-> - *     mp_+52(%rip)
-> - *     44+mp_(%rip)
-> - *
-> - * OP with constant values:
-> - *     $0
-> - *     $123
-> - *     $-1
-> - */
-> -#define SDT_OP_REGEX  "^([+\\-]?)([0-9]*)(\\(?)(%[a-z][a-z0-9]+)(\\)?)$"
-> -
-> -static regex_t sdt_op_regex;
-> -
-> -static int sdt_init_op_regex(void)
-> -{
-> -       static int initialized;
-> -       int ret =3D 0;
-> -
-> -       if (initialized)
-> -               return 0;
-> -
-> -       ret =3D regcomp(&sdt_op_regex, SDT_OP_REGEX, REG_EXTENDED);
-> -       if (ret < 0) {
-> -               pr_debug4("Regex compilation error.\n");
-> -               return ret;
-> -       }
-> -
-> -       initialized =3D 1;
-> -       return 0;
-> -}
-> -
-> -/*
-> - * Max x86 register name length is 5(ex: %r15d). So, 6th char
-> - * should always contain NULL. This helps to find register name
-> - * length using strlen, instead of maintaining one more variable.
-> - */
-> -#define SDT_REG_NAME_SIZE  6
-> -
-> -/*
-> - * The uprobe parser does not support all gas register names;
-> - * so, we have to replace them (ex. for x86_64: %rax -> %ax).
-> - * Note: If register does not require renaming, just copy
-> - * paste as it is, but don't leave it empty.
-> - */
-> -static void sdt_rename_register(char *sdt_reg, int sdt_len, char *uprobe=
-_reg)
-> -{
-> -       int i =3D 0;
-> -
-> -       for (i =3D 0; sdt_reg_tbl[i].sdt_name !=3D NULL; i++) {
-> -               if (!strncmp(sdt_reg_tbl[i].sdt_name, sdt_reg, sdt_len)) =
-{
-> -                       strcpy(uprobe_reg, sdt_reg_tbl[i].uprobe_name);
-> -                       return;
-> -               }
-> -       }
-> -
-> -       strncpy(uprobe_reg, sdt_reg, sdt_len);
-> -}
-> -
-> -int arch_sdt_arg_parse_op(char *old_op, char **new_op)
-> -{
-> -       char new_reg[SDT_REG_NAME_SIZE] =3D {0};
-> -       int new_len =3D 0, ret;
-> -       /*
-> -        * rm[0]:  +/-NUM(REG)
-> -        * rm[1]:  +/-
-> -        * rm[2]:  NUM
-> -        * rm[3]:  (
-> -        * rm[4]:  REG
-> -        * rm[5]:  )
-> -        */
-> -       regmatch_t rm[6];
-> -       /*
-> -        * Max prefix length is 2 as it may contains sign(+/-)
-> -        * and displacement 0 (Both sign and displacement 0 are
-> -        * optional so it may be empty). Use one more character
-> -        * to hold last NULL so that strlen can be used to find
-> -        * prefix length, instead of maintaining one more variable.
-> -        */
-> -       char prefix[3] =3D {0};
-> -
-> -       ret =3D sdt_init_op_regex();
-> -       if (ret < 0)
-> -               return ret;
-> -
-> -       /*
-> -        * If unsupported OR does not match with regex OR
-> -        * register name too long, skip it.
-> -        */
-> -       if (strchr(old_op, ',') || strchr(old_op, '$') ||
-> -           regexec(&sdt_op_regex, old_op, 6, rm, 0)   ||
-> -           rm[4].rm_eo - rm[4].rm_so > SDT_REG_NAME_SIZE) {
-> -               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> -               return SDT_ARG_SKIP;
-> -       }
-> -
-> -       /*
-> -        * Prepare prefix.
-> -        * If SDT OP has parenthesis but does not provide
-> -        * displacement, add 0 for displacement.
-> -        *     SDT         Uprobe     Prefix
-> -        *     -----------------------------
-> -        *     +24(%rdi)   +24(%di)   +
-> -        *     24(%rdi)    +24(%di)   +
-> -        *     %rdi        %di
-> -        *     (%rdi)      +0(%di)    +0
-> -        *     -80(%rbx)   -80(%bx)   -
-> -        */
-> -       if (rm[3].rm_so !=3D rm[3].rm_eo) {
-> -               if (rm[1].rm_so !=3D rm[1].rm_eo)
-> -                       prefix[0] =3D *(old_op + rm[1].rm_so);
-> -               else if (rm[2].rm_so !=3D rm[2].rm_eo)
-> -                       prefix[0] =3D '+';
-> -               else
-> -                       scnprintf(prefix, sizeof(prefix), "+0");
-> -       }
-> -
-> -       /* Rename register */
-> -       sdt_rename_register(old_op + rm[4].rm_so, rm[4].rm_eo - rm[4].rm_=
-so,
-> -                           new_reg);
-> -
-> -       /* Prepare final OP which should be valid for uprobe_events */
-> -       new_len =3D strlen(prefix)              +
-> -                 (rm[2].rm_eo - rm[2].rm_so) +
-> -                 (rm[3].rm_eo - rm[3].rm_so) +
-> -                 strlen(new_reg)             +
-> -                 (rm[5].rm_eo - rm[5].rm_so) +
-> -                 1;                                    /* NULL */
-> -
-> -       *new_op =3D zalloc(new_len);
-> -       if (!*new_op)
-> -               return -ENOMEM;
-> -
-> -       scnprintf(*new_op, new_len, "%.*s%.*s%.*s%.*s%.*s",
-> -                 strlen(prefix), prefix,
-> -                 (int)(rm[2].rm_eo - rm[2].rm_so), old_op + rm[2].rm_so,
-> -                 (int)(rm[3].rm_eo - rm[3].rm_so), old_op + rm[3].rm_so,
-> -                 strlen(new_reg), new_reg,
-> -                 (int)(rm[5].rm_eo - rm[5].rm_so), old_op + rm[5].rm_so)=
-;
-> -
-> -       return SDT_ARG_VALID;
-> -}
-> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c b/tools/p=
-erf/util/perf-regs-arch/perf_regs_aarch64.c
-> index 666874f625b6..6833d34dcbfd 100644
-> --- a/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
-> +++ b/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
-> @@ -18,6 +18,92 @@
->  #define HWCAP_SVE      (1 << 22)
->  #endif
->
-> +/* %xNUM */
-> +#define SDT_OP_REGEX1  "^(x[1-2]?[0-9]|3[0-1])$"
+[...]
+
+>   
+> +#ifndef __HAVE_COLOR_ZERO_PAGE
+> +extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+> +#endif
 > +
-> +/* [sp], [sp, NUM] */
-> +#define SDT_OP_REGEX2  "^\\[sp(, )?([0-9]+)?\\]$"
+> +#ifndef ZERO_PAGE
+> +#define ZERO_PAGE(vaddr) ((void)(vaddr),virt_to_page(empty_zero_page))
+
+Took me a second ...
+
+> +#endif
 > +
-> +static regex_t sdt_op_regex1, sdt_op_regex2;
-> +
-> +static int sdt_init_op_regex(void)
-> +{
-> +       static int initialized;
-> +       int ret =3D 0;
-> +
-> +       if (initialized)
-> +               return 0;
-> +
-> +       ret =3D regcomp(&sdt_op_regex1, SDT_OP_REGEX1, REG_EXTENDED);
-> +       if (ret)
-> +               goto error;
-> +
-> +       ret =3D regcomp(&sdt_op_regex2, SDT_OP_REGEX2, REG_EXTENDED);
-> +       if (ret)
-> +               goto free_regex1;
-> +
-> +       initialized =3D 1;
-> +       return 0;
-> +
-> +free_regex1:
-> +       regfree(&sdt_op_regex1);
-> +error:
-> +       pr_debug4("Regex compilation error.\n");
-> +       return ret;
-> +}
-> +
+>   #endif /* !__ASSEMBLY__ */
+>   
+>   #if !defined(MAX_POSSIBLE_PHYSMEM_BITS) && !defined(CONFIG_64BIT)
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 1a29a719af58..8ea5b76f317f 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -53,6 +53,15 @@ EXPORT_SYMBOL(mem_map);
+>   void *high_memory;
+>   EXPORT_SYMBOL(high_memory);
+>   
+> +#ifndef __HAVE_COLOR_ZERO_PAGE
 > +/*
-> + * SDT marker arguments on Arm64 uses %xREG or [sp, NUM], currently
-> + * support these two formats.
+> + * ZERO_PAGE is a global shared page that is always zero: used
+> + * for zero-mapped memory areas etc..
 > + */
-> +int __perf_sdt_arg_parse_op_arm64(char *old_op, char **new_op)
-> +{
-> +       int ret, new_len;
-> +       regmatch_t rm[5];
-> +
-> +       ret =3D sdt_init_op_regex();
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       if (!regexec(&sdt_op_regex1, old_op, 3, rm, 0)) {
-> +               /* Extract xNUM */
-> +               new_len =3D 2;    /* % NULL */
-> +               new_len +=3D (int)(rm[1].rm_eo - rm[1].rm_so);
-> +
-> +               *new_op =3D zalloc(new_len);
-> +               if (!*new_op)
-> +                       return -ENOMEM;
-> +
-> +               scnprintf(*new_op, new_len, "%%%.*s",
-> +                       (int)(rm[1].rm_eo - rm[1].rm_so), old_op + rm[1].=
-rm_so);
-> +       } else if (!regexec(&sdt_op_regex2, old_op, 5, rm, 0)) {
-> +               /* [sp], [sp, NUM] or [sp,NUM] */
-> +               new_len =3D 7;    /* + ( % s p ) NULL */
-> +
-> +               /* If the argument is [sp], need to fill offset '0' */
-> +               if (rm[2].rm_so =3D=3D -1)
-> +                       new_len +=3D 1;
-> +               else
-> +                       new_len +=3D (int)(rm[2].rm_eo - rm[2].rm_so);
-> +
-> +               *new_op =3D zalloc(new_len);
-> +               if (!*new_op)
-> +                       return -ENOMEM;
-> +
-> +               if (rm[2].rm_so =3D=3D -1)
-> +                       scnprintf(*new_op, new_len, "+0(%%sp)");
-> +               else
-> +                       scnprintf(*new_op, new_len, "+%.*s(%%sp)",
-> +                                 (int)(rm[2].rm_eo - rm[2].rm_so),
-> +                                 old_op + rm[2].rm_so);
-> +       } else {
-> +               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> +               return SDT_ARG_SKIP;
-> +       }
-> +
-> +       return SDT_ARG_VALID;
-> +}
-> +
->  uint64_t __perf_reg_mask_arm64(bool intr)
->  {
->         struct perf_event_attr attr =3D {
-> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c b/tools/p=
-erf/util/perf-regs-arch/perf_regs_powerpc.c
-> index f0a547ad809b..217a001ccd2e 100644
-> --- a/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
-> +++ b/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
-> @@ -19,6 +19,112 @@
->  #define PVR_POWER10            0x0080
->  #define PVR_POWER11            0x0082
->
-> +/* REG or %rREG */
-> +#define SDT_OP_REGEX1  "^(%r)?([1-2]?[0-9]|3[0-1])$"
-> +
-> +/* -NUM(REG) or NUM(REG) or -NUM(%rREG) or NUM(%rREG) */
-> +#define SDT_OP_REGEX2  "^(\\-)?([0-9]+)\\((%r)?([1-2]?[0-9]|3[0-1])\\)$"
-> +
-> +static regex_t sdt_op_regex1, sdt_op_regex2;
-> +
-> +static int sdt_init_op_regex(void)
-> +{
-> +       static int initialized;
-> +       int ret =3D 0;
-> +
-> +       if (initialized)
-> +               return 0;
-> +
-> +       ret =3D regcomp(&sdt_op_regex1, SDT_OP_REGEX1, REG_EXTENDED);
-> +       if (ret)
-> +               goto error;
-> +
-> +       ret =3D regcomp(&sdt_op_regex2, SDT_OP_REGEX2, REG_EXTENDED);
-> +       if (ret)
-> +               goto free_regex1;
-> +
-> +       initialized =3D 1;
-> +       return 0;
-> +
-> +free_regex1:
-> +       regfree(&sdt_op_regex1);
-> +error:
-> +       pr_debug4("Regex compilation error.\n");
-> +       return ret;
-> +}
-> +
-> +/*
-> + * Parse OP and convert it into uprobe format, which is, +/-NUM(%gprREG)=
-.
-> + * Possible variants of OP are:
-> + *     Format          Example
-> + *     -------------------------
-> + *     NUM(REG)        48(18)
-> + *     -NUM(REG)       -48(18)
-> + *     NUM(%rREG)      48(%r18)
-> + *     -NUM(%rREG)     -48(%r18)
-> + *     REG             18
-> + *     %rREG           %r18
-> + *     iNUM            i0
-> + *     i-NUM           i-1
-> + *
-> + * SDT marker arguments on Powerpc uses %rREG form with -mregnames flag
-> + * and REG form with -mno-regnames. Here REG is general purpose register=
-,
-> + * which is in 0 to 31 range.
-> + */
-> +int __perf_sdt_arg_parse_op_powerpc(char *old_op, char **new_op)
-> +{
-> +       int ret, new_len;
-> +       regmatch_t rm[5];
-> +       char prefix;
-> +
-> +       /* Constant argument. Uprobe does not support it */
-> +       if (old_op[0] =3D=3D 'i') {
-> +               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> +               return SDT_ARG_SKIP;
-> +       }
-> +
-> +       ret =3D sdt_init_op_regex();
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       if (!regexec(&sdt_op_regex1, old_op, 3, rm, 0)) {
-> +               /* REG or %rREG --> %gprREG */
-> +
-> +               new_len =3D 5;    /* % g p r NULL */
-> +               new_len +=3D (int)(rm[2].rm_eo - rm[2].rm_so);
-> +
-> +               *new_op =3D zalloc(new_len);
-> +               if (!*new_op)
-> +                       return -ENOMEM;
-> +
-> +               scnprintf(*new_op, new_len, "%%gpr%.*s",
-> +                       (int)(rm[2].rm_eo - rm[2].rm_so), old_op + rm[2].=
-rm_so);
-> +       } else if (!regexec(&sdt_op_regex2, old_op, 5, rm, 0)) {
-> +               /*
-> +                * -NUM(REG) or NUM(REG) or -NUM(%rREG) or NUM(%rREG) -->
-> +                *      +/-NUM(%gprREG)
-> +                */
-> +               prefix =3D (rm[1].rm_so =3D=3D -1) ? '+' : '-';
-> +
-> +               new_len =3D 8;    /* +/- ( % g p r ) NULL */
-> +               new_len +=3D (int)(rm[2].rm_eo - rm[2].rm_so);
-> +               new_len +=3D (int)(rm[4].rm_eo - rm[4].rm_so);
-> +
-> +               *new_op =3D zalloc(new_len);
-> +               if (!*new_op)
-> +                       return -ENOMEM;
-> +
-> +               scnprintf(*new_op, new_len, "%c%.*s(%%gpr%.*s)", prefix,
-> +                       (int)(rm[2].rm_eo - rm[2].rm_so), old_op + rm[2].=
-rm_so,
-> +                       (int)(rm[4].rm_eo - rm[4].rm_so), old_op + rm[4].=
-rm_so);
-> +       } else {
-> +               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> +               return SDT_ARG_SKIP;
-> +       }
-> +
-> +       return SDT_ARG_VALID;
-> +}
-> +
->  /*
->   * mfspr is a POWERPC specific instruction, ensure it's only
->   * built and called on POWERPC by guarding with __powerpc64__
-> diff --git a/tools/perf/util/perf-regs-arch/perf_regs_x86.c b/tools/perf/=
-util/perf-regs-arch/perf_regs_x86.c
-> index d573f9a9ca46..b6d20522b4e8 100644
-> --- a/tools/perf/util/perf-regs-arch/perf_regs_x86.c
-> +++ b/tools/perf/util/perf-regs-arch/perf_regs_x86.c
-> @@ -14,6 +14,227 @@
->  #include "../../perf-sys.h"
->  #include "../../arch/x86/include/perf_regs.h"
->
-> +struct sdt_name_reg {
-> +       const char *sdt_name;
-> +       const char *uprobe_name;
-> +};
-> +#define SDT_NAME_REG(n, m) {.sdt_name =3D "%" #n, .uprobe_name =3D "%" #=
-m}
-> +#define SDT_NAME_REG_END {.sdt_name =3D NULL, .uprobe_name =3D NULL}
-> +
-> +static const struct sdt_name_reg sdt_reg_tbl[] =3D {
-> +       SDT_NAME_REG(eax, ax),
-> +       SDT_NAME_REG(rax, ax),
-> +       SDT_NAME_REG(al,  ax),
-> +       SDT_NAME_REG(ah,  ax),
-> +       SDT_NAME_REG(ebx, bx),
-> +       SDT_NAME_REG(rbx, bx),
-> +       SDT_NAME_REG(bl,  bx),
-> +       SDT_NAME_REG(bh,  bx),
-> +       SDT_NAME_REG(ecx, cx),
-> +       SDT_NAME_REG(rcx, cx),
-> +       SDT_NAME_REG(cl,  cx),
-> +       SDT_NAME_REG(ch,  cx),
-> +       SDT_NAME_REG(edx, dx),
-> +       SDT_NAME_REG(rdx, dx),
-> +       SDT_NAME_REG(dl,  dx),
-> +       SDT_NAME_REG(dh,  dx),
-> +       SDT_NAME_REG(esi, si),
-> +       SDT_NAME_REG(rsi, si),
-> +       SDT_NAME_REG(sil, si),
-> +       SDT_NAME_REG(edi, di),
-> +       SDT_NAME_REG(rdi, di),
-> +       SDT_NAME_REG(dil, di),
-> +       SDT_NAME_REG(ebp, bp),
-> +       SDT_NAME_REG(rbp, bp),
-> +       SDT_NAME_REG(bpl, bp),
-> +       SDT_NAME_REG(rsp, sp),
-> +       SDT_NAME_REG(esp, sp),
-> +       SDT_NAME_REG(spl, sp),
-> +
-> +       /* rNN registers */
-> +       SDT_NAME_REG(r8b,  r8),
-> +       SDT_NAME_REG(r8w,  r8),
-> +       SDT_NAME_REG(r8d,  r8),
-> +       SDT_NAME_REG(r9b,  r9),
-> +       SDT_NAME_REG(r9w,  r9),
-> +       SDT_NAME_REG(r9d,  r9),
-> +       SDT_NAME_REG(r10b, r10),
-> +       SDT_NAME_REG(r10w, r10),
-> +       SDT_NAME_REG(r10d, r10),
-> +       SDT_NAME_REG(r11b, r11),
-> +       SDT_NAME_REG(r11w, r11),
-> +       SDT_NAME_REG(r11d, r11),
-> +       SDT_NAME_REG(r12b, r12),
-> +       SDT_NAME_REG(r12w, r12),
-> +       SDT_NAME_REG(r12d, r12),
-> +       SDT_NAME_REG(r13b, r13),
-> +       SDT_NAME_REG(r13w, r13),
-> +       SDT_NAME_REG(r13d, r13),
-> +       SDT_NAME_REG(r14b, r14),
-> +       SDT_NAME_REG(r14w, r14),
-> +       SDT_NAME_REG(r14d, r14),
-> +       SDT_NAME_REG(r15b, r15),
-> +       SDT_NAME_REG(r15w, r15),
-> +       SDT_NAME_REG(r15d, r15),
-> +       SDT_NAME_REG_END,
-> +};
-> +
-> +/*
-> + * Perf only supports OP which is in  +/-NUM(REG)  form.
-> + * Here plus-minus sign, NUM and parenthesis are optional,
-> + * only REG is mandatory.
-> + *
-> + * SDT events also supports indirect addressing mode with a
-> + * symbol as offset, scaled mode and constants in OP. But
-> + * perf does not support them yet. Below are few examples.
-> + *
-> + * OP with scaled mode:
-> + *     (%rax,%rsi,8)
-> + *     10(%ras,%rsi,8)
-> + *
-> + * OP with indirect addressing mode:
-> + *     check_action(%rip)
-> + *     mp_+52(%rip)
-> + *     44+mp_(%rip)
-> + *
-> + * OP with constant values:
-> + *     $0
-> + *     $123
-> + *     $-1
-> + */
-> +#define SDT_OP_REGEX  "^([+\\-]?)([0-9]*)(\\(?)(%[a-z][a-z0-9]+)(\\)?)$"
-> +
-> +static regex_t sdt_op_regex;
-> +
-> +static int sdt_init_op_regex(void)
-> +{
-> +       static int initialized;
-> +       int ret =3D 0;
-> +
-> +       if (initialized)
-> +               return 0;
-> +
-> +       ret =3D regcomp(&sdt_op_regex, SDT_OP_REGEX, REG_EXTENDED);
-> +       if (ret < 0) {
-> +               pr_debug4("Regex compilation error.\n");
-> +               return ret;
-> +       }
-> +
-> +       initialized =3D 1;
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Max x86 register name length is 5(ex: %r15d). So, 6th char
-> + * should always contain NULL. This helps to find register name
-> + * length using strlen, instead of maintaining one more variable.
-> + */
-> +#define SDT_REG_NAME_SIZE  6
-> +
-> +/*
-> + * The uprobe parser does not support all gas register names;
-> + * so, we have to replace them (ex. for x86_64: %rax -> %ax).
-> + * Note: If register does not require renaming, just copy
-> + * paste as it is, but don't leave it empty.
-> + */
-> +static void sdt_rename_register(char *sdt_reg, int sdt_len, char *uprobe=
-_reg)
-> +{
-> +       int i =3D 0;
-> +
-> +       for (i =3D 0; sdt_reg_tbl[i].sdt_name !=3D NULL; i++) {
-> +               if (!strncmp(sdt_reg_tbl[i].sdt_name, sdt_reg, sdt_len)) =
-{
-> +                       strcpy(uprobe_reg, sdt_reg_tbl[i].uprobe_name);
-> +                       return;
-> +               }
-> +       }
-> +
-> +       strncpy(uprobe_reg, sdt_reg, sdt_len);
-> +}
-> +
-> +int __perf_sdt_arg_parse_op_x86(char *old_op, char **new_op)
-> +{
-> +       char new_reg[SDT_REG_NAME_SIZE] =3D {0};
-> +       int new_len =3D 0, ret;
-> +       /*
-> +        * rm[0]:  +/-NUM(REG)
-> +        * rm[1]:  +/-
-> +        * rm[2]:  NUM
-> +        * rm[3]:  (
-> +        * rm[4]:  REG
-> +        * rm[5]:  )
-> +        */
-> +       regmatch_t rm[6];
-> +       /*
-> +        * Max prefix length is 2 as it may contains sign(+/-)
-> +        * and displacement 0 (Both sign and displacement 0 are
-> +        * optional so it may be empty). Use one more character
-> +        * to hold last NULL so that strlen can be used to find
-> +        * prefix length, instead of maintaining one more variable.
-> +        */
-> +       char prefix[3] =3D {0};
-> +
-> +       ret =3D sdt_init_op_regex();
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       /*
-> +        * If unsupported OR does not match with regex OR
-> +        * register name too long, skip it.
-> +        */
-> +       if (strchr(old_op, ',') || strchr(old_op, '$') ||
-> +           regexec(&sdt_op_regex, old_op, 6, rm, 0)   ||
-> +           rm[4].rm_eo - rm[4].rm_so > SDT_REG_NAME_SIZE) {
-> +               pr_debug4("Skipping unsupported SDT argument: %s\n", old_=
-op);
-> +               return SDT_ARG_SKIP;
-> +       }
-> +
-> +       /*
-> +        * Prepare prefix.
-> +        * If SDT OP has parenthesis but does not provide
-> +        * displacement, add 0 for displacement.
-> +        *     SDT         Uprobe     Prefix
-> +        *     -----------------------------
-> +        *     +24(%rdi)   +24(%di)   +
-> +        *     24(%rdi)    +24(%di)   +
-> +        *     %rdi        %di
-> +        *     (%rdi)      +0(%di)    +0
-> +        *     -80(%rbx)   -80(%bx)   -
-> +        */
-> +       if (rm[3].rm_so !=3D rm[3].rm_eo) {
-> +               if (rm[1].rm_so !=3D rm[1].rm_eo)
-> +                       prefix[0] =3D *(old_op + rm[1].rm_so);
-> +               else if (rm[2].rm_so !=3D rm[2].rm_eo)
-> +                       prefix[0] =3D '+';
-> +               else
-> +                       scnprintf(prefix, sizeof(prefix), "+0");
-> +       }
-> +
-> +       /* Rename register */
-> +       sdt_rename_register(old_op + rm[4].rm_so, rm[4].rm_eo - rm[4].rm_=
-so,
-> +                           new_reg);
-> +
-> +       /* Prepare final OP which should be valid for uprobe_events */
-> +       new_len =3D strlen(prefix)              +
-> +                 (rm[2].rm_eo - rm[2].rm_so) +
-> +                 (rm[3].rm_eo - rm[3].rm_so) +
-> +                 strlen(new_reg)             +
-> +                 (rm[5].rm_eo - rm[5].rm_so) +
-> +                 1;                                    /* NULL */
-> +
-> +       *new_op =3D zalloc(new_len);
-> +       if (!*new_op)
-> +               return -ENOMEM;
-> +
-> +       scnprintf(*new_op, new_len, "%.*s%.*s%.*s%.*s%.*s",
-> +                 strlen(prefix), prefix,
-> +                 (int)(rm[2].rm_eo - rm[2].rm_so), old_op + rm[2].rm_so,
-> +                 (int)(rm[3].rm_eo - rm[3].rm_so), old_op + rm[3].rm_so,
-> +                 strlen(new_reg), new_reg,
-> +                 (int)(rm[5].rm_eo - rm[5].rm_so), old_op + rm[5].rm_so)=
-;
-> +
-> +       return SDT_ARG_VALID;
-> +}
-> +
->  uint64_t __perf_reg_mask_x86(bool intr)
->  {
->         struct perf_event_attr attr =3D {
-> diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
-> index 4d9a286a0e56..5b8f34beb24e 100644
-> --- a/tools/perf/util/perf_regs.c
-> +++ b/tools/perf/util/perf_regs.c
-> @@ -7,10 +7,29 @@
->  #include "util/sample.h"
->  #include "debug.h"
->
-> -int __weak arch_sdt_arg_parse_op(char *old_op __maybe_unused,
-> -                                char **new_op __maybe_unused)
-> +int perf_sdt_arg_parse_op(uint16_t e_machine, char *old_op, char **new_o=
-p)
->  {
-> -       return SDT_ARG_SKIP;
-> +       int ret =3D SDT_ARG_SKIP;
-> +
-> +       switch (e_machine) {
-> +       case EM_AARCH64:
-> +               ret =3D __perf_sdt_arg_parse_op_arm64(old_op, new_op);
-> +               break;
-> +       case EM_PPC:
-> +       case EM_PPC64:
-> +               ret =3D __perf_sdt_arg_parse_op_powerpc(old_op, new_op);
-> +               break;
-> +       case EM_386:
-> +       case EM_X86_64:
-> +               ret =3D __perf_sdt_arg_parse_op_x86(old_op, new_op);
-> +               break;
-> +       default:
-> +               pr_debug("Unknown ELF machine %d, standard arguments pars=
-e will be skipped.\n",
-> +                        e_machine);
-> +               break;
-> +       }
-> +
-> +       return ret;
->  }
->
->  uint64_t perf_intr_reg_mask(uint16_t e_machine)
-> diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-> index 2b27139acadb..7c04700bf837 100644
-> --- a/tools/perf/util/perf_regs.h
-> +++ b/tools/perf/util/perf_regs.h
-> @@ -12,7 +12,7 @@ enum {
->         SDT_ARG_SKIP,
->  };
->
-> -int arch_sdt_arg_parse_op(char *old_op, char **new_op);
-> +int perf_sdt_arg_parse_op(uint16_t e_machine, char *old_op, char **new_o=
-p);
->  uint64_t perf_intr_reg_mask(uint16_t e_machine);
->  uint64_t perf_user_reg_mask(uint16_t e_machine);
->
-> @@ -21,6 +21,7 @@ int perf_reg_value(u64 *valp, struct regs_dump *regs, i=
-nt id);
->  uint64_t perf_arch_reg_ip(uint16_t e_machine);
->  uint64_t perf_arch_reg_sp(uint16_t e_machine);
->
-> +int __perf_sdt_arg_parse_op_arm64(char *old_op, char **new_op);
->  uint64_t __perf_reg_mask_arm64(bool intr);
->  const char *__perf_reg_name_arm64(int id);
->  uint64_t __perf_reg_ip_arm64(void);
-> @@ -46,6 +47,7 @@ const char *__perf_reg_name_mips(int id);
->  uint64_t __perf_reg_ip_mips(void);
->  uint64_t __perf_reg_sp_mips(void);
->
-> +int __perf_sdt_arg_parse_op_powerpc(char *old_op, char **new_op);
->  uint64_t __perf_reg_mask_powerpc(bool intr);
->  const char *__perf_reg_name_powerpc(int id);
->  uint64_t __perf_reg_ip_powerpc(void);
-> @@ -61,6 +63,7 @@ const char *__perf_reg_name_s390(int id);
->  uint64_t __perf_reg_ip_s390(void);
->  uint64_t __perf_reg_sp_s390(void);
->
-> +int __perf_sdt_arg_parse_op_x86(char *old_op, char **new_op);
->  uint64_t __perf_reg_mask_x86(bool intr);
->  const char *__perf_reg_name_x86(int id);
->  uint64_t __perf_reg_ip_x86(void);
-> diff --git a/tools/perf/util/probe-file.c b/tools/perf/util/probe-file.c
-> index 5069fb61f48c..f78c3bc3d601 100644
-> --- a/tools/perf/util/probe-file.c
-> +++ b/tools/perf/util/probe-file.c
-> @@ -28,6 +28,7 @@
->  #include "session.h"
->  #include "perf_regs.h"
->  #include "string2.h"
-> +#include "dwarf-regs.h"
->
->  /* 4096 - 2 ('\n' + '\0') */
->  #define MAX_CMDLEN 4094
-> @@ -784,7 +785,7 @@ static int synthesize_sdt_probe_arg(struct strbuf *bu=
-f, int i, const char *arg)
->                 op =3D desc;
->         }
->
-> -       ret =3D arch_sdt_arg_parse_op(op, &new_op);
-> +       ret =3D perf_sdt_arg_parse_op(EM_HOST, op, &new_op);
->
->         if (ret < 0)
->                 goto error;
-> --
-> 2.34.1
->
+
+I am not so sure of how much value that comment here is.
+
+... and in particular, why it is not next to ZERO_PAGE in pgtable.h? ;)
+
+> +unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)] __page_aligned_bss;
+
+Is there a good (or historic) reason why this is not simply
+
+uint8_t empty_zero_page[PAGE_SIZE] __page_aligned_bss;
+
+Almost looks to simple, right? So there must be some problem with it :)
+
+> +EXPORT_SYMBOL(empty_zero_page);
+> +#endif
+
+Nothing else jumped at me, nice cleanup ... if you get sparc to work :P
+
+-- 
+Cheers,
+
+David

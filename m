@@ -1,25 +1,25 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA0313D891;
-	Mon, 23 Feb 2026 09:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65DE134EF05;
+	Mon, 23 Feb 2026 12:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771838154; cv=none; b=UrG//AVgasHwMznC9GOOTzJMXDGzSVJM2WbsZLS/hyvGP8nMOCq1xR/vMvgyqKHcYU7j0XE80PdIYOSgWlEs58M79I+l/2ngOIrT7Kqs7wlfAokMAIcrFXIZOJqbmYpzSFEbLiKggaTRjEV5Yr0Mnu3FQwXTXpmr7stmYpqsRu0=
+	t=1771851406; cv=none; b=BpDYk8mm4U2dPwHcP/ka5gp5kUrWxq0A7I6sxtLPJPKyusiheEBzWd06QjDoCisj5A5I7NDFPlIz7jnBpIIE0uCAeI6ZJGl4gz4nOwFtoEIk729D4eBi8tSMNm25NG7xKK/N1VN+Wvx8upjTzjPhL7QOkEEKwMLvKzRtKnhN2oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771838154; c=relaxed/simple;
-	bh=6udqOftI4y08g8IexuZmqUZ6jWyjJMTADJKWbvH4DqY=;
+	s=arc-20240116; t=1771851406; c=relaxed/simple;
+	bh=K6MxMAQ6wYI5Ry7oWZ+4SSWCN+WB9h8X6V37mTrwf8k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WrygEw1yE0KVG6oBU34atxaAlvCrTE2pJm60IQk2DUbTtC9nWh6BXkYjeEK7RsQMqFa93/jx41aiGcNhqDGqXqEjaokebuAGTrsY/c1RCrmWNMsJ7YOlKVkQZwwKe9HywBg24LyajPGsOjGYcZJV4Q6xvPTYEsqkLg/QifFvM/g=
+	 Content-Type:Content-Disposition:In-Reply-To; b=qKQbk3USvgaYuzabRTukMMPGLdCwhbwa/CYhq1Nfw0k7jMutDA1iknAVX00H4Uf9D0Mpz7qtGPgPE9WX1uXrICsH7OAwZV4Ede+25ppFd0wkoDYLigUtNK6QfaZEht/QFyW7jDW+VQ6OebCwyzEwXmM3Np/a4an8hbH7M7QmKtw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04162339;
-	Mon, 23 Feb 2026 01:15:44 -0800 (PST)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D54243F62B;
-	Mon, 23 Feb 2026 01:15:49 -0800 (PST)
-Date: Mon, 23 Feb 2026 09:15:47 +0000
-From: Leo Yan <leo.yan@arm.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D8C6339;
+	Mon, 23 Feb 2026 04:56:36 -0800 (PST)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C2103F62B;
+	Mon, 23 Feb 2026 04:56:40 -0800 (PST)
+Date: Mon, 23 Feb 2026 12:56:27 +0000
+From: Mark Rutland <mark.rutland@arm.com>
 To: Jisheng Zhang <jszhang@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -31,14 +31,9 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
 Subject: Re: [PATCH 3/3] arm64: use runtime constant to optimize
  handle_arch_irq access
-Message-ID: <20260223091547.GJ136967@e132581.arm.com>
+Message-ID: <aZxOe_1XGX_gGOoK@J2N7QTR9R3>
 References: <20260220090922.1506-1-jszhang@kernel.org>
  <20260220090922.1506-4-jszhang@kernel.org>
- <20260220123414.GF136967@e132581.arm.com>
- <aZheqINXslxlrmTt@xhacker>
- <aZhi1p0NJH5ug8CA@xhacker>
- <20260220164738.GH136967@e132581.arm.com>
- <aZj42cyIHADECszW@xhacker>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -47,58 +42,96 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aZj42cyIHADECszW@xhacker>
+In-Reply-To: <20260220090922.1506-4-jszhang@kernel.org>
 
-On Sat, Feb 21, 2026 at 08:14:17AM +0800, Jisheng Zhang wrote:
-
-[...]
-
-> On Fri, Feb 20, 2026 at 04:47:38PM +0000, Leo Yan wrote:
-> > On Fri, Feb 20, 2026 at 09:34:14PM +0800, Jisheng Zhang wrote:
-> > 
-> > [...]
-> > 
-> > > > > Run 3 iterations, and measures three metrics (messaging/pipe/seccomp)
-> > > > > and results in seconds. Less is better.
-> > > > > 
-> > > > >   +---------------------+--------+--------+--------+--------+
-> > > > >   |Without change       |   run1 |   run2 |   run3 |    avg |
-> > > > >   +---------------------+--------+--------+--------+--------+
-> > > > >   |messaging (sec)      |  4.546 |  4.508 |  4.591 |  4.548 |
-> > > > >   |pipe (sec)           | 24.258 | 24.224 | 24.017 | 24.166 |
-> > > > >   |seccomp-notify (sec) | 48.393 | 48.457 | 48.232 | 48.361 |
-> > > > >   +---------------------+--------+--------+--------+--------+
-> > > > > 
-> > > > >   +---------------------+--------+--------+--------+--------+--------+
-> > > > >   |With change          |   run1 |   run2 |   run3 |    avg |   diff |
-> > > > >   +---------------------+--------+--------+--------+--------+--------+
-> > > > >   |messaging (sec)      |  4.493 |  4.523 |  4.556 |  4.524 | +0.52% |
-> > > > >   |pipe (sec)           | 23.159 | 23.702 | 28.649 | 25.170 | -4.15% |
-> > > > 
-> > > > If you check the result, this result variance is abnormal, it means
-> > > > your OS is noiser.
-> > > 
-> > > BTW: if you remove the abnormal run3 result, you'll find that the
-> > > benchmark is improved by ~3.5% on CA73:
-> > > (23.159 + 23.702) / 2 = 23.43
-> > > (24.258 + 24.224) / 2 = 24.24
-> > > (24.24 - 23.43)*100 / 23.43 = ~3.5
-> > 
-> > TBH, I don't think we should subjectively select data.  But I agree a
+On Fri, Feb 20, 2026 at 05:09:22PM +0800, Jisheng Zhang wrote:
+> Currently, on arm64 platforms, the handle_arch_irq is a pointer which
+> is set during booting, and every irq processing needs to access it,
+> so it sits in hot code path. We can use the runtime constant mechanism
+> which was introduced by Linus to speed up its accessing.
 > 
-> The precondition of this is testing the benchmark properly. And I just
-> tried perf bench sched in noisy OS, I didn't get the similar abnormal
-> variance as you got, so I think your run3 result was CA53's result.
-> This isn't an apple-to-apple comparison.
+> Tested on Quad CA55 platform, the perf sched benchmark is improved
+> by ~6.5%
 
-Not true.  As said, I tested on CA73.  I should say explicitly that I
-have hotplugged off CA53 CPUs and run test only on CA73 CPUs.
+That is a surprisingly large impact. :/
 
-> If possible, could you plz test after forcing CA53 offline or test on
-> non big.little platform. Anyway, I will test CA73 next week too.
+Does this meaningfully actually affect any real workload?
+
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/arm64/kernel/entry-common.c | 4 +++-
+>  arch/arm64/kernel/irq.c          | 9 ++++++---
+>  2 files changed, 9 insertions(+), 4 deletions(-)
 > 
-> > clean test env is important to avoid noise, and I also agree that the
-> > current results already show positive signals.
-> > 
-> > Thanks,
-> > Leo
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index 3625797e9ee8..46a4c012e15f 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -25,6 +25,7 @@
+>  #include <asm/kprobes.h>
+>  #include <asm/mmu.h>
+>  #include <asm/processor.h>
+> +#include <asm/runtime-const.h>
+>  #include <asm/sdei.h>
+>  #include <asm/stacktrace.h>
+>  #include <asm/sysreg.h>
+> @@ -139,7 +140,8 @@ static void do_interrupt_handler(struct pt_regs *regs,
+>  	set_irq_regs(old_regs);
+>  }
+>  
+> -extern void (*handle_arch_irq)(struct pt_regs *);
+> +extern void (*_handle_arch_irq)(struct pt_regs *);
+> +#define handle_arch_irq runtime_const_ptr(_handle_arch_irq)
+>  extern void (*handle_arch_fiq)(struct pt_regs *);
+
+We should treat handle_arch_irq and handle_arch_fiq the same way. Either
+both get this, or neither do.
+
+>  static void noinstr __panic_unhandled(struct pt_regs *regs, const char *vector,
+> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+> index 15dedb385b9e..30629c183606 100644
+> --- a/arch/arm64/kernel/irq.c
+> +++ b/arch/arm64/kernel/irq.c
+> @@ -23,6 +23,7 @@
+>  #include <asm/daifflags.h>
+>  #include <asm/exception.h>
+>  #include <asm/numa.h>
+> +#include <asm/runtime-const.h>
+>  #include <asm/softirq_stack.h>
+>  #include <asm/stacktrace.h>
+>  #include <asm/vmap_stack.h>
+> @@ -84,15 +85,17 @@ static void default_handle_fiq(struct pt_regs *regs)
+>  	panic("FIQ taken without a root FIQ handler\n");
+>  }
+>  
+> -void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq;
+> +void (*_handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq;
+> +#define handle_arch_irq runtime_const_ptr(_handle_arch_irq)
+
+This breaks the default case, since handle_arch_irq is initialized to a
+bunch of garbage hex bytes (0x0123456789abcdef).
+
+That means that if set_handle_irq() isn't called, an IRQ will result in
+a call to that bogus address rather than default_handle_irq(), which'll
+be more difficult to debug.
+
+Mark.
+
+>  void (*handle_arch_fiq)(struct pt_regs *) __ro_after_init = default_handle_fiq;
+>  
+>  int __init set_handle_irq(void (*handle_irq)(struct pt_regs *))
+>  {
+> -	if (handle_arch_irq != default_handle_irq)
+> +	if (_handle_arch_irq != default_handle_irq)
+>  		return -EBUSY;
+>  
+> -	handle_arch_irq = handle_irq;
+> +	_handle_arch_irq = handle_irq;
+> +	runtime_const_init(ptr, _handle_arch_irq);
+>  	pr_info("Root IRQ handler: %ps\n", handle_irq);
+>  	return 0;
+>  }
+> -- 
+> 2.51.0
+> 
+> 

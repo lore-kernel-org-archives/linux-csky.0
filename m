@@ -1,228 +1,498 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49BD33EAED;
-	Fri, 27 Feb 2026 20:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA8F34E774;
+	Sat, 28 Feb 2026 17:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772224318; cv=none; b=B/xLCtjSu+XF7VLuCkFD6d0FXlJB/9LOlLP52iQUGuqMi+tNwZGAyho1r94t12u+hy4m3FbUsK6w+jn5yFkp6KddCd/trN5H5rcDmMb/ngjyjx61eZaRMJupLh0eGv0w87M0b/YhnySOyUdI7xFNaFA88IE5/NenuAB8X364KsI=
+	t=1772299995; cv=none; b=e432oOSlFLr2l6lAOfxi+EooYOES/G8/HNiv+oxn7UV6Y4R0sNojWgEsO7c4e97FI0xjjHb7+x+iLvVSgWNdI0ZeQ/xRW2UyF/pZ6Ms6iVnrsUZTQI16iexhVZSKu73rV5C0llRMirN4kdMT1xhxT91oyfP+ECpidc9UWdZdiVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772224318; c=relaxed/simple;
-	bh=GsGJcM5lC5dbmgIT+M4WfJsd6FtHP9AI7W3MvjVlZXE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i4KjkuVhyCzvwrdPRo3ZSH5DgXBLULgKS/pfjfs2aqKZGmOPclkPmWPY8Nsk6oHgrlPkcfYOfidiAbYVVx3S4mrhzCM8TrhAaCNUJZiGsDV7LPMagUVrzafwpXTjiTr9zmcJokkxsQzWYOYODi3cBKgHGgoyvIXW+IaphhFuRcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kyuHOhzj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772299995; c=relaxed/simple;
+	bh=6qtRVGbtS3aR0ZqG9gZBcpPW4reY+sZyC7E9G0/88Kk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gk9k8y9cIrjXnKL+4OuApJkbfKcsdEcND1v02eN6zFk8w+yG5C1X2LEtSK2zSqWeldQDGoMcr5OEa8Z/LckyLPXZUA6QgfUauDe8YZsMFK9hk41rfsmL4n84nT7czeH5baZIT87azsTylomRw+0tDjKGmq6jT14CpBj+lbeWWz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTVkpQot; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kyuHOhzj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BD0C116C6;
-	Fri, 27 Feb 2026 20:31:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTVkpQot"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556D3C116D0;
+	Sat, 28 Feb 2026 17:33:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772224318;
-	bh=GsGJcM5lC5dbmgIT+M4WfJsd6FtHP9AI7W3MvjVlZXE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kyuHOhzjPeaL9ZBX8v9BFk4Vl1+Z8aFaC9olyQsYhW+BEPn4gG+OirqiS0vjY7wSh
-	 08AMVtHAdfLIukZECBbxqF78N9qGu5FW8Bt5tRmyiQAQYFEw5wxcQuuzR9pqH6WqJw
-	 r3wShM1wgJAs/WfWXNGcQSjs2IlTlepCJqMP4x/V5zu2VMrV5sMU8NMr+KOPjW/OyS
-	 itN52VkP0EjHt7tbTWQfjPdKlfT5854ZDrWUbFljsH2eAU+gk+L6ltqkFxDegpDUJq
-	 GyMKzPup//vrXRRmPfxpL1HVKDjePjl8VyB6YHiKhoq6Y49SPP4z4wQTNnR2bzJ/f2
-	 3gdeO5LHu2EBQ==
-Date: Fri, 27 Feb 2026 22:31:41 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Alex Shi <alexs@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@kernel.org>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
+	s=k20201202; t=1772299994;
+	bh=6qtRVGbtS3aR0ZqG9gZBcpPW4reY+sZyC7E9G0/88Kk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=RTVkpQotEjY2XKW5ptVdwWfYTC7/ezU4MXgnPRchNo0lRMOotHQw+Dl8MYwpDP0pM
+	 8yDsxhZIjUH59wxIxdmPO9D4Z0xMI5qFI9JQOwyxzFAGXw7ffZ+Xu3MhfSDsEdS9gw
+	 wsdnl8NUO1akO43ERZbbT5/51epsX+F/hDjs3GUccP9Aatl7QI/pfzrOF8XLpWAKd2
+	 XixJsg4ewOK/NHDB36ofzugTEd7ztYCjwwtEay7g2p/DkkCtqGQnMN519EWgml5W00
+	 3zxbLRDTqlwSFci64itcQ+tx+a0rSGp9VS6cRQHJJ0e9Hte3aWNOwfqt3teoG6wYI6
+	 iEbefzv2hUqLA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Ian Rogers <irogers@google.com>,
+	James Clark <james.clark@linaro.org>,
+	Aditya Bodkhe <aditya.b1@linux.ibm.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Athira Rajeev <atrajeev@linux.ibm.com>,
+	Bill Wendling <morbo@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Guo Ren <guoren@kernel.org>,
+	Howard Chu <howardchu95@gmail.com>,
 	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Klara Modin <klarasmodin@gmail.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Magnus Lindholm <linmag7@gmail.com>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Garry <john.g.garry@oracle.com>,
+	Julia Lawall <Julia.Lawall@inria.fr>,
+	Justin Stitt <justinstitt@google.com>,
+	=?UTF-8?q?Krzysztof=20=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
+	Leo Yan <leo.yan@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Richard Weinberger <richard@nod.at>,
-	Ritesh Harjani <ritesh.list@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Stafford Horne <shorne@gmail.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>, x86@kernel.org,
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v3 23/29] arch, mm: consolidate initialization of nodes,
- zones and memory map
-Message-ID: <aaH_LVnl8FlERA_r@kernel.org>
-References: <20260111082105.290734-1-rppt@kernel.org>
- <20260111082105.290734-24-rppt@kernel.org>
- <b9527ed4-7a5c-42e9-8814-b276b3741f63@suse.cz>
+	Paul Walmsley <pjw@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sergei Trofimovich <slyich@gmail.com>,
+	Shimin Guo <shimin.guo@skydio.com>,
+	Suchit Karunakaran <suchitkarunakaran@gmail.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	Tianyou Li <tianyou.li@intel.com>,
+	Will Deacon <will@kernel.org>,
+	Zecheng Li <zecheng@google.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.19 016/844] perf annotate: Fix args leak of map_symbol
+Date: Sat, 28 Feb 2026 12:18:49 -0500
+Message-ID: <20260228173244.1509663-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260228173244.1509663-1-sashal@kernel.org>
+References: <20260228173244.1509663-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b9527ed4-7a5c-42e9-8814-b276b3741f63@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-Hi Vlastimil,
+From: Ian Rogers <irogers@google.com>
 
-On Fri, Feb 27, 2026 at 04:14:42PM +0100, Vlastimil Babka wrote:
-> On 1/11/26 09:20, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > To initialize node, zone and memory map data structures every architecture
-> > calls free_area_init() during setup_arch() and passes it an array of zone
-> > limits.
-> > 
-> > Beside code duplication it creates "interesting" ordering cases between
-> > allocation and initialization of hugetlb and the memory map. Some
-> > architectures allocate hugetlb pages very early in setup_arch() in certain
-> > cases, some only create hugetlb CMA areas in setup_arch() and sometimes
-> > hugetlb allocations happen mm_core_init().
-> > 
-> > With arch_zone_limits_init() helper available now on all architectures it
-> > is no longer necessary to call free_area_init() from architecture setup
-> > code. Rather core MM initialization can call arch_zone_limits_init() in a
-> > single place.
-> > 
-> > This allows to unify ordering of hugetlb vs memory map allocation and
-> > initialization.
-> > 
-> > Remove the call to free_area_init() from architecture specific code and
-> > place it in a new mm_core_init_early() function that is called immediately
-> > after setup_arch().
-> > 
-> > After this refactoring it is possible to consolidate hugetlb allocations
-> > and eliminate differences in ordering of hugetlb and memory map
-> > initialization among different architectures.
-> > 
-> > As the first step of this consolidation move hugetlb_bootmem_alloc() to
-> > mm_core_early_init().
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> I've bisected a problem with virtme-ng testing a NUMA memoryless
-> node setup (on x86_64) to this patch (commit d49004c5f0c1).
-> 
-> It's executed like this, where node 0 has memory and node 1 only cpus:
-> 
-> vng -vr . -p 8 -m 4G --numa 4G,cpus=0-3 --numa 0,cpus=4-7
-> 
-> This fails to boot due to:
-> 
-> [    0.095894] BUG: unable to handle page fault for address: 0000000000004620
-> [    0.097196] #PF: supervisor read access in kernel mode
-> [    0.098180] #PF: error_code(0x0000) - not-present page
-> [    0.099155] PGD 0 P4D 0 
-> [    0.099641] Oops: Oops: 0000 [#1] SMP NOPTI
-> [    0.100437] CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.19.0-rc6-00152-gf206359553c9 #53 PREEMPT 
-> [    0.102201] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.17.0-2-g4f253b9b-prebuilt.qemu.org 04/01/2014
-> [    0.104313] RIP: 0010:mm_core_init_early+0x263/0x900
-> [    0.105271] Code: 93 ff 72 09 8b 7c 24 30 e8 da 82 00 00 48 63 44 24 30 45 31 db 4c 8b 24 c5 a0 7b 1d 9a 48 89 c3 4c 89 5c 24 50 4c 89 5c 24 58 <41> 83 bc 24 20 46 00 00 00 75 0b 41 83 bc 24 14 47 00 00 00 74 04
-> [    0.108863] RSP: 0000:ffffffff99403e38 EFLAGS: 00010046
-> [    0.109861] RAX: 0000000000000001 RBX: 0000000000000001 RCX: 0000000000000001
-> [    0.111223] RDX: 0000000000000040 RSI: 0000000000100000 RDI: ffff89597fffae00
-> [    0.112577] RBP: 0000000000000005 R08: 0000000000000000 R09: ffff89597fffa200
-> [    0.113924] R10: 80000000ffffe000 R11: 0000000000000000 R12: 0000000000000000
-> [    0.115294] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [    0.116656] FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
-> [    0.118193] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.119283] CR2: 0000000000004620 CR3: 0000000060048000 CR4: 00000000000000b0
-> [    0.120645] Call Trace:
-> [    0.121122]  <TASK>
-> [    0.121521]  start_kernel+0x5d/0x780
-> [    0.122206]  x86_64_start_reservations+0x24/0x30
-> [    0.123079]  x86_64_start_kernel+0xd1/0xe0
-> [    0.123860]  common_startup_64+0x12c/0x138
-> [    0.124641]  </TASK>
-> [    0.125061] Modules linked in:
-> [    0.125646] CR2: 0000000000004620
-> [    0.126279] ---[ end trace 0000000000000000 ]---
-> [    0.127162] RIP: 0010:mm_core_init_early+0x263/0x900
-> [    0.128106] Code: 93 ff 72 09 8b 7c 24 30 e8 da 82 00 00 48 63 44 24 30 45 31 db 4c 8b 24 c5 a0 7b 1d 9a 48 89 c3 4c 89 5c 24 50 4c 89 5c 24 58 <41> 83 bc 24 20 46 00 00 00 75 0b 41 83 bc 24 14 47 00 00 00 74 04
-> [    0.131676] RSP: 0000:ffffffff99403e38 EFLAGS: 00010046
-> [    0.132684] RAX: 0000000000000001 RBX: 0000000000000001 RCX: 0000000000000001
-> [    0.134033] RDX: 0000000000000040 RSI: 0000000000100000 RDI: ffff89597fffae00
-> [    0.135412] RBP: 0000000000000005 R08: 0000000000000000 R09: ffff89597fffa200
-> [    0.136763] R10: 80000000ffffe000 R11: 0000000000000000 R12: 0000000000000000
-> [    0.138112] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [    0.139487] FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
-> [    0.141014] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.142094] CR2: 0000000000004620 CR3: 0000000060048000 CR4: 00000000000000b0
-> [    0.143448] Kernel panic - not syncing: Attempted to kill the idle task!
-> [    0.144833] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
-> 
-> > ./scripts/faddr2line vmlinux mm_core_init_early+0x263/0x900
-> mm_core_init_early+0x263/0x900:
-> free_area_init_node at mm/mm_init.c:1721
-> (inlined by) free_area_init at mm/mm_init.c:1902
-> (inlined by) mm_core_init_early at mm/mm_init.c:2681
-> 
-> It crashes at WARN_ON(pgdat->nr_zones || pgdat->kswapd_highest_zoneidx);
-> because pgdat is NULL.
-> 
-> With some debug printk's I've figured out that in free_area_init()
-> we have:
-> 
->                 if (!node_online(nid))
->                         alloc_offline_node_data(nid);
->              
->                 pgdat = NODE_DATA(nid);
->                 free_area_init_node(nid);
-> 
-> 
-> But node_online() is true so this allocation doesn't happen, and
-> pgdat remains NULL.
-> 
-> And node_online() becomes true in init_cpu_to_node():
-> 
->                 if (!node_online(node))
->                         node_set_online(node);
-> 
-> But without having a pgdat allocated.
-> 
-> I was able to workaround this by changing the code in free_area_init() to
-> 
->                if (!node_online(nid) || !NODE_DATA(nid))
->                         alloc_offline_node_data(nid);
+[ Upstream commit 00419892bac28bf148450d762bbff990a6bd5494 ]
 
-if (!NODE_DATA(nid)) is enough ...
+map_symbol__exit() needs calling on an annotate_args.ms, however, rather
+than introduce proper reference count handling to symbol__annotate()
+just switch to passing the map_symbol pointer parameter around, making
+the puts the caller's responsibility.
+
+Fix a number of cases to ensure the map in a map_symbol has a
+reference count increment and add the then necessary map_symbol_exits.
+
+Fixes: 56e144fe98260a0f ("perf mem_info: Add and use map_symbol__exit and addr_map_symbol__exit")
+Reviewed-by: James Clark <james.clark@linaro.org>
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Aditya Bodkhe <aditya.b1@linux.ibm.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Athira Rajeev <atrajeev@linux.ibm.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Dr. David Alan Gilbert <linux@treblig.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Howard Chu <howardchu95@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Garry <john.g.garry@oracle.com>
+Cc: Julia Lawall <Julia.Lawall@inria.fr>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Krzysztof Łopatowski <krzysztof.m.lopatowski@gmail.com>
+Cc: Leo Yan <leo.yan@linux.dev>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <pjw@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Sergei Trofimovich <slyich@gmail.com>
+Cc: Shimin Guo <shimin.guo@skydio.com>
+Cc: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Cc: Thomas Falcon <thomas.falcon@intel.com>
+Cc: Tianyou Li <tianyou.li@intel.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Zecheng Li <zecheng@google.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../arch/loongarch/annotate/instructions.c    | 14 ++++----
+ tools/perf/arch/s390/annotate/instructions.c  | 11 +++---
+ tools/perf/util/annotate.c                    |  2 +-
+ tools/perf/util/capstone.c                    | 14 ++++----
+ tools/perf/util/disasm.c                      | 36 ++++++++++---------
+ tools/perf/util/disasm.h                      |  2 +-
+ tools/perf/util/llvm.c                        |  6 ++--
+ 7 files changed, 47 insertions(+), 38 deletions(-)
+
+diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/perf/arch/loongarch/annotate/instructions.c
+index 70262d5f14442..1c3abb43c8d72 100644
+--- a/tools/perf/arch/loongarch/annotate/instructions.c
++++ b/tools/perf/arch/loongarch/annotate/instructions.c
+@@ -10,9 +10,7 @@ static int loongarch_call__parse(struct arch *arch, struct ins_operands *ops, st
+ {
+ 	char *c, *endptr, *tok, *name;
+ 	struct map *map = ms->map;
+-	struct addr_map_symbol target = {
+-		.ms = { .map = map, },
+-	};
++	struct addr_map_symbol target;
  
-> But I don't have the bigger picture, and also didn't check yet what exactly
-> about this patch results in the failure. Probably ordering of various related 
-> actions. Thoughts?
-
-... and there's a fix already in the mm-hotfixes-stable:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-hotfixes-unstable&id=a4ab97e34bb687a2ca63fc70b47e8762e689797f
-
+ 	c = strchr(ops->raw, '#');
+ 	if (c++ == NULL)
+@@ -38,12 +36,16 @@ static int loongarch_call__parse(struct arch *arch, struct ins_operands *ops, st
+ 	if (ops->target.name == NULL)
+ 		return -1;
+ 
+-	target.addr = map__objdump_2mem(map, ops->target.addr);
++	target = (struct addr_map_symbol) {
++		.ms = { .map = map__get(map), },
++		.addr = map__objdump_2mem(map, ops->target.addr),
++	};
+ 
+ 	if (maps__find_ams(ms->maps, &target) == 0 &&
+ 	    map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
+ 		ops->target.sym = target.ms.sym;
+ 
++	addr_map_symbol__exit(&target);
+ 	return 0;
+ }
+ 
+@@ -58,7 +60,7 @@ static int loongarch_jump__parse(struct arch *arch, struct ins_operands *ops, st
+ 	struct map *map = ms->map;
+ 	struct symbol *sym = ms->sym;
+ 	struct addr_map_symbol target = {
+-		.ms = { .map = map, },
++		.ms = { .map = map__get(map), },
+ 	};
+ 	const char *c = strchr(ops->raw, '#');
+ 	u64 start, end;
+@@ -90,7 +92,7 @@ static int loongarch_jump__parse(struct arch *arch, struct ins_operands *ops, st
+ 	} else {
+ 		ops->target.offset_avail = false;
+ 	}
+-
++	addr_map_symbol__exit(&target);
+ 	return 0;
+ }
+ 
+diff --git a/tools/perf/arch/s390/annotate/instructions.c b/tools/perf/arch/s390/annotate/instructions.c
+index c61193f1e0964..626e6d2cbc81a 100644
+--- a/tools/perf/arch/s390/annotate/instructions.c
++++ b/tools/perf/arch/s390/annotate/instructions.c
+@@ -6,9 +6,7 @@ static int s390_call__parse(struct arch *arch, struct ins_operands *ops,
+ {
+ 	char *endptr, *tok, *name;
+ 	struct map *map = ms->map;
+-	struct addr_map_symbol target = {
+-		.ms = { .map = map, },
+-	};
++	struct addr_map_symbol target;
+ 
+ 	tok = strchr(ops->raw, ',');
+ 	if (!tok)
+@@ -36,12 +34,17 @@ static int s390_call__parse(struct arch *arch, struct ins_operands *ops,
+ 
+ 	if (ops->target.name == NULL)
+ 		return -1;
+-	target.addr = map__objdump_2mem(map, ops->target.addr);
++
++	target = (struct addr_map_symbol) {
++		.ms = { .map = map__get(map), },
++		.addr = map__objdump_2mem(map, ops->target.addr),
++	};
+ 
+ 	if (maps__find_ams(ms->maps, &target) == 0 &&
+ 	    map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
+ 		ops->target.sym = target.ms.sym;
+ 
++	addr_map_symbol__exit(&target);
+ 	return 0;
+ }
+ 
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index cc7764455faf6..791d60f97c23e 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1031,7 +1031,7 @@ int symbol__annotate(struct map_symbol *ms, struct evsel *evsel,
+ 		return 0;
+ 
+ 	args.arch = arch;
+-	args.ms = *ms;
++	args.ms = ms;
+ 
+ 	if (notes->src == NULL) {
+ 		notes->src = annotated_source__new();
+diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
+index be5fd44b1f9dc..2c7feab61b7bf 100644
+--- a/tools/perf/util/capstone.c
++++ b/tools/perf/util/capstone.c
+@@ -143,7 +143,7 @@ static void print_capstone_detail(cs_insn *insn, char *buf, size_t len,
+ 				  struct annotate_args *args, u64 addr)
+ {
+ 	int i;
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct symbol *sym;
+ 
+ 	/* TODO: support more architectures */
+@@ -222,7 +222,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ {
+ #ifdef HAVE_LIBCAPSTONE_SUPPORT
+ 	struct annotation *notes = symbol__annotation(sym);
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct dso *dso = map__dso(map);
+ 	u64 start = map__rip_2objdump(map, sym->start);
+ 	u64 offset;
+@@ -256,7 +256,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 	args->line = disasm_buf;
+ 	args->line_nr = 0;
+ 	args->fileloc = NULL;
+-	args->ms.sym = sym;
++	args->ms->sym = sym;
+ 
+ 	dl = disasm_line__new(args);
+ 	if (dl == NULL)
+@@ -268,7 +268,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 	    !strcmp(args->options->disassembler_style, "att"))
+ 		disassembler_style = true;
+ 
+-	if (capstone_init(maps__machine(args->ms.maps), &handle, is_64bit, disassembler_style) < 0)
++	if (capstone_init(maps__machine(args->ms->maps), &handle, is_64bit, disassembler_style) < 0)
+ 		goto err;
+ 
+ 	needs_cs_close = true;
+@@ -345,7 +345,7 @@ int symbol__disassemble_capstone_powerpc(const char *filename __maybe_unused,
+ {
+ #ifdef HAVE_LIBCAPSTONE_SUPPORT
+ 	struct annotation *notes = symbol__annotation(sym);
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct dso *dso = map__dso(map);
+ 	struct nscookie nsc;
+ 	u64 start = map__rip_2objdump(map, sym->start);
+@@ -382,7 +382,7 @@ int symbol__disassemble_capstone_powerpc(const char *filename __maybe_unused,
+ 	    !strcmp(args->options->disassembler_style, "att"))
+ 		disassembler_style = true;
+ 
+-	if (capstone_init(maps__machine(args->ms.maps), &handle, is_64bit, disassembler_style) < 0)
++	if (capstone_init(maps__machine(args->ms->maps), &handle, is_64bit, disassembler_style) < 0)
+ 		goto err;
+ 
+ 	needs_cs_close = true;
+@@ -408,7 +408,7 @@ int symbol__disassemble_capstone_powerpc(const char *filename __maybe_unused,
+ 	args->line = disasm_buf;
+ 	args->line_nr = 0;
+ 	args->fileloc = NULL;
+-	args->ms.sym = sym;
++	args->ms->sym = sym;
+ 
+ 	dl = disasm_line__new(args);
+ 	if (dl == NULL)
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index 50b9433f3f8e6..924429142631a 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -269,9 +269,7 @@ static int call__parse(struct arch *arch, struct ins_operands *ops, struct map_s
+ {
+ 	char *endptr, *tok, *name;
+ 	struct map *map = ms->map;
+-	struct addr_map_symbol target = {
+-		.ms = { .map = map, },
+-	};
++	struct addr_map_symbol target;
+ 
+ 	ops->target.addr = strtoull(ops->raw, &endptr, 16);
+ 
+@@ -296,12 +294,16 @@ static int call__parse(struct arch *arch, struct ins_operands *ops, struct map_s
+ 	if (ops->target.name == NULL)
+ 		return -1;
+ find_target:
+-	target.addr = map__objdump_2mem(map, ops->target.addr);
++	target = (struct addr_map_symbol) {
++		.ms = { .map = map__get(map), },
++		.addr = map__objdump_2mem(map, ops->target.addr),
++	};
+ 
+ 	if (maps__find_ams(ms->maps, &target) == 0 &&
+ 	    map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
+ 		ops->target.sym = target.ms.sym;
+ 
++	addr_map_symbol__exit(&target);
+ 	return 0;
+ 
+ indirect_call:
+@@ -366,7 +368,7 @@ static int jump__parse(struct arch *arch, struct ins_operands *ops, struct map_s
+ 	struct map *map = ms->map;
+ 	struct symbol *sym = ms->sym;
+ 	struct addr_map_symbol target = {
+-		.ms = { .map = map, },
++		.ms = { .map = map__get(map), },
+ 	};
+ 	const char *c = strchr(ops->raw, ',');
+ 	u64 start, end;
+@@ -440,7 +442,7 @@ static int jump__parse(struct arch *arch, struct ins_operands *ops, struct map_s
+ 	} else {
+ 		ops->target.offset_avail = false;
+ 	}
+-
++	addr_map_symbol__exit(&target);
+ 	return 0;
+ }
+ 
+@@ -1046,7 +1048,7 @@ static size_t disasm_line_size(int nr)
+ struct disasm_line *disasm_line__new(struct annotate_args *args)
+ {
+ 	struct disasm_line *dl = NULL;
+-	struct annotation *notes = symbol__annotation(args->ms.sym);
++	struct annotation *notes = symbol__annotation(args->ms->sym);
+ 	int nr = notes->src->nr_events;
+ 
+ 	dl = zalloc(disasm_line_size(nr));
+@@ -1064,7 +1066,7 @@ struct disasm_line *disasm_line__new(struct annotate_args *args)
+ 		} else if (disasm_line__parse(dl->al.line, &dl->ins.name, &dl->ops.raw) < 0)
+ 			goto out_free_line;
+ 
+-		disasm_line__init_ins(dl, args->arch, &args->ms);
++		disasm_line__init_ins(dl, args->arch, args->ms);
+ 	}
+ 
+ 	return dl;
+@@ -1119,7 +1121,7 @@ static int symbol__parse_objdump_line(struct symbol *sym,
+ 				      struct annotate_args *args,
+ 				      char *parsed_line, int *line_nr, char **fileloc)
+ {
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct annotation *notes = symbol__annotation(sym);
+ 	struct disasm_line *dl;
+ 	char *tmp;
+@@ -1151,7 +1153,7 @@ static int symbol__parse_objdump_line(struct symbol *sym,
+ 	args->line    = parsed_line;
+ 	args->line_nr = *line_nr;
+ 	args->fileloc = *fileloc;
+-	args->ms.sym  = sym;
++	args->ms->sym  = sym;
+ 
+ 	dl = disasm_line__new(args);
+ 	(*line_nr)++;
+@@ -1169,12 +1171,14 @@ static int symbol__parse_objdump_line(struct symbol *sym,
+ 	if (dl->ins.ops && ins__is_call(&dl->ins) && !dl->ops.target.sym) {
+ 		struct addr_map_symbol target = {
+ 			.addr = dl->ops.target.addr,
+-			.ms = { .map = map, },
++			.ms = { .map = map__get(map), },
+ 		};
+ 
+-		if (!maps__find_ams(args->ms.maps, &target) &&
++		if (!maps__find_ams(args->ms->maps, &target) &&
+ 		    target.ms.sym->start == target.al_addr)
+ 			dl->ops.target.sym = target.ms.sym;
++
++		addr_map_symbol__exit(&target);
+ 	}
+ 
+ 	annotation_line__add(&dl->al, &notes->src->source);
+@@ -1338,7 +1342,7 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
+ 					struct annotate_args *args)
+ {
+ 	struct annotation *notes = symbol__annotation(sym);
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct dso *dso = map__dso(map);
+ 	u64 start = map__rip_2objdump(map, sym->start);
+ 	u64 end = map__rip_2objdump(map, sym->end);
+@@ -1375,7 +1379,7 @@ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
+ 	args->line = disasm_buf;
+ 	args->line_nr = 0;
+ 	args->fileloc = NULL;
+-	args->ms.sym = sym;
++	args->ms->sym = sym;
+ 
+ 	dl = disasm_line__new(args);
+ 	if (dl == NULL)
+@@ -1501,7 +1505,7 @@ static int symbol__disassemble_objdump(const char *filename, struct symbol *sym,
+ 				       struct annotate_args *args)
+ {
+ 	struct annotation_options *opts = &annotate_opts;
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct dso *dso = map__dso(map);
+ 	char *command;
+ 	FILE *file;
+@@ -1644,7 +1648,7 @@ static int symbol__disassemble_objdump(const char *filename, struct symbol *sym,
+ int symbol__disassemble(struct symbol *sym, struct annotate_args *args)
+ {
+ 	struct annotation_options *options = args->options;
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct dso *dso = map__dso(map);
+ 	char symfs_filename[PATH_MAX];
+ 	bool delete_extract = false;
+diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
+index d2cb555e4a3be..a3ea9d6762816 100644
+--- a/tools/perf/util/disasm.h
++++ b/tools/perf/util/disasm.h
+@@ -97,7 +97,7 @@ struct ins_ops {
+ 
+ struct annotate_args {
+ 	struct arch		  *arch;
+-	struct map_symbol	  ms;
++	struct map_symbol	  *ms;
+ 	struct annotation_options *options;
+ 	s64			  offset;
+ 	char			  *line;
+diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
+index 2ebf1f5f65bf7..4ada9a10bd93f 100644
+--- a/tools/perf/util/llvm.c
++++ b/tools/perf/util/llvm.c
+@@ -118,7 +118,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ {
+ #ifdef HAVE_LIBLLVM_SUPPORT
+ 	struct annotation *notes = symbol__annotation(sym);
+-	struct map *map = args->ms.map;
++	struct map *map = args->ms->map;
+ 	struct dso *dso = map__dso(map);
+ 	u64 start = map__rip_2objdump(map, sym->start);
+ 	/* Malloc-ed buffer containing instructions read from disk. */
+@@ -184,7 +184,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	args->line = disasm_buf;
+ 	args->line_nr = 0;
+ 	args->fileloc = NULL;
+-	args->ms.sym = sym;
++	args->ms->sym = sym;
+ 
+ 	dl = disasm_line__new(args);
+ 	if (dl == NULL)
+@@ -242,7 +242,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 					 &line_storage_len);
+ 		args->line_nr = 0;
+ 		args->fileloc = NULL;
+-		args->ms.sym = sym;
++		args->ms->sym = sym;
+ 
+ 		llvm_addr2line(filename, pc, &args->fileloc,
+ 			       (unsigned int *)&args->line_nr, false, NULL);
 -- 
-Sincerely yours,
-Mike.
+2.51.0
+

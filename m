@@ -1,34 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA8F34E774;
-	Sat, 28 Feb 2026 17:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A163313E31;
+	Sat, 28 Feb 2026 17:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772299995; cv=none; b=e432oOSlFLr2l6lAOfxi+EooYOES/G8/HNiv+oxn7UV6Y4R0sNojWgEsO7c4e97FI0xjjHb7+x+iLvVSgWNdI0ZeQ/xRW2UyF/pZ6Ms6iVnrsUZTQI16iexhVZSKu73rV5C0llRMirN4kdMT1xhxT91oyfP+ECpidc9UWdZdiVY=
+	t=1772300892; cv=none; b=LZj7AMTTLhrk9CjIZhV5pSfHgwbUD4aLiYHu4GUmoTk2WRi1KbwadsrvcO9fWyXIdM2YDfFeqp5JWLyWEfsTifxjCmYU5kWwVq4e1yqDuJTRwYKD2lXZ/l8bXQjcTJ3/xT2n7EYE8IITL/5v8gbsW8y4Y/b6WPqYj3WC8WAGlQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772299995; c=relaxed/simple;
-	bh=6qtRVGbtS3aR0ZqG9gZBcpPW4reY+sZyC7E9G0/88Kk=;
+	s=arc-20240116; t=1772300892; c=relaxed/simple;
+	bh=GPuD30vv6sqzucOUBpi9B4iP3HDC27EbjrmXMtZrSlM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gk9k8y9cIrjXnKL+4OuApJkbfKcsdEcND1v02eN6zFk8w+yG5C1X2LEtSK2zSqWeldQDGoMcr5OEa8Z/LckyLPXZUA6QgfUauDe8YZsMFK9hk41rfsmL4n84nT7czeH5baZIT87azsTylomRw+0tDjKGmq6jT14CpBj+lbeWWz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTVkpQot; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=ZYsXoDIKOJeqQvJDN8OJuT7TgAqPTzu0U3WUOiERgCXF/zQO3+X2R8YKPXLtNDefhcW2RfZJCdlf9Rj2qHLwASjmH96MnqOSDvDzrAKJWZe56b2GAN/wcT7b6KKNNfqCkzZtC9/NB/apYCoYEo92myDch29MXihmi08SZgKnIwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2mgJSbq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTVkpQot"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556D3C116D0;
-	Sat, 28 Feb 2026 17:33:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2mgJSbq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8689DC116D0;
+	Sat, 28 Feb 2026 17:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772299994;
-	bh=6qtRVGbtS3aR0ZqG9gZBcpPW4reY+sZyC7E9G0/88Kk=;
+	s=k20201202; t=1772300892;
+	bh=GPuD30vv6sqzucOUBpi9B4iP3HDC27EbjrmXMtZrSlM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RTVkpQotEjY2XKW5ptVdwWfYTC7/ezU4MXgnPRchNo0lRMOotHQw+Dl8MYwpDP0pM
-	 8yDsxhZIjUH59wxIxdmPO9D4Z0xMI5qFI9JQOwyxzFAGXw7ffZ+Xu3MhfSDsEdS9gw
-	 wsdnl8NUO1akO43ERZbbT5/51epsX+F/hDjs3GUccP9Aatl7QI/pfzrOF8XLpWAKd2
-	 XixJsg4ewOK/NHDB36ofzugTEd7ztYCjwwtEay7g2p/DkkCtqGQnMN519EWgml5W00
-	 3zxbLRDTqlwSFci64itcQ+tx+a0rSGp9VS6cRQHJJ0e9Hte3aWNOwfqt3teoG6wYI6
-	 iEbefzv2hUqLA==
+	b=Z2mgJSbqwaIzBUJt2LWHO7DtyBBo6dByNe0+cm5mtPjD5SjBJgUbmpXTc2k1VzIlI
+	 d9hm8GWkBdswB5dNllvs4U8G6OzMk5yVlvsL1ulYwew8QQZWh3npCAXZRUB/RDA0cy
+	 7CV1tosjl3Xx2sKL8XbyeNG6Ihupamt1VWUP/EtfcktCbyMdn0jEBndwexVUAGp8jU
+	 +Slna/T8En3j6/M/AuZR6CVTbUiGyNzZ681qDQwXbjAasALDVfmfRx9YEAdoLchTmG
+	 xHIBKqER452Lx0N5zmJMizP+HaukA10kZvBZ5uq9YksmaKtJa2XpeJntxVDzel+SHi
+	 9QWWBncCev2Zw==
 From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
+To: patches@lists.linux.dev
 Cc: Ian Rogers <irogers@google.com>,
 	James Clark <james.clark@linaro.org>,
 	Aditya Bodkhe <aditya.b1@linux.ibm.com>,
@@ -66,12 +65,12 @@ Cc: Ian Rogers <irogers@google.com>,
 	Zecheng Li <zecheng@google.com>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.19 016/844] perf annotate: Fix args leak of map_symbol
-Date: Sat, 28 Feb 2026 12:18:49 -0500
-Message-ID: <20260228173244.1509663-17-sashal@kernel.org>
+Subject: [PATCH 6.18 011/752] perf annotate: Fix args leak of map_symbol
+Date: Sat, 28 Feb 2026 12:35:22 -0500
+Message-ID: <20260228174750.1542406-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260228173244.1509663-1-sashal@kernel.org>
-References: <20260228173244.1509663-1-sashal@kernel.org>
+In-Reply-To: <20260228174750.1542406-1-sashal@kernel.org>
+References: <20260228174750.1542406-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -230,7 +229,7 @@ index c61193f1e0964..626e6d2cbc81a 100644
  }
  
 diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index cc7764455faf6..791d60f97c23e 100644
+index 1d6900033b3a0..dc80d922f450d 100644
 --- a/tools/perf/util/annotate.c
 +++ b/tools/perf/util/annotate.c
 @@ -1031,7 +1031,7 @@ int symbol__annotate(struct map_symbol *ms, struct evsel *evsel,

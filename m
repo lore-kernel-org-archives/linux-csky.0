@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C67274B42;
-	Sun,  1 Mar 2026 01:24:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81B21E0B86;
+	Sun,  1 Mar 2026 01:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772328266; cv=none; b=Lts0Pp2zR7c1afJKeS+EUBWuRkc5Zhaljsom+Lj4LK6rX6DIFHVsEmG35F8RI50LQoxjrTd7KeCsEOGLE9ECxh2aA9CUQ19Wt3dZRr94nXSnXpOctONTYm/zLq8SAY2X5DhxDWGtRfwxzbrBV2GXxc6CSDXpSwrgQOlxOYJWp+o=
+	t=1772328927; cv=none; b=LchO47iKEyNfyC2/GfT31Y46bRHgBQLfNSBjfzC12V8MyYDtuPmz/lQO2VWNTm4wAfFfCqHrml5wEWeTI6gxQEnK6MzcPBHBStfm8l7XoCMXvo0c2a0uYO935tyQrMgXEZ5eWnuKa9sMzI5Hmqu3wr2fannfXH7NObbFpclqCDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772328266; c=relaxed/simple;
-	bh=gm+y4nwaWMbq+//9qC2Pc/2Ash2y3Y/2Yoa0NBb2S5A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vp0NxOflZywNbHwPLpz3XOQwCntmgYpsdnKZ/BUekTenBT72F2FBxkrj6iXOvvsduM/8tv7l+E1N3iq+K6nZSrDjxzmTY14gZoubTIcz4RTXf+4M2O6jQ4xaRZCYIsV2l6PW31JxpFWJSufUlw/rApPMEBoGFTskAFARS+1AJt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YO2xcgjy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772328927; c=relaxed/simple;
+	bh=u42aSAGT1EOnVA3gFIBvM8eteMYTac1kszC/znii7ws=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hppVvJpPskqtvhmjuC7A96DKBUzQtmCrjZWP8D/v2108bCQZocmsCGnEQT2aTLfLsLmQ1kdB84m4SN5vvscpUMaVgc0+lfpoA4ZGqp2glSDplD4Zj4XnVwbJo/9+m4EKusdquzxhsHexlTn3qNhn02ADmvQYuMtBV03HM0boehg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p6ylCREW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YO2xcgjy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4DBBC19421;
-	Sun,  1 Mar 2026 01:24:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6ylCREW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EEDC19421;
+	Sun,  1 Mar 2026 01:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772328265;
-	bh=gm+y4nwaWMbq+//9qC2Pc/2Ash2y3Y/2Yoa0NBb2S5A=;
+	s=k20201202; t=1772328927;
+	bh=u42aSAGT1EOnVA3gFIBvM8eteMYTac1kszC/znii7ws=;
 	h=From:To:Cc:Subject:Date:From;
-	b=YO2xcgjyr+csQg8a5m/gqJkYX9HhBBnotFVFlUsku63Y1+3Za43lEGo7His9BIbou
-	 wvO0cUnn5GuUfepOfOqIdB8GrVwgPxSkGlD0NTVzSGFYhPts3QFzadXqE9BA1ZL6cw
-	 3HelOcWR5MmuNWs0rDypSmWxX/jwarEXCa/mKj1G8kY/re5MvdOqygKfZAOh/tBlXe
-	 dCWT4UGJdkQqTOaXQ7XMd/IaugOEk9XYBKjFWjKja9dCz2B9VLgqFhm/hEl3EOYBep
-	 i2OdeRkyAVhJzKWHpS1ioSyD+KK4Ig3sj1Lg4d7TsdeiHKcF+5B23niSZnWlqB20ub
-	 bUPK8bdqYI2Gw==
+	b=p6ylCREWmG6NncS6aorasZIwQ3O8bnWDoNP5tn9SVEYez4gKfYCl6K+KF+RklqVaS
+	 bkm+T6OQ4HLs6xKWBsbecKhEzme9Im8eIuU9WBA2ajYJ9XzQ7G+UqrBAsmxp+ZrEn5
+	 XWbUMd2Q/ZQizDVp+mpSAu7+ZZRAfM67Y1BL/vyykSSe2ygosaMIfUYUSt7oKNqYGm
+	 v4VMFwn9innG/3g5T7W+EcC9vjYEDL3Rxd5kZsW7mXXV/KNE7TFdwcB7G+Tr2zpgqP
+	 XULDYc88FA2D8kTnRkuaMrrn2QnN6mUMwfZi9BDdQFBbWAmUOfnlqgm+Yf3yiVqzGf
+	 32f+jV4xIl9aw==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	leo.yan@arm.com
@@ -36,9 +36,9 @@ Cc: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>,
 	Namhyung Kim <namhyung@kernel.org>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	linux-csky@vger.kernel.org
-Subject: FAILED: Patch "tools: Fix bitfield dependency failure" failed to apply to 6.12-stable tree
-Date: Sat, 28 Feb 2026 20:24:23 -0500
-Message-ID: <20260301012423.1681239-1-sashal@kernel.org>
+Subject: FAILED: Patch "tools: Fix bitfield dependency failure" failed to apply to 6.6-stable tree
+Date: Sat, 28 Feb 2026 20:35:25 -0500
+Message-ID: <20260301013525.1695104-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -51,7 +51,7 @@ X-stable: review
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the 6.12-stable tree.
+The patch below does not apply to the 6.6-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.

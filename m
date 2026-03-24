@@ -1,119 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AF81494C3;
-	Thu,  5 Mar 2026 00:36:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EEA3AD534;
+	Tue, 24 Mar 2026 06:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772671005; cv=none; b=kdXvbGDuaaQjD/NHVqe/mk7Gzp4vuKenXGmkVXZLiFIm0UompskYwsk/yk1Q919syQiQbi2v87Wg06apPFRxe/h488j+QT5u1sarXVM6ODP64I/uNi/2vr/p/Ol2EECPOz28L/cNm5JJPBgEVjUTRi/zEOxxyN19olScvgIkEvI=
+	t=1774332455; cv=none; b=XgGkjt5NLRhc32q11XaUJSySNDou3OqvxoTgxMsXe43Nndhx7jruMyMK0UdNwiTBQFFBlTJjhtuUG7fWbAMgeOXfJS/+LLCb7nuwL6qaT0LRblybunA7z7pjRUhhCVT2q5TwwYhqoxEyZVdC73Wgv02K3OlGTMmf1hMdlz6ke+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772671005; c=relaxed/simple;
-	bh=dufxbUIyr7d8ExFT8JscxBc90VyX6BXpvMXaMHirGFY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=NuB/2colSWq/IScSq18GNiHE9njLfWu1FVHPyCKCfmAb6AmgXUadRwqUf50X1RmW/1rsLk2jtZO5xkdokw2u1nz0C6TxUfd60zK7ai+EisGPgfYxcymmEq5W9xrVF8c5AeTab/97dQitXFTA8IhdeHrMUVAAH0BGU7V1LwlRAZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KToGiCmv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774332455; c=relaxed/simple;
+	bh=wFb340HUOaVrCXWQpjgqhiuSeNlgOOpYnArU4IDmxzQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rQ4JHiQ+pnvvHj3T0KHjPkY1ZKCMp72NKGZAoRctupubMTehSxhnhCly4ee3I+lqNqyoNy1bVsx5W5JefUpnBtVosxgDpfeEdQAC9xhGmUZoVf3A4HC1Hm9cYOrl93fLix6rO6tVbr8tXs5FnsbY9R+juBHTQTXw2Kyyhc0py4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBlAG3kL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KToGiCmv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C0CC4CEF7;
-	Thu,  5 Mar 2026 00:36:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBlAG3kL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E9ADC19424;
+	Tue, 24 Mar 2026 06:07:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772671004;
-	bh=dufxbUIyr7d8ExFT8JscxBc90VyX6BXpvMXaMHirGFY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=KToGiCmvRjrVNqFH9bmGJHeZ38P88LzG7roLZL+LfIaWcpEiN2r+2cd8LeoKKP35z
-	 U1kZMnp2GF5lnZ/nU+B3HGi0hmJYpifkPnaIttjOzC0p4MJWgdE7whcAtStb71A/hR
-	 PWMEoeZUETbXXgqKLd947UqscZTCqE7PdSGVXWHEJVzdsA5P/GL+TYntigcrzmPu9S
-	 bwFDNJowrmaquHt0GQepYaacF/aqErDIPLaR1+ZJBBxnDoRwltgCLkyg6X/do1S70f
-	 /t3wS/hkSXMAn5Ptc3L2X59NGkKMvuLeUJNxpcdH9xAkM1JdLfqBeN7u7tjz5Udo9K
-	 2yvhogx3J8MSA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Richard Henderson <richard.henderson@linaro.org>, 
- Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>, 
- Vineet Gupta <vgupta@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
- Brian Cain <bcain@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, 
- WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
- Sam Creasey <sammy@sammy.net>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
- Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, 
- Stafford Horne <shorne@gmail.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, Richard Weinberger <richard@nod.at>, 
- Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
- Johannes Berg <johannes@sipsolutions.net>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
- linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
- linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
- linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org, 
- stable@vger.kernel.org, Ed W <lists@wildgooses.com>
-In-Reply-To: <20260225-separate-modinfo-from-elf-details-v1-1-387ced6baf4b@kernel.org>
-References: <20260225-separate-modinfo-from-elf-details-v1-1-387ced6baf4b@kernel.org>
-Subject: Re: [PATCH] kbuild: Split .modinfo out from ELF_DETAILS
-Message-Id: <177267099220.1730256.13119170390082704508.b4-ty@kernel.org>
-Date: Wed, 04 Mar 2026 17:36:32 -0700
+	s=k20201202; t=1774332454;
+	bh=wFb340HUOaVrCXWQpjgqhiuSeNlgOOpYnArU4IDmxzQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TBlAG3kLq1QC9v/NKcvGed5e0LjMvlG9h0iMOSj/3glJcGD0yAAUYeXqJdBQlyd0n
+	 mxF3JXMSNmPhKUSGpblKH0uhIQnL36LIgEy4RiYqtxA6VpPMdmI3RCvMcAE/ryfipI
+	 aOiDQoDLBkG/+2wfKqahNxof/eeA24qDIxLyeSjLvnTXWPIFTu55qFEg9sbEnSkyD6
+	 IE90UwaA0J5PEjHSEZVGG/rhPNCy/KGELPK7CQJrWsJnxwHafSwdmIDBCXAlFNjQW+
+	 /GZzQ7+h0MixrEKdi9ZxoOAdi8r3VsYs6bqBzBzxTMMRdItSGJ2Czpb+6ey4cxdcUu
+	 qS1/OaI3tMXnw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA04E3808200;
+	Tue, 24 Mar 2026 06:07:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 00/12] perf annotate arch clean up
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <177433244254.469836.16725604300266891770.git-patchwork-notify@kernel.org>
+Date: Tue, 24 Mar 2026 06:07:22 +0000
+References: <20260122213516.671089-1-irogers@google.com>
+In-Reply-To: <20260122213516.671089-1-irogers@google.com>
+To: Ian Rogers <irogers@google.com>
+Cc: linux-riscv@lists.infradead.org, peterz@infradead.org, mingo@redhat.com,
+ acme@kernel.org, namhyung@kernel.org, alexander.shishkin@linux.intel.com,
+ jolsa@kernel.org, adrian.hunter@intel.com, james.clark@linaro.org,
+ john.g.garry@oracle.com, will@kernel.org, leo.yan@linux.dev,
+ guoren@kernel.org, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ alex@ghiti.fr, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, zecheng@google.com,
+ tianyou.li@intel.com, thomas.falcon@intel.com, Julia.Lawall@inria.fr,
+ suchitkarunakaran@gmail.com, atrajeev@linux.ibm.com, aditya.b1@linux.ibm.com,
+ howardchu95@gmail.com, krzysztof.m.lopatowski@gmail.com, linux@treblig.org,
+ shimin.guo@skydio.com, slyich@gmail.com, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org
 
-On Wed, 25 Feb 2026 15:02:51 -0700, Nathan Chancellor wrote:
-> Commit 3e86e4d74c04 ("kbuild: keep .modinfo section in
-> vmlinux.unstripped") added .modinfo to ELF_DETAILS while removing it
-> from DISCARDS, as it was needed in vmlinux.unstripped and ELF_DETAILS
-> was present in all architecture specific vmlinux linker scripts. While
-> this shuffle is fine for vmlinux, ELF_DETAILS and DISCARDS may be used
-> by other linker scripts, such as the s390 and x86 compressed boot
-> images, which may not expect to have a modinfo section. In certain
-> circumstances, this could result in a bootloader failing to load the
-> compressed kernel [1].
+Hello:
+
+This series was applied to riscv/linux.git (for-next)
+by Arnaldo Carvalho de Melo <acme@redhat.com>:
+
+On Thu, 22 Jan 2026 13:35:04 -0800 you wrote:
+> 3 initial memory leak fix patches for perf annotate.
+> 
+> Move the disasm.c #included arch files into a new util/annotate-arch
+> directory. Make the code compile standalone. Try to better encapsulate
+> architecture specific code within the files and with a
+> arch__new_<arch> function that allows additional data to be associated
+> with the struct arch using the standard container_of trick.
 > 
 > [...]
 
-Applied to
+Here is the summary with links:
+  - [v3,01/12] perf header: Fix memory leaks in process_cpu_domain_info
+    https://git.kernel.org/riscv/c/d84f24c89886
+  - [v3,02/12] perf annotate: Fix args leak of map_symbol
+    https://git.kernel.org/riscv/c/00419892bac2
+  - [v3,03/12] perf maps: Fix reference count leak in maps__find_ams
+    https://git.kernel.org/riscv/c/6fdd2676db55
+  - [v3,04/12] perf disasm: Constify use of struct arch
+    https://git.kernel.org/riscv/c/57d26593a92f
+  - [v3,05/12] perf disasm: Constify use of struct ins_op
+    https://git.kernel.org/riscv/c/1e3b91d6c53e
+  - [v3,06/12] perf disasm: Constify use of struct ins
+    https://git.kernel.org/riscv/c/2a1ca20d0b58
+  - [v3,07/12] perf disasm: Rework the string arch__is to use the ELF machine
+    https://git.kernel.org/riscv/c/927308527310
+  - [v3,08/12] perf disasm: Don't include C files from the arch directory
+    https://git.kernel.org/riscv/c/07b972ff09f4
+  - [v3,09/12] perf disasm: Refactor ins__is_call/jump to avoid exposing arch ins_ops
+    https://git.kernel.org/riscv/c/5301cc698821
+  - [v3,10/12] perf map_symbol: Switch from holding maps to holding thread
+    https://git.kernel.org/riscv/c/c4e3a00356ff
+  - [v3,11/12] perf disasm: Refactor arch__find and initialization of arch structs
+    (no matching commit)
+  - [v3,12/12] perf disasm: Minor layout tweaks for struct arch
+    https://git.kernel.org/riscv/c/dc329efc162a
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-fixes
-
-Thanks!
-
-[1/1] kbuild: Split .modinfo out from ELF_DETAILS
-      https://git.kernel.org/kbuild/c/8678591b47469
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
+You are awesome, thank you!
 -- 
-Nathan Chancellor <nathan@kernel.org>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

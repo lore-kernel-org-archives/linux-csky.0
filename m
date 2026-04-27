@@ -1,117 +1,229 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512B52F25F5
-	for <linux-csky@vger.kernel.org>; Thu, 23 Apr 2026 09:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7460E29405;
+	Mon, 27 Apr 2026 17:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776935607; cv=none; b=DqG2g9Z2P768JFu9R5+knXEj7PGyTWf64rblLx02rrBTMO/BfPY7r6lhGS70Z2TBR5NGlA3cEfySk3FJIDBo0Y07OJa6ONTxEL9azrrYEFgJ1xm9i7rlaxPmjFmo9DCDSYbo2A69hEaW1KrKTNaD/VPPw91aEz4JChYwXjRE+Ok=
+	t=1777310219; cv=none; b=lnKg7BoxsEj+KpDcf/oALBrXT1ccTPBpkTI3ECVX2s5+j9fNGEdNiRPFZQ8HHDtmvwK+7jcFnrgXz6RbeU/6P/VLAj5z8DPYqKu0fs6R/6tWQQ0otKZOoYGLjzORJyOu7yinHhzzi5Rz3N/XoPqxUmBTM7+3NcZDBN5Fa5hGw78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776935607; c=relaxed/simple;
-	bh=6T9IqlK5280psLkT3eMJmwYwDyICLVpbc7WfYWRFFiY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t3+jXdEFRFCjsNBK4OJ3U+QuEgIrJWFhMU1c2BMKA5RPxLHg98CbIuDAwodiOymlRDQ90JQpSKhExSzBRaNpFj5GHDlnt6Zhbb9EVtvU4qUFPpXIcwTJ1JnttlfUbVUPsOn/j6/5+8/PtBse8GbyoG5p9X8CTyhRwdMV/79JNkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sGuGzt8O; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1777310219; c=relaxed/simple;
+	bh=Gdo90UdOw5JDNcbBc6CTpgqBoS99tJWdzzhKt47HDkg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QCWJwhkgyQIPBwW36YBLsUTxKenVr8c/dnY28kBLLI5w/jdSgmUcTrI8h7IRMX6fYYCmnIiH5daNsx88sS8N05ODBVdWNquhCzzZoTW7kiY+fqoobv6Du/Xc5AYtVrf7QCsNShxs3Cx0dwSSwP+bsgcv8u6JdQAck3yTm/GilNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U2+LLE02; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sGuGzt8O"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b150559bso50870465e9.1
-        for <linux-csky@vger.kernel.org>; Thu, 23 Apr 2026 02:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1776935605; x=1777540405; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iBZ9+FXv0tBiNwFRrrrMnD/CIzl1HaptSL4qAqgrjwM=;
-        b=sGuGzt8OSxXHXuuQSOIbjM0yAZHsXrcsBG0ct0RqXYUgZDL2Md8h1h01TBdRYMtvJS
-         gSAaBP/bBElP+I5fQ6XuYMCp1nSzXOO7/Sd1dmQAq5eHd+FCd3RqF8jIm3btI1DR6zbS
-         BcLa3rrvHBebrEiaQbO5nVi8uDxEM+NvnqvPZ/TefJGvJWAudWHRWkVrgmNrxSAI2fLr
-         0drhLCZA5yE7oaS6+d3GRSTMsEAshwGQX6Znhgt5y9jYTN4M9aYO94GWekxeUo/17rqY
-         3BuxbiqaZLIpp6JLklQygli7DWihQLEVrspiYmCddhwJX3XNjfNyAWbVaMD8QY3LMB+y
-         Vqig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776935605; x=1777540405;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iBZ9+FXv0tBiNwFRrrrMnD/CIzl1HaptSL4qAqgrjwM=;
-        b=muaROnZxGrZRQWi3tDAig25laoIy6D53okWzRc+9pQBCQCdqNJ7s1ZU3jeOd68j1n2
-         37tJAuFsQmmBGXJ3TLyS0ycNKGrenH8PDBPsnYYqR/87o4ylf2jkSCzMuxnBfVpswP9S
-         iKAm6rlrfKitz5lEm323DQWvrsA7hEwJ50Jl903oHOGZ/C273SlYaSAlXmueQfbk9TwV
-         f+CfLo8wDSks4fhajbFoHkMXefv/F0saPlMImOjS34gOoyNyGuH8gX8ukblviugJwe+L
-         N+aKxmEELe9u++X0IUIhNWiJIT6a4ckmb6XfpdNN+TSE6C8F9Tjw1uCYXAeyR9e71p0Z
-         qRGA==
-X-Forwarded-Encrypted: i=1; AFNElJ/HfITR80UzXzxT33Zx+IyF5uQDQr/C+nJ+entARuQ/VJmGB4RwCsMZTbascAyxbvSva5E6eLMHomOb@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS3SvBcvBeVz7ImVIFI3AMMsVvnjiHGo318mwwVUoxuVNXraaG
-	MaKKrc9wTb++1pJIOkynyKHcYC2L/Ucaw+I/FH1FDXaprfl5zUunIGqfijEAzkKFMMA=
-X-Gm-Gg: AeBDieuiu4/G1qMEdbNJ1t8VuaDrz1A7UY2kZzCrhlG5b69iDctujloZ8TDaqZDev7U
-	vGqu2s9XLQ94N8mqACG3Ludm2l4ZXa9P21pxGzqZoIf/sHG1vgcE8Af5cayipSMFNtFNzgzmwnX
-	qpzy6jjbhnEJBS80oHc9Hs7W8+sPmp/aeIWQQdVLeVLSBsBNKX0mvuUIQKj1c83Vz6Rh1lCQP0X
-	splc5v4FwZA8etkq/MtcEmizn+JJqhzA2pU1MNnSqLTfGnf18K2KQd8ymN36TmAVx9OuA5V1lPU
-	GQ7VMtdCB0UgxnVnmOWyXvSjSNwklE6iN79l9CLbQ4ulCyEE0/FrUyfd/3AmOwhVvVelMS1PTDR
-	kLsr5sJWzosvvTdWv8ZSCY85pF5imNcOypc5EoIauz+04WMNowf1Q4X/RGAWyp4lI0XBlrzzD/B
-	N5Hu5X3sviTQV1PigUf40tZDw9EnpoPdvCojXpaFjsagw=
-X-Received: by 2002:a05:600c:c10a:b0:483:2c98:4368 with SMTP id 5b1f17b1804b1-488fb771613mr293409705e9.18.1776935604727;
-        Thu, 23 Apr 2026 02:13:24 -0700 (PDT)
-Received: from [192.168.178.64] ([84.246.200.167])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a557412eesm85745545e9.9.2026.04.23.02.13.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2026 02:13:24 -0700 (PDT)
-Message-ID: <204607f3-16fc-4be8-91ac-bf38c6dc31f9@linaro.org>
-Date: Thu, 23 Apr 2026 10:13:22 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U2+LLE02"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87FE1C2BCB4;
+	Mon, 27 Apr 2026 17:16:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777310218;
+	bh=Gdo90UdOw5JDNcbBc6CTpgqBoS99tJWdzzhKt47HDkg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=U2+LLE02v2RJdGrHn64GqYJdP4+hDdO9CRQcGon9U+fg19LBxhX5PBepS5h9HJCqe
+	 szqGGe/Sn0Ja8ufrVfKBRayklpg7ZNqhD3AjlJFyhWTD2cy+E9nyVtxoXvU6RVePwS
+	 nC/EKNFwPrGycTqEuaSwxvd9NLoS3iznsIjTk0KPgTVc+veLovfoR+uQQZvkXu6BEL
+	 XY5HSP+s8CkmcaZnZCCWlv0qtPkuKqPRoos+3EvmYxD3lbF+eVbofOW/u0ribOc9N6
+	 46gB4iCE7qS4DHXiu+LbPED9AO2rWWkmtG0xffEU92OaQJ+vWiy9PumgjbDE3AiKLE
+	 isfjlgjrnrghg==
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+To: Yury Norov <ynorov@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	kvm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	dmaengine@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-fsi@lists.ozlabs.org,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	linux-wpan@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	xen-devel@lists.xenproject.org,
+	linux-fsdevel@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev,
+	bpf@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	linux-x25@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	sound-open-firmware@alsa-project.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: [RFC PATCH v1 0/9] uaccess: Convert small fixed size copy_{to/from}_user() to scoped user access
+Date: Mon, 27 Apr 2026 19:13:41 +0200
+Message-ID: <cover.1777306795.git.chleroy@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] perf dwarf-regs: Fix off by one in
- __get_dwarf_regnum_for_perf_regnum_csky()
-To: Dan Carpenter <error27@gmail.com>, Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
- Guo Ren <guoren@kernel.org>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
- kernel-janitors@vger.kernel.org
-References: <aenDmXNIKdwdtMzn@stanley.mountain>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <aenDmXNIKdwdtMzn@stanley.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7253; i=chleroy@kernel.org; h=from:subject:message-id; bh=Gdo90UdOw5JDNcbBc6CTpgqBoS99tJWdzzhKt47HDkg=; b=owGbwMvMwCV2d0KB2p7V54MZT6slMWS+nxkaMinl/6P42P3bc0Qj3v7nk1G4YbGg/rEse+BPv 7e7BNgWdJSyMIhxMciKKbIc/8+9a0bXl9T8qbv0YeawMoEMYeDiFICJRDExMmwV0vIK89sWnHjX Y4WN3O+gaTyvmP0m2koKTvi9YNORsocM/wPkn2xoM0q8N63lWvLNy/m/speGuG7LLGiQ1I6bVSB dxgQA
+X-Developer-Key: i=chleroy@kernel.org; a=openpgp; fpr=10FFE6F8B390DE17ACC2632368A92FEB01B8DD78
+Content-Transfer-Encoding: 8bit
 
+A lot of copy_from_user() and copy_to_user() perform copies of small
+fixed size pieces of data between kernel and userspace, and don't
+care about partial copies.
 
+copy_from_user() and copy_to_user() are big functions optimised for
+copying large amount of data, with cache management, etc ... This is
+often overkill for small copies that could just be inlined instead.
 
-On 23/04/2026 08:00, Dan Carpenter wrote:
-> Change the > comparison >= to prevent an out of bounds access of
-> the dwarf_csky_regnumsp[] array.
-> 
-> Fixes: 8cac4013b0c2 ("perf dwarf-regs: Add csky perf to dwarf register number mapping functions")
-> Signed-off-by: Dan Carpenter <error27@gmail.com>
-> ---
-> ---
->   tools/perf/util/dwarf-regs-arch/dwarf-regs-csky.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/util/dwarf-regs-arch/dwarf-regs-csky.c b/tools/perf/util/dwarf-regs-arch/dwarf-regs-csky.c
-> index cb44b774f8d9..4c586a5cb763 100644
-> --- a/tools/perf/util/dwarf-regs-arch/dwarf-regs-csky.c
-> +++ b/tools/perf/util/dwarf-regs-arch/dwarf-regs-csky.c
-> @@ -118,7 +118,7 @@ int __get_dwarf_regnum_for_perf_regnum_csky(int perf_regnum, unsigned int flags)
->   	if (flags & EF_CSKY_ABIV2)
->   		idx++;
->   
-> -	if (perf_regnum <  0 || perf_regnum > (int)ARRAY_SIZE(dwarf_csky_regnums) ||
-> +	if (perf_regnum <  0 || perf_regnum >= (int)ARRAY_SIZE(dwarf_csky_regnums) ||
->   	    dwarf_csky_regnums[perf_regnum][idx] == 0)
->   		return -ENOENT;
->   
+What makes things a bit more tricky is that those copy functions
+are designed to handle partial copies in case of page fault. But among
+the 6000 callers of those functions, only 2% really care about the
+quantity of no-copied data that those functions return. All other ones
+fails as soon as the returned value is not 0, returning -EACCESS.
 
-Reviewed-by: James Clark <james.clark@linaro.org>
+So first step in this series is to introduce variants called
+copy_from_user_partial() and copy_to_user_partial() which will be
+called by the 2% users that care about the partial copy, then the
+original copy_from_user() and copy_to_user() are changed to return
+-EFAULT when the copy fails.
+
+Then the second step is to implement copy of small fixed-size data
+with scoped user access instead of calling the arch specific heavy
+user copy functions.
+
+Patch 5, can be split in different patches for each archicture or
+subsystem, but let's get a first feedback and agree on the principle.
+
+Christophe Leroy (CS GROUP) (9):
+  uaccess: Split check_zeroed_user() out of usercopy.c
+  uaccess: Convert INLINE_COPY_{TO/FROM}_USER to kconfig and reduce
+    ifdefery
+  x86/umip: Be stricter in fixup_umip_exception()
+  uaccess: Introduce copy_{to/from}_user_partial()
+  uaccess: Switch to copy_{to/from}_user_partial() when relevant
+  uaccess: Change copy_{to/from}_user to return -EFAULT
+  x86: Add unsafe_copy_from_user()
+  arm64: Add unsafe_copy_from_user()
+  uaccess: Convert small fixed size copy_{to/from}_user() to scoped user
+    access
+
+ arch/alpha/Kconfig                            |   1 +
+ arch/alpha/kernel/osf_sys.c                   |   4 +-
+ arch/alpha/kernel/termios.c                   |   2 +-
+ arch/arc/include/asm/uaccess.h                |   3 -
+ arch/arc/kernel/disasm.c                      |   2 +-
+ arch/arm/include/asm/uaccess.h                |   2 -
+ arch/arm64/include/asm/gcs.h                  |   2 +-
+ arch/arm64/include/asm/uaccess.h              |  30 +++--
+ arch/arm64/kernel/signal32.c                  |   2 +-
+ arch/csky/Kconfig                             |   1 +
+ arch/hexagon/include/asm/uaccess.h            |   3 -
+ arch/loongarch/include/asm/uaccess.h          |   3 -
+ arch/m68k/include/asm/uaccess.h               |   3 -
+ arch/microblaze/include/asm/uaccess.h         |   2 -
+ arch/mips/include/asm/uaccess.h               |   3 -
+ arch/mips/kernel/rtlx.c                       |   8 +-
+ arch/mips/kernel/vpe.c                        |   2 +-
+ arch/nios2/include/asm/uaccess.h              |   2 -
+ arch/openrisc/include/asm/uaccess.h           |   2 -
+ arch/parisc/include/asm/uaccess.h             |   3 -
+ arch/powerpc/Kconfig                          |   1 +
+ arch/powerpc/kvm/book3s_64_mmu_hv.c           |   4 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c        |   4 +-
+ arch/powerpc/kvm/book3s_hv.c                  |   2 +-
+ arch/riscv/Kconfig                            |   1 +
+ arch/riscv/kernel/signal.c                    |   2 +-
+ arch/s390/include/asm/idals.h                 |   8 +-
+ arch/s390/include/asm/uaccess.h               |   3 -
+ arch/sh/include/asm/uaccess.h                 |   2 -
+ arch/sparc/include/asm/uaccess_32.h           |   3 -
+ arch/sparc/include/asm/uaccess_64.h           |   2 -
+ arch/sparc/kernel/termios.c                   |   2 +-
+ arch/um/include/asm/uaccess.h                 |   3 -
+ arch/um/kernel/process.c                      |   2 +-
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/include/asm/uaccess.h                |  29 ++++-
+ arch/x86/kernel/umip.c                        |   2 +-
+ arch/x86/lib/insn-eval.c                      |   2 +-
+ arch/x86/um/signal.c                          |   2 +-
+ arch/xtensa/include/asm/uaccess.h             |   2 -
+ drivers/android/binder_alloc.c                |   2 +-
+ drivers/comedi/comedi_fops.c                  |   4 +-
+ drivers/dma/idxd/cdev.c                       |   2 +-
+ drivers/firmware/efi/test/efi_test.c          |   2 +-
+ drivers/fsi/fsi-scom.c                        |   2 +-
+ .../amd/display/amdgpu_dm/amdgpu_dm_debugfs.c |   2 +-
+ drivers/gpu/drm/i915/gt/intel_sseu.c          |   4 +-
+ drivers/gpu/drm/i915/i915_gem.c               |   4 +-
+ drivers/hwtracing/intel_th/msu.c              |   2 +-
+ drivers/misc/ibmvmc.c                         |   2 +-
+ drivers/misc/vmw_vmci/vmci_host.c             |   2 +-
+ drivers/most/most_cdev.c                      |   2 +-
+ drivers/net/ieee802154/ca8210.c               |   4 +-
+ drivers/net/wireless/ath/wil6210/debugfs.c    |   2 +-
+ .../intel/iwlwifi/pcie/gen1_2/trans.c         |   2 +-
+ drivers/net/wireless/ti/wlcore/debugfs.c      |   2 +-
+ drivers/ps3/ps3-lpm.c                         |   2 +-
+ drivers/s390/crypto/zcrypt_api.h              |   4 +-
+ drivers/spi/spidev.c                          |   2 +-
+ .../staging/media/atomisp/pci/atomisp_cmd.c   |   8 +-
+ drivers/tty/tty_ioctl.c                       |  14 +--
+ drivers/tty/vt/vc_screen.c                    |   4 +-
+ drivers/usb/gadget/function/f_hid.c           |   4 +-
+ drivers/usb/gadget/function/f_printer.c       |   2 +-
+ drivers/vfio/vfio_iommu_type1.c               |   4 +-
+ drivers/xen/xenbus/xenbus_dev_frontend.c      |   2 +-
+ fs/namespace.c                                |   2 +-
+ fs/ocfs2/dlmfs/dlmfs.c                        |   2 +-
+ fs/proc/base.c                                |   4 +-
+ include/asm-generic/uaccess.h                 |   2 -
+ include/linux/bpfptr.h                        |   2 +-
+ include/linux/sockptr.h                       |   4 +-
+ include/linux/uaccess.h                       | 107 ++++++++++++++----
+ ipc/msg.c                                     |   8 +-
+ ipc/sem.c                                     |   8 +-
+ ipc/shm.c                                     |  18 +--
+ kernel/regset.c                               |   2 +-
+ kernel/sys.c                                  |   4 +-
+ lib/Kconfig                                   |   3 +
+ lib/Makefile                                  |   4 +-
+ lib/kfifo.c                                   |   8 +-
+ lib/{usercopy.c => usercheck.c}               |  22 ----
+ lib/usercopy.c                                |  66 -----------
+ mm/kasan/kasan_test_c.c                       |   4 +-
+ mm/memory.c                                   |   2 +-
+ net/x25/af_x25.c                              |   2 +-
+ rust/helpers/uaccess.c                        |   6 +-
+ sound/pci/emu10k1/emufx.c                     |   4 +-
+ sound/pci/rme9652/hdsp.c                      |   6 +-
+ sound/soc/intel/avs/probes.c                  |   6 +-
+ sound/soc/sof/compress.c                      |  12 +-
+ sound/soc/sof/sof-client-probes.c             |   6 +-
+ 92 files changed, 269 insertions(+), 288 deletions(-)
+ copy lib/{usercopy.c => usercheck.c} (73%)
+
+-- 
+2.49.0
 

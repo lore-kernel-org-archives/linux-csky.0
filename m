@@ -1,35 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94C1340DA6;
-	Thu, 30 Apr 2026 03:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9262E8DFC;
+	Sat,  2 May 2026 11:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777519554; cv=none; b=SVtXiLJVEmUEVP+fmRVBydYvuzF8wccaPo6dMxrO5xNlr7zZE1qbPvC3g4n9AqwZJ/liK5uR2cO7M6q+jdCY4V19NkObgT5vbOR2EejEk2r5Bi4vYPQFSgRkQQjPzLnHrJ0fJmUJjmKIfNKAT8b7vpKepzBX2OlxNmRGBD6qovI=
+	t=1777720765; cv=none; b=EHxeRlFsLm3AtUdzPAreayUSIBn2o+0Qmw6YgZ8lFjbvNg4/FbJi30Ij8SXUcfqPNye/zGn+THqR4psVuLIqI4eAwL/uWUyeiXMJufyJSET2hB8a69sn/hYj9T2cGAKHPWVR0ue+oooKhiJp53Gj86xBF7iLbKEs8Rp2PYukYyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777519554; c=relaxed/simple;
-	bh=7DUN2QuqQEe+BONI1ESG4SkIz1fzsjbqa3ckTuuKON0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=IEas1vT90gxtI1lPUrCSKfLn3neEyilN64FRKY7RTMK1LCD78B72sjJXOmrbj0TZdyM9NL5XFxDeRr6RA0JXPdGCjFVur4PZdsZIPhwFEY6s7F7g6g3ZkzJKgxmwIVBhucu/zZcWCwg3FQpewWbrqf4zNtzW48uHStQS7D6SxNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3K5G1Xo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777720765; c=relaxed/simple;
+	bh=Y7BmLuecdtoDWUbyr5oGGqes/kM/uBxyXVEYWfLelAI=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=XPMMn7wZiEO10/CH6kaSm+GLEG/vvS7ppKozhcVQqDU5C+Ck7UcTh0V97gV08MtbEf3JEPJpIhcZLkjEEXpeUgQ6UTet0epUxt3CXB1ZvrRLCcIVly+E9ft5buu3TVdp7CE050yzaXCYDa5Y+h7eHyfnAsfanfgnm1SEUuc9o6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=El2wKY1H; arc=none smtp.client-ip=43.163.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3K5G1Xo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F0EC2BCB8;
-	Thu, 30 Apr 2026 03:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777519554;
-	bh=7DUN2QuqQEe+BONI1ESG4SkIz1fzsjbqa3ckTuuKON0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=S3K5G1XovhD07R5O5Cfcy7lVvTxvdUAegkMVL4L8Mtzf9fKcNC7CadGfDm94ncYW3
-	 /b3gcg0/YcLg9Als2F8ssWaUxHQUhQMOrsInNGp23YyNVEoZesnW9na1KfzAJGwADp
-	 KTU1UQLuwoaLC0FxYgCBT9ErRd1+nqtKD6J1vJmiEmkbMPNMtG+lgotURJHsePS61S
-	 RLCqfSNYiEnZojyCuQbicPLDo3ywac2PmflqikQdR6Ir9LNvsPRYjNWI6Ol8jDiw5K
-	 s6K1opc7+K/SSJ8ToRvLUcMAZC9t1wDEJ2EBfwZ5oF2rytHLJHY/YtizCxlNq2AgJI
-	 UMoMxqu7YBolw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA0123809A07;
-	Thu, 30 Apr 2026 03:25:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="El2wKY1H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1777720753; bh=76NoYislCiSkqg+6/jcEtLqb9Fj7DsHDYv26GtYkFpI=;
+	h=From:To:Cc:Subject:Date;
+	b=El2wKY1HhEcZ4yPLnx0yrB9SFuCYFyzpPME7bCV2UcyZzWa3FVs9LfyA4MUBee3Yg
+	 6OCBll6ksw3o35fplgeWLqkqIMre5SAQNEbv242YlDO4K7RhjoL9DXwLkPc28GXvFk
+	 4fTFmzPLTKvBnDb6uSv0OPL2LBzPDsm0GD1u5W74=
+Received: from Lang.smartont.net ([2409:8a44:2312:14e1:56d8:1e1e:3f0b:d0f3])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id 4C8A3C3A; Sat, 02 May 2026 19:19:08 +0800
+X-QQ-mid: xmsmtpt1777720748t758xpqbo
+Message-ID: <tencent_7F23A3DF4B91955F6E2BD07BAE7C92B2E607@qq.com>
+X-QQ-XMAILINFO: MMwjR1C73eIsJwuzCV45N4dDiEQ/1wUpUyHkryJgzG5UMbBvwuMK+dWgUCCUgq
+	 6+CIloBQDFVl/g/fT1xeZiYQz7rZQemtSMn8/R5WZfhrMslMtfaxVkHc5wVCkH11ayBQFrLgJx4X
+	 C1U//aBCdGVJHLSNG7ZjUr0eQ4XKO+hNDiKIu/78fO1p1njJtjvH/Y+8AiVSVkm25V9XjgzLHApl
+	 KSkaMMCbgoi4vB67kcIjdAwLtfDfKFOvZxALwsuLHuKTS6J36zt5ub8BjENhpmoqmbTfdts8FWqy
+	 NvQFSrilCQsspCsvQJIVFe/HgSvHTx/eAddbtIjnPZAQFlU5XSBaRd4rrminLSdPDl5c1Jpf9nA6
+	 nEVmDYe+pgKE3XmklxcIbmk3rtAJOqI1PuXZ3v2bOv1r2kgYWexD+3nO0sg5LQE6hCyTeDGEpIys
+	 DW7mZ7cMeuKDn7Ayb4FxIO9JaFP9t44RUZlSHguc3ZnnigAWpK7k+pP9Z3zs60q+YtryqntYpFR7
+	 /F7tAiB89MjsNMHGCp//W3/oschof+FmczMMON/7fyn6l+WP2/CZKiDVT+oaMCCmtAtoB0PxfPDp
+	 QDL0K2jh84C7mDRkdpxLmGLehPorGLOoSFSvPIu9Yt7Ux3g7n0f20M+zVT3bZ7EbGmxDRi/7vhcq
+	 K8vxKBwG2By5iXViti6q1V92C42DRI+KLBLtHJZQsoYV+y99Yp7mWd9UyUPUCOEFQYZFsSkux6Fv
+	 X+b2/evlU8Yw0elRFjXH7jnJH+EGb+HeW8BspJKqEb75YybW5Lsia05q3d2eQrhzsuJc3sKFn9GE
+	 RKwl+I1YlNDe3lz42LthH/O9sqMqYNfkbHmxR6tfDewaeR+vo89dQ6Xa/Fmh3ba6yz3P1cso8ijA
+	 S9j2FKx5O2IzGhTVJLAg/imyCnxfrdnMtIi85ISgkASxu8LXXcyt5f/BURCyA+fkaDhmP/rWyxLt
+	 vv7/clk7k4fUxBIWNxqRmi69SMivSMzXsYHvzM8pTotSsmHitmgNxZT/zKxMsdDoeSfBbRXmzMFq
+	 G4zGqdAkd2bFMxr/UHWVf+LYVgplI0xHdJuKWqdAaKM4J1h65xLeVaoNyhIp5rrJdjBoyMip1/9a
+	 rcLU+D
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+From: Wang Zihan <3772548978@qq.com>
+To: devicetree@vger.kernel.org,
+	linux-csky@vger.kernel.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	guoren@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wang Zihan <3772548978@qq.com>
+Subject: [PATCH] dt-bindings: csky: Fix typo in pmu node name
+Date: Sat,  2 May 2026 19:19:08 +0800
+X-OQ-MSGID: <20260502111908.142458-1-3772548978@qq.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -37,65 +63,28 @@ List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/4] arch, mm: consolidate empty_zero_page
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <177751950929.2274119.3965174046465654804.git-patchwork-notify@kernel.org>
-Date: Thu, 30 Apr 2026 03:25:09 +0000
-References: <20260211103141.3215197-1-rppt@kernel.org>
-In-Reply-To: <20260211103141.3215197-1-rppt@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-riscv@lists.infradead.org, akpm@linux-foundation.org,
- andreas@gaisler.com, bp@alien8.de, bcain@kernel.org, catalin.marinas@arm.com,
- chleroy@kernel.org, davem@davemloft.net, dave.hansen@linux.intel.com,
- david@kernel.org, dinguyen@kernel.org, geert@linux-m68k.org,
- guoren@kernel.org, deller@gmx.de, chenhuacai@kernel.org, mingo@redhat.com,
- johannes@sipsolutions.net, glaubitz@physik.fu-berlin.de,
- Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, maddy@linux.ibm.com,
- linmag7@gmail.com, mattst88@gmail.com, jcmvbkbc@gmail.com,
- mpe@ellerman.id.au, mhocko@suse.com, monstr@monstr.eu, palmer@dabbelt.com,
- richard@nod.at, linux@armlinux.org.uk, shorne@gmail.com, surenb@google.com,
- tglx@kernel.org, vgupta@kernel.org, vbabka@suse.cz, will@kernel.org,
- linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-um@lists.infradead.org, linux-mm@kvack.org,
- x86@kernel.org
 
-Hello:
+Fix 'performace-monitor' to 'performance-monitor' in the example
+node name.
 
-This series was applied to riscv/linux.git (fixes)
-by Andrew Morton <akpm@linux-foundation.org>:
+Signed-off-by: Wang Zihan <3772548978@qq.com>
+---
+ Documentation/devicetree/bindings/csky/pmu.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, 11 Feb 2026 12:31:37 +0200 you wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Hi,
-> 
-> These patches cleanup handling of ZERO_PAGE() and zero_pfn.
-> 
-> v3 changes:
-> * move zero_page_pfn extern declaration back inside the helpers
-> * add tags, thanks all!
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,1/4] mm: don't special case !MMU for is_zero_pfn() and my_zero_pfn()
-    https://git.kernel.org/riscv/c/652d12bc74a0
-  - [v3,2/4] mm: rename my_zero_pfn() to zero_pfn()
-    https://git.kernel.org/riscv/c/9a1d0c738b45
-  - [v3,3/4] arch, mm: consolidate empty_zero_page
-    https://git.kernel.org/riscv/c/6215d9f4470f
-  - [v3,4/4] mm: cache struct page for empty_zero_page and return it from ZERO_PAGE()
-    https://git.kernel.org/riscv/c/26513781d1b3
-
-You are awesome, thank you!
+diff --git a/Documentation/devicetree/bindings/csky/pmu.txt b/Documentation/devicetree/bindings/csky/pmu.txt
+index 728d05ca6..08a829ae3 100644
+--- a/Documentation/devicetree/bindings/csky/pmu.txt
++++ b/Documentation/devicetree/bindings/csky/pmu.txt
+@@ -30,7 +30,7 @@ Examples:
+ ---------
+ #include <dt-bindings/interrupt-controller/irq.h>
+ 
+-	pmu: performace-monitor {
++	pmu: performance-monitor {
+ 		compatible = "csky,csky-pmu";
+ 		interrupts = <23 IRQ_TYPE_EDGE_RISING>;
+ 		interrupt-parent = <&intc>;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.54.0
 

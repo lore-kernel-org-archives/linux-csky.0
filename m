@@ -1,155 +1,121 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911063EEAF5
-	for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 08:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6837340DFDE
+	for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 09:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779180506; cv=none; b=W2W8P2Qyq4eisjaZdwYCA8l04LGjPshSJfOvx4c05paiEpLTA4CUK2BTwSi63lOZarEiYan52PWyhevXHzINvWjW9i2opCEmHdGveOMKgvpmbXHjn/qKmi1yErkNxbthhQ3z9rL8QWJw59QnIGxuywPkbjAukYaTce+aVgT99Qs=
+	t=1779184168; cv=none; b=QZ5IeTab1ML55OZMmBvU1dTcITyQAKjsqtzBTbnaDcKRQ5CZNtlsWp//4Lvvw1YP4aij8gNc7dNF6nh+c3E5a/VFpyGo9Ua9g9y2JTcfv6Mc/6d8Ax/wyRRzVxKtXIeb6Bws6tMX5IygdtNnfOJeKS/jdPXDs8PvMF9YIs0JQT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779180506; c=relaxed/simple;
-	bh=Hyx9uiXztVttxLdo9VjcbHUiP6qvqHfhOZr9vbJAYdk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lMXGTadC4SR3CHIttANFrRQmQbg+xiHG7Ja5Xf99HQQwOL2pD57npxrps8wikpb0nUKv1JCYCtPtzfjGVrfFSN1SNmdqz8+x2AR/D5n4bhKxflDSDe2zKi9gNtQHjwyuOWPIiafJ2Iynr0u0ViG9KjvRS5Ot/CaL580SxkuHyqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eKm0WEKT; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1779184168; c=relaxed/simple;
+	bh=VV0WQeCgbPqBTi7yab+uEYQeq6u9LFtTUX4clbsM2Vw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hwTy8Hm70rwegAvv60FtCEfEoHrcJYSs8tz22FsPMZoQLUy8IYIoS+UHAmpNzEzDI1ar9mZe8vSZplia9kXNKRm/RcadApmIYwulSQeqnOSJ9O5CU7wZHgKYP5XRnY+rECx3f1KCx/N3WBX4M2VMiMuwrw0iwC5vtMqfRE2PoiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eKm0WEKT"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488b0046078so29359635e9.1
-        for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 01:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779180503; x=1779785303; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8U8k5KUlWmxiDre3dDf6j/8PHyhhwOqohUrC9tjzC3Y=;
-        b=eKm0WEKT3mVDrwy7IMshOn0GT2kwmWUNussjaxGEyv482mBKvskG0hs7pJ5k+AfXcN
-         l7Rjpy9iZzrpocdayWNqfQdXtH/nwyhXHiZOuGC5I7B98fO16ELapo992aMvVW7NErxJ
-         Dom6oCaQBG4n0rJrkSsLMhnHP63zTKUiw5KuKnT6p7IvYNK+2mRBlfzqpifVUT/esNd3
-         vlhe3vAPa4t8awQvJiHD5JpieSz9o9c/NHG55x2xnbEgyrkqQ4UwvMthmyx0XIjO0dD8
-         Ds9+nZuBWp3o5j4Qfh95443MbvDyxxMyRCOg8xUEL3EtMFxko1g7WSrXeeWqy5p4Vy/L
-         m4TQ==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-4042905015cso2865274fac.0
+        for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 02:49:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779180503; x=1779785303;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8U8k5KUlWmxiDre3dDf6j/8PHyhhwOqohUrC9tjzC3Y=;
-        b=mhYzk2P3KwupLNhVk62R71392F2qPh1s+veDFW7jGRi7LCaleDZsadoFOd8n3TPcKv
-         56eRAxt7jHk1VbPJV6AY2ZvL/cOO/TKpTMSvQ4WI/geDh+PQEd6AKp0KNn/9oG5DiWym
-         2Fpb0GKAupQ5qRiy2FH5jS0Jlfu63Qf4Q9MslmJGFajhdJzEGt2LXN8A8HUxkVOqpYj5
-         Fb5GCjo7iWZR78u2n5Nv6/LBmguxm579bIMOemtgRdMvl6M7dn1M5k+pZdctNVGsVXCS
-         V0bhOfAwVttuoqM7RGClET5dDa31lq2DLLYCmWdICpalXKc/Z9iNlzFTNQq1/B9CadGN
-         SwNw==
-X-Forwarded-Encrypted: i=1; AFNElJ+AcENLyqudN/yC22Ee4tTodHtU8Hjy7f97E2tOwjyGkLmxOIgSpGt21ywAII4YCYAaO60ZPvDVJKoW@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcN5ubqXqmXNGQvuIzfFqbC8o4yiRFJ5GC+9HeBpKK9wrmqf7g
-	7kIWHbKEbRpm9K1yCejrsaRQiUaZ/TmdpGNLL/YVBlZuhN/C7s95IzIx
-X-Gm-Gg: Acq92OE/g2RYi6azYJWFIfmzaShuj06jpv/MT/Hf13eQThV2W1UJ4XpZzTXdiaJRVxD
-	ofIo85QjbMcMsTeVtUTHUXx0V6IeQrAWgmvNZUQHuXqok9MojWrrsxCd45y6orNCLHBtrPsEl0n
-	gYt+K3+pDPvgzprZ82GfM4KSiCZ+5DbvbVlMjtUSWwQFJdkSAFbHqzAojXWW3vCgcAOJ89Bqwwm
-	Feoc39EnPTEiDBJQrsXOnwjjNuqMtq1Qp6LJHGZ3L2kDQXUKiLLOV7JsEhveUSj6yBIvuKogkMU
-	3mecSotGyHWA3S4WpuP2E9XuN0fD5Def8rdaqXBw9wmQ2Qr0XOnzMRgTBIE7ag/wpToNFKFCP6g
-	qKRF51BVFiw1D4DhNB5U52QdTImkF0Qd9LRPXqzbrBe4CrxA1Z2qcfg1QrKJHKELaKsm4w6tQzA
-	+m25N9eTIy7p+n1oSuYchJ6URtuIgSSMNnW9Ildh+pfPxCKbgbrxzZPM0Emp4/C1jZ
-X-Received: by 2002:a05:600c:3e1b:b0:48a:8905:a500 with SMTP id 5b1f17b1804b1-48fe60da647mr311906705e9.12.1779180502860;
-        Tue, 19 May 2026 01:48:22 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4c8344asm530004325e9.1.2026.05.19.01.48.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2026 01:48:22 -0700 (PDT)
-Date: Tue, 19 May 2026 09:48:20 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Cc: linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
- workflows@vger.kernel.org, linux-arch@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, netdev@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-csky@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Daniel
- Lezcano <daniel.lezcano@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang
- Mu <dzm91@hust.edu.cn>, Hu Haowen <2023002089@link.tyut.edu.cn>, Dinh
- Nguyen <dinguyen@kernel.org>, Kees Cook <kees@kernel.org>, Oleg Nesterov
- <oleg@redhat.com>, Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
- <aneesh.kumar@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Nick
- Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>, Vinod
- Koul <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, Dave Penkler
- <dpenkler@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron
- <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
- =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
- <kwilczynski@kernel.org>
-Subject: Re: [PATCH] nios2: remove the architecture
-Message-ID: <20260519094820.1f05ab8e@pumpkin>
-In-Reply-To: <20260518042833.272221-1-enelsonmoore@gmail.com>
-References: <20260518042833.272221-1-enelsonmoore@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        d=1e100.net; s=20251104; t=1779184166; x=1779788966;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T+2SZGl9spcuw3ZVraVsNeWL62/l5e6HnqNdDh6fCso=;
+        b=CingYfPLDMZA3gBbYMVGWAu+xeqp/TWY/7LQhqvGG7WPFzDA6zmPInDq3oj4NrcTms
+         S8MraYXgTgwUoutFMA5/cVQe5S4F6Yd7JpLyA7F0lkztdCzvyp70G1HTi07bpzxSoHj1
+         mh/yBLvhALUXDUZ+AJWAOesSjI/+68gR1yYEMpdp/mUcX+5jExGGYtstVjALMJKTk6JB
+         AOejssSZZb5rzLccEwIz2l6fyDUA3WTlTBRqznRbsr6JiDK+WkiedM1nQFoFl5FIMVy6
+         PrR8MXFEyzNBr4YOTdzGzAateYtTRF1bDZ/Ht8juTzfqzAnBx8rEpV9B1WsVS7+0WClQ
+         YtyA==
+X-Forwarded-Encrypted: i=1; AFNElJ9lKmQMcdPFUiSp5c1ZTGMCw374DC+YC0/g5RpA9TI9qhU8QCY8zdUuvVcczGHUwxpddKvv7NjCpIHN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK80FX4iHYvMcuSlStIKl4apeYDFzkp9fW2EX8b2qzafvQ5ZfS
+	AjPJu3L0p+vWmr44/VDsaN2MAk/ixjc9ws3e3YwjVxSwl6V2yufZg8t1jDhYSBED
+X-Gm-Gg: Acq92OFMpsPMRIo+jm2hJz6wycGX+85F9FbMqeK2Qx5aVW8Ti7Jhv9V4OgHCc8PuXUQ
+	1Pl1H3SuCN46oq0MH3D5HsLHretXVPgwjBTT4aypLoEDtWQZl1eRsW4SA5g/JdPCSJi3qGhurAO
+	iT6Frb1MJp9/9XEptdF437UEEg+tkSk2zszdcc82zbyLRD8mYVi7Q+nW0nA82AnvkY+lyBGUBzU
+	nX/ynXpnx3jvNLTud7gFJCDVnKzA7qq5k3A+1gy1wBaPP5nVoGITIHE3p9lPtusoyC705gwreL8
+	xL6yHjxJNVynZ577VKlOFV7/FX28BeRmtHqpHbIG8ORr4w010GqECINCkEioEvLUzbQxJ1iMHVY
+	mjY3k99pRDBlsETxr5aEAK5GQ+2ubVvT22rTxMWI/lFYQJThgVHNjIcfk+cuSwjcQf6WW8fcZEr
+	gjFeEuMGEeV3YbcEoC0KT5kDyruIb4ThpPfdnAFlYxO4zR83F5TQEF71eSfOGy
+X-Received: by 2002:a05:6870:2896:b0:430:246f:3a2 with SMTP id 586e51a60fabf-43a2dcc71e7mr11795137fac.17.1779184166159;
+        Tue, 19 May 2026 02:49:26 -0700 (PDT)
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com. [209.85.210.53])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43a9576cdb2sm6529254fac.16.2026.05.19.02.49.25
+        for <linux-csky@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 May 2026 02:49:25 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7dea20cf21aso3399188a34.1
+        for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 02:49:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ9KzrPxibmWn/WQj/qnR7MyeFshDmDIdU8PQJQRtEsOoxoJdjKnMyy4r9OBlDLr4HovM/Kt1NhjDo9Z@vger.kernel.org
+X-Received: by 2002:a05:6102:511f:b0:634:d42d:15e2 with SMTP id
+ ada2fe7eead31-63a403ac9a2mr7077474137.26.1779183821499; Tue, 19 May 2026
+ 02:43:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260518042833.272221-1-enelsonmoore@gmail.com> <20260519094820.1f05ab8e@pumpkin>
+In-Reply-To: <20260519094820.1f05ab8e@pumpkin>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 19 May 2026 11:43:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVw349EBZUuYZAns3FnTndx0A=PHbznxarYuAQr8nbqDQ@mail.gmail.com>
+X-Gm-Features: AVHnY4Lfn8Mcrjf-CZtgFTL8ilhwbGlXFwz-O3Z8xcIZpla9SRL4d3C994HiNs4
+Message-ID: <CAMuHMdVw349EBZUuYZAns3FnTndx0A=PHbznxarYuAQr8nbqDQ@mail.gmail.com>
+Subject: Re: [PATCH] nios2: remove the architecture
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>, linux-doc@vger.kernel.org, 
+	devicetree@vger.kernel.org, workflows@vger.kernel.org, 
+	linux-arch@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-csky@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Alex Shi <alexs@kernel.org>, 
+	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
+	Hu Haowen <2023002089@link.tyut.edu.cn>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>, Vinod Koul <vkoul@kernel.org>, 
+	Frank Li <Frank.Li@kernel.org>, Dave Penkler <dpenkler@gmail.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+	David Lechner <dlechner@baylibre.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, 17 May 2026 21:28:33 -0700
-Ethan Nelson-Moore <enelsonmoore@gmail.com> wrote:
+Hi David,
 
-> The Nios II architecture is a soft-core architecture developed by
-> Altera (since acquired by Intel) and intended to run on their FPGAs.
-> 
-> Licenses for the architecture have not been available for purchase
-> since 2024 [1],
+On Tue, 19 May 2026 at 10:55, David Laight <david.laight.linux@gmail.com> wrote:
+> The company I used to work for used 4 NIOS II inside an fpga.
+> The instruction timing for one is pretty critical, it has some code that
+> has to complete in 122 clocks (worst case).
+> Our solution was to spend a few man-weeks writing a compatible cpu!
+> I think it came out with fewer pipeline stalls (in particular it 'lost'
+> the one for a (predicted) taken branch).
+> The maximum clock frequency might be lower; but it is ok at 62.5MHz and the
+> higher 125MHz in just impossible for all sorts of reasons.
+>
+> OTOH I really wouldn't run Linux on it!
 
-Except I think they got 'beaten up' by some telcos.
-The Nios II gets used inside fpga for small cpu doing things that it would
-be far to difficult to do in VHDL.
-(I believe some mobile base stations fgpa embed a lot of them.)
-These will have a small amount of code (maybe 4k - 64k) and a similarly
-small amount of data memory along with access to fpga peripheral registers
-and (optionally) host memory vie PCIe. No MMU, no cache (or rather the code/data
-is in the cache memory but it isn't backed by anything), no branch predictor
-(guaranteed cycle times), etc.
-Intel suggested that RISCV could be used instead, but it isn't the same beast.
-They didn't document the instruction timings nor how to add custom instructions.
+Sounds similar to what CoreSemi is doing with J2 (nommu, also for
+predictable latency), but their products do run Linux.
+See the video from the LPC session at
+https://lpc.events/event/19/contributions/2097/
 
-The company I used to work for used 4 NIOS II inside an fpga.
-The instruction timing for one is pretty critical, it has some code that
-has to complete in 122 clocks (worst case).
-Our solution was to spend a few man-weeks writing a compatible cpu!
-I think it came out with fewer pipeline stalls (in particular it 'lost'
-the one for a (predicted) taken branch).
-The maximum clock frequency might be lower; but it is ok at 62.5MHz and the
-higher 125MHz in just impossible for all sorts of reasons.
+Gr{oetje,eeting}s,
 
-OTOH I really wouldn't run Linux on it!
+                        Geert
 
--- David
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> and support for it has been removed from GCC 15 [2],
-> Buildroot [3], and QEMU [4].
-> 
-> Given all of these factors, it is time to remove Nios II support from
-> the kernel. The maintainer stated in 2024 that they were planning to do
-> so soon [5], but this did not come to pass.
-> 
-> Remove Nios II support from the kernel and move the former maintainer
-> to CREDITS. Thank you, Dinh Nguyen, for maintaining Nios II support!
-> 
-> References:
-> [1] https://docs.altera.com/v/u/docs/781327/is-discontinuing-ip-ordering-codes-listed-in-pdn2312-for-nios-ii-ip
-> [2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e876acab6cdd84bb2b32c98fc69fb0ba29c81153
-> [3] https://github.com/buildroot/buildroot/commit/6775ccc5a199d574ad70b5f79ec58cce97a07c6f
-> [4] https://github.com/qemu/qemu/commit/6c3014858c4c0024dd0560f08a6eda0f92f658d6
-> [5] https://sourceware.org/pipermail/newlib/2024/021083.html
-> 
-> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

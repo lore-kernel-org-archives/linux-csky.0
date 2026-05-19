@@ -1,166 +1,155 @@
-Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com [209.85.222.195])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1867713777E
-	for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 00:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.195
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779149652; cv=pass; b=STcgkB4RE78Y92U8i0i6den3GOuOYw4CrFa45fl0rZkDaBObwkdMqgEpbsKad4ZGA1EsJlfi0pDD3ojMr+VaSnH4m7szys34z1pnu2msSd4PRU6NmDYmxgzmdHvV+RGXs8HaX+l4zlqyNXjIV2LGcfyCw5u9MEN1Jy5DydEGj6o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779149652; c=relaxed/simple;
-	bh=LPwsRaL3/VhQKGJMHLIVfCwqYVCTUXR7opK9047JBWk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MJnhIsYmXKiVZTQuvsdqKTjHAdYBNJSDG+ArPG2CnyiLu6UjKPlXbDztpC+xdTsECd2xjtgJkAIwOkXRWjqmKAOKUPVgto1GRFCnmFFTFhObivvYzGruL8Ni8/9pwJQrdv8BIMzwgileVqMQfYIvmHtSlCueAEfhmVUxE3/pM48=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d59lwcl8; arc=pass smtp.client-ip=209.85.222.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911063EEAF5
+	for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 08:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779180506; cv=none; b=W2W8P2Qyq4eisjaZdwYCA8l04LGjPshSJfOvx4c05paiEpLTA4CUK2BTwSi63lOZarEiYan52PWyhevXHzINvWjW9i2opCEmHdGveOMKgvpmbXHjn/qKmi1yErkNxbthhQ3z9rL8QWJw59QnIGxuywPkbjAukYaTce+aVgT99Qs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779180506; c=relaxed/simple;
+	bh=Hyx9uiXztVttxLdo9VjcbHUiP6qvqHfhOZr9vbJAYdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lMXGTadC4SR3CHIttANFrRQmQbg+xiHG7Ja5Xf99HQQwOL2pD57npxrps8wikpb0nUKv1JCYCtPtzfjGVrfFSN1SNmdqz8+x2AR/D5n4bhKxflDSDe2zKi9gNtQHjwyuOWPIiafJ2Iynr0u0ViG9KjvRS5Ot/CaL580SxkuHyqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eKm0WEKT; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d59lwcl8"
-Received: by mail-qk1-f195.google.com with SMTP id af79cd13be357-913cc4d7c71so255424885a.2
-        for <linux-csky@vger.kernel.org>; Mon, 18 May 2026 17:14:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779149649; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BTWdgBFkiGYiWYjMZJjvPeW2mt6NRxZFZuaBamzAORxC4BT7bd8pqdySFh57nJHdzJ
-         f13JuTLz5jiibESn+MTFqXMXOtPJ7ZdwoTv7ykg3UI+Vs9RT/w9nLpcHDkdkQvkwhQII
-         d7j8cwbK2QV9R8qvNNc16eJHGCODj0bhdvZOIy62iy5LryexvNhZqu8gKJIeRB9M9aX/
-         6CsyUOG8eHlxfoHh0HgbqCAvLZJUru6ZNphssF7YSx7PSz3KJ/rfMRkcO0+gkFG0NcSS
-         Nl9iueKrUcOGLmbKuX0bavelZtqBkQXzsJqiXKztzw2J5n1ffzosTL1WNFWLGhO5lW47
-         l0Mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LPwsRaL3/VhQKGJMHLIVfCwqYVCTUXR7opK9047JBWk=;
-        fh=2GRKuOc/2A6cOFt2mRukVrCTCYCMWS5P4fpsapDpDMc=;
-        b=I7QlWAukMejRRgvMvkbxquA2MO2HYlVKXVcvuYaa4k45X2qav01+7Zeh7o/fVqltvx
-         T/8oU+XRmmKBFDoxOlb7mCKgkjjwbUG44JXPp7/8/etAdVcuTQJYcex8zNoZj2wVLGf0
-         jv1A3NaVdvQM1dBtiwSCTbTAsrZ4Qdqg2aMxIqMZuR23tAZ6tgH9dQiBkxlF8phHH43I
-         CYsig/bZcMTY5OdmHDbg+rTe08diEEHC6cZM/hFBs6IHvcel9xpr0r3ktLL8crv65MQq
-         6xVMf/SkVqwD6jWfLjMqni3XR0yxDEDRbta/eKX9OwO8lhvQmHU8sLL31sWVH9kIG+Fx
-         zZJQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eKm0WEKT"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488b0046078so29359635e9.1
+        for <linux-csky@vger.kernel.org>; Tue, 19 May 2026 01:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779149649; x=1779754449; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779180503; x=1779785303; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LPwsRaL3/VhQKGJMHLIVfCwqYVCTUXR7opK9047JBWk=;
-        b=d59lwcl8NvuOHlMwJ/jtLfvIVKwSl887jI0zUq+n+MokZhIz5kSNG+Q7m83cRRj++o
-         7S3rzqts7N4yutIkInkFXV9kygWG7yxiMPc0JWryBnFhkU7pGX5375FZhqllLsu46QxD
-         yqRXefPbKqpNqDqlvNkmKy9NH53MH/MzNhs5i0t6EGN/qbHwnG3z9w6y+vTpWbbm4ui8
-         +Y/emkK8/ZzUeQNXSb3F20EcO2qGGKw0KLfo5yfAg9tQxjLb8ir1PQn5DJpL6n74Uv7I
-         Kzy/KgWqFZU9F5z3/y0h3xh8lwac6mtJi6nFuR/ealUBmYZWKM9xgcZKuPtDs3lS0PL6
-         E+cw==
+        bh=8U8k5KUlWmxiDre3dDf6j/8PHyhhwOqohUrC9tjzC3Y=;
+        b=eKm0WEKT3mVDrwy7IMshOn0GT2kwmWUNussjaxGEyv482mBKvskG0hs7pJ5k+AfXcN
+         l7Rjpy9iZzrpocdayWNqfQdXtH/nwyhXHiZOuGC5I7B98fO16ELapo992aMvVW7NErxJ
+         Dom6oCaQBG4n0rJrkSsLMhnHP63zTKUiw5KuKnT6p7IvYNK+2mRBlfzqpifVUT/esNd3
+         vlhe3vAPa4t8awQvJiHD5JpieSz9o9c/NHG55x2xnbEgyrkqQ4UwvMthmyx0XIjO0dD8
+         Ds9+nZuBWp3o5j4Qfh95443MbvDyxxMyRCOg8xUEL3EtMFxko1g7WSrXeeWqy5p4Vy/L
+         m4TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779149649; x=1779754449;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1779180503; x=1779785303;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LPwsRaL3/VhQKGJMHLIVfCwqYVCTUXR7opK9047JBWk=;
-        b=d0ZnsK1sGeN76FE8dSMx7ZqOGSm8cA9xsXi1kZtGYr21ksMAVkdZV82IH1sCWgM8Dx
-         SGcdpxBgCW3kjj4ov2hPbZgPp4bmsYtBry7iqKkI9SCxJFHdiB6M0N3fs8frWGWOp2Vn
-         MSHqyvP1er5GZ/e/AsL34E1DD5y/IYTDeGU1vIRfmTlUMf4Bi4aQLk4d/xqjwjcH4xXA
-         q41u5rWIpjt3wweepUqUGvtfgiyVAXwrYkR+tWmeS91EGVEh/rIUPub1DEEIg9EUcEr6
-         9KInB47BqkEsY9qiIiQfOX6kpEAQy0svwDxv+avf4VJqKR0VxZa+cDFbJMdCq0Vzis6N
-         wu0w==
-X-Forwarded-Encrypted: i=1; AFNElJ/18hozVZrbz7yh0YQnJL8H4/BMnLvqoKgUJCf5df5j768wGww/GQZQMy2EFiTlUdt7YAf8H//RSr5z@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcDdDI2Ixc4jFoapztweONAHvS4c2ys9e+/z021V3T+4ByoLZ2
-	g3CTzu8q4wwBocBWGkrPgGqV4xZ32EyG1LnlsM46fmLlMHbLGzPbILP3L0KYjFpAmy3WmhwbmmR
-	36ccyXGEXuiSGYe1Rr9g1o7NJDsBJPwY=
-X-Gm-Gg: Acq92OHp/HACq9Y9DlSgceslQzzMJetdOGWdNYrduAntATTaipobSfaT/3LcotFk+zd
-	Q5GPldmCRBEKJb3qdTlzZpCHgFZpK5trbUhElneuVYVcaO1B8jB8dPzYhBgfmbD22Sjq8GX6w8C
-	Nk5msaRpuwyoiQAwZMH28s0TXRKu9UUNTBk1gj2e+DUsgPqepmUE6BdpCCEUUKlTGcCvzKLGMtM
-	Q03vo5wUg/3MLjKQdykRMh5K+R1BR1Y64qTcBSjRIhuC1BDu26hOHVnX1EuO8OOkrHyo+0tAJ5d
-	W0WgcVP7oUho9TCxo+lOIWVz1DiLdZMRH61W6FS6L7VKaVgRv925chf9HjAgOvXtbLN317rDXYi
-	SVFM=
-X-Received: by 2002:a05:622a:d0e:b0:516:707a:cf8 with SMTP id
- d75a77b69052e-516707a0e9amr149948671cf.44.1779149648695; Mon, 18 May 2026
- 17:14:08 -0700 (PDT)
+        bh=8U8k5KUlWmxiDre3dDf6j/8PHyhhwOqohUrC9tjzC3Y=;
+        b=mhYzk2P3KwupLNhVk62R71392F2qPh1s+veDFW7jGRi7LCaleDZsadoFOd8n3TPcKv
+         56eRAxt7jHk1VbPJV6AY2ZvL/cOO/TKpTMSvQ4WI/geDh+PQEd6AKp0KNn/9oG5DiWym
+         2Fpb0GKAupQ5qRiy2FH5jS0Jlfu63Qf4Q9MslmJGFajhdJzEGt2LXN8A8HUxkVOqpYj5
+         Fb5GCjo7iWZR78u2n5Nv6/LBmguxm579bIMOemtgRdMvl6M7dn1M5k+pZdctNVGsVXCS
+         V0bhOfAwVttuoqM7RGClET5dDa31lq2DLLYCmWdICpalXKc/Z9iNlzFTNQq1/B9CadGN
+         SwNw==
+X-Forwarded-Encrypted: i=1; AFNElJ+AcENLyqudN/yC22Ee4tTodHtU8Hjy7f97E2tOwjyGkLmxOIgSpGt21ywAII4YCYAaO60ZPvDVJKoW@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcN5ubqXqmXNGQvuIzfFqbC8o4yiRFJ5GC+9HeBpKK9wrmqf7g
+	7kIWHbKEbRpm9K1yCejrsaRQiUaZ/TmdpGNLL/YVBlZuhN/C7s95IzIx
+X-Gm-Gg: Acq92OE/g2RYi6azYJWFIfmzaShuj06jpv/MT/Hf13eQThV2W1UJ4XpZzTXdiaJRVxD
+	ofIo85QjbMcMsTeVtUTHUXx0V6IeQrAWgmvNZUQHuXqok9MojWrrsxCd45y6orNCLHBtrPsEl0n
+	gYt+K3+pDPvgzprZ82GfM4KSiCZ+5DbvbVlMjtUSWwQFJdkSAFbHqzAojXWW3vCgcAOJ89Bqwwm
+	Feoc39EnPTEiDBJQrsXOnwjjNuqMtq1Qp6LJHGZ3L2kDQXUKiLLOV7JsEhveUSj6yBIvuKogkMU
+	3mecSotGyHWA3S4WpuP2E9XuN0fD5Def8rdaqXBw9wmQ2Qr0XOnzMRgTBIE7ag/wpToNFKFCP6g
+	qKRF51BVFiw1D4DhNB5U52QdTImkF0Qd9LRPXqzbrBe4CrxA1Z2qcfg1QrKJHKELaKsm4w6tQzA
+	+m25N9eTIy7p+n1oSuYchJ6URtuIgSSMNnW9Ildh+pfPxCKbgbrxzZPM0Emp4/C1jZ
+X-Received: by 2002:a05:600c:3e1b:b0:48a:8905:a500 with SMTP id 5b1f17b1804b1-48fe60da647mr311906705e9.12.1779180502860;
+        Tue, 19 May 2026 01:48:22 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4c8344asm530004325e9.1.2026.05.19.01.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 01:48:22 -0700 (PDT)
+Date: Tue, 19 May 2026 09:48:20 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+ workflows@vger.kernel.org, linux-arch@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-csky@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang
+ Mu <dzm91@hust.edu.cn>, Hu Haowen <2023002089@link.tyut.edu.cn>, Dinh
+ Nguyen <dinguyen@kernel.org>, Kees Cook <kees@kernel.org>, Oleg Nesterov
+ <oleg@redhat.com>, Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
+ <aneesh.kumar@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Nick
+ Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>, Vinod
+ Koul <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, Dave Penkler
+ <dpenkler@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron
+ <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
+ =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
+ <kwilczynski@kernel.org>
+Subject: Re: [PATCH] nios2: remove the architecture
+Message-ID: <20260519094820.1f05ab8e@pumpkin>
+In-Reply-To: <20260518042833.272221-1-enelsonmoore@gmail.com>
+References: <20260518042833.272221-1-enelsonmoore@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518042833.272221-1-enelsonmoore@gmail.com>
- <d40b1e80-37fc-4c88-9d7f-dae6458efe6c@app.fastmail.com> <20260518105735.GW3126523@noisy.programming.kicks-ass.net>
- <20260518172444.zyd47mcagrcwu7wt@dev-vm-schuster>
-In-Reply-To: <20260518172444.zyd47mcagrcwu7wt@dev-vm-schuster>
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Date: Mon, 18 May 2026 17:13:58 -0700
-X-Gm-Features: AVHnY4ICd7H9-70Xucdx9uJAfA9u6BhUaXyRyteuNE6Jo8mNtePRuTvmeSFjqyQ
-Message-ID: <CADkSEUjhq6HSdg4ignzbuJiN5uXATsTdxFbRJ3BMxs5=WUWLDg@mail.gmail.com>
-Subject: Re: [PATCH] nios2: remove the architecture
-To: Simon Schuster <schuster.simon@siemens-energy.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dinh Nguyen <dinguyen@kernel.org>, linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
-	workflows@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-iio@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
-	linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Alex Shi <alexs@kernel.org>, 
-	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
-	Hu Haowen <2023002089@link.tyut.edu.cn>, Kees Cook <kees@kernel.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Nicholas Piggin <npiggin@gmail.com>, Vinod Koul <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, 
-	Dave Penkler <dpenkler@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof WilczyDski <kwilczynski@kernel.org>, 
-	Andreas Oetken <andreas.oetken@siemens-energy.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi, Simon,
+On Sun, 17 May 2026 21:28:33 -0700
+Ethan Nelson-Moore <enelsonmoore@gmail.com> wrote:
 
-Thank you for notifying us of your continued use of the Nios II architectur=
-e.
+> The Nios II architecture is a soft-core architecture developed by
+> Altera (since acquired by Intel) and intended to run on their FPGAs.
+> 
+> Licenses for the architecture have not been available for purchase
+> since 2024 [1],
 
-On Mon, May 18, 2026 at 10:24=E2=80=AFAM Simon Schuster
-<schuster.simon@siemens-energy.com> wrote:
-> Unfortunately, as we are an infrastructure provider for civil energy
-> infrastructure, the refurbishment cycle is a bit slower than for
-> traditional consumer systems. This implies that the traditional LTS
-> support duration (max. Dec 2028 as of writing [1]) is rather short, and
-> we would be glad if we could keep the architecture in mainline for at
-> least 5 years and only then "decay" to LTS.
+Except I think they got 'beaten up' by some telcos.
+The Nios II gets used inside fpga for small cpu doing things that it would
+be far to difficult to do in VHDL.
+(I believe some mobile base stations fgpa embed a lot of them.)
+These will have a small amount of code (maybe 4k - 64k) and a similarly
+small amount of data memory along with access to fpga peripheral registers
+and (optionally) host memory vie PCIe. No MMU, no cache (or rather the code/data
+is in the cache memory but it isn't backed by anything), no branch predictor
+(guaranteed cycle times), etc.
+Intel suggested that RISCV could be used instead, but it isn't the same beast.
+They didn't document the instruction timings nor how to add custom instructions.
 
-Your reasoning makes complete sense. However, there is an alternative
-to maintaining the architecture in mainline.
+The company I used to work for used 4 NIOS II inside an fpga.
+The instruction timing for one is pretty critical, it has some code that
+has to complete in 122 clocks (worst case).
+Our solution was to spend a few man-weeks writing a compatible cpu!
+I think it came out with fewer pipeline stalls (in particular it 'lost'
+the one for a (predicted) taken branch).
+The maximum clock frequency might be lower; but it is ok at 62.5MHz and the
+higher 125MHz in just impossible for all sorts of reasons.
 
-The Civil Infrastructure Platform project maintains super-LTS kernels
-(and a set of base Debian packages) for 10 years. They are intended to
-be used for exactly these kinds of devices.
-See here: https://wiki.linuxfoundation.org/civilinfrastructureplatform/star=
-t#kernel_maintainership
-and here: https://cip-project.org/about/linux-kernel-core-packages
+OTOH I really wouldn't run Linux on it!
 
-CIP will maintain kernel 6.12 until 2035. Is this long enough for your
-lifecycle? What kernel are you currently using? If it's newer than
-6.12, we can easily wait until the next CIP SLTS release to remove
-Nios II support to avoid a downgrade.
+-- David
 
-One important thing to note is that the default CIP kernel branches
-are not equivalent to standard LTS branches and include new hardware
-support, which has a higher likelihood of introducing regressions.
-However, the -st branches do not include these changes and follow the
-same patch acceptance rules as standard LTS, so they are likely a
-better fit for your use case.
+> and support for it has been removed from GCC 15 [2],
+> Buildroot [3], and QEMU [4].
+> 
+> Given all of these factors, it is time to remove Nios II support from
+> the kernel. The maintainer stated in 2024 that they were planning to do
+> so soon [5], but this did not come to pass.
+> 
+> Remove Nios II support from the kernel and move the former maintainer
+> to CREDITS. Thank you, Dinh Nguyen, for maintaining Nios II support!
+> 
+> References:
+> [1] https://docs.altera.com/v/u/docs/781327/is-discontinuing-ip-ordering-codes-listed-in-pdn2312-for-nios-ii-ip
+> [2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e876acab6cdd84bb2b32c98fc69fb0ba29c81153
+> [3] https://github.com/buildroot/buildroot/commit/6775ccc5a199d574ad70b5f79ec58cce97a07c6f
+> [4] https://github.com/qemu/qemu/commit/6c3014858c4c0024dd0560f08a6eda0f92f658d6
+> [5] https://sourceware.org/pipermail/newlib/2024/021083.html
+> 
+> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 
-Also, CIP focuses on architectures used by CIP members - currently I
-think they are x86 (32 and 64-bit), ARM (32 and 64-bit) and RISC-V.
-Since Siemens is already a CIP member, you can simply ask them to add
-Nios II to the list, and you can assist them with testing and directly
-submit patches to them once the standard 6.12 LTS period ends.
-
-I hope this information helps you decide on the best course of action.
-
-Ethan

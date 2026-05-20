@@ -1,109 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6F6370AF4;
-	Tue, 19 May 2026 11:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4244E34F48F;
+	Wed, 20 May 2026 07:07:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779190823; cv=none; b=hpzt8W4g3Umztv9oh+yY9I6e357wlAD13z8vDkIEDmEC6PeGA1h9DH//bijePeNOnsR1FhuMIO3lvzgDtnOIoEv4ve0zJhDAN2WPuJJAm9GjPTLlkUPFKlNY3mlfgjDiiA8W3PJTQyZPLmKKPeBDSxDgSxYuJoICEzTyF3NQsYM=
+	t=1779260838; cv=none; b=TIlg7HfUyxC/70SZ9cp9lQyxmA0dtk43pfGLApyJL14loTKSHMfDIJJIw0zKrElg6WhmUwVB8BO07lAbGutoPVFPphUk5Q9WPWWdp7FrFLaSDxy35Nbr5RBOr/Ys6kVs4KSzTvvenfOA0+HideBAW7cV5iz//0a6RrIHSna+mLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779190823; c=relaxed/simple;
-	bh=QQaaGxQ5MASOA16eW1u17RV/meEJnJskrvGMHhJ6QeQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hfRFjpS077LvXhtU0z3kzy8nB8R8VeqWVdTNxyhVSdIWx78/Fe8DWuXg4Y9sUqP6SDwWLDwCU2DxvkA9I/dSGq3JNpl30hnAhdf4ewmc3ZWe0dsGFh9IY/wxu46j7L25XhxUR8D0VBkaf0a0Z4PrKG9oq6c+vVAz5+xxlUE7L1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G0TPOmjb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779260838; c=relaxed/simple;
+	bh=4UmG7P11W8AQAGwVtiZgMyYozzVFcf+K+iTyto2DY7Y=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sNicx4et+RJK5dvWIppul5rrp4JpCXvKPpOQS/eMRzU4WDlrTpRAje3//EBe2D9pe4IDHOhbeihbboNjO4SXBjqR8KIa/Ap2meps7Uj/CzjTj9HF5p6ujYyXZAzOpUmWk3kpGw9x2piBnRQPouNAEm9Rar5SGztdC5YvJjcQU14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=B653PIVe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GnYd28z8; arc=none smtp.client-ip=103.168.172.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G0TPOmjb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FFCC2BCB3;
-	Tue, 19 May 2026 11:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779190823;
-	bh=QQaaGxQ5MASOA16eW1u17RV/meEJnJskrvGMHhJ6QeQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G0TPOmjbmcvJIsyGp9Lt9WWuGrK3bSidLM55V8j1toGC08ccXy34OW+azx4MDkSV7
-	 a/BjSolTL36yxsLoocb5XUNbmpvdpDCm+P1wzQ6KWLN2vZA6JE6WOXE6NoTfzmfUey
-	 ef352MxE0yvpE8Idden2ACG12L3FEAoE2VydQ6X7abTwmp4W+J7UEPOHhQC0QxrCUv
-	 A5SHqdGiPEPP28otiuD5aBL0d9JDnfKn5p70KSV2wgC/lhciRK56CwFnAc4hkqZKLg
-	 mvQf2SluEbysYMgQBbiDmzhVt7XjUOIOl9GPWQDyB05H0C+RTfaFU1sGH/cIjAHr4+
-	 Jh0UTs5zoTCUA==
-Message-ID: <6b5378ed-270a-4ade-a944-654941ee9f8c@kernel.org>
-Date: Tue, 19 May 2026 06:40:18 -0500
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="B653PIVe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GnYd28z8"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id 45A361380030;
+	Wed, 20 May 2026 03:07:16 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Wed, 20 May 2026 03:07:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1779260836;
+	 x=1779268036; bh=Yc0JG1Xn3Wha37rB1V4lbZPt4g1XIowSANBWVbYnYYg=; b=
+	B653PIVeT6uaYy3t2lF/YnNdWPHqubwh3EDKNnOtFGEz+Fddi3+jLGVO7gIb6ZUN
+	hPyzpzE00vzBB4FUos8RIMr4sCwlZQpGssPQnPh+6czAOoLwAftWa5e1FK7RpDEN
+	rS1WcM+Dv1v71YncQWjBS35nP08DYu5Ci394FOzWskEmJ1U37vNqd1lTu+CTCQg/
+	2t+eqXZfsHVisrfl284hE1uvTVn8jJCt8YJ/NiT8bobdKukP2Rvu2stuc7BJj4dU
+	+e7h4wtogZIit97VsX07EyugTest4kUhBIiLUt7JGVFixgka05hqGjMuy1DkLN43
+	JC41BZdEsZ0FWLTi7N1XUw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1779260836; x=
+	1779268036; bh=Yc0JG1Xn3Wha37rB1V4lbZPt4g1XIowSANBWVbYnYYg=; b=G
+	nYd28z87pqNi+9PdJzaxXZwhv0d9XOb673uhc0dQ12SOzgua/kwGuDzdJ3P/KXA7
+	3wKhVpJEAcXpNHTMZjPSz28yz7/3VQlDPOAQEm8pe7MlfINyfzK1hcoKLwbdpURI
+	Hk6It8Ms0Ab1wLvCqX/Z2v+VOAMREM55Dx6cyIGrz1qDwQxY6oJnQ0TQmVLsz6a7
+	x18qidBeC6dQgG9AvzVdYaWz5fGH40LJZ6ICpW87Lz8JV+55ZXVQG7ntZsHwiC8V
+	BjtLpJkbmlL+6zqwsHrCwc+QHrWJR7sdcp/88nuk4YWvM1bzHvuomb2vkFPiWzjW
+	LpQlE35CMXRAm71I7taXw==
+X-ME-Sender: <xms:oV0NahcvhCqxyShf_GQCxcWNLGoQg7kHPo8XsyEnOyzCH8smWX_kgw>
+    <xme:oV0NaqCKWROXJfx0jBWTTTa4aw69uXBky8ZqSpccGHX2CA4W7mw9j4kFLNIqCjeZm
+    zj3xBZN6UG3wcMx_NUU-6KlVXgXHDLkNGayRxRAMjlYL0TbkACmeo0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddugeefleelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepkedvheeghfehlefhvdehfffggfdukeekkeehleeuvdeijeeuteevgeejvdefueet
+    necuffhomhgrihhnpedujedrrghsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    hedtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnuhhnohdrshgrsegrnhgrlh
+    hoghdrtghomhdprhgtphhtthhopegulhgvtghhnhgvrhessggrhihlihgsrhgvrdgtohhm
+    pdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhope
+    guphgvnhhklhgvrhesghhmrghilhdrtghomhdprhgtphhtthhopegvnhgvlhhsohhnmhho
+    ohhrvgesghhmrghilhdrtghomhdprhgtphhtthhopehnphhighhgihhnsehgmhgrihhlrd
+    gtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphht
+    thhopeguiihmledusehhuhhsthdrvgguuhdrtghnpdhrtghpthhtohepphgvthgvrhiise
+    hinhhfrhgruggvrggurdhorhhg
+X-ME-Proxy: <xmx:ol0Nah2ii_y-TksNBCT-MowRFapYyZydyI7H4QxxQH4g9XTtz8bobg>
+    <xmx:ol0NarIfG5ugU7JqBORV9sTbHmRBn4g4EaMGJ4YY0AclQPdkv_bZmw>
+    <xmx:ol0Nav-OOvCx4WVvnznx03vUOOFvzfTjft2gLXlcAKL364cJsd6-WA>
+    <xmx:ol0NaiQ9xIABZU_YgIC_PxsPzaYvVcygjExJvggA16DtUstR3GpVrg>
+    <xmx:pF0NagQ9B6Q70cBKcBExfrRFa4A-4wY7ab5nhbQQey_V9mP7bRvenXP2>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id DE0EA182007A; Wed, 20 May 2026 03:07:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] nios2: remove the architecture
-Content-Language: en-US
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Simon Schuster <schuster.simon@siemens-energy.com>
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
- linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
- workflows@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
- linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+X-ThreadId: AoFiOxpvQUXV
+Date: Wed, 20 May 2026 09:06:33 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "schuster.simon@siemens-energy.com" <schuster.simon@siemens-energy.com>,
+ "Ethan Nelson-Moore" <enelsonmoore@gmail.com>,
+ "Wolfram Sang" <wsa+renesas@sang-engineering.com>
+Cc: "Peter Zijlstra" <peterz@infradead.org>,
+ "Dinh Nguyen" <dinguyen@kernel.org>, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, workflows@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, dmaengine@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ Netdev <netdev@vger.kernel.org>, linux-pci@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-hardening@vger.kernel.org,
+ linux-kbuild@vger.kernel.org,
  "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Thomas Gleixner
- <tglx@kernel.org>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
- Hu Haowen <2023002089@link.tyut.edu.cn>, Kees Cook <kees@kernel.org>,
- Oleg Nesterov <oleg@redhat.com>, Will Deacon <will@kernel.org>,
+ "Jonathan Corbet" <corbet@lwn.net>,
+ "Shuah Khan" <skhan@linuxfoundation.org>,
+ "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Daniel Lezcano" <daniel.lezcano@kernel.org>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Alex Shi" <alexs@kernel.org>,
+ "Yanteng Si" <si.yanteng@linux.dev>, "Dongliang Mu" <dzm91@hust.edu.cn>,
+ "Hu Haowen" <2023002089@link.tyut.edu.cn>, "Kees Cook" <kees@kernel.org>,
+ "Oleg Nesterov" <oleg@redhat.com>, "Will Deacon" <will@kernel.org>,
  "Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Nicholas Piggin <npiggin@gmail.com>, Vinod Koul <vkoul@kernel.org>,
- Frank Li <Frank.Li@kernel.org>, Dave Penkler <dpenkler@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Krzysztof WilczyDski <kwilczynski@kernel.org>,
- Andreas Oetken <andreas.oetken@siemens-energy.com>
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Nicholas Piggin" <npiggin@gmail.com>, "Vinod Koul" <vkoul@kernel.org>,
+ "Frank Li" <Frank.Li@kernel.org>, "Dave Penkler" <dpenkler@gmail.com>,
+ "Andi Shyti" <andi.shyti@kernel.org>,
+ "Jonathan Cameron" <jic23@kernel.org>,
+ "David Lechner" <dlechner@baylibre.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ "Andy Shevchenko" <andy@kernel.org>,
+ "Andrew Lunn" <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ "Andreas Oetken" <andreas.oetken@siemens-energy.com>
+Message-Id: <76af64fa-7820-4d92-8aa9-826c3bd812a1@app.fastmail.com>
+In-Reply-To: <20260519103012.blot4bssgiqfer6p@dev-vm-schuster>
 References: <20260518042833.272221-1-enelsonmoore@gmail.com>
  <d40b1e80-37fc-4c88-9d7f-dae6458efe6c@app.fastmail.com>
  <20260518105735.GW3126523@noisy.programming.kicks-ass.net>
  <20260518172444.zyd47mcagrcwu7wt@dev-vm-schuster>
  <CADkSEUjhq6HSdg4ignzbuJiN5uXATsTdxFbRJ3BMxs5=WUWLDg@mail.gmail.com>
- <20260519103012.blot4bssgiqfer6p@dev-vm-schuster> <agxBqd-ubOL2_i-j@shikoro>
-From: Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <agxBqd-ubOL2_i-j@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20260519103012.blot4bssgiqfer6p@dev-vm-schuster>
+Subject: Re: [PATCH] nios2: remove the architecture
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-Hi Simon,
+On Tue, May 19, 2026, at 12:30, Simon Schuster wrote:
+> On Mon, May 18, 2026 at 05:13:58PM -0700, Ethan Nelson-Moore wrote:
+>
+> 2035 is still a rather tight timeframe for our typical support/phase-out
+> period (we would hope to get close to 2040 with the SLTS extensions),
+> which is also the reason for our targeted 'lifetime extension' for the
+> nios2 architecture for approximately 5 years, or more precisely ~2-3
+> SLTS kernels assuming the usual cadence of 2 years between SLTS versions
+> (+ some safety margin).
 
-On 5/19/26 05:55, Wolfram Sang wrote:
-> Hi Simon,
-> 
->>> ... but given this, you might want to get added in MAINTAINERS as
->>> reviewer (or even maintainer) for nios2? Besides that your efforts are
->>> already worth it in my book, it would also ensure you get CCed on
->>> patches like this. Then, you are not depending on people like Arnd
->>> putting you in the loop manually.
->>
->> Sure, I'd be glad to do so, but so far I refrained from it as I was a bit
->> unsure about the netiquette (can I simply do so by self-proclamation? At
->> least the git history seems to suggest so...).
-> 
-> In your case, you can do so, I'd say. You explained your very reasonable
-> interest in the architecture and have already shown efforts to keep it,
-> as we can see from the git history. The final call will be done by Dinh
-> Nguyen obviously with whom you probably need to sort out details. But I
-> can't imagine your offer for help will be rejected, quite the contrary.
-> 
+I think that is a reasonable target. We have a bunch of embedded
+architectures that have a similarly small user base and I expect
+that we will want to remove most of them at some point, as we did
+for seven architectures in linux-4.17.
 
-I 100% support adding you as a maintainer. Please send a patch.
+As long as there is a maintainer for nios2 and it's not actively
+getting in the way of a specific treewide change, I don't see any
+reason to remove this any earlier than the other ones.
 
-Thanks,
-Dinh
+Obviously at some point nios2 will have to get removed because
+of the limit to gcc-14 or older, but that should not be a problem
+for the next few LTS releases.
 
+> Sure, I'd be glad to do so, but so far I refrained from it as I was a bit
+> unsure about the netiquette (can I simply do so by self-proclamation? At
+> least the git history seems to suggest so...).
+
+Dinh already replied that he welcomes the help, and I also suggested
+the same thing a year ago. As the only known user that has contributed
+patches in a long time, you are obviously qualified.
+
+Sending a patch for the MAINTAINERS file to Dinh is the first step,
+once he has sent that upstream, you can (optionally) apply for
+kernel.org account that would let you host a git tree on kernel.org
+or have a tree that you both have access to.
+
+     Arnd

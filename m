@@ -1,172 +1,121 @@
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4244E34F48F;
-	Wed, 20 May 2026 07:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F68138228F
+	for <linux-csky@vger.kernel.org>; Thu, 21 May 2026 10:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779260838; cv=none; b=TIlg7HfUyxC/70SZ9cp9lQyxmA0dtk43pfGLApyJL14loTKSHMfDIJJIw0zKrElg6WhmUwVB8BO07lAbGutoPVFPphUk5Q9WPWWdp7FrFLaSDxy35Nbr5RBOr/Ys6kVs4KSzTvvenfOA0+HideBAW7cV5iz//0a6RrIHSna+mLk=
+	t=1779357618; cv=none; b=MM5ZRA6wxxTzYwXPcOgb845d8H0c2jGPt0UO3acWU5aMacyi+ACD79KjhhyPRHd370YzvrU/zInRJjnLvQQnHjWNUozpyDTVVG+JoPK99zHzpx9qajS32dPfdDn1GVBXFE/BbtU3d3WmXlkS7WTwg+3dvtF4rFzsQf2Bg01kZUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779260838; c=relaxed/simple;
-	bh=4UmG7P11W8AQAGwVtiZgMyYozzVFcf+K+iTyto2DY7Y=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=sNicx4et+RJK5dvWIppul5rrp4JpCXvKPpOQS/eMRzU4WDlrTpRAje3//EBe2D9pe4IDHOhbeihbboNjO4SXBjqR8KIa/Ap2meps7Uj/CzjTj9HF5p6ujYyXZAzOpUmWk3kpGw9x2piBnRQPouNAEm9Rar5SGztdC5YvJjcQU14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=B653PIVe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GnYd28z8; arc=none smtp.client-ip=103.168.172.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1779357618; c=relaxed/simple;
+	bh=C2RVFkRflNNWVpwy3bzTkXkqKQmsPqWZ0B4Xb2BKlt0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ShOt/FG/+XIdrg9T4pEH2jMWMvUUv8AaPBIuU+AD8IlUgHbIPnquQXjhdHoQpL0SfVdcXKZb84YnBpimmCSyXj3hjqJ+BKc1IOmEgtdL1xr/zfzsBy6zNL2AiM7bmm6Aci5EdYcsr93rKENUT2sFl5dO15ePjGgy6sa6f5lmKpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EVI4DyBS; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="B653PIVe";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GnYd28z8"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id 45A361380030;
-	Wed, 20 May 2026 03:07:16 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Wed, 20 May 2026 03:07:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1779260836;
-	 x=1779268036; bh=Yc0JG1Xn3Wha37rB1V4lbZPt4g1XIowSANBWVbYnYYg=; b=
-	B653PIVeT6uaYy3t2lF/YnNdWPHqubwh3EDKNnOtFGEz+Fddi3+jLGVO7gIb6ZUN
-	hPyzpzE00vzBB4FUos8RIMr4sCwlZQpGssPQnPh+6czAOoLwAftWa5e1FK7RpDEN
-	rS1WcM+Dv1v71YncQWjBS35nP08DYu5Ci394FOzWskEmJ1U37vNqd1lTu+CTCQg/
-	2t+eqXZfsHVisrfl284hE1uvTVn8jJCt8YJ/NiT8bobdKukP2Rvu2stuc7BJj4dU
-	+e7h4wtogZIit97VsX07EyugTest4kUhBIiLUt7JGVFixgka05hqGjMuy1DkLN43
-	JC41BZdEsZ0FWLTi7N1XUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1779260836; x=
-	1779268036; bh=Yc0JG1Xn3Wha37rB1V4lbZPt4g1XIowSANBWVbYnYYg=; b=G
-	nYd28z87pqNi+9PdJzaxXZwhv0d9XOb673uhc0dQ12SOzgua/kwGuDzdJ3P/KXA7
-	3wKhVpJEAcXpNHTMZjPSz28yz7/3VQlDPOAQEm8pe7MlfINyfzK1hcoKLwbdpURI
-	Hk6It8Ms0Ab1wLvCqX/Z2v+VOAMREM55Dx6cyIGrz1qDwQxY6oJnQ0TQmVLsz6a7
-	x18qidBeC6dQgG9AvzVdYaWz5fGH40LJZ6ICpW87Lz8JV+55ZXVQG7ntZsHwiC8V
-	BjtLpJkbmlL+6zqwsHrCwc+QHrWJR7sdcp/88nuk4YWvM1bzHvuomb2vkFPiWzjW
-	LpQlE35CMXRAm71I7taXw==
-X-ME-Sender: <xms:oV0NahcvhCqxyShf_GQCxcWNLGoQg7kHPo8XsyEnOyzCH8smWX_kgw>
-    <xme:oV0NaqCKWROXJfx0jBWTTTa4aw69uXBky8ZqSpccGHX2CA4W7mw9j4kFLNIqCjeZm
-    zj3xBZN6UG3wcMx_NUU-6KlVXgXHDLkNGayRxRAMjlYL0TbkACmeo0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddugeefleelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepkedvheeghfehlefhvdehfffggfdukeekkeehleeuvdeijeeuteevgeejvdefueet
-    necuffhomhgrihhnpedujedrrghsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    hedtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnuhhnohdrshgrsegrnhgrlh
-    hoghdrtghomhdprhgtphhtthhopegulhgvtghhnhgvrhessggrhihlihgsrhgvrdgtohhm
-    pdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhope
-    guphgvnhhklhgvrhesghhmrghilhdrtghomhdprhgtphhtthhopegvnhgvlhhsohhnmhho
-    ohhrvgesghhmrghilhdrtghomhdprhgtphhtthhopehnphhighhgihhnsehgmhgrihhlrd
-    gtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphht
-    thhopeguiihmledusehhuhhsthdrvgguuhdrtghnpdhrtghpthhtohepphgvthgvrhiise
-    hinhhfrhgruggvrggurdhorhhg
-X-ME-Proxy: <xmx:ol0Nah2ii_y-TksNBCT-MowRFapYyZydyI7H4QxxQH4g9XTtz8bobg>
-    <xmx:ol0NarIfG5ugU7JqBORV9sTbHmRBn4g4EaMGJ4YY0AclQPdkv_bZmw>
-    <xmx:ol0Nav-OOvCx4WVvnznx03vUOOFvzfTjft2gLXlcAKL364cJsd6-WA>
-    <xmx:ol0NaiQ9xIABZU_YgIC_PxsPzaYvVcygjExJvggA16DtUstR3GpVrg>
-    <xmx:pF0NagQ9B6Q70cBKcBExfrRFa4A-4wY7ab5nhbQQey_V9mP7bRvenXP2>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id DE0EA182007A; Wed, 20 May 2026 03:07:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVI4DyBS"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b9fcf7c91bso62440685ad.0
+        for <linux-csky@vger.kernel.org>; Thu, 21 May 2026 03:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779357616; x=1779962416; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yVOsPLBQPlP1hoWnahX+LhIqlKbd5jGX8t7OujcN3pg=;
+        b=EVI4DyBSsHLQQ4+kzPY5QAWWRrkMxsioEH0WrgApkC13VWAK0K7/sqtZhj+3oXYDsN
+         2jVUoZOs/FFrlCqsooRxFHwIbg/QYduMUF08rzvBoyNvdBX2e1xJHXGpkQwwPr3n6ych
+         e+NHztIBcbtbOO2mdsKfua0Xpynrf43k3t6hUpyEmpQD/M0velyGwsiJ1u8rzwK+vhIr
+         PPe7Sf3prTPvf6zpRNMSH21eEhhxF3cNHL9X4QMxTolgDtZa56w2IrAgZAQWhbsIRpLO
+         ON65H6uL9ECSqb8409HdArfs2VyLrvHiOkay2Vk68PA5ODx+0pCT6307rTf7Zsb5pDeC
+         nCOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779357616; x=1779962416;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yVOsPLBQPlP1hoWnahX+LhIqlKbd5jGX8t7OujcN3pg=;
+        b=mcAAxLuuFlr8sTLqnnVCF7+KzKKoIjUHqY/quEv+O+fQscChM/dQdw0JkjC+MS9TMx
+         uVfypAG2CyMcv+G7ItrN8YH6vqIstGeM7YoenkTMgtlYe4KMFmNkgKDZ7ZvvcOn4Bfer
+         h9WCpLQ8qNDNwA2VCr3pTnAeZI0VwdaK5jCKz9JUy+A2gQ6tJC8HKJ36l27i8yKlJNKq
+         Wue6pjR2+ZM2Ub493PlmoUjBQChWrMf6UplSwyTFNbXZ1TPx7LIwRKzI/CgpwQuutPsg
+         NoRNRMFac3CNdZDgKIIy/4rsauyo4rfEyZ5aXJSJ/NLHmd0MCxayHum+QPWyU6jOv8YA
+         nMyQ==
+X-Gm-Message-State: AOJu0YzjWTO4PeVJKonVbjOcIoblqYbrkOFq+sflEuf/zL+uLL/HNlZA
+	X7sAn6XAFs+9muAMroqk5bk7YzzT/+t9aALUWEqS4SORRlTnnE8/m5JB
+X-Gm-Gg: Acq92OFzDjdWP+spHJwG3HI8NPpDu+AerD9h9WievXNxvuuP5EswcSbHZcnZFZ6KzdK
+	JcOnKAp8oXdrgdXbQxfP1OqxDB2ur9dTmkAPsjcAZnsTpxwC4I2jF1ncSTuPiml5WhWT83Q7K+m
+	JI0WeYDh8loI79WbEulwyykx69+izTcW8AzX5Ve2K/yfOneVbc6xNo4HL7LmdC2nKciruq7rOQ4
+	WoXJ1sOtdprFUIyOCZ/+jSFRK+evyo8Kr5pEbjnAgGa5RXd6t4kTaNMf59nZ8NdLb+m/GQDx5Ml
+	3V1SrmjkhdKgS+8ajDK3+1/F8HWg0MAhw+6npleYwFzJLu2L8XZv+zDHDa2cfV5l3I9o17l5dWP
+	Gi2wLvHvpsks7nEsu920OkAiMcGfUY8qNJL+d3v+Jt2ZkeNoF+8yaANDBjPY1aHQfsFa0Kh1mKd
+	HJD3COiE8NVYrfTLgD/OH17JKog5YR/j81NoTk6HTfOGrwqNK1OVeikeahJOazaTjg4cSeS3U=
+X-Received: by 2002:a17:902:e849:b0:2bd:49ce:d240 with SMTP id d9443c01a7336-2bea31c7662mr25049845ad.5.1779357612371;
+        Thu, 21 May 2026 03:00:12 -0700 (PDT)
+Received: from gmail.com (42-200-172-209.static.imsbiz.com. [42.200.172.209])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bea990e08csm5499005ad.63.2026.05.21.03.00.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2026 03:00:11 -0700 (PDT)
+From: hlsong <pgeorge8929@gmail.com>
+To: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	hlsong89 <pgeorge8929@gmail.com>
+Subject: [PATCH] csky: Fix a4/a5 restoration in syscall trace path
+Date: Thu, 21 May 2026 17:59:46 +0800
+Message-Id: <20260521095946.37876-1-pgeorge8929@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AoFiOxpvQUXV
-Date: Wed, 20 May 2026 09:06:33 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "schuster.simon@siemens-energy.com" <schuster.simon@siemens-energy.com>,
- "Ethan Nelson-Moore" <enelsonmoore@gmail.com>,
- "Wolfram Sang" <wsa+renesas@sang-engineering.com>
-Cc: "Peter Zijlstra" <peterz@infradead.org>,
- "Dinh Nguyen" <dinguyen@kernel.org>, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, workflows@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, dmaengine@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
- Netdev <netdev@vger.kernel.org>, linux-pci@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-kbuild@vger.kernel.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- "Jonathan Corbet" <corbet@lwn.net>,
- "Shuah Khan" <skhan@linuxfoundation.org>,
- "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Daniel Lezcano" <daniel.lezcano@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Alex Shi" <alexs@kernel.org>,
- "Yanteng Si" <si.yanteng@linux.dev>, "Dongliang Mu" <dzm91@hust.edu.cn>,
- "Hu Haowen" <2023002089@link.tyut.edu.cn>, "Kees Cook" <kees@kernel.org>,
- "Oleg Nesterov" <oleg@redhat.com>, "Will Deacon" <will@kernel.org>,
- "Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Nicholas Piggin" <npiggin@gmail.com>, "Vinod Koul" <vkoul@kernel.org>,
- "Frank Li" <Frank.Li@kernel.org>, "Dave Penkler" <dpenkler@gmail.com>,
- "Andi Shyti" <andi.shyti@kernel.org>,
- "Jonathan Cameron" <jic23@kernel.org>,
- "David Lechner" <dlechner@baylibre.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- "Andy Shevchenko" <andy@kernel.org>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- "Andreas Oetken" <andreas.oetken@siemens-energy.com>
-Message-Id: <76af64fa-7820-4d92-8aa9-826c3bd812a1@app.fastmail.com>
-In-Reply-To: <20260519103012.blot4bssgiqfer6p@dev-vm-schuster>
-References: <20260518042833.272221-1-enelsonmoore@gmail.com>
- <d40b1e80-37fc-4c88-9d7f-dae6458efe6c@app.fastmail.com>
- <20260518105735.GW3126523@noisy.programming.kicks-ass.net>
- <20260518172444.zyd47mcagrcwu7wt@dev-vm-schuster>
- <CADkSEUjhq6HSdg4ignzbuJiN5uXATsTdxFbRJ3BMxs5=WUWLDg@mail.gmail.com>
- <20260519103012.blot4bssgiqfer6p@dev-vm-schuster>
-Subject: Re: [PATCH] nios2: remove the architecture
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 19, 2026, at 12:30, Simon Schuster wrote:
-> On Mon, May 18, 2026 at 05:13:58PM -0700, Ethan Nelson-Moore wrote:
->
-> 2035 is still a rather tight timeframe for our typical support/phase-out
-> period (we would hope to get close to 2040 with the SLTS extensions),
-> which is also the reason for our targeted 'lifetime extension' for the
-> nios2 architecture for approximately 5 years, or more precisely ~2-3
-> SLTS kernels assuming the usual cadence of 2 years between SLTS versions
-> (+ some safety margin).
+From: hlsong89 <pgeorge8929@gmail.com>
 
-I think that is a reasonable target. We have a bunch of embedded
-architectures that have a similarly small user base and I expect
-that we will want to remove most of them at some point, as we did
-for seven architectures in linux-4.17.
+The syscall trace path reloads syscall arguments from pt_regs before
+calling the syscall handler. On C-SKY ABIv2, the 5th and 6th syscall
+arguments are prepared as stack arguments before invoking syscallid.
 
-As long as there is a maintainer for nios2 and it's not actively
-getting in the way of a specific treewide change, I don't see any
-reason to remove this any earlier than the other ones.
+The current code adjusts sp before loading LSAVE_A4 and LSAVE_A5. Since
+those offsets are relative to the original pt_regs base, loading them
+after changing sp fetches the wrong slots. As a result, traced syscalls
+that use the 5th or 6th argument may receive corrupted arguments.
 
-Obviously at some point nios2 will have to get removed because
-of the limit to gcc-14 or older, but that should not be a problem
-for the next few LTS releases.
+This is visible with mmap2(), which takes six arguments. A small
+PTRACE_SYSCALL reproducer opens a file and maps one page with:
 
-> Sure, I'd be glad to do so, but so far I refrained from it as I was a bit
-> unsure about the netiquette (can I simply do so by self-proclamation? At
-> least the git history seems to suggest so...).
+  mmap(NULL, 4096, PROT_READ | PROT_EXEC, MAP_PRIVATE, fd, 0)
 
-Dinh already replied that he welcomes the help, and I also suggested
-the same thing a year ago. As the only known user that has contributed
-patches in a long time, you are obviously qualified.
+Before the fix, the traced child fails the mmap and exits with 12.
+After the fix, the mapping succeeds and the child exits with 0.
 
-Sending a patch for the MAINTAINERS file to Dinh is the first step,
-once he has sent that upstream, you can (optionally) apply for
-kernel.org account that would let you host a git tree on kernel.org
-or have a tree that you both have access to.
+Fix the trace path by using the correct pt_regs offsets after adjusting sp.
 
-     Arnd
+Tested on: ck860f, linux-4.19.15, C-SKY abiv2
+
+Signed-off-by: hlsong89 <pgeorge8929@gmail.com>
+---
+ arch/csky/kernel/entry.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
+index c68cdcc76..98692fc78 100644
+--- a/arch/csky/kernel/entry.S
++++ b/arch/csky/kernel/entry.S
+@@ -94,9 +94,9 @@ csky_syscall_trace:
+ 	ldw	a3, (sp, LSAVE_A3)
+ #if defined(__CSKYABIV2__)
+ 	subi	sp, 8
+-	ldw	r9, (sp, LSAVE_A4)
++	ldw	r9, (sp, LSAVE_A4 + 8)
+ 	stw	r9, (sp, 0x0)
+-	ldw	r9, (sp, LSAVE_A5)
++	ldw	r9, (sp, LSAVE_A5 + 8)
+ 	stw	r9, (sp, 0x4)
+ 	jsr	syscallid                     /* Do system call */
+ 	addi	sp, 8
+-- 
+2.25.1
+

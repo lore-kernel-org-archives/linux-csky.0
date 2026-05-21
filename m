@@ -1,132 +1,180 @@
-Received: from mta-64-132.flowmailer.net (mta-64-132.flowmailer.net [185.136.64.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6662E6CCD
-	for <linux-csky@vger.kernel.org>; Thu, 21 May 2026 15:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779378471; cv=none; b=DJx0rana+eUdg6dK1OZVYF8QOtuStHwH+IVWdalKaMqap5PqKRxNjiQdbMFbgermTLuQGHhEtnXxmWW1+batMJowR6FKk+xO6Vmqs6n6xGy5Ue7T6JwvDT+dviilUcRe7TvRrdPHbuGvmExBC3kWvec/MzlC+pKDpXOeooiDahg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779378471; c=relaxed/simple;
-	bh=ueEF+bxWvWqR586sT6h/9OE/noXhk1FsLD5ozFIo48g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mjcGNVR3H6CKFScZ43svI+46U8zSMUBaquVCfRxPkZcTfLqS+6FY29V4dZ+SWPqN2omw8lcNunImXXV6ssvI670jDua3it8KTYcrW9jcDF3WNkaiOgWFy9IHCkJfzrbd25KG+gjc42QNbtX+Mo+5KWjJ35l9SrQuijkLdJpsJag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens-energy.com; spf=pass smtp.mailfrom=errorhandling.siemens-energy.com; dkim=pass (1024-bit key) header.d=flowmailer.net header.i=@flowmailer.net header.b=MMFq36yT; dkim=pass (2048-bit key) header.d=siemens-energy.com header.i=schuster.simon@siemens-energy.com header.b=Zq3CXr0l; arc=none smtp.client-ip=185.136.64.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens-energy.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=errorhandling.siemens-energy.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59683630A3
+	for <linux-csky@vger.kernel.org>; Thu, 21 May 2026 18:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779388190; cv=pass; b=nUnCghJINFLQmTGfkcfy9Wjx9Gz+/0PK6+QkfGzlzSyG7Z9SmM8Hix+H7kbtP1JiB40kPfcYTLLm2CPRrvjCpLWXXzyFs+9oA7+MLi5ngp94NkpjxaseDUAKXm1SfpEackqvueCN5NnfoUWfxDFkQnjlFEhXDa8PIuApmT1pilE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779388190; c=relaxed/simple;
+	bh=Q5e6sSZzmuItajOaKFdLEVI5pAP0ZIMF7fYCfsF6InI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zgyld/te8/T1GCfZ24PZYIk0hNMkTXQURXB50XMoGhgCfgozpbYWXhR9G9eng4BGuQtFvyzYc3jNoI6JYtZE4S7MrZilRynVUTIEw3AR+YQKlG5c6jKKAqSPEvUUgxvZomJqfa0ii4o/opyCKngFO+SlMNJkRNNSRhEoXX30uEE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1lH6jJ1; arc=pass smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=flowmailer.net header.i=@flowmailer.net header.b="MMFq36yT";
-	dkim=pass (2048-bit key) header.d=siemens-energy.com header.i=schuster.simon@siemens-energy.com header.b="Zq3CXr0l"
-Received: by mta-64-132.flowmailer.net with ESMTPSA id 20260521153732ef163bdbeb0019fdf2
-        for <linux-csky@vger.kernel.org>;
-        Thu, 21 May 2026 17:37:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=s1;
- d=flowmailer.net;
- h=from:from:sender:to:to:cc:cc:subject:subject:content-type:content-type:content-transfer-encoding:References:In-Reply-To:Date:Message-ID:MIME-Version;
- bh=KcRzYfxPkdiV7UzaW+6lIfDEOBCRNUcUcG27X2U1VSs=;
- b=MMFq36yTf/DJOdkiWD8dxyVJTeBb2CpUxQWl6ikCBdoeyzPO1YF1TlVatLLSDsvGHWcQd5
- VDsmO4GbpHypEfkjO53Qz6kghqkYW63SBOu0Z3QcrtuSqWyhCWSOJvxnT/UwU+hUbYuuGM0J
- HuZSr59c5et2+K6wbsqMmvXOzxMIc=;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm3;
- d=siemens-energy.com; i=schuster.simon@siemens-energy.com;
- h=from:from:sender:to:to:cc:cc:subject:subject:content-type:content-type:content-transfer-encoding:References:In-Reply-To:Date:Message-ID:MIME-Version;
- bh=KcRzYfxPkdiV7UzaW+6lIfDEOBCRNUcUcG27X2U1VSs=;
- b=Zq3CXr0liSNgT0BCELoEs6XA0YM8cHIjZYr0stylqb6wFZbahGV2hbEmOBF/1TqoTWIGML
- pQmKEA14s3UI+M6MccDXkCrApiCPspbcb8X1z4i0qqkc0XKsEuZWyaX++RCNyx2Oho4OkebH
- CljyjSOBruD/mCsSnEVDpu/bRn9huDA1sfKAPLG4TnjoGEs76ifH2dvqbyplGH4LM/bN//MJ
- TbAfvH9UHgJigDJ9qujRe7uPZe7uulWgnP1HXFpgW6KlqYd6iasg0kXPD7frFGW+6jdQlaQd
- pc5Ftr3JZPBE4ZdvXY4aK24gQwmJHg5mcdt41zeDIsJIor2N0FKdzstA==;
-Date: Thu, 21 May 2026 17:37:29 +0200
-From: Simon Schuster <schuster.simon@siemens-energy.com>
-To: Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>, Peter Zijlstra
- <peterz@infradead.org>, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, workflows@vger.kernel.org, Linux-Arch
- <linux-arch@vger.kernel.org>, dmaengine@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, Netdev
- <netdev@vger.kernel.org>, linux-pci@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-kbuild@vger.kernel.org, "linux-csky@vger.kernel.org"
- <linux-csky@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Daniel
- Lezcano <daniel.lezcano@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang
- Mu <dzm91@hust.edu.cn>, Hu Haowen <2023002089@link.tyut.edu.cn>, Kees Cook
- <kees@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Will Deacon
- <will@kernel.org>, "Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nicholas Piggin
- <npiggin@gmail.com>, Vinod Koul <vkoul@kernel.org>, Frank Li
- <Frank.Li@kernel.org>, Dave Penkler <dpenkler@gmail.com>, Andi Shyti
- <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>, David Lechner
- <dlechner@baylibre.com>, =?ISO-8859-1?Q?Nuno_S=E1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof
- WilczyDski <kwilczynski@kernel.org>, Andreas Oetken
- <andreas.oetken@siemens-energy.com>
-Subject: Re: [PATCH] nios2: remove the architecture
-Message-ID: <20260521153729.ig2xgvskkbg3nx47@dev-vm-schuster>
-References: <20260518042833.272221-1-enelsonmoore@gmail.com>
- <d40b1e80-37fc-4c88-9d7f-dae6458efe6c@app.fastmail.com>
- <20260518105735.GW3126523@noisy.programming.kicks-ass.net>
- <20260518172444.zyd47mcagrcwu7wt@dev-vm-schuster>
- <CADkSEUjhq6HSdg4ignzbuJiN5uXATsTdxFbRJ3BMxs5=WUWLDg@mail.gmail.com>
- <20260519103012.blot4bssgiqfer6p@dev-vm-schuster>
- <76af64fa-7820-4d92-8aa9-826c3bd812a1@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1lH6jJ1"
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7dbca22dbfeso3461940a34.1
+        for <linux-csky@vger.kernel.org>; Thu, 21 May 2026 11:29:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779388184; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ez9sKr5RdcZ8dmVANCXrAoGrFn9F9OHxXqYpS97fxy8XJ//kY5j5d+kHTM149rih/M
+         sTyhKz9nSGRq3u92Cg3JCv4dqrImG62UL2zdovU/21cMXF5bPDp2EQHEEZN87gnttFOd
+         06A6WE+HaV1FHjbkaP9ITmLGuKiwkDaP96NRcJtlCcnQ09wu0/NGYtd2sxwL2wVUzrBK
+         QV8DE97IcQFMTKvq8rjxII0Y1kcjpQzF3EzTWRnRmkab/E972g6h1UdiNpATEURirZVL
+         n6WhytmanLcfCokGoJ/Q5xSp0xPF9GhrpW0qftieuXxWkG4O6CPKpTcYjvVpigDJ3HnG
+         87/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gZpBuLQ9Aw8UYPgH/cnQy1hu7yQqfZzlVshE1mb55Yg=;
+        fh=PINNAIEwn3cXjEj8ro6Hd5J5tHkvlm8KubxYtlb/HFg=;
+        b=Y0OkC7hwCVwBwOukzeuFBzM3YWjXXbNKz45Wq5nNe6MA3anQSmw4HTOdg68pBO6nZr
+         tj+BSso+4z9x6E8+PQ/HWZLbKXO468SA7cP0aa0u4rPoDRFO1Vafmara9hjHqrPbMAia
+         WKeVdDIQHof8b7CjMctDJuhSu+QezhoyPVeq9WkVL9W4o29y5JqcK373OpVRQ7+qlPvZ
+         BbAEuJSCvnSdiNugAFoA34A6F8wbMudvc0VPKcyGO33IPRzaaCio9s2HE4EVYRgZ7bPt
+         iQ8c7GOOjuk6MTknMzVg2Buh13HTT58oSrhP2BaP4Eb583J4YVVaJ3uebLfo7Bi418mi
+         4RuQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779388184; x=1779992984; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gZpBuLQ9Aw8UYPgH/cnQy1hu7yQqfZzlVshE1mb55Yg=;
+        b=D1lH6jJ1o2PNNNBqns0pqltpBYT/pVTDi4ugBMo+s33iYCmmRiqx+9pat6NM1DL7dT
+         f5m2bpbi7ekPyViJlDJFJQpWGo8OL+OourytcHiFtUJMAMaZotiKB0q2UY2Ikb5MQoRY
+         Hz+A3FGbimc7vzEjdIxfksuaq9UjBhUgZsnvZlHT0yVVdNFrBJ7CaYNw+wxeZFCRJpUz
+         0Z4EwI/wA2utHj88hwnrNtm/x765n2cHo7B8kgLdRHs0rJ2MkZ9nuzceqa+ptT8Y3X7s
+         RpYVZ34QTFBDYckU7abop0pifoMpUsyRYWwsjy718qcpQ0PDoa3L0HXlVAk+IWa2w9kO
+         j2dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779388184; x=1779992984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gZpBuLQ9Aw8UYPgH/cnQy1hu7yQqfZzlVshE1mb55Yg=;
+        b=Bd7JrTMpj1ZXFfvhJpt8ai7Q1l66RZiBIFBK6HsOndTw/0iGzBTrPRwF35rFIeDA+n
+         R3jQv4z3lyx++45kqFuO39t9FbZ9ST11elPeawbz+SpVoGzp+iJrQP8QYoykBbqqNMGo
+         WOeP/SMpRlWpVG1X20bwfqWAx0eV63MxC4rnz18svQ55DQCC0HLqYzf3lvaUbOyBx4Cf
+         57yBGwRov1M9grkPaAku30yjhGUjWwc+3oBTOgaGhhi9p/aF4lfjDywCaDJX3SFnGUZe
+         RDDyBpiXDp8SDklpg2m9h2ZKJaMXPuh1anD3iR8gLb2KoW0/o/19DEh4D03azKHywg1y
+         9UKQ==
+X-Gm-Message-State: AOJu0YzfFebdV1q6pwaj+e2z0eFEg0BDs2hFfArGgjqM13C9DrxrjP4J
+	pDM6yLAYBJBUyR2KwDTdmTlryjR2E5ul+grMeoTlz/D8/Wuyv7syStLZN2UGCMbBGLVbs5YzZGr
+	tuf1W1c5VVz57p75wY1fbbFCL08lV7xw=
+X-Gm-Gg: Acq92OESTQrYXLx43zybyXzj/IWBRRMoOHEWjPHu06kxftCB6v4Z+Yeebcg1GZMe8mS
+	e1J+x8rFnC+ZfkKRLzZ91KWmjVDW09wDAro7J6JEZp9Uc0DOLcMgbvjNGh8hy3qU9viAdJEb2pQ
+	rVgM1fM0nqdaEu1nl8rVcxbROwZ+v33yGlLz75WvSBn5fZCy8sX7sD7o/mj5d8MF6rTqwggGl+n
+	e6JDuYCDBy8bpT3wDOwEC7VMFO93DN7aqgcBKl5bwVT0BP+CNTJFZJu5QJ8yuBp4NwWcIB1a5hk
+	V/iab2vlUdqUXe/DplVpcLcEPJNPziruL3sNDlo=
+X-Received: by 2002:a05:6820:4512:b0:69d:7d6e:e198 with SMTP id
+ 006d021491bc7-69d7eb8d767mr188067eaf.16.1779388184260; Thu, 21 May 2026
+ 11:29:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76af64fa-7820-4d92-8aa9-826c3bd812a1@app.fastmail.com>
+References: <CAJF2gTRumJwDi19nCmKZa+6KvvNvRSo=Jhyd7f6=5pe9J5Q0nQ@mail.gmail.com>
+ <20260521113356.58513-1-pgeorge8929@gmail.com> <CAJF2gTRSkqgPQPjgEBd=PvXGzPdNZGsxpc7Bqd377=swPmKVYA@mail.gmail.com>
+In-Reply-To: <CAJF2gTRSkqgPQPjgEBd=PvXGzPdNZGsxpc7Bqd377=swPmKVYA@mail.gmail.com>
+From: Hanlin Song <pgeorge8929@gmail.com>
+Date: Thu, 21 May 2026 18:29:33 +0800
+X-Gm-Features: AVHnY4JGWB4uZXEa8BUhtoHI091oejgcNkJzGagzB03p3fQR0p1K7CYHhaGgujE
+Message-ID: <CABvmTk0P0tT3xNFMLbGaoRH5sVFC0oVR+9Un=OFRnLMz=fCgfA@mail.gmail.com>
+Subject: Re: [PATCH v2] csky: Fix a4/a5 restoration in syscall trace path
+To: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd, Dinh, Wolfram, and Miguel,
+Hi Guo,
 
-thank you for your explanations and encouragement; I've now sent my
-application for co-maintainership for arch/nios2 to you, Dinh.
+Sorry for the noise. I noticed that the patch was submitted with my
+short handle as the author / Signed-off-by name.
 
-On Wed, May 20, 2026 at 09:06:33AM +0200, Arnd Bergmann wrote:
-> I think that is a reasonable target. We have a bunch of embedded
-> architectures that have a similarly small user base and I expect
-> that we will want to remove most of them at some point, as we did
-> for seven architectures in linux-4.17.
-> 
-> As long as there is a maintainer for nios2 and it's not actively
-> getting in the way of a specific treewide change, I don't see any
-> reason to remove this any earlier than the other ones.
-> 
-> Obviously at some point nios2 will have to get removed because
-> of the limit to gcc-14 or older, but that should not be a problem
-> for the next few LTS releases.
+If it is still possible, could you please update it from:
 
-This all sounds quite reasonable, including the toolchain
-considerations. Thank you for the offer to keep it around a bit.
-If any issues arise with tree-wide changes I'd be happy to look into
-what can be done on the arch/nios2 side; now that the issues should
-reliably reach me via mail.
+hlsong <pgeorge8929@gmail.com>
 
-> > Sure, I'd be glad to do so, but so far I refrained from it as I was a bit
-> > unsure about the netiquette (can I simply do so by self-proclamation? At
-> > least the git history seems to suggest so...).
-> 
-> Dinh already replied that he welcomes the help, and I also suggested
-> the same thing a year ago. As the only known user that has contributed
-> patches in a long time, you are obviously qualified.
-> 
-> Sending a patch for the MAINTAINERS file to Dinh is the first step,
-> once he has sent that upstream, you can (optionally) apply for
-> kernel.org account that would let you host a git tree on kernel.org
-> or have a tree that you both have access to.
+to:
 
-I've sent the patch, I'm sure we can work everything else out from
-there.
+Hanlin Song <pgeorge8929@gmail.com>
 
-Best regards,
-Simon
+Thanks,
+Hanlin
+
+
+Guo Ren <guoren@kernel.org> =E4=BA=8E2026=E5=B9=B45=E6=9C=8821=E6=97=A5=E5=
+=91=A8=E5=9B=9B 23:45=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, May 21, 2026 at 7:34=E2=80=AFPM hlsong <pgeorge8929@gmail.com> wr=
+ote:
+> >
+> > From: hlsong89 <pgeorge8929@gmail.com>
+> >
+> > The syscall trace path reloads syscall arguments from pt_regs before
+> > calling the syscall handler. On C-SKY ABIv2, the 5th and 6th syscall
+> > arguments are prepared as stack arguments before invoking syscallid.
+> >
+> > The current code adjusts sp before loading LSAVE_A4 and LSAVE_A5. Since
+> > those offsets are relative to the original pt_regs base, loading them
+> > after changing sp fetches the wrong slots. As a result, traced syscalls
+> > that use the 5th or 6th argument may receive corrupted arguments.
+> >
+> > This is visible with mmap2(), which takes six arguments. A small
+> > PTRACE_SYSCALL reproducer opens a file and maps one page with:
+> >
+> >   mmap(NULL, 4096, PROT_READ | PROT_EXEC, MAP_PRIVATE, fd, 0)
+> >
+> > Before the fix, the traced child fails the mmap and exits with 12.
+> > After the fix, the mapping succeeds and the child exits with 0.
+> >
+> > Fix the trace path by loading a4/a5 from pt_regs before changing sp.
+> >
+> > Tested on: ck860f, linux-4.19.15, C-SKY abiv2
+> >
+> > Suggested-by: Guo Ren <guoren@kernel.org>
+> > Signed-off-by: hlsong89 <pgeorge8929@gmail.com>
+> > ---
+> > Changes in v2:
+> > - Use Guo Ren's suggested approach to handle the ABIv2 stack arguments.
+> > - Tested with the ptrace+mmap reproducer.
+> >
+> >  arch/csky/kernel/entry.S | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
+> > index c68cdcc76..3261f46f2 100644
+> > --- a/arch/csky/kernel/entry.S
+> > +++ b/arch/csky/kernel/entry.S
+> > @@ -93,11 +93,11 @@ csky_syscall_trace:
+> >         ldw     a2, (sp, LSAVE_A2)
+> >         ldw     a3, (sp, LSAVE_A3)
+> >  #if defined(__CSKYABIV2__)
+> > -       subi    sp, 8
+> >         ldw     r9, (sp, LSAVE_A4)
+> > +       ldw     r10, (sp, LSAVE_A5)
+> > +       subi    sp, 8
+> >         stw     r9, (sp, 0x0)
+> > -       ldw     r9, (sp, LSAVE_A5)
+> > -       stw     r9, (sp, 0x4)
+> > +       stw     r10, (sp, 0x4)
+> >         jsr     syscallid                     /* Do system call */
+> >         addi    sp, 8
+> >  #else
+> >
+> > base-commit: 5200f5f493f79f14bbdc349e402a40dfb32f23c8
+> > --
+> > 2.25.1
+> >
+> Applied, thx.
+>
+> --
+> Best Regards
+>  Guo Ren

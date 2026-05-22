@@ -1,155 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E94F25B08D
-	for <linux-csky@vger.kernel.org>; Fri, 22 May 2026 00:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DEB3093B8
+	for <linux-csky@vger.kernel.org>; Fri, 22 May 2026 03:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779411215; cv=none; b=SX7HfHKRYj3BFAL2JzdUGPviulgBKvJ1dDjcpeO7yd/XDz8EPdY1Q17dz/yKM3ieQIkKOBUAeH9J1VSB9OPV8k+Aq4K2yhKbUhcHuJ50WYTS7RzWeL8mC3XohYcVWy6tTG/s9DVo0iu3QWTpa3Gao4jmfX028jy7q6kZmlYLHZI=
+	t=1779419917; cv=none; b=H94CIvoXYCq+pzGRqSbQOKe5Wia6j4bFmSLY/TswAcTSXaUtLWuuzGmZ6ULzDivmwtQ9ClDjapBvlq8B1TsKGpRRht3sfDaknvEBQlr3XDI3umN9A3UbgXM7ytDifEluUt5cj0UGx+2U1LyQK+n79knrJq14FpSBSaVo15e9jTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779411215; c=relaxed/simple;
-	bh=zDUvLctaHgXyMQ35Q2Uj8D+QOnK+PP5Mt8/CnsOcouw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LrQ/DshRAMbSsXgjGmNm8OK1Cy/ATmh8HhsxPL4Vv8vCUSBfjTpuKbOvabOFgwxa6XyauliJgZoJcGq/rtLwMOBky1TexYJ6J4NghDQ7vpSK4lI4iTFPyGxRdiemgosTA9LIv6OPA3kYZ/fp+mxoHM0EbFMA3beIb65u2DFU9Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UWY5hUZV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779419917; c=relaxed/simple;
+	bh=RHcrASUOn7BVoJt+yDpq8P6M8enx47c//4tLXYQfln0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=kBdKt1wA8TvxnXIaRI4+1oCFJIDIhu3QedEffyZVnhU97dV6VUnWvNwcEuowpX81MUFXJ7QnIdvaanz96Jda7jSFBspJQ4FLODOihrNrUN3UlhJ/Pl6NPHDhrAMlF9st1xPmuk5SzJB3wYTPlQ3DSsYq8dxn/hZErBMXyyVhYJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CYIXtGq7; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UWY5hUZV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07FE11F000E9
-	for <linux-csky@vger.kernel.org>; Fri, 22 May 2026 00:53:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779411214;
-	bh=fZ0lkfzpNiRHG7GpSIh7WZS9D/wJaogzECf/2GqY21w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=UWY5hUZVZtYuYHerePq9Gesd2Oxm+H8yzYa3dHpA3Vs7rmpn4sM1FyDlGVMVvUlyO
-	 euvQo2LxgddGR3hfMUDYZrwfdToAKgPxn12iqHguOvIeLKDygE4Fnt68Ab0Dsmo46/
-	 J2307o/ayzVu/9VrCzzOE/qkuroy+NIBZ7IXyVDAulZWgrvFRZlWlkvSMuVw7WY+f2
-	 SdB24G4gdRh3GjYWhputQUPMG30do+zVq8nl7VzTSFlF67wg5QMvGpvjkyqyv11zbr
-	 rkxDXW9wousbaNBRnpwlD5Uc0JzRxGNwSW7xUYdwLCBMiWGCF9iEkoWf9UILm4v27/
-	 THkov7bT/fU1g==
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-45e7c636e74so3672075f8f.0
-        for <linux-csky@vger.kernel.org>; Thu, 21 May 2026 17:53:33 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yz5kFnjyOy2yVOAkSEl0faC2l13zZ53w+yCALSkRlgY7Ls0opbV
-	KDC6DMpWe9EI3Ms0V2vXmwrzdDh4ZQ3cLY+5608DbNjHj1MLttNJrB0zlRb6/h7XlNNCfJyj0vt
-	DFmaK5nnYh11JlMV0mbt2/Cm2MDeTfT4=
-X-Received: by 2002:a05:6000:25fd:b0:45b:d5d7:1f59 with SMTP id
- ffacd0b85a97d-45eb38a64f8mr1228900f8f.24.1779411212674; Thu, 21 May 2026
- 17:53:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CYIXtGq7"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-366330b6751so5329557a91.1
+        for <linux-csky@vger.kernel.org>; Thu, 21 May 2026 20:18:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779419916; x=1780024716; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/T4BWblikkw6zSJAAAEguKwZNShD2P4z6u7X5YgfzeE=;
+        b=CYIXtGq7RwjYwpKjQ7+y2agcBgAItZL+xA7yz84pjwWMP2CaWfFENomolJvMGM5wCs
+         3GA6V7jG62+f/KoxwcClrSKN8+wANsUMKh6/a4GGCvBHyP05HTenBdPubewNLYMH/tw8
+         mve7I2QrFFbQ5Pfx5cEir4u5EzMAoVWlDVxRBRk/zcO5jnogO2DxZ71929C++ImHNM2I
+         JjCyS4B5lyXlEHlsWqGn8Pskuua5npK52mLSCd/gOprSV4Ofzf+hFWdMnFWtkg99EDif
+         KZbq9FWE6aJuuIFDQh/Zun2Ki5Rr73P2Sk8oowmmV23d+N0RJSvlUSzAcbEffdVh7W8c
+         as6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779419916; x=1780024716;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/T4BWblikkw6zSJAAAEguKwZNShD2P4z6u7X5YgfzeE=;
+        b=jrgg9vsdckIfrU73Il6jhGipS9cqBfmInH0cBMGffp20U1FTnaq2NKkJUkpGCUA7in
+         pMN2n0ozsqztWa1vT7jcrGozl1xUwJGGUcWS0qa0ZRSRA5T9DZ8Hm2EZsFDArtDIhtzz
+         /VXkz1hK8VACw0gmN21D6fWBzXXidkAK0kWBjRaBXKTs92cMGcQcvFH05LAGJ5yRv8qO
+         NqMRR7hjAFCPnttrQl8eYBZbV+4l6fen6azESLv4J/lwWuhQnxWFNzwQrqpSch0bnpss
+         DMZcwFtoH7B6M171mwE21wBGy6gRb6P2m4dard+Oy5ps1HGBSGQQCCS5hQasx4qQi+O2
+         VQ4A==
+X-Gm-Message-State: AOJu0Yx9VTfYRrSeYIUf8SmDpXrhz0UI/jL8OHGUJzcoYTZPPko1CqvJ
+	oE1Deyy2/fcU+lssHcJC6R0bMe9hz1oyjUDBFOzzMt2Tyu029ucI/6p9
+X-Gm-Gg: Acq92OEd2dPw+XwaTxzplbS2/GjosJvcGPn2xRS9Ya/+r3/OOGw5E7dBD36CpI688PN
+	3eCn5B7lzXtIpikB6uc34W1yYOJ23e+0sVo1GyDhDFK/EHVCEeLovgyvxIaEuWGvTG5zujsvgnA
+	rGT+FaHo7Hof4nWFRI5iVmaJUbXrjtg6f0ErTWlx+cGmiCRT74INJy5Aw1ON6Y/Ypxcfs5FtRJm
+	djbZhtpiVqRSRBOk7eZ+Q+Wl8w62AkyGujx0irdH3JFU6yhBYCCHH92GGSNkNmwzgBTbgVwuVqL
+	xAn8w+SuamyT5t7uQluQmdGU1dplL+DZXF9cwOrzuAPx7KT7zWGD6jmqaQl4pf8o6AKDo4/FfGE
+	L3F5RrYR83ImMBYDUkZs9BNFuBFoK8oboa5yOw85oJDa9g/8MG3rRhnQcl2CQdRuK6qJii2TenZ
+	VRtpj3mO24bPiA37nJ58EFSTp+LaenDX3x9BAHpZWFHAutJkcYfH89d/qrYR9fCl00cOzexuND7
+	xEpmRQD
+X-Received: by 2002:a17:90b:2b88:b0:367:db13:aca6 with SMTP id 98e67ed59e1d1-36a6785aedcmr1835344a91.26.1779419915891;
+        Thu, 21 May 2026 20:18:35 -0700 (PDT)
+Received: from gmail.com (42-200-231-193.static.imsbiz.com. [42.200.231.193])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a721c7b92sm393706a91.12.2026.05.21.20.18.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2026 20:18:35 -0700 (PDT)
+From: Hanlin Song <pgeorge8929@gmail.com>
+To: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hanlin Song <pgeorge8929@gmail.com>
+Subject: [PATCH v3] csky: Fix a4/a5 restoration in syscall trace path
+Date: Fri, 22 May 2026 11:18:24 +0800
+Message-Id: <20260522031824.22834-1-pgeorge8929@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAJF2gTT1LwmR=b+_-8M9Q4iZ5V=GYM0P7qbLSRWgsvajCtJ0kA@mail.gmail.com>
+References: <CAJF2gTT1LwmR=b+_-8M9Q4iZ5V=GYM0P7qbLSRWgsvajCtJ0kA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJF2gTRumJwDi19nCmKZa+6KvvNvRSo=Jhyd7f6=5pe9J5Q0nQ@mail.gmail.com>
- <20260521113356.58513-1-pgeorge8929@gmail.com> <CAJF2gTRSkqgPQPjgEBd=PvXGzPdNZGsxpc7Bqd377=swPmKVYA@mail.gmail.com>
- <CABvmTk2+kd9n7xwSK=nnDBK4nC62sS7Du-MVeY17XV-p9pRufQ@mail.gmail.com>
-In-Reply-To: <CABvmTk2+kd9n7xwSK=nnDBK4nC62sS7Du-MVeY17XV-p9pRufQ@mail.gmail.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Fri, 22 May 2026 08:53:19 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT1LwmR=b+_-8M9Q4iZ5V=GYM0P7qbLSRWgsvajCtJ0kA@mail.gmail.com>
-X-Gm-Features: AVHnY4Je-rbKl5qaKGGtcJ0t5CCBJSP7P0iM5BjyOIJs6EfhtGvTBDIbKhCKHpo
-Message-ID: <CAJF2gTT1LwmR=b+_-8M9Q4iZ5V=GYM0P7qbLSRWgsvajCtJ0kA@mail.gmail.com>
-Subject: Re: [PATCH v2] csky: Fix a4/a5 restoration in syscall trace path
-To: George Patton <pgeorge8929@gmail.com>
-Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Please resend this patch, thx.
+The syscall trace path reloads syscall arguments from pt_regs before
+calling the syscall handler. On C-SKY ABIv2, the 5th and 6th syscall
+arguments are prepared as stack arguments before invoking syscallid.
 
-On Fri, May 22, 2026 at 2:14=E2=80=AFAM George Patton <pgeorge8929@gmail.co=
-m> wrote:
->
-> Hi Guo,
->
-> Sorry for the noise. I noticed that the patch was submitted with my
-> short handle as the author / Signed-off-by name.
->
-> If it is still possible, could you please update it from:
->
-> hlsong <pgeorge8929@gmail.com>
->
-> to:
->
-> Hanlin Song <pgeorge8929@gmail.com>
->
-> Thanks,
-> Hanlin
->
-> Guo Ren <guoren@kernel.org> =E4=BA=8E2026=E5=B9=B45=E6=9C=8821=E6=97=A5=
-=E5=91=A8=E5=9B=9B 23:45=E5=86=99=E9=81=93=EF=BC=9A
->>
->> On Thu, May 21, 2026 at 7:34=E2=80=AFPM hlsong <pgeorge8929@gmail.com> w=
-rote:
->> >
->> > From: hlsong89 <pgeorge8929@gmail.com>
->> >
->> > The syscall trace path reloads syscall arguments from pt_regs before
->> > calling the syscall handler. On C-SKY ABIv2, the 5th and 6th syscall
->> > arguments are prepared as stack arguments before invoking syscallid.
->> >
->> > The current code adjusts sp before loading LSAVE_A4 and LSAVE_A5. Sinc=
-e
->> > those offsets are relative to the original pt_regs base, loading them
->> > after changing sp fetches the wrong slots. As a result, traced syscall=
-s
->> > that use the 5th or 6th argument may receive corrupted arguments.
->> >
->> > This is visible with mmap2(), which takes six arguments. A small
->> > PTRACE_SYSCALL reproducer opens a file and maps one page with:
->> >
->> >   mmap(NULL, 4096, PROT_READ | PROT_EXEC, MAP_PRIVATE, fd, 0)
->> >
->> > Before the fix, the traced child fails the mmap and exits with 12.
->> > After the fix, the mapping succeeds and the child exits with 0.
->> >
->> > Fix the trace path by loading a4/a5 from pt_regs before changing sp.
->> >
->> > Tested on: ck860f, linux-4.19.15, C-SKY abiv2
->> >
->> > Suggested-by: Guo Ren <guoren@kernel.org>
->> > Signed-off-by: hlsong89 <pgeorge8929@gmail.com>
->> > ---
->> > Changes in v2:
->> > - Use Guo Ren's suggested approach to handle the ABIv2 stack arguments=
-.
->> > - Tested with the ptrace+mmap reproducer.
->> >
->> >  arch/csky/kernel/entry.S | 6 +++---
->> >  1 file changed, 3 insertions(+), 3 deletions(-)
->> >
->> > diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
->> > index c68cdcc76..3261f46f2 100644
->> > --- a/arch/csky/kernel/entry.S
->> > +++ b/arch/csky/kernel/entry.S
->> > @@ -93,11 +93,11 @@ csky_syscall_trace:
->> >         ldw     a2, (sp, LSAVE_A2)
->> >         ldw     a3, (sp, LSAVE_A3)
->> >  #if defined(__CSKYABIV2__)
->> > -       subi    sp, 8
->> >         ldw     r9, (sp, LSAVE_A4)
->> > +       ldw     r10, (sp, LSAVE_A5)
->> > +       subi    sp, 8
->> >         stw     r9, (sp, 0x0)
->> > -       ldw     r9, (sp, LSAVE_A5)
->> > -       stw     r9, (sp, 0x4)
->> > +       stw     r10, (sp, 0x4)
->> >         jsr     syscallid                     /* Do system call */
->> >         addi    sp, 8
->> >  #else
->> >
->> > base-commit: 5200f5f493f79f14bbdc349e402a40dfb32f23c8
->> > --
->> > 2.25.1
->> >
->> Applied, thx.
->>
->> --
->> Best Regards
->>  Guo Ren
+The current code adjusts sp before loading LSAVE_A4 and LSAVE_A5. Since
+those offsets are relative to the original pt_regs base, loading them
+after changing sp fetches the wrong slots. As a result, traced syscalls
+that use the 5th or 6th argument may receive corrupted arguments.
 
+This is visible with mmap2(), which takes six arguments. A small
+PTRACE_SYSCALL reproducer opens a file and maps one page with:
 
+  mmap(NULL, 4096, PROT_READ | PROT_EXEC, MAP_PRIVATE, fd, 0)
 
---=20
-Best Regards
- Guo Ren
+Before the fix, the traced child fails the mmap and exits with 12.
+After the fix, the mapping succeeds and the child exits with 0.
+
+Fix the trace path by loading a4/a5 from pt_regs before changing sp.
+
+Tested on: ck860f, linux-4.19.15, C-SKY abiv2
+
+Suggested-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Hanlin Song <pgeorge8929@gmail.com>
+---
+Changes in v3:
+- Use full real name for the author and Signed-off-by.
+
+Changes in v2:
+- Use Guo Ren's suggested approach to handle the ABIv2 stack arguments.
+- Tested with the ptrace+mmap reproducer.
+
+ arch/csky/kernel/entry.S | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
+index c68cdcc76..3261f46f2 100644
+--- a/arch/csky/kernel/entry.S
++++ b/arch/csky/kernel/entry.S
+@@ -93,11 +93,11 @@ csky_syscall_trace:
+ 	ldw	a2, (sp, LSAVE_A2)
+ 	ldw	a3, (sp, LSAVE_A3)
+ #if defined(__CSKYABIV2__)
+-	subi	sp, 8
+ 	ldw	r9, (sp, LSAVE_A4)
++	ldw	r10, (sp, LSAVE_A5)
++	subi	sp, 8
+ 	stw	r9, (sp, 0x0)
+-	ldw	r9, (sp, LSAVE_A5)
+-	stw	r9, (sp, 0x4)
++	stw	r10, (sp, 0x4)
+ 	jsr	syscallid                     /* Do system call */
+ 	addi	sp, 8
+ #else
+
+base-commit: 5200f5f493f79f14bbdc349e402a40dfb32f23c8
+-- 
+2.25.1
+

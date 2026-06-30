@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8CC3D666A
-	for <linux-csky@vger.kernel.org>; Tue, 30 Jun 2026 03:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409A740BCC8
+	for <linux-csky@vger.kernel.org>; Tue, 30 Jun 2026 10:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782788792; cv=none; b=gWGsC7/5Uu6ihi8JqhRVra+YDse4kZlOXgQGGnD9uwK/nII8snYYgITJ2VpBZ1DmR8uFzQsWtgsPn1msdB/0PTRsXsPIqJsbPgPfXNBMpKtwF3nVFuGiLJGwhegebCK5SVsBi5E0Cy4c9VAfzbEdevn/DtFP8vMBJ349tPxhavU=
+	t=1782817044; cv=none; b=qeeetkZYeTF0MjWGHzPzcmL6HHY1TeUaQtDRCmNICFyrFzw6Glc9ms0Jws6Dfwl45EjrpXsnEHNzkXRvjKiS2C5NiwRm0r+1gt+dvgGqTxyDist6T44mzqX5YhxVnkeOwhwRFW+K/eyrTzRFMfC7PGZrk403OGfLM/nhYDBPtS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782788792; c=relaxed/simple;
-	bh=mR8DP2XZ/1StzxeHsy2i3aZNjuZlRnSSuFmoACgUkak=;
+	s=arc-20240116; t=1782817044; c=relaxed/simple;
+	bh=SFJyhzApgCLMGmQKlBrEgilM7Tdt6DP5MxjLh24ot3s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A1lMq9PdpKkQ6w5iFMO7ReGPXUJzfb9C2rZzBe3KYbGrrtbNWYiEFzKhwgDKO3grORTPvCgcXLTfEf7dPx1CiW6eSolQpZP5opIOZ1ErSRHmxGhJ7IFzgjjdW6mMLRgf/chacERbcnJc5JqfSZMvBVua2Tp4E7FcwQAoOKodY6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U2zLVume; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=WAa01sNFVVMkAR6m4jRUvazUvgwAdVk21JTibdPx+VarCNeVKbOtq8GJbVh/nVZ4lN8Twpufvvrh4YMypiLZrU4OJgVvycMPQQMQZHehjrHk8sSWFio88XLIPuxCMJbICT0/HgsZtDxmeAVEJE17p8bYxP4B7QgH+y0nq3Z/v6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ml0Ca4UA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U2zLVume"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85681F00A3D
-	for <linux-csky@vger.kernel.org>; Tue, 30 Jun 2026 03:06:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ml0Ca4UA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA0361F00AC4
+	for <linux-csky@vger.kernel.org>; Tue, 30 Jun 2026 10:57:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782788781;
-	bh=fzAepXvhPnU3RVO1srqzjPmRiEpd6yJalacgOF/VkH0=;
+	s=k20260515; t=1782817042;
+	bh=2+HA/JoBOxFhZJaSk9aZ5CarxkWj6UA49Z/NltJ50Cg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=U2zLVumemi5RyKZ/Er4lX1JcPSmWBY8+0UgYwin5Bay4lHHKvQp1iISEIp61FMlc7
-	 tmjtG1H8ddTlX55LyydEVW1W3bIrXqoaqVFBBE0Wj9o+hsbRNKHPichpVAF13NcDFd
-	 XaG+g/wwrXs5f370g1M+N/X1iN3J4JHgpcuw0ja7ON8RLFxagyt8D+6KeDyPfTWHrF
-	 MxeeX/+Jah0pEhVsAhwBD5vTC3O5hYwy1CqigQPQsAx1PhH5hcwdMghsqTvTsg4/E/
-	 mzCKcooz9M55dBb06apUrAwo1YVjZXlxokWiv/paEXPEVBc6FtX1L0f3vfp8D0QMzA
-	 9/QOejrPJUqBQ==
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-47231f1f8f3so3191163f8f.1
-        for <linux-csky@vger.kernel.org>; Mon, 29 Jun 2026 20:06:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RoJr7v4d+Nv3fWltYo6vLg7BXgHBKCXxrlHTOfNJ1weqFZS/oTxteeqFfFk8qwKc/ugDgFXm3RGep1s@vger.kernel.org
-X-Gm-Message-State: AOJu0YytVYX9sqFx8Q0vt7QKEObL2KvT7LU0mm/FZgZCSueJ97zUtwgD
-	IIxwsVx7dPW5a2/CxvspKGliYDN65FUxIV6BjQhwcPY7p2UX+44MaCdwIaqssUJrRGkP/3zCHM9
-	IsgygSGGul8bjdFTKwBYbjCkEXbDDfl8=
-X-Received: by 2002:a05:6000:3110:b0:475:806:c5e8 with SMTP id
- ffacd0b85a97d-475506e972cmr2367506f8f.9.1782788780671; Mon, 29 Jun 2026
- 20:06:20 -0700 (PDT)
+	b=ml0Ca4UA8WnoIceeByIqxj9zleRHe4d4FldENXK+iKmBFAipQ75AEdeo/fGCqmRJC
+	 Qubr3JAb4291J+0F8rRqobUgfrwR7AEdiTQvF3tERlrAkYYJAQt4tCZDdZDoc0Fmbx
+	 FAaWWdZewjg/UrTOTRfiw+6Wi7dHvD0F0+oujEHCJvNwNi9jzf9SgfnQ17icKyQsNW
+	 jsIphJi6kruZaAP1WC44aB58wb14jYgWJSz1GFqjOlCjw9IYclQq4dPwYUUbWJuVCd
+	 rMjHy84CAguLrfYAops3rN5vfJdoFQTBYkmIA3Z+9ui4Xe/zGr01rwoQEuNm97vpkN
+	 GtkF6n/sh4ACQ==
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-51c0006ea8eso15461161cf.1
+        for <linux-csky@vger.kernel.org>; Tue, 30 Jun 2026 03:57:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8d5T1Yp6wN3WIkdHBWcx1X4R6hXR5sI7TALBI4mUI6rQb5jzAmvHVxu+tDeKqucMHbC+aoOGnZ7f6G@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqULAzAO5R9OY/wzyn5LMY4840CZXeaP4q17ETHrls++0DHtWJ
+	UBl62r5dEzP9UzQlwaXik42oSsEYBeMpodPjVWcdmRn4tZ0jmRALu2gNEM34v1LoDCeVYui3fMi
+	82V9sOS7msSZk6dUkDSM2tF16E1eYobQ=
+X-Received: by 2002:a05:622a:207:b0:51a:8c86:bd40 with SMTP id
+ d75a77b69052e-51c1ca5ad03mr786431cf.61.1782817042418; Tue, 30 Jun 2026
+ 03:57:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -43,17 +43,18 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <202606291606.9h8aGniQ-lkp@intel.com> <20260629171909.1d6e96dd15a80b8f463bb68a@linux-foundation.org>
 In-Reply-To: <20260629171909.1d6e96dd15a80b8f463bb68a@linux-foundation.org>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 30 Jun 2026 11:06:08 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT+Pz51u2ckYQGye_TNbfbvHHiEHb0Ned-k0MFCe4vgEg@mail.gmail.com>
-X-Gm-Features: AVVi8CfpjiHAZxpIu9w2olplIGKjchfQBEYO-NTXILWsnMIEoAgT2ud8VKG7C3U
-Message-ID: <CAJF2gTT+Pz51u2ckYQGye_TNbfbvHHiEHb0Ned-k0MFCe4vgEg@mail.gmail.com>
+From: Barry Song <baohua@kernel.org>
+Date: Tue, 30 Jun 2026 18:57:10 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4wViR10e-9B1qqv5MNTMGVHVGLDiDzqh8PM=PPfm5rCTA@mail.gmail.com>
+X-Gm-Features: AVVi8CfRjXxRj_MDC-E8kjBOS5LOmhQQQo2Vt2_pEXaIk32vDSLRHRLAK_LHPZk
+Message-ID: <CAGsJ_4wViR10e-9B1qqv5MNTMGVHVGLDiDzqh8PM=PPfm5rCTA@mail.gmail.com>
 Subject: Re: [akpm-mm:mm-new 59/142] mm/vmalloc.c:3590:23: warning: unused
  variable 'start'
 To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, "Barry Song (Xiaomi)" <baohua@kernel.org>, oe-kbuild-all@lists.linux.dev, 
+Cc: kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev, 
 	David Hildenbrand <david@kernel.org>, Linux Memory Management List <linux-mm@kvack.org>, mm-commits@vger.kernel.org, 
-	Dev Jain <dev.jain@arm.com>, Wen Jiang <jiangwen6@xiaomi.com>, linux-csky@vger.kernel.org
+	Dev Jain <dev.jain@arm.com>, Wen Jiang <jiangwen6@xiaomi.com>, Guo Ren <guoren@kernel.org>, 
+	linux-csky@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -129,31 +130,17 @@ iable]
 > Cc: Will Deacon <will@kernel.org>
 > Cc: Xueyuan Chen <xueyuan.chen21@gmail.com>
 > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
->
->  arch/csky/abiv1/inc/abi/cacheflush.h |    7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> --- a/arch/csky/abiv1/inc/abi/cacheflush.h~csky-implement-flush_cache_vma=
-p-in-c
-> +++ a/arch/csky/abiv1/inc/abi/cacheflush.h
-> @@ -42,7 +42,12 @@ static inline void flush_anon_page(struc
->   * Use cache_wbinv_all() here and need to be improved in future.
->   */
->  extern void flush_cache_range(struct vm_area_struct *vma, unsigned long =
-start, unsigned long end);
-> -#define flush_cache_vmap(start, end)           cache_wbinv_all()
-> +
-> +static inline void flush_cache_vmap(unsigned long start, unsigned long e=
-nd)
-> +{
-> +       cache_wbinv_all();
-> +}
-> +
-Thx for the fixup.
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Thanks for the fix. We even have a checkpatch check and coding
+style documentation for this:
 
---=20
+6813216bbdba ("Documentation: coding-style: ask function-like
+macros to evaluate parameters")
+
+b1be5844c1a ("scripts: checkpatch: check unused parameters for
+function-like macros")
+
+Reviewed-by: Barry Song <baohua@kernel.org>
+
 Best Regards
- Guo Ren
+Barry

@@ -1,82 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A173420894
-	for <linux-csky@vger.kernel.org>; Tue,  7 Jul 2026 03:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD3F188713
+	for <linux-csky@vger.kernel.org>; Tue,  7 Jul 2026 03:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783394133; cv=none; b=nvmuIsrOgXSBYCNiqKIVu91xhMVnfwRqOfktP1V1zoHyD7jSxaZJHLZSceStH4//SleRhqLmsUbXGiWm5+AdfDCVUH+V9C0/Didiqr98ETVz+gJDpQ6H5nXORbrgPDV57iR98/25IiFY5RxLaC0+Rgrl4z7D6nLU5HA9Q+csJHw=
+	t=1783396075; cv=none; b=tEG5PHm5DWGaVqpMfgYopAo+TNYadugN55VHrdLCYtZJL2GBLWDguJ6dtGtlJrok+NQD5JsA/Vm32Ya+wIAqy5pbn32ivzOuv2Ka+ixzeMCx8f/xZqWqpObdX/W8F2M/PuyZRX6zBv26JR91bu9ss8Z5ueVk2+JPQIgPn5h6TVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783394133; c=relaxed/simple;
-	bh=KOO+bq4CdxG/gRvjSNKLfw4xd+/J4MXSQBE5xgy8ShM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K6bUYk0reL5FoLZliet4SIPqWrHESXBAgklxxuFGeSq5pKxuZuHBHDoh6fCxTv4qk0+7QU5w8P0h7uKjQv80Lrkd0dIXoHZg/LvvLEal87OV8kV4kkJYAf1pXkQhZnyV/p6DeNSOy1mV1AH4FrVTosuE2F1pxN5VxMOQcAnie+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZOLu0CX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783396075; c=relaxed/simple;
+	bh=70M8owVCOQmzoIVE/OE13k0xqPMzJj6kgCNEiBOsQRk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=i7Kni9MJZcwqvDM6QwVXE5ua2w9ROIcYYclmcUOqOrsaRclhbKTH8byxFgR5GS/QZPjmGDASZVfOAVooMzY+BqZelV7pVbxLuRCa30h3gpmD84J6l2l61lrSIhoI9XeumS8L81XuBMW5B/dldy7Uulcsw5Hl/GixPlTK/S6mSpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZMOeexJv; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZOLu0CX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09DF1F000E9
-	for <linux-csky@vger.kernel.org>; Tue,  7 Jul 2026 03:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783394131;
-	bh=KOO+bq4CdxG/gRvjSNKLfw4xd+/J4MXSQBE5xgy8ShM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=TZOLu0CXjyw8ohuxB7Bbc6rSSQZdG0bGylhJWEVjqREGlmxuSjF8lyIMvZcj2RltB
-	 aXj2TsBF3h1NhO6pZaeW6vl7HD3sPyUUHHd7BDxVwWGZXgtsur8FUJkOgvEIQ+knUQ
-	 ugV/A7ExJjWuQzF8M2xhn6J3PNsGo63wj0/2Tils1xtp5tXMI+z9lJ5BnKdgfmB5eC
-	 ukXjzKqeSBIJflj7vSF9MXDvR7nAxouDfDsFJzvi0dxMujV9O2NwgdwSfVHToEm6Kf
-	 1S1Hbur2Hg/wtLuN2RKPnNZb7OiNxWinZJjacFtVPQr/UvkuilJxzhiw2GPfX9z/5+
-	 ZHMBK/CUHiM5w==
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4799b3f7c83so2298344f8f.2
-        for <linux-csky@vger.kernel.org>; Mon, 06 Jul 2026 20:15:31 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzWzRFdjjUF8DxfZGznsv6r2S14bAms6dcOw5BugY/VYl/V87pC
-	GbIZF90Z8CFdDxMKVM5J/E58+sfvrzKlFC7DPApLKPOD2Of6Wawtgx5GJXI01S2IgKzZ0BUK2m9
-	BOwnWsHM3v6I4p77tNcxd4a3a0V1Ga/0=
-X-Received: by 2002:a5d:670d:0:b0:470:2fb1:3dbc with SMTP id
- ffacd0b85a97d-47de66cdc70mr2240912f8f.35.1783394130436; Mon, 06 Jul 2026
- 20:15:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZMOeexJv"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-37cab825ec9so3707102a91.1
+        for <linux-csky@vger.kernel.org>; Mon, 06 Jul 2026 20:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783396073; x=1784000873; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=70M8owVCOQmzoIVE/OE13k0xqPMzJj6kgCNEiBOsQRk=;
+        b=ZMOeexJv/vShrNIbmEQGHZt9Zr+JR/e+50DtyhDKkAj0n6+V97SVb6jDx058aOLWCr
+         m8jXhcHo6wC1ygagq46IUDtJoyBFvsOOI32xZYzaDTRlauNLxc7xnPvkpzdS7GnRwoe/
+         CkUgaf6oSIIUhsFAS2hvBiHkqI4qBbYjKO+oKXVWXQBuGXlNqdgb+hkxAgVQ0ulY5sBE
+         maxwVroWL5aeYG5LDdO6rep4mUfcA5RPxrqV5N4ueDWLSWyX+XeyhdbIdo/afz3aMSrl
+         LY4cOvZft2k6Jp2YHlo0uWJQ0LPu65kbrKaBy7uK5W0sQq5tPe+b4fbTnh2vgOwIH5xz
+         qOwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783396073; x=1784000873;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=70M8owVCOQmzoIVE/OE13k0xqPMzJj6kgCNEiBOsQRk=;
+        b=pOFyYk1kf6jWEL91s5znnPQvhzs928/mX9Oyp1ra2flao22XbIbMAPbFQ3o46cAiek
+         EzAScJ5TAvzkYwnf4d1JZrXHXGWjQfIMIJCERtGX1uSohoZPN3mr+O37f32FrIdfhkU4
+         SDS/L9A0Mg2gXjvTzn/pSUYIkHrpbWzJLWDKL0nlqyZF3mlwBf0isfqUA3tEq8n+GyoY
+         xJBtT/ooyuM6qIh2XIMpTYAkIjg8UySuxddSw61xw1wM5nL6fbu2QjuFMWswzqzLrO3B
+         P/MtqoEnMdJI/r5f8q/dRWAiVTHdCJ/07Sa8tl4t8s0k2sJrwDIInLnLT4SyAp5sSH8U
+         rvEw==
+X-Forwarded-Encrypted: i=1; AHgh+RotwjA1FutLbasCJoTCpcw12If02pdMghhuNv4hK2SJYpnsE/XyzELe4GQyAnmjEBO7/h2uqcw9gcXK@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZFO3hV2aUCbadTkV7lVCYfiZYRfqCNNpKYQ5Wb/G+4BryPzQn
+	7ZPqpzhqqFQql/RFJTXEE2sERCDU+BMqsZQtlj0UIcZPIPLvml2/0voh
+X-Gm-Gg: AfdE7cm5EfSZSfFCoWQG3iZ3QylBr13gAm2y1HV6jb6FFu2yFjL3RwNrtOnWLC41W1+
+	EvTZkiQbIzTBMa6LT6ocED/be/5PHBhSIsGVYCnMzHSHN3WiRDBAk0bzAIEO8NWHdTc1fGE1AMl
+	lYfaQ8qEM6DB30y7ceiBA8zlEjTtNwfBbo4bVVPM8fUXQA69YO5KsgIjXRscJD4zwTFX9bsT/dv
+	kfXu58YDEilv8DnYZGEAff4Uo2Xn2U0nd32plEPT/pBz51rosg0n7najEEiDBK7oYaz5umnixpG
+	Owp0wz3P/34b7/kjRlPS3yDIl7nIjc8/333QrHPk494y7rTH4meAAsbtfEMefKEUx4tCSzah3oY
+	Nv0XqFEMbLqh1ndsW6gWJInCo0/Ql5rlUJPmKEgX5Ek62Ncgy9o2DRIKVzlFkHTAgEzC90VJIBl
+	sXvFjIyMIlMECMN7zxpR8tP/tJDz9Eg/M6p6YPy7g=
+X-Received: by 2002:a17:90b:586d:b0:37f:9ce1:cdb3 with SMTP id 98e67ed59e1d1-3875a1ba886mr3438082a91.33.1783396073612;
+        Mon, 06 Jul 2026 20:47:53 -0700 (PDT)
+Received: from gmail.com (42-200-231-193.static.imsbiz.com. [42.200.231.193])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-387d20a361asm314188a91.15.2026.07.06.20.47.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 20:47:52 -0700 (PDT)
+From: Hanlin Song <pgeorge8929@gmail.com>
+To: Guo Ren <guoren@kernel.org>
+Cc: Hanlin Song <pgeorge8929@gmail.com>,
+	linux-csky@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] csky: Fix ABIv2 memcmp() s1 alignment check
+Date: Tue,  7 Jul 2026 11:47:26 +0800
+Message-Id: <20260707034726.11076-1-pgeorge8929@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAJF2gTTExptWYfy7m-aMG6WtcOJhegZ7=obcf4PQ25-jpMHvSA@mail.gmail.com>
+References: <20260623112438.33022-1-pgeorge8929@gmail.com> <20260706103932.20961-1-pgeorge8929@gmail.com> <CAJF2gTTExptWYfy7m-aMG6WtcOJhegZ7=obcf4PQ25-jpMHvSA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623112438.33022-1-pgeorge8929@gmail.com> <20260706103932.20961-1-pgeorge8929@gmail.com>
-In-Reply-To: <20260706103932.20961-1-pgeorge8929@gmail.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 7 Jul 2026 11:15:18 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTExptWYfy7m-aMG6WtcOJhegZ7=obcf4PQ25-jpMHvSA@mail.gmail.com>
-X-Gm-Features: AVVi8CfEme2pv6RaFCOSeuNyWBgYHCXSxI_IDqu8rrXo5282CryWwznMYdVB7zw
-Message-ID: <CAJF2gTTExptWYfy7m-aMG6WtcOJhegZ7=obcf4PQ25-jpMHvSA@mail.gmail.com>
-Subject: Re: [PATCH] csky: Fix ABIv2 memcmp() s1 alignment check
-To: Hanlin Song <pgeorge8929@gmail.com>
-Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Song,
+Hi Guo Ren,
 
-On Mon, Jul 6, 2026 at 6:40=E2=80=AFPM Hanlin Song <pgeorge8929@gmail.com> =
-wrote:
->
-> Hi Guo Ren and C-SKY maintainers,
->
-> Gentle ping on this patch.
->
-> My understanding is that r3 holds the original s1 pointer after r0 is
-> cleared, so the alignment check should use r3 instead of r0. I also
-> tested this on a CK860f chip, and the patched version was faster in my
-> unaligned memcmp test.
->
-> I may be missing some C-SKY ABIv2 detail, so any feedback would be
-> appreciated.
->
+Thanks for the clarification.
 
-Thanks for the patch, but this code is intentional. The CK810 and
-CK860 support misaligned load/store in their microarchitecture, so the
-alignment-check path is effectively dead code that exists only to keep
-this asm code. It has been carried over unchanged from the very first.
-
-
---=20
-Best Regards
- Guo Ren
+Hanlin

@@ -1,74 +1,50 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.9])
+Received: from sender-op-o14.zoho.eu (sender-op-o14.zoho.eu [136.143.169.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C646223507C;
-	Fri, 24 Jul 2026 02:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784859488; cv=none; b=pFe1CWVBOoYGm8QzqiT/qbc7FSouQ+G6USKovKHUnzZUEly8Dvnfbb0mrBaJ7/9Bb0/NA3cUVigReni5XUajd/dIj6uu7YjXJ56jgoCGXI6ASdC67rITJpi20OUI6r/hPxlQFPQbqiZryvaIsRCD1QMwPPBNkvHk/ESPH0DtCME=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784859488; c=relaxed/simple;
-	bh=rwRg529y05peA/WWTMCXEBfX3q0s9gAsSrO8arvTDhM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Udv56V9xCfVJxhYRYDg+oD+o8A8OYh9Q+MRX1L6OQV4XPJiKY0WlhSa1tEkaeyJwsovsRQdzUUkw7psDmYIz3pDG1Q5aGJOUQX9hoR9pOBPE59WWeHK9k4fhu75WLIh0eaBRxddYgJdPZ2RsbZvzUVlan9OK951snMtGjcO1eq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=ipar9103; arc=none smtp.client-ip=220.197.31.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA823C4168;
+	Fri, 24 Jul 2026 11:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784892022; cv=pass; b=Df8lUPK09Z/NTGqJFoCT98biln1rq1O5w/z1w5jx774Vh1VbB6ZsYcXeX8itql+uLDc3qEe93VnWxiE5oxlfCj2tvA3AmYOyP/iVIPqqEXXd8RRxCyJWF0YLr+n9rx2Y+uRD1fNt+nUVnfCD/s6URlZAfK+iE7fEvBkyEBu0V4E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784892022; c=relaxed/simple;
+	bh=XavdgeStjkSn+NtOzy1VzvhIdvnRqKWIpiZg7PYiBkw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uFeKyAyNGaQbJe6gOe0kzPeQcuc3E0P2O/3onOe4IalMKWO1viUdt9h7Cr8igUNKVaLL7l52eIIOYQ1oYWb9LPxfo40iqE+S0NZf0rTYfDA5MPtcTwKxScLlTFTBLKF2poDvoM/nsoKa/vZiLEtm22dNJWRnQcMlfIVEnkcXsZ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=auditcode.ai; spf=pass smtp.mailfrom=auditcode.ai; dkim=pass (1024-bit key) header.d=auditcode.ai header.i=security@auditcode.ai header.b=L+H3VNeT; arc=pass smtp.client-ip=136.143.169.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=auditcode.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=auditcode.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="ipar9103"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=L/
-	SZp0vPqZ6bgIHdMlwc9563CUsJkyQzIo7rI6wG1fs=; b=ipar9103VugBwa7uzk
-	RoqjOghrHfRoqDl2bzaHe0YPIkBrqYCLgiYNa1/ES/GRQ8WHq2GbajVuBN2uMDbr
-	+3gkFYU0bsk813V33HstJUih1FcKIA7lBelM4qVniwAowoHQCdo0vuE4VHpsY6gY
-	n6ZDAiMe/dnXvn4gK6jlV0i+Y=
-Received: from song-MS-7D48.. (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSkvCgDnr+wRymJqH7z4DA--.34972S3;
-	Fri, 24 Jul 2026 10:12:39 +0800 (CST)
-From: Song Chen <chensong_2000@126.com>
-To: arnd@arndb.de,
-	kees@kernel.org,
-	clm@fb.com,
-	dsterba@suse.com,
-	linux@armlinux.org.uk,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	guoren@kernel.org,
-	kernel@xen0n.name,
-	maddy@linux.ibm.com,
-	mpe@ellerman.id.au,
-	npiggin@gmail.com,
-	chleroy@kernel.org,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	gor@linux.ibm.com,
-	borntraeger@linux.ibm.com,
-	agordeev@linux.ibm.com,
-	svens@linux.ibm.com,
-	tglx@kernel.org,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	jpoimboe@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
+	dkim=pass (1024-bit key) header.d=auditcode.ai header.i=security@auditcode.ai header.b="L+H3VNeT"
+ARC-Seal: i=1; a=rsa-sha256; t=1784891977; cv=none; 
+	d=zohomail.eu; s=zohoarc; 
+	b=WxPVJoFjx9aPW0sEzulSo/o2iOUo/SPFHf9JRpn/CHRkN0l3GYmIHS+sd4A0UcMu9WEeOmpq5zGkWZhySwFC6cDFDF6eWwxGV12xSmto09M8zBRn658LfmUHAqoG6+snlTRZa/ftTM+gTtTw3wq0FU7kaSPDWPS66EVWW3iILsY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+	t=1784891977; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=W6Px5a6vVEkCpmv2n7tsMwFBT/kgVpoaE4enTXtDgmU=; 
+	b=ROZMjYeye3qoGAdquDGV0hBL3cuwH+p0z/xvd+cd/GNOi1T7lG0E/B9J2JG/wAqaekE9Gtz8VJrCqrQkMva/OAQuoQl0R4hq4AJt/R+zt2kLchTiCP40AKA8ORlECm3dDgdXHz3hCjFZ/kAWGQzI3YBczvW9YWzJN06ZWioq2eU=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+	dkim=pass  header.i=auditcode.ai;
+	spf=pass  smtp.mailfrom=security@auditcode.ai;
+	dmarc=pass header.from=<security@auditcode.ai>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784891977;
+	s=zmail; d=auditcode.ai; i=security@auditcode.ai;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=W6Px5a6vVEkCpmv2n7tsMwFBT/kgVpoaE4enTXtDgmU=;
+	b=L+H3VNeT16t3mLP4ZJdp264ECdGPd8iZPOZhxJua5dkDZyOReolTcgF/sVstQcyO
+	QcXUtBewO8CQBoqUWuKUJSPwxBJS8vTYt9Wx4DLrSik1xy47PHpeeIHaSjNM6+W3hrp
+	kCjTX5JjpAqmrasoB0J8Poh/zHH6nH5Gtc9RZ3tM=
+Received: by mx.zoho.eu with SMTPS id 1784891974746726.9116488134342;
+	Fri, 24 Jul 2026 13:19:34 +0200 (CEST)
+From: Ibrahim Hashimov <security@auditcode.ai>
+To: guoren@kernel.org
+Cc: arnd@arndb.de,
 	linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Song Chen <chensong_2000@126.com>
-Subject: [RFC PATCH v2 1/3] error-injection: Introduce EI_ETYPE_FALSE for fail_function
-Date: Fri, 24 Jul 2026 10:12:27 +0800
-Message-ID: <20260724021229.47302-2-chensong_2000@126.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260724021229.47302-1-chensong_2000@126.com>
-References: <20260724021229.47302-1-chensong_2000@126.com>
+	stable@vger.kernel.org
+Subject: [PATCH] csky: alignment: validate address before emulated load/store
+Date: Fri, 24 Jul 2026 13:19:31 +0200
+Message-ID: <20260724111931.76451-1-security@auditcode.ai>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -76,50 +52,72 @@ List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSkvCgDnr+wRymJqH7z4DA--.34972S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWrtr4DJw4kKF1xCrWkZFW8JFb_yoW8JF1DpF
-	1q9r9rury8K348Cry8AFZ2yr1F9rsrGrZxKasxWws7Zw17tF4kt39FgrWUXrykGrW8uayj
-	va9rWFZ0yr45AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRwvttUUUUU=
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBsxfqampiyhdNyQAA31
+X-ZohoMailClient: External
 
-Introduce EI_ETYPE_FALSE for functions which need false as return
-value in their error-injections, like btrfs_data_csum_ok.
+The abiv1 misalignment fixup csky_alignment() re-executes a trapped
+unaligned load/store from kernel context. It computes the target address
+entirely from user-controlled state -- the base register read from the
+saved user regs via get_ptreg() plus an immediate decoded from the
+faulting instruction -- and then performs the access with raw supervisor
+ldb/stb instructions in ldb_asm()/stb_asm(), without checking that the
+address points into user space.
 
-EI_ETYPE_NULL can return 0 too but its readability is not good
-enough.
+A local unprivileged process can therefore execute a crafted unaligned
+STW/STH whose base register holds a kernel address: the fixup emulates it
+and stores an attacker-controlled value to an attacker-chosen kernel
+address -- an arbitrary kernel write, i.e. a privilege-escalation
+primitive. The symmetric load path is an arbitrary kernel read. The
+__ex_table entry on the asm only recovers from an unmapped fault; a store
+to a mapped, writable kernel page completes. The existing rx/rz != {0,1}
+test is a register-index filter, not an address bound.
 
-Signed-off-by: Song Chen <chensong_2000@126.com>
+Reject the emulated access when the fault came from user mode and the
+target is not a valid user address, using access_ok(). Rejected accesses
+fall through to the existing bad_area path, which delivers
+SIGBUS/BUS_ADRALN like every other rejected case. Kernel-mode faults
+legitimately touch kernel memory and are deliberately left unchecked.
+
+Found by inspection; CK610 (CONFIG_CPU_CK610) abiv1 silicon has no
+upstream emulation target, so this is not runtime-reproduced.
+
+Fixes: 081860b970ad ("csky: Exception handling and mm-fault")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ibrahim Hashimov <security@auditcode.ai>
+Assisted-by: AuditCode-AI:2026.07
 ---
- include/asm-generic/error-injection.h | 1 +
- kernel/fail_function.c                | 2 ++
- 2 files changed, 3 insertions(+)
+ arch/csky/abiv1/alignment.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
-index b05253f68eaa..6c399121ab7a 100644
---- a/include/asm-generic/error-injection.h
-+++ b/include/asm-generic/error-injection.h
-@@ -8,6 +8,7 @@ enum {
- 	EI_ETYPE_ERRNO,		/* Return -ERRNO if failure */
- 	EI_ETYPE_ERRNO_NULL,	/* Return -ERRNO or NULL if failure */
- 	EI_ETYPE_TRUE,		/* Return true if failure */
-+	EI_ETYPE_FALSE,		/* Return false if failure */
- };
- 
- struct error_injection_entry {
-diff --git a/kernel/fail_function.c b/kernel/fail_function.c
-index 2eaf55005f49..90cdad0412cd 100644
---- a/kernel/fail_function.c
-+++ b/kernel/fail_function.c
-@@ -48,6 +48,8 @@ static unsigned long adjust_error_retval(unsigned long addr, unsigned long retv)
+diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
+index aee904833dec..19337946e0d5 100644
+--- a/arch/csky/abiv1/alignment.c
++++ b/arch/csky/abiv1/alignment.c
+@@ -261,18 +261,26 @@ void csky_alignment(struct pt_regs *regs)
+ 	switch (opcode) {
+ 	case OP_LDH:
+ 		addr = get_ptreg(regs, rx) + (imm << 1);
++		if (user_mode(regs) && !access_ok((void __user *)addr, 2))
++			goto bad_area;
+ 		ret = ldh_c(regs, rz, addr);
  		break;
- 	case EI_ETYPE_TRUE:
- 		return 1;
-+	case EI_ETYPE_FALSE:
-+		return 0;
+ 	case OP_LDW:
+ 		addr = get_ptreg(regs, rx) + (imm << 2);
++		if (user_mode(regs) && !access_ok((void __user *)addr, 4))
++			goto bad_area;
+ 		ret = ldw_c(regs, rz, addr);
+ 		break;
+ 	case OP_STH:
+ 		addr = get_ptreg(regs, rx) + (imm << 1);
++		if (user_mode(regs) && !access_ok((void __user *)addr, 2))
++			goto bad_area;
+ 		ret = sth_c(regs, rz, addr);
+ 		break;
+ 	case OP_STW:
+ 		addr = get_ptreg(regs, rx) + (imm << 2);
++		if (user_mode(regs) && !access_ok((void __user *)addr, 4))
++			goto bad_area;
+ 		ret = stw_c(regs, rz, addr);
+ 		break;
  	}
- 
- 	return retv;
--- 
-2.43.0
-
+--
+2.50.1 (Apple Git-155)

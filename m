@@ -1,65 +1,50 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E63C3AD52B;
-	Wed, 26 Aug 2026 20:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2AD3381B0D;
+	Thu, 27 Aug 2026 05:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787777892; cv=none; b=krrCOz1akLTAjzg+bi4jOHPho7Muqe3FXZtYrd8i8uF5nqSvH/q8ETsOzX7MgN48yi3bM0z1G/s5CoF2Lt02U/eXq0l0f8HHICVD0gpppKaEUw9POg4xeo3e8kRVPPicHxGABN2lUdIRjbzTykpr7pjXPT9UnS77Swfqy4vW+qw=
+	t=1787808503; cv=none; b=UzSstMtHXoy/U7PYlSOgxmimfucsllFCLopxWC52vDXbeqdQ91GUrEpVdRgiiODtAZUCEz7Y+Y2dcAyyrP/Dms4Sp1vK1ZU2nkpNPHX51+f0tSRcqBVRmkCG7g6tAhSe7Nfn7PAbOvyHZ5AbvgMU3rwkXGkal9r8SoiWeMZUILA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787777892; c=relaxed/simple;
-	bh=0z9/8QDTndRX0GOVClV5gilwMHhR4WDORaNJ2Jj8ySM=;
+	s=arc-20240116; t=1787808503; c=relaxed/simple;
+	bh=r3zpWAjSDYwO4obpTt1hi/LzERvjZcV2ma+xAQZJE1k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UKLThnQq66BZ0fAmZxH9s4AsVjqdq2rVtZn9v48jOEqwwaMazjOMGJ8s+RA+Ptc2WejDajFqLUeflS9psRRo7dsEhLsebsMZoDblmODS4sGKzbcPR9xhpP8nBV29G/MlDuWIYdcIiO/8DskvN3+v4e2l3OLtRKCURdmt0jOOGE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Gk++gNb7; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=KDgTyDX8h+8Pc6oE72bWXm/U58yApSKOd4UGTZG+DGB9q2Vy7maEXRqIT/yOTMh1Dobacs1G1NcVjUJkZZthJERQSeSc4zkTF31EBluR8oOajvHrI/AmNXvkfXcewHbWdWtBwrNnZ9zKZ6XQOeVBj2IOyb4ymd8gcL4l/QiGWMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Qbvokt9Y; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Gk++gNb7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=6BSYdpEPt01McAnG4u8lln5Yld57nZzWrLhCayqxD+0=; b=Gk++gNb7sGZR1YerBxsUPWVOAv
-	UOLsd1KSFlgVFGFo/4Dm7AT9R5ueV3ELForjXbWCOik5M3t7GhBzcbhrDpk6H5obJIo838smYoKG9
-	390FgaW/u4wyOhISwb+DP4JolTFF9jLWkY8P5JQLIqmEqKIli3ytdmFt7jXYDAAzgGfQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wzKgm-001Zg2-1Q; Wed, 26 Aug 2026 22:57:40 +0200
-Date: Wed, 26 Aug 2026 22:57:40 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Stanislav Fomichev <sdf.kernel@gmail.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-	pabeni@redhat.com, anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch,
-	saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com,
-	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-	aleksander.lobakin@intel.com, horms@kernel.org,
-	magnus.karlsson@intel.com, sdf@fomichev.me, ast@kernel.org,
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-	guoren@kernel.org, dtatulea@nvidia.com, witu@nvidia.com,
-	martin.lau@kernel.org, yoong.siang.song@intel.com,
-	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
-	linux-csky@vger.kernel.org, leon@kernel.org
-Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
- handling
-Message-ID: <0c17200b-105b-463a-8677-45f575c294f0@lunn.ch>
-References: <20260819160535.1472459-1-sdf@fomichev.me>
- <20260819160535.1472459-4-sdf@fomichev.me>
- <aoceSoSFMx69Z9up@boxer>
- <aoeoJ6-njBxcWs4w@devvm7509.cco0.facebook.com>
- <aogpDsa8hz6CPpD3@boxer>
- <aoiIarzdjk92RkCN@devvm7509.cco0.facebook.com>
- <20260824111443.34bffe04@kernel.org>
- <dc2ccb14-c7c0-402b-93b3-afba52df78fa@bootlin.com>
- <20260826132043.39fb435a@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Qbvokt9Y"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E07A71691;
+	Wed, 26 Aug 2026 22:28:14 -0700 (PDT)
+Received: from localhost (a085714.arm.com [10.164.19.28])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE0D43F66F;
+	Wed, 26 Aug 2026 22:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1787808498; bh=r3zpWAjSDYwO4obpTt1hi/LzERvjZcV2ma+xAQZJE1k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Qbvokt9YNMXIimouS57c8IUjHG3UY/NxbyriHVJNF09htLAHlcOYfMdqN9rNk2Y3/
+	 mSu7y20m+SkO9PdnMyXySHrLzwhN7q5RvdaRZuxZGl6y42IopDCGHEBnjAJBHjcg2R
+	 GlMX/PkmQ3bkQo82ApB3CeCPp5qCKqiyYLpu1D5M=
+Date: Thu, 27 Aug 2026 10:58:15 +0530
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+To: Samuel Holland <samuel.holland@sifive.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-um@lists.infradead.org, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, linux-mm@kvack.org, akpm@linux-foundation.org, david@kernel.org
+Subject: Re: [RFC V3 8/8] mm: Drop pxd_ERROR()
+Message-ID: <ajnoyja6a3hi2b7zn52n4dwrnpaa3ofpk6enekdan3babfsmbv@lnc3mbpogtq5>
+References: <20260818040041.1891769-1-anshuman.khandual@arm.com>
+ <20260818040041.1891769-9-anshuman.khandual@arm.com>
+ <6dae9cae-9665-4dc8-9a49-d6e5acda221b@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -68,14 +53,116 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260826132043.39fb435a@kernel.org>
+In-Reply-To: <6dae9cae-9665-4dc8-9a49-d6e5acda221b@sifive.com>
 
-> Also if you try running driver ksfts - please keep us posted on what
-> the blockers are. I _think_ we just need to teach ksft to cross compile
-> C binaries?
+On Mon, Aug 24, 2026 at 10:50:37AM -0500, Samuel Holland wrote:
+> On 2026-08-17 11:00 PM, Anshuman Khandual wrote:
+> > There are no more users left for any pxd_ERROR() either in generic MM or in
+> > the platform MM. Hence all these platform macros along with their generic
+> > fallback could be dropped across the tree.
+> > 
+> > Cc: linux-alpha@vger.kernel.org
+> > Cc: linux-snps-arc@lists.infradead.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-csky@vger.kernel.org
+> > Cc: linux-hexagon@vger.kernel.org
+> > Cc: loongarch@lists.linux.dev
+> > Cc: linux-m68k@lists.linux-m68k.org
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: linux-openrisc@vger.kernel.org
+> > Cc: linux-parisc@vger.kernel.org
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > Cc: linux-riscv@lists.infradead.org
+> > Cc: linux-s390@vger.kernel.org
+> > Cc: linux-sh@vger.kernel.org
+> > Cc: sparclinux@vger.kernel.org
+> > Cc: linux-um@lists.infradead.org
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: linux-mm@kvack.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+> > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> > ---
+> > Changes in RFC V3
+> > 
+> > - Moved ptrval_to_str() as header in a [PATCH 1/8]
+> > - Stopped using pxd_ERROR() in generic MM in [PATCH 2/8]
+> > - Dropped pxd_ERRO() macros from all platforms in this patch
+> > 
+> >  arch/alpha/include/asm/pgtable.h               |  7 -------
+> >  arch/arc/include/asm/pgtable-levels.h          | 11 -----------
+> >  arch/arm/include/asm/pgtable.h                 |  7 -------
+> >  arch/arm/kernel/traps.c                        | 17 -----------------
+> >  arch/arm64/include/asm/pgtable.h               | 15 ---------------
+> >  arch/csky/include/asm/pgtable.h                |  4 ----
+> >  arch/hexagon/include/asm/pgtable.h             |  3 ---
+> >  arch/loongarch/include/asm/pgtable.h           | 11 -----------
+> >  arch/m68k/include/asm/mcf_pgtable.h            |  6 ------
+> >  arch/m68k/include/asm/motorola_pgtable.h       |  8 --------
+> >  arch/m68k/include/asm/sun3_pgtable.h           |  7 -------
+> >  arch/microblaze/include/asm/pgtable.h          |  7 -------
+> >  arch/mips/include/asm/pgtable-32.h             | 10 ----------
+> >  arch/mips/include/asm/pgtable-64.h             | 13 -------------
+> >  arch/nios2/include/asm/pgtable.h               |  7 -------
+> >  arch/openrisc/include/asm/pgtable.h            |  7 -------
+> >  arch/parisc/include/asm/pgtable.h              |  9 ---------
+> >  arch/powerpc/include/asm/book3s/32/pgtable.h   |  2 --
+> >  arch/powerpc/include/asm/book3s/64/pgtable.h   |  7 -------
+> >  arch/powerpc/include/asm/nohash/32/pgtable.h   |  2 --
+> >  .../powerpc/include/asm/nohash/64/pgtable-4k.h |  3 ---
+> >  arch/powerpc/include/asm/nohash/64/pgtable.h   |  5 -----
+> >  arch/riscv/include/asm/pgtable-64.h            |  9 ---------
+> >  arch/riscv/include/asm/pgtable.h               |  4 ----
+> >  arch/s390/include/asm/pgtable.h                | 11 -----------
+> >  arch/sh/include/asm/pgtable-3level.h           |  3 ---
+> >  arch/sh/include/asm/pgtable_32.h               |  8 --------
+> >  arch/sparc/include/asm/pgtable_32.h            |  3 ---
+> >  arch/sparc/include/asm/pgtable_64.h            | 10 ----------
+> >  arch/um/include/asm/pgtable-2level.h           |  7 -------
+> >  arch/um/include/asm/pgtable-4level.h           | 13 -------------
+> >  arch/x86/include/asm/pgtable-2level.h          |  5 -----
+> >  arch/x86/include/asm/pgtable-3level.h          | 11 -----------
+> >  arch/x86/include/asm/pgtable_64.h              | 18 ------------------
+> >  arch/xtensa/include/asm/pgtable.h              |  4 ----
+> >  include/asm-generic/pgtable-nop4d.h            |  1 -
+> >  include/asm-generic/pgtable-nopmd.h            |  1 -
+> >  include/asm-generic/pgtable-nopud.h            |  1 -
+> >  38 files changed, 277 deletions(-)
+> > ...
+> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> > index 5d5756bda82e..993a6505eb8f 100644
+> > --- a/arch/riscv/include/asm/pgtable.h
+> > +++ b/arch/riscv/include/asm/pgtable.h
+> > @@ -559,10 +559,6 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+> >  	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | newprot_val);
+> >  }
+> >  
+> > -#define pgd_ERROR(e) \
+> > -	pr_err("%s:%d: bad pgd " PTE_FMT ".\n", __FILE__, __LINE__, pgd_val(e))
+> 
+> We can drop the PTE_FMT macro now too.
 
-It would be nice to make it not give out 1000s of warnings on 32 bit
-builds. At least that is my experience doing a native ARM 32 bit
-build.
+Agreed, will just fold in the following changes.
 
-	Andrew
+diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+index 709a36fb4323..b4bbae55e931 100644
+--- a/arch/riscv/include/asm/page.h
++++ b/arch/riscv/include/asm/page.h
+@@ -76,12 +76,6 @@ typedef struct page *pgtable_t;
+ #define __pgd(x)       ((pgd_t) { (x) })
+ #define __pgprot(x)    ((pgprot_t) { (x) })
+
+-#ifdef CONFIG_64BIT
+-#define PTE_FMT "%016lx"
+-#else
+-#define PTE_FMT "%08lx"
+-#endif
+-
+ #if defined(CONFIG_64BIT) && defined(CONFIG_MMU)
+ /*
+  * We override this value as its generic definition uses __pa too early in
+
+> 
+> Regards,
+> Samuel
+> 

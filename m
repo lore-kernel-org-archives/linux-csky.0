@@ -1,164 +1,179 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D0B511E97
-	for <linux-csky@vger.kernel.org>; Fri,  4 Sep 2026 17:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788542483; cv=pass; b=iEW5CNrYzTvqyq/dgcW7wc3UOgq/LDnO+lW1RXflXTN3RFELMbiuyljH2pjoCaz0icraPd3L0QYbNTm1zhgVqz3MuRkc83J7SG4pGJX2hjSNLEwhhU8K9GPgMCa6x3k5ySGgroSZhEmVHsuwhai38B8xZr9yroboX/VGBxJ8lTY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788542483; c=relaxed/simple;
-	bh=AFNBiWCRpUcEoXNChHss1VconiHm4hB8qaeZxdrK+Dg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AoKadHeCu3dKqD0o1ySfBucVLfF/z0EJkj7vSmKFgEEUZVD7Luvz+XzDa32V4TH16lZf1eP8GYy+wjY9lJf0HPRKmaZq8AMKgitn78gJpSu0P+mmQkLzYxaI9vi4P+Vmw6sY/HRXMLcRa82lDtjEy9RwBA/Un5ZWm4qdjm78L14=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+5ZMHHh; arc=pass smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516565013CC;
+	Mon,  7 Sep 2026 16:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788797627; cv=none; b=HHhYPvT2cOyAtA1dqwWksezAUFshbvZ6Vnb/lcN8kY0MQzrW7fI6HrWxd8HSTHeVJjT8LpLE7Bk9nUlLG2h9Ux73XRrHKSaeJuIZXz3ieelCuFZzil4+vAzsPv4S1l0t0JrHPVsFZxI6Cheb+7xp8RnndTtRm66qzd5p8jd4wuk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788797627; c=relaxed/simple;
+	bh=cP4xKAaKOy4iVTTsWFYKaL64jtvJrYREJqa+UilTZKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rHg+BskC0pFKG8wXpIcrQhYFiLS9mU53HYFXKnmS/cxa5/H9jV8FtBIGXCo8d6YR8MTKBt8zisbfPAefqcGQoOesXhrOGWJ4lbBB9CqDswfp5Ne+FA3TRHjCaMBaZFz+r6/DPghF4QzCNlvAO4mAqWPK63Y3XPG7Ph45kUpx2nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=oeIFSP/L; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=kNANdT9i; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=u1sO1jKj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=rRrXf8R3; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+5ZMHHh"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6a68aaf4840so2892850a12.0
-        for <linux-csky@vger.kernel.org>; Fri, 04 Sep 2026 10:21:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788542480; cv=none;
-        d=google.com; s=arc-20260327;
-        b=g1t/eCJ2qI080XC8sw3ETQjQ59r63kcPM1+xesLYDG4xLkhC3ZGuHEaxmKDI7dbeaV
-         am8bCVTEgFH2VcGhNw9fvhDzlyFOC+tNdB6qqUYyMiorFzv1EBNbLwONBmAwBgx5Sc5t
-         Y2Fq3j7LZXip180QwU1hHS98U7ER7ZkNkpMJT+zqr233ycFocvLW/lQhBb9Hq3JyIZtM
-         j3pnETAWGw8zM5rJ2HuyQ+c1TYfa9H4lnrhuGuApdACeGOssG/UEhKO2ksHiM5++4FP6
-         rhfZb+qyudh5e+YPJyf611eWIoEnV1eC3dESjrtOXRx9tsxLs2hXIHlChvrz6ran+L09
-         HA/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
-        fh=PdIzpq2MQkR/zaSpqGJafJ4zNdELsFIliv9cmHu2QmI=;
-        b=LK+Z2rZNAkoTC95wLE14G2EsTxLypNsuXXQjxM+D2y4QtuaNjk6gj/+OycAidGxZj2
-         zJjHVQq1FD7FE8q7f4uhh2NyuxMTTSq89SGImiO8CjEYIiN53qv49CKV+IIfJXW//+G3
-         4q2peurW+y6C3AHQuUQkuGkzb7LQ+keJ5HB1L7ZUfp5sbELwVF1CcW+p0rKSV4VoaXeO
-         ZP+wuFPuIwiu+2gKFIARB2/AGRJueMsC/SnNnpxSqkFKztvnEEcL9s48a9dwZg4qE3DS
-         IWwMS5t1MentyCnVhhJGrJFrTrqq5HlXy+ncifXcvznsG1X7fuGlckAJmcsZtv44r0Zn
-         xXuA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788542480; x=1789147280; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
-        b=S+5ZMHHhfGjA+IdWmeugDDHgBwHG5bBYSPYfCEow+5chkn8MQle82UmWyVbxLiEN7d
-         ijcv6053WNTu2RqyJ6VR+Q1MSk4Vxz4n7ZKFRrjYrPqEbaWeUeae4OgCiLykWRLNUDRA
-         ZH/X93kZSKA1/wbKpcmxavHteq0Ow+JKUXYEkMsejbWI7AKmmLzp7rDEpD05dDMzdu05
-         qx2RS3AgstzLvoN8v5AUqAPOvMKc+nz/J8n2Lte3Wf5wq5bPQVeGs2cRbGv15hnp0TgY
-         EW5NlkkUE9iLPQcY1GiopKTuEm/IxQzvNCCThYHaycwvH5N4Y2kyLdCZ7Tyzs3tF5f6h
-         EH1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788542480; x=1789147280;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
-        b=KsOZkUPhyEQ1tQXeFartpm4b1GjY6aA+bRacZ4tuzEDciVBZsLZ21tUYoL+aj2RboZ
-         OA7Ps0/3U/9AId+gPJJOEs6ElxxFfUNZtlDlS2Usaq4CAubC7lrVVVQi3OEMYXAY3671
-         y/kMsGr150sfGe6BsLb2gGZv0Xt2SxjpgyEBk7mHx6RWuUHUEVMeQVEVWNpPW6v0u90J
-         HoKwGMGJsQ0GhRbkrNyfjRhaTfYL2VoiD4cj8V/37nIizGCyUXApv/BVFuTY/5kIOKBV
-         BKvRvNKylSujDU8fpJhl7lDiRnESJH5PafQmXWFSydqqBvaCRrTnVzKk4zYyVpJO4Qvf
-         07gQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz+YBg6R6mMXsnPQTxSkmLjsJF14gNiWAnHtHl+BamlO60jQYVHwOtozlbwuKISWci/eMNb6GxGSJFP@vger.kernel.org
-X-Gm-Message-State: AFuF++mhYobFKvX24Wjb0EqPLhlDr+QButqMncMTb6posrJ8B0oJH7fF
-	UOZ13HeOpcekalhmwF7+s1wypvHbY81UWclE2WCegKv+J/JdUqkdb9lXx1JKCDhcTNAlvCs9Zmq
-	S/UVFSIiZuAWnQSam4AcfmnDd/za+GmQ=
-X-Gm-Gg: AYBFou3yv8L3cumXc6TZ7Tw2uJHqFJkb2Q5G1daQvMY3ml8Zcz+5F07gA/Ka4sumPOs
-	LkNna1w6aLRbUKmHvCWX1nl9KVIg1vNRkjL+CpJpJNl3PtDftGEvz6JO8fUJwYsAzJga1nyFt5c
-	maOev6Bhw8cBGi2faX4iwYR+jTO3i/4S8jell+WrlMzDNafzdrt+8hgMCh+wp+AUlTJ3WbP3ZAA
-	OZIg5+U6YMJiEais51KuA2yKOHILyiZrGd8LE09gVmXQ0bhCsGOLzxopvy0D6xPfKRQuku6TWdt
-	f7Slu2vcYKCYOo2iRCmzaUAMe8fGAtkw7Tf1JC8GdAmQGwJ4AQoknQkcaq/2ACSC4YAukoaTyVL
-	C1S4T1ZexxWxGgI7k/MBPBHCbm6Dlw0E=
-X-Received: by 2002:a05:6402:a252:20b0:6a6:9368:73a0 with SMTP id
- 4fb4d7f45d1cf-6a696a73aa1mr4363499a12.6.1788542479338; Fri, 04 Sep 2026
- 10:21:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="oeIFSP/L";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="kNANdT9i";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="u1sO1jKj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="rRrXf8R3"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E5479219FA;
+	Mon,  7 Sep 2026 16:13:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788797620;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ejjj/UktNvHuL6ZfBgZGy2xOjH4lWFO1beWpbKfBw+Y=;
+	b=oeIFSP/L7324gUSNEaYyp0KvjIp3oQI6RVhqgp2FBq0m49WuGeoy1zRIO/5nqzENHG+mG1
+	3I9/e7RZBR0bX//gSSRRZHy+4nCa7HrY3t7N7iU9SeMYCFVC4sJVwNbKr6WTuh4G4x2/+I
+	ipZtHvSR+tcSiBKdXZn97W8WWTtz+R4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788797620;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ejjj/UktNvHuL6ZfBgZGy2xOjH4lWFO1beWpbKfBw+Y=;
+	b=kNANdT9iEIOsfAslKtmL2Q5eOUtU61PuGxDvBbGP3Xy3WUe1CHTjmKw4dOQMHg++xKpkoX
+	9F2kXR1wCo97u3Cg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788797615;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ejjj/UktNvHuL6ZfBgZGy2xOjH4lWFO1beWpbKfBw+Y=;
+	b=u1sO1jKj1FfYIzynI5bvYBkCHyro3DcF4Brevq/t09F8gGP51aD7yvK3titlL8rwhbmuiI
+	A0j0RJcHyqXxzT+B+py3ObaISB8tPQomVAWwRDRUUVudapBz87sohNNZQXmmpCnItWecYc
+	8hlFuJ4UpElNyrD13S3AkRRWDsvjQiE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788797615;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ejjj/UktNvHuL6ZfBgZGy2xOjH4lWFO1beWpbKfBw+Y=;
+	b=rRrXf8R3i97G0BUMSmSQiLikYTVEvTzIi0tEO54jMomkUPIdivwrpoQwYF7THAPUBMtj1H
+	tYUuuZzTr7cEy7Cg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9A6F71339B;
+	Mon,  7 Sep 2026 16:13:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id q4uAJa/inmqFDgAAD6G6ig
+	(envelope-from <dsterba@suse.cz>); Mon, 07 Sep 2026 16:13:35 +0000
+Date: Mon, 7 Sep 2026 18:13:30 +0200
+From: David Sterba <dsterba@suse.cz>
+To: Song Chen <chensong_2000@126.com>
+Cc: arnd@arndb.de, kees@kernel.org, clm@fb.com, dsterba@suse.com,
+	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+	guoren@kernel.org, kernel@xen0n.name, maddy@linux.ibm.com,
+	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, gor@linux.ibm.com, borntraeger@linux.ibm.com,
+	agordeev@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, jpoimboe@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/3] btrfs: add error injection support for
+ checksum verification
+Message-ID: <20260907161330.GX9053@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20260724021229.47302-1-chensong_2000@126.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1788351089.git.rrobaina@redhat.com> <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
-In-Reply-To: <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Fri, 4 Sep 2026 19:21:07 +0200
-X-Gm-Features: AcwNN1WpEQ0Y6eKbtA6wNzDHeYOBs1Tconhq7C15XjRhFKDXvjk4jMYrR9OFExk
-Message-ID: <CA+=Fv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4BLWOvDTt92t5Eg@mail.gmail.com>
-Subject: Re: [PATCH v2 02/13] alpha: pass pt_regs to audit_syscall_entry()
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, paul@paul-moore.com, 
-	eparis@redhat.com, sgrubb@redhat.com, oleg@redhat.com, 
-	richard.henderson@linaro.org, mattst88@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260724021229.47302-1-chensong_2000@126.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Level: 
+X-Spam-Score: -2.50
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-2.50 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	HAS_REPLYTO(0.30)[dsterba@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[37];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLq7rgjtkhinpjg5fumb6k6gau)];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[126.com];
+	FREEMAIL_ENVRCPT(0.00)[126.com,gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[arndb.de,kernel.org,fb.com,suse.com,armlinux.org.uk,arm.com,xen0n.name,linux.ibm.com,ellerman.id.au,gmail.com,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,lists.infradead.org,vger.kernel.org,lists.linux.dev,lists.ozlabs.org];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:replyto,suse.cz:mid,imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[]
 
-Hi Ricardo,
+On Fri, Jul 24, 2026 at 10:12:26AM +0800, Song Chen wrote:
+> This patchset adds fault injection support for btrfs_data_csum_ok,
+> enabling controlled simulation of checksum mismatches to test btrfs
+> silent data corruption detection and reporting paths.
+> 
+> The first patch extends the error injection framework with a new type,
+> EI_ETYPE_FALSE, which allows bool-returning functions to be overridden
+> with a false return value directly.
+> 
+> The second patch marks btrfs_data_csum_ok with ALLOW_ERROR_INJECTION
+> using this new type.
+> 
+> The third patch adds a parent field to fei_attr to allow fault injection
+> on a function only when called from a specific parent function. 
+> 
+> Song Chen (3):
+>   error-injection: Introduce EI_ETYPE_FALSE for fail_function
+>   btrfs: Allow error injection on btrfs_data_csum_ok
+>   error-injection: Introduce parent in fei_attr
 
-On Wed, Sep 2, 2026 at 4:44=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.com=
-> wrote:
->
-> audit_syscall_entry() now takes a pointer to pt_regs and extracts
-> the syscall arguments itself via syscall_get_arguments(). Drop the
-> individual argument registers from the call and pass regs instead.
->
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
->  arch/alpha/kernel/ptrace.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/alpha/kernel/ptrace.c b/arch/alpha/kernel/ptrace.c
-> index fc8f6cedbb28..8a39c0473297 100644
-> --- a/arch/alpha/kernel/ptrace.c
-> +++ b/arch/alpha/kernel/ptrace.c
-> @@ -496,8 +496,7 @@ asmlinkage unsigned long syscall_trace_enter(void)
->         }
->
->  #ifdef CONFIG_AUDITSYSCALL
-> -       audit_syscall_entry(syscall_get_nr(current, regs),
-> -               regs->r16, regs->r17, regs->r18, regs->r19);
-> +       audit_syscall_entry(syscall_get_nr(current, regs), regs);
->  #endif
->         return syscall_get_nr(current, regs);
->  }
-> --
-> 2.55.0
->
-This doesn't apply on top of my "alpha: enable GENERIC_ENTRY" series
+I'm going through my mailbox and found this. No objections to add the
+injection point to btrfs, but the rest is generic fault injection code
+so I can't take it via btrfs tree without acks.
 
-https://lore.kernel.org/linux-alpha/20260902184058.198679-1-linmag7@gmail.c=
-om/T/#t
+There are some sashiko comments (as replies in the thread [1]) and there
+have been some changes to btrfs code too so the patchset needs a
+refresh.
 
-That series moves alpha's syscall entry onto the generic entry
-framework and removes syscall_trace_enter() and its direct
-audit_syscall_entry() call entirely - verified with git am against
-GENERIC_ENTRY applied, it fails at exactly this hunk.
-You don't need a replacement alpha patch, though. Once GENERIC_ENTRY
-lands, alpha's syscall entry goes through
-syscall_enter_from_user_mode_randomize_stack(), which already calls
-syscall_enter_audit() as part of the shared entry helpers
-(include/linux/entry-common.h). I applied patch 1/13 alone on top of
-GENERIC_ENTRY and confirmed alpha's entry path already routes through
-the updated __audit_syscall_entry() - no alpha-specific code needed.
-So for alpha, you can drop this patch in the next revision rather
-than rebase it.
+I see maintainers in CC, if somebody could please let us know how to
+proceed.
 
-Regards
-Magnus
+[1] https://lore.kernel.org/all/20260724021229.47302-1-chensong_2000@126.com/
+
+>  arch/arm/lib/error-inject.c           |  6 ++
+>  arch/arm64/lib/error-inject.c         |  6 ++
+>  arch/csky/lib/error-inject.c          |  6 ++
+>  arch/loongarch/lib/error-inject.c     |  6 ++
+>  arch/powerpc/lib/error-inject.c       |  6 ++
+>  arch/riscv/lib/error-inject.c         |  6 ++
+>  arch/s390/lib/error-inject.c          |  6 ++
+>  arch/x86/lib/error-inject.c           |  6 ++
+>  fs/btrfs/inode.c                      |  1 +
+>  include/asm-generic/error-injection.h |  6 ++
+>  kernel/fail_function.c                | 98 ++++++++++++++++++++++++++-
+>  11 files changed, 152 insertions(+), 1 deletion(-)

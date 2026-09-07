@@ -1,106 +1,104 @@
 Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF6D51E423
-	for <linux-csky@vger.kernel.org>; Mon,  7 Sep 2026 16:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9424192FC
+	for <linux-csky@vger.kernel.org>; Mon,  7 Sep 2026 21:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788800043; cv=pass; b=XphGFDlP4/x0jtQP+iifkG66oTSoyq+EgkP6InjRcJ39nu1qqQZ4enfsv5xqjaYsweL1KkkxJlZ2yoYaND5JjJSNuinkOHgkKoADlCWytz2q/wAXOX0Yo27Wuoe0E7zUqiZ17/sJSZgtc/I/K5yE4AmNHO+hKtaG3nDOfpOulKA=
+	t=1788815273; cv=pass; b=TrL/DnqPFwDBrFHhR5NG/Nvlt65a3ztWQYFm6wmI3vmkziilE8lX7ZF9lqOwdLi6N7MMBJyRUwX/kwnBoIfZ8dRsHTnVmntz6IlbD/dS8vYCkx9wPGJ92jVSAMSBqDaIZOt20fECr3v6JeqWpouRHuCSNakCugupiAzL/vjDpDw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788800043; c=relaxed/simple;
-	bh=7nZvXQAXFpGDq6OvBtcrjZaQ3gxcarFF2OJUmuf6SHc=;
+	s=arc-20240116; t=1788815273; c=relaxed/simple;
+	bh=OFnY5O2swjOM6Aa9822KWrZkE4mt65lLa95J2R/BasU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uuJQC9Xk4QIghM/xqeK/AFJgUAbVjfIwACuTOczQGIgiPafpFMyKg0nME2OhB+v5LPpvHcsfLhZHrj1Hg9OuVlRo78aAD2sNvX57+orcbAJPz8+4NBGEjJCU1a06ubGTHQdyNw1Uu8cA2WKnhP8pPR+p5lsIuVFnYZFqfMrml84=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BxQxw96b; arc=pass smtp.client-ip=74.125.230.204
+	 To:Cc:Content-Type; b=Kbchnifa6Uf9PTKDQlmBOEtyBLJERIDTEmrevpnClZhwfUvUhCh5aw9ek7zTS2L0XOqugbv+G3okVo+W02ta0ecVs6UU16DzQv5Y6gAIiJKTFisQr5Go+M7nuyHlU/WBL71p2dnxfoif5/OntRc3JfBhJbPILZce4DcmGuEA5ho=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gZa1SEFO; arc=pass smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BxQxw96b"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-5307425f44bso312341cf.1
-        for <linux-csky@vger.kernel.org>; Mon, 07 Sep 2026 09:54:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788800041; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gZa1SEFO"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-5306706e89dso455771cf.1
+        for <linux-csky@vger.kernel.org>; Mon, 07 Sep 2026 14:07:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788815270; cv=none;
         d=google.com; s=arc-20260327;
-        b=kxRIH7Sx49FNr79ZBTqnEqPL1bbrlfeAzxBtG+T/diD4D+3/VxHhPz1or3b70AGMxN
-         RiqEoTzgGQmVHAGVS3Cm7j3BOsgm08DKBQM19HX/wqAWnp49WI6ED7CxpGeun3IAHUfo
-         Dwqus8Ta+39LQ/7jGaY/OJCVuHzcTuWQ1C3cXmmDSlA6Xcv2giLNZDP+kR5yMX57/4Vq
-         SVPbGRSQKA/c0FyxX9inL3KlXLGYCsv9a6NqWpcIwfYb2d1uXNsI4MdMLLK64ScIobUH
-         GoxaT2GWbjvnJjdz8M7MEG8DuPhXAIaBaFfEL0Nlv3yoiLfONWXzjU2LOQct610mqxKC
-         PnKQ==
+        b=KfRDjaXvr4a5BLn7soKCgPPg9gzUahLZgZiq5pgUeM2eSLgu1HK7t+f8M0fQ6PshJw
+         8w6hr136jK0ek+vap9UQbNTSWjg6muo5E9Cdjz4BH7spdj4wzvqrsX5ffyjQPrpJdPdK
+         fuaKomE7rvzgVy/X6OKSY9PR9p9R2lygOzEbZaEskAl3uWK3KIGBbmaqzS2/oIe8fCfg
+         zN84zzB2Jc7L3aPXJ4kxd3L8bNFCJx2Cp/cWzaV/zPiUtB941n+iT41EjBStP2QWMcgG
+         4K2cISxaLklJ2C7esHDi0iNwnocaDI1TnkUSLOhItXnYrTedf703EFrjPwUhnuI8MIYU
+         ZtMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=WOgo3zFXzbtiQDjz57z5HXaLiQwAncd9HG4Gw1Bp/lg=;
-        fh=JFqWUhl/CqwMgkcDWZv3/qohr2/L2Xr580+5iuZrgU0=;
-        b=SGvz84IzD/dsKVNMxZRpuscgDesPOtwx4Vx4YROuFIC12QKcngBOZ+6j6tTouMTLFL
-         FV77HMhTDiSo+fcD2LA+a0c/w+pJu9c8Dusw760UDP3987roRWsyLbmzPN4b10ouOliR
-         8ikgGUrhOhI0bq7PPpNnUxdxgaCtvYxcda98l7157r96F2EN1aj2xGaeLXwBV0NzhNBL
-         RGj3jcmZIT7vk2TVWNKsyjJ9Hy0gADLEqsnk8bn/L9YC2Pal7Kjq8iFpf09re2vdxwap
-         WL6n95QT/jb+2IQ6qDg8KKlYNEPc8HCvgIQ9hOm+YGK9mVPPBuzRV2hwvXXfduvUBDPU
-         Aajg==;
+        bh=j33dWXa87ubHe2rcHlgmZCfdvDttwcXovkMGxt/Pcfc=;
+        fh=IuFLaeOzEyVTMEGaWZ1yz0LqFBHKxkgF9QFs8QheR6w=;
+        b=msI24zwA6wqu5CbJtfafyCTvQV6PSHuouPef99VGw9YEhfGh4Ozpa7OAK+6GUEFZLP
+         iuK68kgWAJc/GD+WtnQNgUI+tOpwYM249kNFYuo5vbD36Lw6w94Ab7zTq2dsN5IdYkCB
+         +11RN82L29D7/t3jx8iV4OMJegLmYQuE4MnkHAIQIwI2UqxpbEJZv2yNL2+XwX5e5/Iz
+         UmZgolhvbR/U5P7ufMeu3tbhHZoy11Q7pC4xGIo9JABI9dpzxWFd4OTlA5U1zWM2cYLN
+         HOYnVBdL/pPE6ndDKqFqHy3Sv+Za05hCm/4aZOYShFtd25XtSJ3ueb6dVpUxVKH/WAjB
+         1dhQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788800041; x=1789404841; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1788815270; x=1789420070; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=WOgo3zFXzbtiQDjz57z5HXaLiQwAncd9HG4Gw1Bp/lg=;
-        b=BxQxw96b8xvrxLr1jdA70MZQa0pHkKHPoMGH21I71CPFUwxmIqLL87Rne2VW/BytVK
-         z767NLbdYNRXVmkUAnVY1GZ1xvcYKeo8UuDhWQumo7D5/fER1/7VqMW1FFKo1gj6tcNZ
-         Gy6TPPqyAXjjhV+JfrceFMs4fD7V2X4HTR5UOPVep3B2I1xY8kD9iZwlZUOFDFQHgQKO
-         0z+jLwEGZtM3zpAZmLibs7+fBi+tsyTplqrsgA3tUktBcjv/QK5NEoj+F9U4YWxaB54y
-         bUlcF2c3R5ZX6PXfLXF4SqVAMVgTjc1GyfxrN3QNh2UsmuDWEZY1Gj9Il5SgAj7bdyPL
-         UKVw==
+        bh=j33dWXa87ubHe2rcHlgmZCfdvDttwcXovkMGxt/Pcfc=;
+        b=gZa1SEFOVPdEV/FpjKaPjpj0KNPZ1Iecab4PdgmraoAo2b7ryO2g5NK6tMroCKiFKD
+         8l8A80GfGN6lSE2YxLoxSsbPKgRu+TKEHgFwF27dcpWRyJvnyc+r0DAxKEw1/EFAuzU6
+         KKPJCZaaMjwheVTJN8aQ5vV5MuubXIV3Oe9PyhSD3x1/06QFhB9XcXsN5pZDYd0GXKAd
+         TF6DI3+Mha53Om1+XoVrw/AFKG4dAgedwx4/V9xi0JmbWhdVKLOshxId27o60xDKjUH5
+         IX+y4q4Vm5ctTNthUn9LHNKyNANRCpLkuz0XIHO6E98Md0HMmTHO7f6AR+/XqzAgDxuh
+         oH8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788800041; x=1789404841;
+        d=1e100.net; s=20251104; t=1788815270; x=1789420070;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WOgo3zFXzbtiQDjz57z5HXaLiQwAncd9HG4Gw1Bp/lg=;
-        b=e2jhrvYuY/VG8CB/5PAxcICygN+iWasZ6HIe9tydyYfVwzAIZMGZB+C19Og1PDEksr
-         1XrLJA2ulsSkfzl3PomCy4PLuTpHb4pAzfn7aZNcKAUg6QqbQsUf4ddxRJjtoGEuQMOJ
-         1VRQHB6+r6lSDe5UZptmBdFLw7KpN3KezvyiGPnQl0Md0PkIGi5wBOqQbsQl06T6rWn1
-         wqq3F785jhaC9y3VA9/e0JH7xIdQjMQgWIrWWIeAVrNFTSpFjD3Fx6L++d7HPtXQnpjP
-         clkaI/td832ikBTdKnTen8voELO4f8uaWTlH7Qw50EratwA1ODCBVyuK6c5U545+ITm/
-         h4fg==
-X-Forwarded-Encrypted: i=1; AKwUvBwjQU9aduccPek9T//T6mvEzZ+gdcu2p28V8mmeabvqN1EPURMTBGSHE5oFAU+Fulyg7OHEG5LTrRZX@vger.kernel.org
-X-Gm-Message-State: AFuF++kSB2Kp0VEgNMM1Z3vC9uwIQz36Ixwt6Pl5nGThRm022KpFWdFA
-	ESikKoNOF8faTw0yww++Z2fp7OxsXEioCIZOGlNQVid7I+E7Psej3WZy5tQSOImZ3VN5ffLr4Uo
-	g7uSG3N2YLaplJ6ejWDa2ZWiMn95vIDwfvYOua2A2
-X-Gm-Gg: AYBFou0EPM3RgeHWg9mNfatTJfM3hWLzD8896/4DA4GND7BGLZo+E5nJmQZ+AKVPl1Y
-	1lIpGtODo/CMmEHbeaEb9RfINu/MKGdzx7dLZ7h0ff5ZKEe2Y3PfZbjH3qhgZikA6Qh0Ujr1Afr
-	7k36jQqsMmpZERHY6liBQAKYeAUwQhpNNyYk5VNiS6dzGsfT4kHnJDo1q4cqomQRLv2EHNwCRKb
-	HNZs4CFOVMfZk4QXwwJhfbD2M6HgzWK4f3KMGmBCTDCv8dYqk4LmG4KB2vAfMqv1qmtLaMl9YNW
-	MaVwjWBoqPwW9Ilpdf5BBFY3LobqXn+D1BwhnKbJX18=
-X-Received: by 2002:a05:622a:28e:b0:52f:8389:29e0 with SMTP id
- d75a77b69052e-530920caba6mr3560401cf.0.1788800035234; Mon, 07 Sep 2026
- 09:53:55 -0700 (PDT)
+        bh=j33dWXa87ubHe2rcHlgmZCfdvDttwcXovkMGxt/Pcfc=;
+        b=lYajPJlIBFrPwbUC0DOAlKcFmp2N7g1dyNvmMau+HptSFGIesIt4lHOvbDCyxoJd1c
+         XOy0jTt03oYMERLUqv1sbTarF1p7YLc8w/PrnIXvx9yjkOEBk+qZV6uqtmQD/gjYts3m
+         4Ko3G0dZqYXlCbWWYtb8amPpMZ+W4irWdl7luuPXJn9/MXq4wnNphmH73pLYbSswApog
+         KSGVmarZbgjzwekZSVkecggHPFYSh1gfpuYXCwnIQSE2Bkb/irmwjuLJUe/V3aieCiGI
+         Tage1v7DShsaRoVlnVRSkc0A38GaqKa4uhHNdOssIjTzDKOPGyIoxO96XWu5Xh96qYJ9
+         02dw==
+X-Forwarded-Encrypted: i=1; AKwUvBy/X2mrEcEYWbOqZ60RhYokKtvD3igTAi3usCAau3cRFxMZKaTyyawobUTYmpB+rsJfMb6LSpV/w/8d@vger.kernel.org
+X-Gm-Message-State: AFuF++kc7OnluiAu5iWhRDpyHvpNR9X4RhqZFJKqQrUWru7mLv+1Ue+b
+	8ayFweL5P+E3bUzmnI7VjDCEsctuhBjRH2qSRCRCeLJAOkwtLJ9WByDL8N0r6BA/65Y4TRxK+l5
+	TLWPlJzzE41tRAW6FiR/fdiddzWgoPJsaLEcDmHWM
+X-Gm-Gg: AYBFou1T/qJWZWKDv9S/H/wFaYmLJx2RG0u6U3FeDPBWy28q7Zkw66L4gmn57MJjRbI
+	d4xGVFANv89C+2enVP1B79n0pjG7U4F9Cu3hpHDrg2ZWjOVyzG2cw5cOjEnOVsDXMC9t+MvglYh
+	2KJd/KRqeWrIx7pxAbT0v6bvhkNS4/doydUVJk+si16rwBF3mhgV7AiMYuH09fmxWMUP/bDgPmC
+	8b8WrR6WxiqSlnM1K9JbGO8GFsSd3wRnCQBb8hWSWp+3OOYckE5ir1qEjwKqdYXk9Ow/Sj+J3H9
+	zXz/JMnTIY2rHj50DHoK/dYTMvUQY0thIOxv9ddW0Cg=
+X-Received: by 2002:a05:622a:2589:b0:517:64f6:3365 with SMTP id
+ d75a77b69052e-53065d7943emr35669061cf.4.1788815269129; Mon, 07 Sep 2026
+ 14:07:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260901-rcu-pagetable-freeing-v1-0-5456a81c8212@kernel.org>
- <20260901-rcu-pagetable-freeing-v1-12-5456a81c8212@kernel.org>
- <apbUpMDJglS99_yK@thinkstation> <apbfzUwBQyxe3P9R@gremlin>
- <apcH74QsR5I-DIbL@thinkstation> <apcJhtvnd45EkjJI@gremlin>
-In-Reply-To: <apcJhtvnd45EkjJI@gremlin>
+References: <20260901-rcu-pagetable-freeing-v1-0-5456a81c8212@kernel.org> <20260901-rcu-pagetable-freeing-v1-5-5456a81c8212@kernel.org>
+In-Reply-To: <20260901-rcu-pagetable-freeing-v1-5-5456a81c8212@kernel.org>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 7 Sep 2026 09:53:43 -0700
-X-Gm-Features: AcwNN1WRGdFWOzxEbOcmfkztqDuQQAGpor7Xm60pdWlD2DjKNo1Y7S4S7DNXdgs
-Message-ID: <CAJuCfpH_v4YU+hsQDU_yQ4HZDf-2C6DuiJU5PGL+uVAsTwkZug@mail.gmail.com>
-Subject: Re: [PATCH 12/12] mm: change the contract for free_pgtables(), update docs
+Date: Mon, 7 Sep 2026 14:07:37 -0700
+X-Gm-Features: AcwNN1U8TkUrFVP6EqWbmqC7u-eOkQZui9u0urXe4uY9QHhCrt9ILjWVeJ-SJWo
+Message-ID: <CAJuCfpESe_BXihJh-8FhjQVKzsSpnS4zdMgg3e59byJTc8QViA@mail.gmail.com>
+Subject: Re: [PATCH 05/12] mm: enable MMU_GATHER_RCU_TABLE_FREE for arc,
+ microblaze, xtensa
 To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Kiryl Shutsemau <kas@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
 	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
 	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
 	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Guo Ren <guoren@kernel.org>, Brian Cain <bcain@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Simon Schuster <schuster.simon@siemens-energy.com>, Jonas Bonn <jonas@southpole.se>, 
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Guo Ren <guoren@kernel.org>, 
+	Brian Cain <bcain@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Simon Schuster <schuster.simon@siemens-energy.com>, 
+	Jonas Bonn <jonas@southpole.se>, 
 	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
 	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
 	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Paul Walmsley <pjw@kernel.org>, 
@@ -139,99 +137,146 @@ Cc: Kiryl Shutsemau <kas@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 1, 2026 at 10:25=E2=80=AFAM Lorenzo Stoakes (ARM) <ljs@kernel.o=
-rg> wrote:
+On Tue, Sep 1, 2026 at 4:06=E2=80=AFAM Lorenzo Stoakes (ARM) <ljs@kernel.or=
+g> wrote:
 >
-> On Tue, Sep 01, 2026 at 06:15:17PM +0100, Kiryl Shutsemau wrote:
-> > On Tue, Sep 01, 2026 at 03:31:26PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > > On Tue, Sep 01, 2026 at 02:57:13PM +0100, Kiryl Shutsemau wrote:
-> > > > On Tue, Sep 01, 2026 at 12:01:32PM +0100, Lorenzo Stoakes (ARM) wro=
-te:
-> > > > > diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-> > > > > index b91b1a98029c..ff8ff3706485 100644
-> > > > > --- a/mm/pgtable-generic.c
-> > > > > +++ b/mm/pgtable-generic.c
-> > > > > @@ -386,9 +386,21 @@ pte_t *pte_offset_map_rw_nolock(struct mm_st=
-ruct *mm, pmd_t *pmd,
-> > > > >   * be read-only/read-write protected.
-> > > > >   *
-> > > > >   * Note that free_pgtables(), used after unmapping detached vmas=
-, or when
-> > > > > - * exiting the whole mm, does not take page table lock before fr=
-eeing a page
-> > > > > - * table, and may not use RCU at all: "outsiders" like khugepage=
-d should avoid
-> > > > > - * pte_offset_map() and co once the vma is detached from mm or m=
-m_users is zero.
-> > > > > + * exiting the whole mm, does not take the page table lock befor=
-e freeing a
-> > > > > + * table.
-> > > > > + *
-> > > > > + * However, the PMD entry is cleared first, and the table freed =
-only after
-> > > > > + * an RCU grace period, so a walker that mapped the table under
-> > > > > + * rcu_read_lock() stays safe, and the pmd_same() recheck in
-> > > > > + * pte_offset_map_lock() detects the teardown.
-> > > > > + *
-> > > > > + * Therefore it is safe for "outsiders" like khugepaged to use
-> > > > > + * pte_offset_map() and co. for VMAs that might be undergoing pa=
-ge table
-> > > > > + * teardown.
-> > > >
-> > > > Is it strictly true?
-> > > >
-> > > > free_pte_range() clears the pmd without taking the PTL, so the
-> > > > pmd_same() recheck in pte_offset_map_lock() can pass and the pmd ge=
-ts
-> > > > cleared right after.
-> > > >
-> > > > Readers are fine -- __pte_offset_map() holds rcu_read_lock() until
-> > > > pte_unmap(), so the table cannot go away.
-> > > >
-> > > > khugepaged is an odd example here. collapse_pte_mapped_thp() and
-> > > > retract_page_tables() don't rely on this recheck -- they take pmd_l=
-ock()
-> > > > plus the ptl and do their own pmd_same() under both.
-> > > >
-> > > > Can we say walks are safe and leave the write rule where it is?
-> > >
-> > > Hmm yeah, ah page tables, what a rabbit hole of horror :)
-> > >
-> > > I guess this is effectively a reflection of the 'write lock on write,=
- RCU load
-> > > on read' pattern in RCU itself generally.
-> > >
-> > > So, maybe something like:
-> > >
-> > >  * Note that free_pgtables(), used after unampping detached vmas, or =
-when
-> > >  * exiting the whoel mm, does not take a page table lock before freei=
-ng a page
-> > >  * table.
-> > >  *
-> > >  * As page table freeing itself is RCU-safe, page table readers can s=
-afely run
-> > >  * concurrently with page table teardown. However, writers cannot, as=
- without
-> > >  * a lock nothing prevents concurrent teardown.
-> > >  */
-> > >
-> > > Instead? What do you think?
-> >
-> > s/whoel/whole/
+> Each of these architectures directly free page tables without routing the=
+se
+> changes through tlb_remove_ptdesc().
 >
-> Haha yup the inevitable typo...
+> The use of tlb_remove_ptdesc() is required for
+> CONFIG_MMU_GATHER_RCU_TABLE_FREE to correctly free page tables under RCU,
+> so simply update these architectures to use these functions.
+>
+> Since none of the architectures share page tables or do anything unusual,
+> nothing complicated is required here.
+>
+> Therefore this is simply a mechanical change - convert __pud_free_tlb(),
+> __pmd_free_tlb() and __pte_free_tlb() to use tlb_remove_ptdesc() as
+> required.
+>
+> At the point this is in place, all mmu_gather page table freeing is
+> performed under RCU, and thus MMU_GATHER_RCU_TABLE_FREE is selected for
+> each architecture.
+>
+> This forms part of an overall effort to switch every architecture to this
+> mode.
+>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
+>  arch/arc/Kconfig                      | 1 +
+>  arch/arc/include/asm/pgalloc.h        | 6 +++---
+>  arch/microblaze/Kconfig               | 1 +
+>  arch/microblaze/include/asm/pgalloc.h | 2 +-
+>  arch/xtensa/Kconfig                   | 1 +
+>  arch/xtensa/include/asm/tlb.h         | 2 +-
+>  6 files changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+> index 2ed7186c81c5..7a7542b61823 100644
+> --- a/arch/arc/Kconfig
+> +++ b/arch/arc/Kconfig
+> @@ -47,6 +47,7 @@ config ARC
+>         select HAVE_SYSCALL_TRACEPOINTS
+>         select IRQ_DOMAIN
+>         select LOCK_MM_AND_FIND_VMA
+> +       select MMU_GATHER_RCU_TABLE_FREE
+>         select MODULES_USE_ELF_RELA
+>         select OF
+>         select OF_EARLY_FLATTREE
+> diff --git a/arch/arc/include/asm/pgalloc.h b/arch/arc/include/asm/pgallo=
+c.h
+> index dfae070fe8d5..9b6c37f92e97 100644
+> --- a/arch/arc/include/asm/pgalloc.h
+> +++ b/arch/arc/include/asm/pgalloc.h
+> @@ -72,7 +72,7 @@ static inline void p4d_populate(struct mm_struct *mm, p=
+4d_t *p4dp, pud_t *pudp)
+>         set_p4d(p4dp, __p4d((unsigned long)pudp));
+>  }
+>
+> -#define __pud_free_tlb(tlb, pmd, addr)  pud_free((tlb)->mm, pmd)
+> +#define __pud_free_tlb(tlb, pmd, addr)  tlb_remove_ptdesc((tlb), virt_to=
+_ptdesc(pmd))
+>
+>  #endif
+>
+> @@ -83,10 +83,10 @@ static inline void pud_populate(struct mm_struct *mm,=
+ pud_t *pudp, pmd_t *pmdp)
+>         set_pud(pudp, __pud((unsigned long)pmdp));
+>  }
+>
+> -#define __pmd_free_tlb(tlb, pmd, addr)  pmd_free((tlb)->mm, pmd)
+> +#define __pmd_free_tlb(tlb, pmd, addr)  tlb_remove_ptdesc((tlb), virt_to=
+_ptdesc(pmd))
+>
+>  #endif
+>
+> -#define __pte_free_tlb(tlb, pte, addr)  pte_free((tlb)->mm, pte)
+> +#define __pte_free_tlb(tlb, pte, addr)  tlb_remove_ptdesc((tlb), page_pt=
+desc(pte))
+>
+>  #endif /* _ASM_ARC_PGALLOC_H */
+> diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
+> index 484ebb3baedf..af7e821e96c1 100644
+> --- a/arch/microblaze/Kconfig
+> +++ b/arch/microblaze/Kconfig
+> @@ -41,6 +41,7 @@ config MICROBLAZE
+>         select PCI_SYSCALL if PCI
+>         select CPU_NO_EFFICIENT_FFS
+>         select MMU_GATHER_NO_RANGE
+> +       select MMU_GATHER_RCU_TABLE_FREE
+>         select SPARSE_IRQ
+>         select ZONE_DMA
+>         select TRACE_IRQFLAGS_SUPPORT
+> diff --git a/arch/microblaze/include/asm/pgalloc.h b/arch/microblaze/incl=
+ude/asm/pgalloc.h
+> index 084a8a0dc239..ffee6a009219 100644
+> --- a/arch/microblaze/include/asm/pgalloc.h
+> +++ b/arch/microblaze/include/asm/pgalloc.h
+> @@ -25,7 +25,7 @@ extern void __bad_pte(pmd_t *pmd);
+>
+>  extern pte_t *pte_alloc_one_kernel(struct mm_struct *mm);
+>
+> -#define __pte_free_tlb(tlb, pte, addr) pte_free((tlb)->mm, (pte))
+> +#define __pte_free_tlb(tlb, pte, addr) tlb_remove_ptdesc((tlb), page_ptd=
+esc(pte))
+>
+>  #define pmd_populate(mm, pmd, pte) \
+>                         (pmd_val(*(pmd)) =3D (unsigned long)page_address(=
+pte))
+> diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+> index f2f9cd9cde50..33c4caee30e2 100644
+> --- a/arch/xtensa/Kconfig
+> +++ b/arch/xtensa/Kconfig
+> @@ -55,6 +55,7 @@ config XTENSA
+>         select HAVE_VIRT_CPU_ACCOUNTING_GEN
+>         select IRQ_DOMAIN
+>         select LOCK_MM_AND_FIND_VMA
+> +       select MMU_GATHER_RCU_TABLE_FREE if MMU
 
-Also s/unampping/unmapping please.
+And MMU is required because NOMMU does not perform mmu_gather
+operations, same as in the previous patch? If so, maybe make a note of
+it in the changelog?
+
+>         select MODULES_USE_ELF_RELA
+>         select PERF_USE_VMALLOC
+>         select TRACE_IRQFLAGS_SUPPORT
+> diff --git a/arch/xtensa/include/asm/tlb.h b/arch/xtensa/include/asm/tlb.=
+h
+> index 8c3ceb427018..6fb7b78154f6 100644
+> --- a/arch/xtensa/include/asm/tlb.h
+> +++ b/arch/xtensa/include/asm/tlb.h
+> @@ -16,7 +16,7 @@
 >
-> >
-> > Otherwise, LGTM.
+>  #include <asm-generic/tlb.h>
 >
-> Thanks! :)
+> -#define __pte_free_tlb(tlb, pte, address)      pte_free((tlb)->mm, pte)
+> +#define __pte_free_tlb(tlb, pte, address)      tlb_remove_ptdesc((tlb), =
+page_ptdesc(pte))
 >
-> >
-> > --
-> >   Kiryl Shutsemau / Kirill A. Shutemov
+>  void check_tlb_sanity(void);
+>
 >
 > --
-> Cheers, Lorenzo
+> 2.55.0
+>

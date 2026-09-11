@@ -1,159 +1,238 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D20585974;
-	Wed,  9 Sep 2026 16:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1854AE130;
+	Fri, 11 Sep 2026 19:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788972283; cv=none; b=kYAlDbAufQ8wHeUkcUPPQmnfVxWqhps5QU/mqJMlE95SuEvwXtDzIjIfHatCL2b/OE6DxCUwZv/F5BGo3e2Xtb7oFrtowMyDXzXXfH7ICXUBAhM26cMWkXhuiFnT85jAaEEjfDDVOyy9UxoMp8X8lWPZrWKK9h/lETje7dwvlaE=
+	t=1789154759; cv=none; b=k/VJ8BUut5IO2AQb93JLerrpoWyMnsb6epaWWWMElGGZLtUjP96i2nPdajX6uBIDN7NTiyvYBHKoKCd7+B6TqIRCT+kuJGfC19ctTYW19RSfVhbyMKAig9qDKVAWf5MsJahJQ3rsDwk87f/hPvcfdQmTnfoxqGCn+4KRmBOUm2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788972283; c=relaxed/simple;
-	bh=h1TOCNSkj5R56lNH3DJ3hUBmUSsPSkXgQfnKFDYvvQg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qqHNYooEZlfFj9d3uSg8a1RKCyUoPUZ5HjYFCHaamRdndEHzL+LxrUxGvECd7BRejO0q0uaDbMX+irmxYcp2ai/xBYDb30xoZ/GMUuITGxQZvyMQD9fAl4FWbqPZEtuY9AyVUp+odPF3jPmiCaRN4Gf92UeXCOlq6KxVTQ9NgjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SvkfUBrj; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SvkfUBrj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14881F000FF;
-	Wed,  9 Sep 2026 16:44:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788972281;
-	bh=Bapc0YSkMfnvYk3VlSbyVwcwaxlxEF/qdP5fqXt2FVU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SvkfUBrj+qqUCItjJr4thxIOtrO+WmcNQus9iN7o7fjn21Kjri7ciOsZZbXojK8eq
-	 ebmrsmEhjQ8lMe6NScH5NJJVO7FkHjSrPlMJAzs9SeDQJIL0euxfAANelWLDPoYw1X
-	 CcSIvP/FGlOivDpnH/QksUP428gC7WgcKMjXSRAyqMHuiTJd6wYCdFyF9iWecTST2l
-	 DPfn0SayJdOumRm8EjJ0YaCf7wOVn5AtF52jH/K7lyYBUkf1LvlE8O39pf5s+r01dw
-	 hpz3MZmyVQYZqDR+4GQ6n1zp4Q8/XwEUokZ3xCVu0XLtYHfY7rf+QXRgnY7M4GG9HF
-	 fN2FuuSzCKwhQ==
-Date: Wed, 9 Sep 2026 17:44:16 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kiryl Shutsemau <kas@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Guo Ren <guoren@kernel.org>, Brian Cain <bcain@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Simon Schuster <schuster.simon@siemens-energy.com>, Jonas Bonn <jonas@southpole.se>, 
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Russell King <linux@armlinux.org.uk>, 
-	Vineet Gupta <vgupta@kernel.org>, Michal Simek <monstr@monstr.eu>, Chris Zankel <chris@zankel.net>, 
-	Max Filippov <jcmvbkbc@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Richard Henderson <richard.henderson@linaro.org>, 
-	Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-snps-arc@lists.infradead.org, linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-um@lists.infradead.org, Hugh Dickins <hughd@google.com>, Qi Zheng <qi.zheng@linux.dev>
-Subject: Re: [PATCH v2 11/12] mm: make userland page table freeing RCU-safe
-Message-ID: <aqGMqVxJCWbZePmW@gremlin>
-References: <20260908-rcu-pagetable-freeing-v2-0-1f60b64e878e@kernel.org>
- <20260908-rcu-pagetable-freeing-v2-11-1f60b64e878e@kernel.org>
- <aqEivRP0LmJZcgEx@thinkstation>
+	s=arc-20240116; t=1789154759; c=relaxed/simple;
+	bh=PCyYoxWXg7sOin+tmY8Fbun+nm8rOPLv4vut1yRslEM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GnIxBpoY0ci6vd+yaWRFTYsL/WOjSbnXBs+r6OBlxgzR7twpg/oCNY+DGg9WykMnzQB8OIGM6e/KeN774Yes7jABwJ/nYerHndtx0Cz/7p2KpG7RKCOxVjS9C5MPr3Cwtq2HqGkHSNv/fAc18bHQ6mhCnNiwHyafyxXARCGKrQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.helo=mail.mainlining.org; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.helo=mail.mainlining.org
+From: Bradley Morgan <brads@mainlining.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: frederic@kernel.org,
+	neeraj.upadhyay@kernel.org,
+	boqun@kernel.org,
+	joelagnelf@nvidia.com,
+	rcu@vger.kernel.org,
+	"Andrew Morton" <akpm@linux-foundation.org>,
+	"Arnd Bergmann" <arnd@arndb.de>,
+	linux-arch@vger.kernel.org,
+	"Vineet Gupta" <vgupta@kernel.org>,
+	linux-snps-arc@lists.infradead.org,
+	"Russell King" <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	"Guo Ren" <guoren@kernel.org>,
+	linux-csky@vger.kernel.org,
+	"Yoshinori Sato" <ysato@users.sourceforge.jp>,
+	"Rich Felker" <dalias@libc.org>,
+	"John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+	linux-sh@vger.kernel.org,
+	"Chris Zankel" <chris@zankel.net>,
+	"Max Filippov" <jcmvbkbc@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	brads@mainlining.org
+Subject: [PATCH 1/6] lib: Add two-byte cmpxchg emulation function
+Date: Fri, 11 Sep 2026 19:25:34 +0000
+Message-ID: <20260911192540.20983-2-brads@mainlining.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260911192540.20983-1-brads@mainlining.org>
+References: <20260911192540.20983-1-brads@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aqEivRP0LmJZcgEx@thinkstation>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 09, 2026 at 10:15:13AM +0100, Kiryl Shutsemau wrote:
-> On Tue, Sep 08, 2026 at 01:32:20PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > Now every architecture has been converted to support
-> > CONFIG_MMU_GATHER_RCU_TABLE_FREE, this configuration option no longer makes
-> > any sense to keep around.
-> >
-> > Therefore remove it, and remove all the dead code that existed for
-> > !CONFIG_MMU_GATHER_RCU_TABLE_FREE architectures previously.
-> >
-> > Additionally, CONFIG_MMU_GATHER_TABLE_FREE is no longer necessary, as all
-> > architectures instead use CONFIG_HAVE_ARCH_TLB_REMOVE_TABLE when a custom
-> > __tlb_remove_table() is required, so remove this too.
-> >
-> > A number of architectures only enabled CONFIG_MMU_GATHER_RCU_TABLE_FREE if
-> > CONFIG_MMU was set, however the mmu_gather logic only actually does
-> > something meaningful if CONFIG_MMU is set (mmu_gather.c is only compiled in
-> > this case, for instance).
-> >
-> > As a result, there's no need to gate any of this logic on CONFIG_MMU
-> > explicitly.
-> >
-> > CONFIG_PT_RECLAIM however does have a strict dependency on CONFIG_MMU, so
-> > make this dependency explicit.
-> >
-> > Additionally, correct comments to remove references to non-RCU page table
-> > gathering and make it clear that this is not 'semi-RCU', nor has it been
-> > since commit 1fb3d8c20bfa ("mm/mmu_gather: replace IPI with
-> > synchronize_rcu() when batch allocation fails").
-> >
-> > With this change in place the kernel policy is now that all page tables are
->
-> You missed s/all/userspace/ from v1.
+cmpxchg_emu_u8() emulates one-byte cmpxchg() in terms of four-byte
+cmpxchg() for the architectures lacking native one-byte atomics.
+The same architectures also lack native two-byte cmpxchg(), where
+such an operation is not supported and either fails to compile via
+BUILD_BUG() or fails to link, because the bad pointer sentinels
+these architectures declare are never defined.
 
-Hmm I thought I got this... will fix on respin!
+Add cmpxchg_emu_u16(), the two-byte sibling. It reads the enclosing
+word with READ_ONCE(), splices the two target bytes through a union
+and loops on cmpxchg() of the full word until the compare succeeds.
+Like cmpxchg_emu_u8() it is fully ordered.
 
->
-> > freed after an RCU grace period, and thus it is now safe to unconditionally
-> > perform page table walks under RCU, safe in the knowledge that page tables
-> > will not be freed underneath the walker.
->
->
-> > @@ -151,24 +148,15 @@
-> >   *  This might be useful if your architecture has size specific TLB
-> >   *  invalidation instructions.
-> >   *
-> > - *  MMU_GATHER_TABLE_FREE
-> > - *
-> > - *  This provides tlb_remove_table(), to be used instead of tlb_remove_page()
-> > - *  for page directores (__p*_free_tlb()).
-> > - *
-> > - *  Useful if your architecture has non-page page directories.
-> > + *  Page directories (__p*_free_tlb()) are always freed via tlb_remove_table(),
-> > + *  after an RCU grace period (see mm/mmu_gather.c).
-> >   *
-> > - *  When used, an architecture is expected to provide __tlb_remove_table() or
-> > - *  use the generic __tlb_remove_table(), which does the actual freeing of these
-> > - *  pages.
-> > + * This serialises against software page-table walkers, including architectures
-> > + * which do not use IPIs for remote TLB invalidates.
->
-> Indentation is broken.
+The Kconfig symbol gating this file is renamed from
+ARCH_NEED_CMPXCHG_1_EMU to ARCH_NEED_CMPXCHG_1_2_EMU, as it now
+selects both the one-byte and the two-byte emulation.
 
-Ugh I thought I fixed this before I respun too, doh!
+Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Bradley Morgan <brads@mainlining.org>
+---
+ arch/Kconfig                |  2 +-
+ arch/arc/Kconfig            |  2 +-
+ arch/arm/Kconfig            |  2 +-
+ arch/csky/Kconfig           |  2 +-
+ arch/sh/Kconfig             |  2 +-
+ arch/xtensa/Kconfig         |  2 +-
+ include/linux/cmpxchg-emu.h |  1 +
+ lib/Makefile                |  2 +-
+ lib/cmpxchg-emu.c           | 35 ++++++++++++++++++++++++++++++++---
+ 9 files changed, 40 insertions(+), 10 deletions(-)
 
-Will fix.
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 3bb2e568f5b1..d56064797e09 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1817,7 +1817,7 @@ config CC_HAS_SANE_FUNCTION_ALIGNMENT
+ 	# strict alignment always, even with -falign-functions.
+ 	def_bool CC_HAS_MIN_FUNCTION_ALIGNMENT || CC_IS_CLANG
+ 
+-config ARCH_NEED_CMPXCHG_1_EMU
++config ARCH_NEED_CMPXCHG_1_2_EMU
+ 	bool
+ 
+ config ARCH_WANTS_PRE_LINK_VMLINUX
+diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+index 80e61175bf52..0e91d254eccb 100644
+--- a/arch/arc/Kconfig
++++ b/arch/arc/Kconfig
+@@ -14,7 +14,7 @@ config ARC
+ 	select ARCH_HAS_SETUP_DMA_OPS
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+-	select ARCH_NEED_CMPXCHG_1_EMU
++	select ARCH_NEED_CMPXCHG_1_2_EMU
+ 	select ARCH_SUPPORTS_ATOMIC_RMW if ARC_HAS_LLSC
+ 	select ARCH_32BIT_OFF_T
+ 	select BUILDTIME_TABLE_SORT
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 408aa58a2a5b..8fef4238d411 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -38,7 +38,7 @@ config ARM
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
+-	select ARCH_NEED_CMPXCHG_1_EMU if CPU_V6
++	select ARCH_NEED_CMPXCHG_1_2_EMU if CPU_V6
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_CFI
+ 	select ARCH_SUPPORTS_HUGETLBFS if ARM_LPAE
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 4331313a42ff..5f26e8615d7d 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -37,7 +37,7 @@ config CSKY
+ 	select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
+ 	select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
+ 	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
+-	select ARCH_NEED_CMPXCHG_1_EMU
++	select ARCH_NEED_CMPXCHG_1_2_EMU
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+ 	select COMMON_CLK
+diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+index d60f1d5a94c0..09e556fced01 100644
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -14,7 +14,7 @@ config SUPERH
+ 	select ARCH_HIBERNATION_POSSIBLE if MMU
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_WANT_IPC_PARSE_VERSION
+-	select ARCH_NEED_CMPXCHG_1_EMU
++	select ARCH_NEED_CMPXCHG_1_2_EMU
+ 	select CPU_NO_EFFICIENT_FFS
+ 	select DMA_DECLARE_COHERENT
+ 	select GENERIC_ATOMIC64
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index f2f9cd9cde50..62019fd444d4 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -14,7 +14,7 @@ config XTENSA
+ 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
+ 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
+ 	select ARCH_HAS_STRNLEN_USER
+-	select ARCH_NEED_CMPXCHG_1_EMU
++	select ARCH_NEED_CMPXCHG_1_2_EMU
+ 	select ARCH_USE_MEMTEST
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_USE_QUEUED_SPINLOCKS
+diff --git a/include/linux/cmpxchg-emu.h b/include/linux/cmpxchg-emu.h
+index 998deec67740..fee8171fa05e 100644
+--- a/include/linux/cmpxchg-emu.h
++++ b/include/linux/cmpxchg-emu.h
+@@ -11,5 +11,6 @@
+ #define __LINUX_CMPXCHG_EMU_H
+ 
+ uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new);
++uintptr_t cmpxchg_emu_u16(volatile u16 *p, uintptr_t old, uintptr_t new);
+ 
+ #endif /* __LINUX_CMPXCHG_EMU_H */
+diff --git a/lib/Makefile b/lib/Makefile
+index 43421c39d21b..d0e69312176a 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -202,7 +202,7 @@ obj-$(CONFIG_CODE_TAGGING) += codetag.o
+ lib-$(CONFIG_GENERIC_BUG) += bug.o
+ 
+ obj-$(CONFIG_HAVE_ARCH_TRACEHOOK) += syscall.o
+-obj-$(CONFIG_ARCH_NEED_CMPXCHG_1_EMU) += cmpxchg-emu.o
++obj-$(CONFIG_ARCH_NEED_CMPXCHG_1_2_EMU) += cmpxchg-emu.o
+ 
+ obj-$(CONFIG_DYNAMIC_DEBUG_CORE) += dynamic_debug.o
+ #ensure exported functions have prototypes
+diff --git a/lib/cmpxchg-emu.c b/lib/cmpxchg-emu.c
+index 27f6f97cb60d..991a5969f471 100644
+--- a/lib/cmpxchg-emu.c
++++ b/lib/cmpxchg-emu.c
+@@ -1,8 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+- * Emulated 1-byte cmpxchg operation for architectures lacking direct
+- * support for this size.  This is implemented in terms of 4-byte cmpxchg
+- * operations.
++ * Emulated 1-byte and 2-byte cmpxchg operations for architectures lacking
++ * direct support for these sizes.  These are implemented in terms of
++ * 4-byte cmpxchg operations.
+  *
+  * Copyright (C) 2024 Paul E. McKenney.
+  */
+@@ -43,3 +43,32 @@ uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new)
+ 	return old;
+ }
+ EXPORT_SYMBOL_GPL(cmpxchg_emu_u8);
++
++union u16_32 {
++	u16 h[2];
++	u32 w;
++};
++
++/* Emulate two-byte cmpxchg() in terms of 4-byte cmpxchg. */
++uintptr_t cmpxchg_emu_u16(volatile u16 *p, uintptr_t old, uintptr_t new)
++{
++	u32 *p32 = (u32 *)(((uintptr_t)p) & ~0x3);
++	int i = (((uintptr_t)p) & 0x2) / 2;
++	union u16_32 old32;
++	union u16_32 new32;
++	u32 ret;
++
++	WARN_ON_ONCE(((uintptr_t)p) & 0x1);
++	ret = READ_ONCE(*p32);
++	do {
++		old32.w = ret;
++		if (old32.h[i] != old)
++			return old32.h[i];
++		new32.w = old32.w;
++		new32.h[i] = new;
++		instrument_atomic_read_write(p, 2);
++		ret = data_race(cmpxchg(p32, old32.w, new32.w)); // Overridden above.
++	} while (ret != old32.w);
++	return old;
++}
++EXPORT_SYMBOL_GPL(cmpxchg_emu_u16);
+-- 
+2.47.3
 
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
-
---
-Cheers, Lorenzo

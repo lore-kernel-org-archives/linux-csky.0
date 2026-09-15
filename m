@@ -1,82 +1,69 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847A536F8F7
-	for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 17:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789494729; cv=pass; b=EY63/WI7UYcGciKIL70BpGOEh2YiklgPu91aRHS2N+y0xruz9Bg5X30TRjwZl7F9/utO+28ZsisM27RBM56C8oCwsXcPR/Ni2v6oywl0USqcD5TEkt9Y5TV+HLxz3tH15ZfyD33Ira+kyjpKZPBc8EbitIDcHupSiWb2Zl03Mso=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789494729; c=relaxed/simple;
-	bh=+4G5uXJmB7HF3o1L37WqbjganRxVa3Gn0saA7lTxNiM=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686A44CE66B
+	for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 19:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789499360; cv=none; b=Upe7h3NDIUNJ96OiC5p7rpd8EPiZf9eSVrNAxPqe10LPuCgl2Ik0jQ0ynpYhD+4M/KMSRK+RYP4/FfI7G92+FBSOTO0AfZYuFSdJnYcoaBtjiTt1wR4nk+EVcYIJRZe10zHMJv/EzBkKiHFMluk13vrtG2w1eLlqzSMNQ8wZ4qw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789499360; c=relaxed/simple;
+	bh=AGk4y8oFpNibhByHKIxcRS7KnQx6z20Q8VC6dFl1tNo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wl7TMPFlJ8PPi2roC3Rx87K2x2ULHTKuVTh1/2F7eAdtQzKN91MOYGVEI6+ciWfY0qSMV8zPH0LB0SGf6FJYrCdCa7br8g10LF84WSzG6QajOQtxLtyLvezMXiU+F1buEcQWd+wXEhJH8Yu1FsOGMxTywxYniILVDPZDD1kY7LY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WPgx9Wh6; arc=pass smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=hnIAgyP1zJWwMh+oASX7eBNLG2/uXWWdbsJ3eWkPmftfkCcgZ2LdPrlJ+L63lYr/96dpt5Ap2H1iwqcqmox3XRJ2x17anLsmoaQadw2fIafBZ9aAdqAuedwbPFSqMa/FDibQka4yomUPIKUwHGnqbNivGhuHVozmesnQbGJsH7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=CSrtt9Un; arc=none smtp.client-ip=74.125.228.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WPgx9Wh6"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2dd4b917769so6905ad.1
-        for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 10:52:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789494727; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iwLJYShDucibn5DkxuSa8sxuVs6IIa3Z264rve6zyPBlXMdt1KcE88oZHT5hDT8zEx
-         yC4BKzp02+qFBqn5DE8twCZ9SB/LIeesOAdKj+g1H5kWV6vEg5JXRY66b8HLT6pRqgXb
-         avbUkVYcSNdksNLokmzsCC/ge5GhuAGVAEPqV0unLi+nZQK3PX3nfPVJcc1NSU51Xk0u
-         CbLiodi8VNIcq0VgzpG8YDF/K6C4QDTZbgsw7qlh45oAYsKEmD8GkHiEX2rCO9F993PB
-         SmDPPkSIzWksvQjjfV2HvwsWJ8i7NrML67fkyfbKSiiddz/fOq0DJi9dJvwXapJrDNfd
-         KP/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+4G5uXJmB7HF3o1L37WqbjganRxVa3Gn0saA7lTxNiM=;
-        fh=/6VqNRkCV+Yi1W6vthmD7rL3ZWSKW+V9jxt8Fe2+VFg=;
-        b=aCGDUHxb+anH4BSVgKpmp64LLcZ5ecd0zbt3XI+Fc4XlL5TB6JI0/zVNbWMUVvmV/3
-         Vlh7hkOYV0caAvhR+EuPfFEwWzsUDpxueIN1qHQ7FBtqXftmcIYHTERHVsMpmsiNDsQk
-         FVW7HS5kHPVdc9aYSCZRKXCJZYn3HcWAhG4xdyUXumzciwnhOMVQu6vnwdnTzkfXPngE
-         qOe2b6wqB+H064tm4OVHQ/XVXsi1vS0xHiPAOdjHzesAFGiBSIvln3a/+ejhebhzoWPR
-         uOGg2AC9thnqua9z0npCGxJVJk+mHHyfsFcz6ORHxzW0ZJ4pr1celjQ61CLuxSNaH/ig
-         QlhQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="CSrtt9Un"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a6063d7dc4so254721a12.3
+        for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 12:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789494727; x=1790099527; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=+4G5uXJmB7HF3o1L37WqbjganRxVa3Gn0saA7lTxNiM=;
-        b=WPgx9Wh6g8ehXMOaZf8ZSNtevHb9fzr3lXk5INKsJirqC99dpiARLSwTsIwHA4pbMW
-         JbWx8MvBxDUFu6opqA60njTwuSet+XjH0Wga4OKXeEmVhOXoy61UWc3rqiL6EU8/l428
-         EjMY1UqvowxmFEZiD+cpXVE0I3gM0Ssco82ZH8FSIs0h6jzSdSLoGG2b/9Ga+W+7Aup7
-         R3Y2jKX2VRyqaVjVjF8po02JGQLWYioBTM31SQGX//CGOHsZjgwuKy0KaaC3tSzQflwo
-         ISJi8sLOMT0xayOGlmIx3TnuUJAs8/tTEps0xY78QDJPw7a+XDrg4k1OSruo0M4Rr9uE
-         eRpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789494727; x=1790099527;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=linux-foundation.org; s=google; t=1789499357; x=1790104157; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+4G5uXJmB7HF3o1L37WqbjganRxVa3Gn0saA7lTxNiM=;
-        b=0DPzPr7bobMUVTQ3pk33zsRDNCVd3yBKcYjOGj7A8+yrp7Q/IhbMMLfU0plh3KB5HC
-         YpmOlyF9ZPgops7O6BBHs6gQ/go3TiEGP3y3tHWbS4qVQIk8THZ/BiQ3GqMBgh+8emYz
-         Vkty+8nCH+5+UDWgWqxK/fKXMxcjQc8rgbTvgDxDhNCxD1NiTFxI7k0g0yn3cuPrb2nC
-         s3Ro5uV18n8ZpOVPZICNtR7uqh1VFRYP+AMmp5itwXfDaDZajvSUDc9NvXV/vhdV2XAi
-         w0d2hEKoRhYtNEa5DSZ12Hs+ZE9cshYrlOWF0a1y2ha+i1Guhmej2AKRoq1BFcK3rtM8
-         /5/g==
-X-Forwarded-Encrypted: i=1; AKwUvBzq6Jqw+p/QTmzq+3zqAYv1/7+PWDJaBGEMvhLUAQE7iF+l5xCsa3ZnEnmUJg4djSh4rOCzjE4rtLRx@vger.kernel.org
-X-Gm-Message-State: AFuF++kct4weDFy+zvkxl7JoD11BQ9T3v8XfeJixLyNtu+inYgF8zfMQ
-	pOoyW46Ah5piZA3+RHk+7p0YQ9cas635lxnUKwtO0csPAgasRvKHpeuHWzmF8agRUtipdx6FOMB
-	RMKxg+KBOUYjQ5YqCwkQAn1l6tTg7xEs7u6SC4enH
-X-Gm-Gg: AYBFou2HNO9VfU60oOYHnyO/VYeQg9ftdaBl91emHOqrRkSDy/s3RbLn+7Xodhpvjv0
-	kbu0csLPU2C9TKKgSAaxAsD1a1TAcKSa10Hh9ww+tDEtwxtCTWosleLaX+4GfDtI4GaQOMZO4qN
-	dQ08LVZ5MjX72L/qWQ4MQAUsQ3MH4VDPGJ9yO7BSVk5vSAeokrq/8yb4lEP0Zoyeo9mF1vV9uUx
-	m7reAgBqjDW2NxwefWS3YxGCLdb7A7kwszqnviaflq3JESTUvPq0+TIN3wcsSse0dUZI7U015ID
-	47SiSqTFm4CpeSXoYCDghMsDZLpzQ5f4LTN91ixrHwPwRi5lPYL0bLYfGyHmewO+CK80CLeHeih
-	gcCStlRxUNrrQCGzrkpNKZYYK+LTGeltLp2cKq/MfRyIu3lRe5Eo=
-X-Received: by 2002:a17:902:f612:b0:2dd:5363:31ec with SMTP id
- d9443c01a7336-2dd89c0c38amr177395ad.14.1789494726332; Tue, 15 Sep 2026
- 10:52:06 -0700 (PDT)
+        bh=XFFk9jJtDswBQpA8QWIooO6lLG4HdlvPT/LqykRjG+U=;
+        b=CSrtt9Unpbm2RA3J8D1Piu8PqBvT7/aa/KZ5CE3c3D++Q65F+8LC8PQhJ+YAQkLRZF
+         FOCbEfcedihMauvO8i4QEZYDfsgCMc/AU6Y/5BuRF/k4i643ZbHqsUyNas20hZQzkd2E
+         0RZUaMtkje/C5faG2xlXImdyEwn4T014v7tJM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789499357; x=1790104157;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=XFFk9jJtDswBQpA8QWIooO6lLG4HdlvPT/LqykRjG+U=;
+        b=gDtn7qZaqgf4H8Q/5iMpLg+YrKbH+KOhnZ96eHQ2ieJyyS7W4pBuhPCc92XH/3gBYO
+         6msUES8llXyo1uBO6joDePmc+sgOoDbESq5NqXFisJ89zzQ8EDEnRpeT1fyTU4p4xpS7
+         pgj+E5dmJem6J20lvcMOYvYakRWSTAJQY7yH0oDOOBiRRGxcjzZSU0fiJpYLky0cIbbc
+         3vRxmy9TzJGiK+B8BYTBZo0vaUUBOHXbtZPYDbKOf8Ucglvh8o0+ZPlZMABnjh+/sCWJ
+         f6RufBGNrHpEU/NQ1KXAjSYdpaSDkH8OyeWigjG+2qBQYHlRHQhJwcXPqRUT1BseV8eh
+         FUrA==
+X-Forwarded-Encrypted: i=1; AKwUvByauhBypvw7AXa3z1LOu3YuQcxlGYSKl3ju02ako2KH+z4TbvUDz880P8Z6cHn/6XnDLnaLJoQ4WpW3@vger.kernel.org
+X-Gm-Message-State: AFuF++nrxbjZst4RfKWnOEUbwNiuKMF9njP60OdOZZiRi9FzUgiLmYWU
+	lyFKKlGaK6DQOhASYxhkZ20m2D0IoiTPZi9ET4C3bgE/ct7+vUlZhEWvIFB+7MT43a6rQZeTZ9+
+	+BKVjuL4=
+X-Gm-Gg: AYBFou1pmocoTJE+glaU3nyLD3PCXGQbATBATsJicnxpYA/tjPfcaNKX8HT5BOFCsk6
+	RpY8vkHs8clX68wnSj7BYJBJJkEJua4PYWRD8n5vFfJTQqVGBr5NYGgtYFqg3s6S0v1vS5TpW/C
+	0L2bjaFzx7yiV1nhxioDaUc+9gMJEkBrCfBrgBz89Ualrg3gbgMqfaONSBomlIWNJKiE6x1WCil
+	2hFBMgvCpE2oLoS6hTzMZKlxMLqDGbt2Wc62rsSqdpaiBnKkPkHpgV8ha8UOosadAYlzgxmsUPf
+	RRW47gnjc4hGy56hXuXj2QCxr6vB3e6GC7Ayf/sID2KbSBIql298XVaurppcE6LOOst47yHqgLV
+	MpFZOdosCsRJNOuPnCpscMR+RdQUEMLWeD+PEz9p9usGf6Xg9vYc1j7BVG9gy8plS1RPXUHT20H
+	VWGyM9a8Hk+heoKyZbgdpiOlVEp5WxP2RAida8y4wRykBoZ9y4PaPBzfq4iFalsJQl03fZZwfFF
+	ZYMWzolmH7Ik+xtsGpO91m7FkY6AgN2fKTllOuEOo04tkaxgA==
+X-Received: by 2002:a05:6402:4617:b0:6a5:f4eb:df3 with SMTP id 4fb4d7f45d1cf-6a9f61e4e87mr11439524a12.2.1789499356678;
+        Tue, 15 Sep 2026 12:09:16 -0700 (PDT)
+Received: from mail-ej2-f41.google.com (mail-ej2-f41.google.com. [74.125.228.169])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aa1cfe0570sm151277a12.4.2026.09.15.12.09.15
+        for <linux-csky@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2026 12:09:16 -0700 (PDT)
+Received: by mail-ej2-f41.google.com with SMTP id a640c23a62f3a-c254fa663bfso33743866b.1
+        for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 12:09:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBydGDj7YY8AgxJilzRn1N36dDOzuwi073JYV8+gFgTgZb31ux8lQ4cud0X1h0nz8dUxJRMseqLx+27o@vger.kernel.org
+X-Received: by 2002:a17:906:7309:b0:c25:47a4:fedc with SMTP id
+ a640c23a62f3a-c29b839a057mr1176039766b.2.1789499355710; Tue, 15 Sep 2026
+ 12:09:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -84,17 +71,19 @@ List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
-In-Reply-To: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 15 Sep 2026 19:51:27 +0200
-X-Gm-Features: AcwNN1Vhgv53PI2-XyXtJBbVzCNkGiiWjtvOE2b-8zHim7-UybJ3H2xniPj1VUE
-Message-ID: <CAG48ez1RsdT=O=-0city3vjgWhDvY424KtTmrCJntWy5ds3HBQ@mail.gmail.com>
+ <CAG48ez1RsdT=O=-0city3vjgWhDvY424KtTmrCJntWy5ds3HBQ@mail.gmail.com>
+In-Reply-To: <CAG48ez1RsdT=O=-0city3vjgWhDvY424KtTmrCJntWy5ds3HBQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 15 Sep 2026 12:08:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi3Kkqgfg6zUTHpQoZNL2VOB4vYqpi6RX0WNO++29UtyQ@mail.gmail.com>
+X-Gm-Features: AcwNN1VCm0LMG7z3Jned014oJh6WBcf4uOx0OBk98_hrtHKbrhcQiMMJ_A-fmB0
+Message-ID: <CAHk-=wi3Kkqgfg6zUTHpQoZNL2VOB4vYqpi6RX0WNO++29UtyQ@mail.gmail.com>
 Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
+To: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
 	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
 	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
 	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
@@ -107,26 +96,37 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>, Alexander Viro <viro@zeniv.l
 	David Airlie <airlied@redhat.com>, virtualization@lists.linux.dev, kvm@vger.kernel.org, 
 	kexec@lists.infradead.org, linux-hyperv@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 15, 2026 at 1:31=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-> TL;DR, this lets arch code handle fd install and cleanup. fd_prepare()
-> allocates a descriptor like get_unused_fd_flags() does and records it in
-> a slot on the task. fd_stage() attaches the file to that slot and
-> returns the number.
+On Tue, 15 Sept 2026 at 10:52, Jann Horn <jannh@google.com> wrote:
+>
+> Is this mainly about stuff like "we installed a file descriptor and
+> then the following put_user() failed"? Because if so, I think a nicer
+> fix would be to have a policy of "if userspace provides unwritable
+> memory to a syscall, just keep going and pretend the access worked",
+> and maybe have a sysctl that kills the process when this happens to
+> emphasize that userspace should not be doing this.
 
-I'm not really a fan but I feel like if you want to do this, you
-should be using task_work so you don't have to touch the entry/exit
-paths directly? (And if task_work is too inefficient somehow, you
-could tinker with the task_work implementation.)
+We've done that before, where we just ignore put_user() errors and the
+user gets whatever the user gets.
 
-> When the syscall returns success the exit path installs every staged
-> file. When it returns an error it drops the descriptors and the files.
+It is maybe not optimal, but it's fine. You can find quite a lot of
+unchecked put_user() calls with a pattern like
 
-Is this mainly about stuff like "we installed a file descriptor and
-then the following put_user() failed"? Because if so, I think a nicer
-fix would be to have a policy of "if userspace provides unwritable
-memory to a syscall, just keep going and pretend the access worked",
-and maybe have a sysctl that kills the process when this happens to
-emphasize that userspace should not be doing this.
+        git grep '^[[:space:]]*put_user(.*);'
+
+and some of them are in core code - see the two in kernel/fork.c, for example.
+
+One of them says "if userspace has not set up a proper pointer then
+tough luck". The other one doesn't even bother with a comment.
+
+The scheduler has two cases too, although one of them is admittedly
+for another error case.
+
+So yes, saying "if you pass bogus arguments, you get what you get" is
+a valid model. It's perhaps not the *preferred* model, but it's not
+wrong.
+
+It *would* be wrong to take code that already has error handling and
+remove the error handling, though.
+
+                  Linus

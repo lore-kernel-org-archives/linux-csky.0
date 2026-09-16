@@ -1,113 +1,142 @@
-Received: from mail-ej2-f27.google.com (mail-ej2-f27.google.com [74.125.228.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CEF38CFED
-	for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 22:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EE037C0FD;
+	Wed, 16 Sep 2026 02:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789512918; cv=none; b=Qj70ELm9mCRDbfxiv36dG4rmXICktNI7anYOR1JaPtu3bGQRTe4iGAzbSgX9/FCV8yYHLJaYsIw3v4q0Lwf7LNO6Qaz27Bjv7HAiYMxTPgB3+Wu4QdcI2uHPeerNpmujDRsjzKbGRA0DNixG6xYwPyneDd24XMgGLElbS1lA0gw=
+	t=1789524114; cv=none; b=JqeOYD9o0LvaaaOgINkAzg0gcSjIdhIKcHefDtCo2hsXJYhssfELEfoeFgu3jZ8kzXLWhJDw9lhIInscKVVlmwU7OdAgoRkF+dURRu8PkIZOQwTzrgEsTTITEpelQhXHYj0RIKgWl3znYDtwmv3MWP78sj/iK5g6RlTadrn1EC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789512918; c=relaxed/simple;
-	bh=ITz7hBythv5OWTbmQ9c4e1mzRPysX2+YTMbCrseTj6Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f+olP/kGuX0yech4112j4MWeniuyA3Gl5pljWy+Xgoi04lcYtpYi5GzkAxo2IPJ4mAV9SrnQLkgNr+xS8BWS7zJ1ep4KPqCXkYBTy4W+QkCPzI8BONAXbxBsVKcvBk+NZwQMF64049J3aBTwtjpbGmAzQYt94DEQs2KBjpF4YLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=O8zInPWI; arc=none smtp.client-ip=74.125.228.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1789524114; c=relaxed/simple;
+	bh=al7g21kcAnfwtj0vu9RWx8oCgWBRDlGHfixQOqRdgZw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=mBknqYs96MVAULrGtsFMBOokXe0MITZSIWgnfWBvkUD/1letp+Va5OT/qs5u8HMoudiNWcuG37eXjOqdjBI9LQGEMPLVB776QoCBuc7bFBWS0x565xKweaQ36blkr00GxMfDx5GGDcwx7VVQkV2wdP/3GQalU+VwKPMc+vGYYoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HA4IrxR+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="O8zInPWI"
-Received: by mail-ej2-f27.google.com with SMTP id a640c23a62f3a-c254f6c7a58so58012866b.2
-        for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 15:55:15 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HA4IrxR+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E999D1F00893;
+	Wed, 16 Sep 2026 02:01:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1789512914; x=1790117714; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7NEEN5klK6sYQ7k8fj+V0z2WeSFVNwjy5fJJIdfiMPQ=;
-        b=O8zInPWIdyxyOa5FLkMPUHA3YCGWIiELKOQ/L6484wNxxTf9lTsXdbe5Jtu55K7Q+P
-         iy2mxlVKms3E8wCPHNo/6//rHBOqwkZxyHIA/DGNKVacM/d2k88mwpsHwLM215I56XFw
-         eB0PiNUAr8DA6jrTxjB3eiFi8KrMYLE22XljE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789512914; x=1790117714;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=7NEEN5klK6sYQ7k8fj+V0z2WeSFVNwjy5fJJIdfiMPQ=;
-        b=L5NhVsyn/S9D3RlKTiXhE7cVIcf1xPsv4HJ8og+APHV2q6g6nNGP8o3/guyzWlhJDc
-         2OUgfRGEP0SamMSfOCezW+C8U9ZUNLfnKPBaFubqAsCfyRlB+ojVczcsdLtvh+I/RTtY
-         I9dbDUm6SEzVQhGctA1IRPBnQtikR0BB64nMRuloNdUfw4D/44hi2/bk3BJ2ShbX60a1
-         /mhN/g/rj+Xd19g1B9qFUw3yiDKPX40jFKXImpuX/ScrWiGRYby9tzxRR5JWuii1Cfa+
-         V/ecxUukAfQzQRLBiMimxVIk3aL57Gblrc+m2xcD+66IyfAODP2d0q+ZJRKyfp74H5UW
-         WTQw==
-X-Forwarded-Encrypted: i=1; AKwUvBym5ViNby9+5IDJsvUPsrBfysZqdvDjC19txWCTFsWxSulU2heuksZ2PIbVWcNhHZpE3R01t6VmqWBG@vger.kernel.org
-X-Gm-Message-State: AFuF++l6VGpm269oWHKcm+wChfcbODBkOqclE/6CARtCafrUb+YgvU3U
-	n6FFXu2Ra9DsSvy5IA9jIDjFZiNy/DtWE2Ql0NT57jOJPjuioG41nXpA8cwDmUIzGZmTcVuyaEM
-	yaOjdj5tAYg==
-X-Gm-Gg: AYBFou0FzNx9p8eqZuFZZa9stRB0Xfc+2yJdVsJB5oxtAGy0QEPA5EwOdESpEcfLHZE
-	HiLVDKSJy79tAqRjCbj+LitxgD7jpSilrMatVYwATi+eWIe5MhwrJCA6B3pfU5QUrJ584gweRlW
-	D/COiRYE9TztcUTTMHmJQYd52RPfvo0yoDeYzTJzm7dmsEpcom8NtS8u8I0mKg9BkWpXLxMNFhQ
-	TyWNvamRNmt/wt2tIysvD2OW9j+IOFAb87OWN756B/BMlPNGkdaiTolbznjvrXFvuNhmPF4W2oN
-	bJAosjBHU4Sdl8DM1vFvKeIN2rWfouYB53VZyns02/gntBnfvcMJQMc1aTSDVbKWoDBGiFEqKfS
-	36Uu2bZFDcB3bEZCbB49Zw43lmjcxSPPKIctwbt6tjGryS8XBFanjDOe+jvhDdUzavKUCeOVoW/
-	SnxBPR0G+ikFNu0D/JiGrO6t+vUtVUE6NgZ+hQNIr9Z+DwuVm46qclebT7XMaqExw0T3MMHBZjq
-	zr+bR5ycPU2w9IBvNMSSruKdfrvTuKO7zQK0lRDguYnuntiIA==
-X-Received: by 2002:a17:907:9621:b0:c29:4415:2ec6 with SMTP id a640c23a62f3a-c29e520778fmr9509266b.12.1789512914228;
-        Tue, 15 Sep 2026 15:55:14 -0700 (PDT)
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com. [74.125.228.76])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c29de48ce9csm32997566b.25.2026.09.15.15.55.14
-        for <linux-csky@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2026 15:55:14 -0700 (PDT)
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a605844571so457267a12.3
-        for <linux-csky@vger.kernel.org>; Tue, 15 Sep 2026 15:55:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzN7nags/JpPt1C6yBAi6cFcToRsN3QNZD9Ka3mJ08ltODNj+kC+pyUjRVKKytpRgkBeSbEBJFZqVYk@vger.kernel.org
-X-Received: by 2002:a05:6402:5d1:b0:6a9:a6c0:e5ef with SMTP id
- 4fb4d7f45d1cf-6aa2244ef06mr218172a12.37.1789512913950; Tue, 15 Sep 2026
- 15:55:13 -0700 (PDT)
+	d=linux-foundation.org; s=korg; t=1789524094;
+	bh=Kq4nX0CZWZvbBl1ewxdrR8njTtxJd2HKKhLZ4yZoin4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=HA4IrxR+bH6KFYi5TWsVFFRj5NN/KsmXWn+L2rcKXslNm+h4O1+C0Mz1TX/mnbSd5
+	 wNlo1vs7L/RwOu/p4JC+a32HO1/edlho+RmyG7M/c8w2xQw4dUW63KjVSNntMUP6xo
+	 zHIhd6HWzSLYzzfxhv0JalmDYIqgVcBuZA1Pa2/U=
+Date: Tue, 15 Sep 2026 19:01:31 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, Baolin
+ Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
+ <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, Ryan Roberts
+ <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
+ <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Usama Arif
+ <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Guo Ren
+ <guoren@kernel.org>, Brian Cain <bcain@kernel.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Dinh Nguyen <dinguyen@kernel.org>, Simon Schuster
+ <schuster.simon@siemens-energy.com>, Jonas Bonn <jonas@southpole.se>,
+ Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne
+ <shorne@gmail.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, Rich
+ Felker <dalias@libc.org>, John Paul Adrian Glaubitz
+ <glaubitz@physik.fu-berlin.de>, Paul Walmsley <pjw@kernel.org>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Russell King <linux@armlinux.org.uk>, Vineet Gupta
+ <vgupta@kernel.org>, Michal Simek <monstr@monstr.eu>, Chris Zankel
+ <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Will Deacon
+ <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick
+ Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ "David S. Miller" <davem@davemloft.net>, Andreas Larsson
+ <andreas@gaisler.com>, Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland
+ <mark.rutland@arm.com>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge
+ Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, Michael
+ Ellerman <mpe@ellerman.id.au>, "Christophe Leroy (CS GROUP)"
+ <chleroy@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, Richard Weinberger <richard@nod.at>, Anton Ivanov
+ <anton.ivanov@cambridgegreys.com>, Johannes Berg
+ <johannes@sipsolutions.net>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jason Gunthorpe
+ <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
+ <peterx@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-snps-arc@lists.infradead.org,
+ linux-arch@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+ linux-um@lists.infradead.org, Hugh Dickins <hughd@google.com>, Qi Zheng
+ <qi.zheng@linux.dev>
+Subject: Re: [PATCH v3 00/12] mm: make userland page table freeing RCU-safe
+Message-Id: <20260915190131.adee185f2ce04a8ec821489c@linux-foundation.org>
+In-Reply-To: <20260911-rcu-pagetable-freeing-v3-0-7b8c86103821@kernel.org>
+References: <20260911-rcu-pagetable-freeing-v3-0-7b8c86103821@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
- <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com> <CACSVV028AdnTYa6OKDeoJYCau58uTkKMgEdqTn7crNSV8QZxOA@mail.gmail.com>
-In-Reply-To: <CACSVV028AdnTYa6OKDeoJYCau58uTkKMgEdqTn7crNSV8QZxOA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 15 Sep 2026 15:54:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjhJF91TCO0Zqeuf+caG2tQZ4AzbLr2qFmRmnMM4dbh4g@mail.gmail.com>
-X-Gm-Features: AcwNN1Wx2MaYDtFtmeOlL6MnzYY7doY_FEPpziKatTBWbLOeKsjmritQ5JuAL3M
-Message-ID: <CAHk-=wjhJF91TCO0Zqeuf+caG2tQZ4AzbLr2qFmRmnMM4dbh4g@mail.gmail.com>
-Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
-To: rob.clark@oss.qualcomm.com
-Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jann Horn <jannh@google.com>, Jan Kara <jack@suse.cz>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
-	netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, 
-	David Airlie <airlied@redhat.com>, virtualization@lists.linux.dev, kvm@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-hyperv@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 15 Sept 2026 at 15:21, Rob Clark <rob.clark@oss.qualcomm.com> wrote:
->
-> With fd's it is more than just about error rollback.. exposing an fd
-> to userspace mid-way thru an ioctl is an easy security bug to write..
+On Fri, 11 Sep 2026 20:36:47 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
 
-That isn't very common code. It's something that is done by a few
-strange cases, and yes, those cases should just do it right.
+> The majority of architectures in the kernel defer page table freeing until
+> an RCU grace period has elapsed, this series converts all remaining
+> architectures to do so too and eliminates CONFIG_MMU_GATHER_RCU_TABLE_FREE
+> altogether.
 
-But "those few cases should do it right" does not mean "make a whole
-new subsystem for this thing that makes a simple "open" actually be
-slower and stranger".
+Thanks, I've updated mm.git's mm-unstable branch to this version.
 
-             Linus
+> v3:
+> * Added Kiryl's tag to series (thanks! :)
+> * Corrected commit message, comment indentation in 11/12 as per Kiryl.
+> * Corrected 12/12 documentation as per Kiryl.
+
+Here's how v3 altered mm.git:
+
+
+ Documentation/mm/process_addrs.rst |    4 ++--
+ include/asm-generic/tlb.h          |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+--- a/Documentation/mm/process_addrs.rst~b
++++ a/Documentation/mm/process_addrs.rst
+@@ -541,8 +541,8 @@ We establish basic locking rules when in
+   after an RCU grace period has elapsed. However, any entry found must be
+   revalidated after the page table lock is taken (such as the
+   :c:func:`!pmd_same` recheck performed by :c:func:`!pte_offset_map_lock`)
+-  before it is acted upon. Changing an entry always requires the page table
+-  lock.
++  before it is acted upon. Changing an entry requires the page table
++  lock and one of the locks that excludes teardown (mmap or VMA lock).
+ * Reads from and writes to page table entries must be *appropriately*
+   atomic. See the section on atomicity below for details.
+ * Populating previously empty entries requires that the mmap or VMA locks are
+--- a/include/asm-generic/tlb.h~b
++++ a/include/asm-generic/tlb.h
+@@ -151,8 +151,8 @@
+  *  Page directories (__p*_free_tlb()) are always freed via tlb_remove_table(),
+  *  after an RCU grace period (see mm/mmu_gather.c).
+  *
+- * This serialises against software page-table walkers, including architectures
+- * which do not use IPIs for remote TLB invalidates.
++ *  This serialises against software page-table walkers, including architectures
++ *  which do not use IPIs for remote TLB invalidates.
+  *
+  *  An architecture is expected to provide __tlb_remove_table() (see
+  *  HAVE_ARCH_TLB_REMOVE_TABLE) or use the generic __tlb_remove_table(), which
+_
+

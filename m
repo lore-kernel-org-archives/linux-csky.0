@@ -1,196 +1,162 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F1A5208A4
-	for <linux-csky@vger.kernel.org>; Thu, 17 Sep 2026 16:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789663665; cv=pass; b=jpdDEmWN/O9PJm/iCMU6Cw9J43YTcGuYUHuI35/nXhjfErIKfNCUUq/fcJvOfDOTCUopvzgIISQnZuSWqaxB8NsO+n2OQUkaPI4hu1+jrX3IRuugnlM7rCupq3Fw+Q7qYO8GDclFqlfXfyfUmK7tvkUiPRI70obEmMcWOm0Eefg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789663665; c=relaxed/simple;
-	bh=OXoyJpegabl0ocESy43SWOAVnutZsDrl9ix8aJurgKM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lliT5WgNpBM48+Odnzu9aqN0NH7m/5FGGaMQ+mbuAElYpbGAoq+vNUN4o4O7ZmQGxGFfHzL3hD942/SHkFcdvXtR8JpQQo0ejswtd2InLF7xuemRj0i4rgsuDx2/GQih6RBNTIKsNGDDvBRBRRFmghCNvxg5UE02KFgnJKPXa4Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eATgGJvg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dKGKnJD3; arc=pass smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB8B4BA1F3
+	for <linux-csky@vger.kernel.org>; Fri, 18 Sep 2026 08:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789721985; cv=none; b=jRxVrg9LncHW39J72G8UzgvVQS6dQRqQYH1a8Y/Jb3BH/uJnM4ZGDe4jacSCvn6Bb9zlCPhVJ0LtKs8R54zRqH95egijiKDAQEJIsVCMeqUonNjSUUUczcqaB9odGVD3umY42wnljAavUEojowXwjI5L8j8ndXPV11BgM/JO6vM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789721985; c=relaxed/simple;
+	bh=ag8wHUMdvAkX5UXW/sgiiILfewkFHxwIL+3xC1CLLP0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SxbanVrZl2gHcvrzjPV+Z13cvg0L8I2lFIdoCaMzAfdXMgiIwsOWtXZByUmtisif4Jh2FexYbAMcEGKyjzD2XoJivuKNgnYaotPuxCn/n8Oo9XKE7EYaRoIeZ0z5qrY1Yop3d7dWPRAZE0p0J3RO1dvNLcEcjwv4GB7Qqhn7CXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tw7XcUZm; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eATgGJvg";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dKGKnJD3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789663661;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ghsNMjszr/YVVrzwI9L3VChkEhVa9VAV3CWSeRoOujg=;
-	b=eATgGJvglDB/e/XNDRrzgW5WKOMEpiB7LymnGtDf3t8cuHmDceHF6yh3kS+B4K+hNcO7ms
-	+q7mwqmlMk4xTiF2LCi9CdNZxB2HVauHdvJoBImez5qV++TOb0SpSxrRysTv9oeZ9rPF7n
-	RqubMsnYYyb9IE5olgw4ULYsdRg071o=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-CKYT77C0NXqWDGtEwcEqAQ-1; Thu, 17 Sep 2026 12:47:39 -0400
-X-MC-Unique: CKYT77C0NXqWDGtEwcEqAQ-1
-X-Mimecast-MFC-AGG-ID: CKYT77C0NXqWDGtEwcEqAQ_1789663658
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c295b027ee0so120928466b.0
-        for <linux-csky@vger.kernel.org>; Thu, 17 Sep 2026 09:47:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789663658; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NuxDKWtGLbJcMp9h7o7b8Jlh7/+r3bDrRqMva95CnwGlXLgrzPuVrDLvCIVTLIeCMB
-         uvczMTOgtt/aMtjh1xGQW3FK7EVBNKVBOZqfeSRgdIxns31UnajglQCo9R6RGjcj4lHm
-         bsDt6Uy1PME6nh3hoH9vZfYXxTWEL83gIWZ74Mp1IkMl3mcostSWX1RAF2uU4ttWiBAv
-         RkYeON5zmPHOxKm+ClvhUnn+bsEsvPEBQPAhTerqLuMuqkRHuJfHxi7V2OW4Ich3rXE4
-         KhP6iofWw2g7nB+n7w918YyBDTx7sGIYVhOL53io47XjxERimT3jmCgWXkdQPx2tGZN3
-         uQQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ghsNMjszr/YVVrzwI9L3VChkEhVa9VAV3CWSeRoOujg=;
-        fh=Fb4ePRC+I6QGzFEKi6aCn0Zt2mWoKBsbCUIhfBjD8qE=;
-        b=qgTxF1wVVJaxp3pox5dwDJ3U8Vvq34iGu8djHbaX5+PLboDzpGQlEoFSyyxlJvusIN
-         OXwbBvKj1n22T+Zz+s2feES+hV2XLPi2pxI+rFHsxF83G/CqEf3IXlwY1lAS0BxT5SPB
-         mXQYUq82BIN7oNuw+PGhyAqhTY7qsqUO0ip4ome+DATgefRJhN6oIU0QcamNMLYhyJeG
-         N4wPhdOq99FWQs4t77XZZChsn66RPGgQNiwu78k53FIt38W3gzZbFEteXQcv6Tm4+yev
-         8BfdY7Whhgtv4RYQ/sP+zq2RaBcYJqntqhwO7ZyXzDobS7Zuom/IzPIAXTRPzkFYjT8x
-         1SoA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tw7XcUZm"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48431648f33so652233f8f.0
+        for <linux-csky@vger.kernel.org>; Fri, 18 Sep 2026 01:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1789663658; x=1790268458; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1789721980; x=1790326780; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ghsNMjszr/YVVrzwI9L3VChkEhVa9VAV3CWSeRoOujg=;
-        b=dKGKnJD38WiZGeDo9G7w61tJE8iA6+vSv3+VhV/+0BSAMznrhvPVqnGGKYQ4PLBA6I
-         0x6n1uxTHhGhrERHIq4n2fwx7oBAGeJ0UH2xKBLCAHlcgYVJbSGdqkRY1bIrFojj6Vu2
-         1xzNeV3ObTyMCYkO5MWwX8CYgFeVi4bWCgXmC4n+onP+bI4+jZOOu0utxMpLFY4bJHAr
-         EnjiwLBgjs87fs6PxCZOmw1IRvyMdPyrIn9tJRRP/SWbFlBMtaD4DAF8BTLubz0gyLzg
-         wVbhbv7VzQr/+jzG98EbBOOsFR5Vdnw7E8gs5KXES7CruX20+ZZXuAPdluYPVbk+dg7Y
-         c55A==
+        bh=ebKeWW1b/FCTysKRCA2qCKC9jXPhUpw/tMxPeazltLI=;
+        b=Tw7XcUZm0rC0dkuh5w5E/veMnAhHyo0i7FcBH07sfDYi3aAAUsIle064UkwLQIZSMe
+         useq7JQAeSSaz08P4uG5jY5l10RZd7riLVIKipTE9RnSidBNPtYxPGEWSjBSnPqpNux2
+         qVzVyMbACCUE/cE4CgY/Kec/zkb0hCVMAz/BXbqxKszI3bTE5A3+TFTczN13inT5sLFt
+         Zm0WVYEHp4fl6PyZYQOO+yiI1UcBFS2DETFGYgkUW9tLY3uwCTRMSYNgt+A87U8/iJl8
+         fF4FViJlCDt6G3SGpB1D06SoBeUUvIyOIhYkF8ejii0kdeyP+cV23dJ4736Kqzd0u1H8
+         qbSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789663658; x=1790268458;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789721980; x=1790326780;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ghsNMjszr/YVVrzwI9L3VChkEhVa9VAV3CWSeRoOujg=;
-        b=RrCjmob81SkpI3QTHC5ElR4Y8p5dILUw56zIlsPBQ+tBFNvrVdnAz/2A7/uFCvmvxo
-         zot52B5Ua2E0EhTt7uW3FT4UYaJqNc90crB6y64b14qq1bQgZGRwbVrV2FHtc/bRwI6W
-         nm7y6lTWWKJx46M4Pj9Ck+Th8se7lkSVXdX2RUb4NbhwlWmg5HyXQ0Mn7rTaMYW9KgDu
-         VB7C1pgU/nH2Y+JUEq+XP8w5k/ggsZy3gmKw+mKLaZ+8SwfvrDxDqmdSNYEzTgzz0DL3
-         vEsdR+nsMyrKJ9MpbTo9U7uffP6SuZ3cGDyHdao3HuqOn5RHvhLdq9YE+g/DJ83HLVTT
-         ZtZA==
-X-Forwarded-Encrypted: i=1; AKwUvByVN+dp99LESEmioO6TLFb5sdSS4xXChKMKO6A8yhYLVSVP+QRUszEwOlKaO9LNEiJ3Xc2dnw7a8N81@vger.kernel.org
-X-Gm-Message-State: AFuF++mYCjoMPEQxd6cTCejs7c1LMMHXIiBe8kSSgsN7Z/G46wKKZajU
-	yGBQNM1tx/AYgi1ifwzua8yAiKz1pgn3lUOuVBu3Z3YTl7peuqMkna/WyHU2PK3Ar9K8hU1kz6z
-	Vhb34vCGyL2pf1rnHh1OwbC2VcfHYsnw2jwR1Tse3/Mw0O6f9evzVRSBwJpIJVo/Bo/eUzNrxms
-	b0cVcIYdNFY++eJgm+XOcXdmBnQMyIIT1+ZPhTIw==
-X-Gm-Gg: AYBFou0f2kGLerxwO/h+TVTjeimUS+urRTApahL2ZtWVsH3zkRXmWc9ieuq5Ws7EMLO
-	dJMavQ3QsmXRHnEZ4otLTZGXypeFFTMFDBPIDsP10/iDU4a0qYpdF0TcR7U9oZ2/cGqI68EUpAT
-	5aToxnhUk0B/REu5XTt6Uu3VRd8/bKiupDo70CH0G+M6iOokwXxIUXh62QC08A0y7K7jrcvXtcA
-	KnchGg6dGMjgP3rdYsLmTg4JKKKGfD8l2pxtCrrPcf7J2E4fQYN/4wa3T8Xjleu7c+lsUOijHux
-	3pk=
-X-Received: by 2002:a17:907:1c29:b0:c25:fdbc:52df with SMTP id a640c23a62f3a-c29e5244c19mr627703666b.10.1789663657749;
-        Thu, 17 Sep 2026 09:47:37 -0700 (PDT)
-X-Received: by 2002:a17:907:1c29:b0:c25:fdbc:52df with SMTP id
- a640c23a62f3a-c29e5244c19mr627698766b.10.1789663657315; Thu, 17 Sep 2026
- 09:47:37 -0700 (PDT)
+        bh=ebKeWW1b/FCTysKRCA2qCKC9jXPhUpw/tMxPeazltLI=;
+        b=q3yde0FsTi2C/OTWGef20A+1PC2ayi82ZZnlm2rJjqFGpjBLYu8S7TahlVcSDnUUdP
+         2g4b4f0/zBquyoG5rhErUo8/FMlHl46gzvHwA2AAd72PaqbNLVD6xe6PTnGKGDNicUFS
+         UZjJSi0XXuOtwOB1tD2WQqYXJ+Up+TAUfojGdoUMjfpazoqFKxHaIMdoazQuxuTqu+rd
+         U8F+UHkchndEr2A1+Gm5JvF1A90s/+BKZp35NUWMgeDVhc3FJ4Z10TJBD+v2CxSmgRWk
+         L8L6C6ORxnMhEmCkFJllf1eM8Q7xhmBYlg1WFujpkIAJsxKiJm8Lv0BD+21hgAhZ8+fK
+         liUg==
+X-Forwarded-Encrypted: i=1; AKwUvBzAwX4aNcrlbLA0wpFHzzUFr0spbqDnyOTOWj1/e6bsFB+oAEIgjt6XOOCiU+Wa6jhRbWdVRmifhvaV@vger.kernel.org
+X-Gm-Message-State: AFuF++l408bsIG1BBw2SSeHByNyIdIQ4586fRvJWxJpnVsriNhUp4YyB
+	eOFbh7KUX9Zz0oiY7dXsj05sfowtx9EvkDzJ+wQHMipRbOyXbwvA0dOE
+X-Gm-Gg: AYBFou3GKq/N+x27Wi4fPhwQ2Hdj9JHyC8wIs1xXH1mx3hxy5nI9k0stMDJqWHtUxNZ
+	2x7u5h60Q/Mug23Mfc3jgdBp5W1u6Io1Basg/z/AXsjBBACKW3GOcaj8lLbUnaaMZef0kS8OVVM
+	9WqtroVMsz/A6fZ8o4sAlrLEoIj0CljrJJFC7OUvrrD5cT7uFiKj0rFahC/rRRCOIeGpy09IciP
+	LSWAUHzuSDMZxkpOuKMcyGc6NHvWrZV2yJIyanK8oR53FZlExanqBSXUGwVe0IwlLa/e4rDsYTL
+	egsWx2ktr70MPll9gcaSUynfc/iaFFzz0NebA8yoEHK/+D5M2SsZ7rhf7v7ZkJ402h2QWNTuCS+
+	yTEUNQxKKKAyEDGDT4H821tvt5WpdR8w04krW+2GC+RF/xhUaLhixULwZtglTH3yfxAl0eW5dZv
+	S/qveZ3vul8PVdb3kC7NF8mMaf6Qe4hrzmz8M3iz4/fsjokZ4/oq0JiThBKvJLPlFYr67ACS4Jz
+	tl222a6SFaJXPRMJ7bv3WYKgZ5/Yyb4e/vO
+X-Received: by 2002:a5d:6f06:0:b0:485:8d9c:47d2 with SMTP id ffacd0b85a97d-48713c7ef38mr9129868f8f.30.1789721980248;
+        Fri, 18 Sep 2026 01:59:40 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4872008f34dsm2547841f8f.36.2026.09.18.01.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 01:59:39 -0700 (PDT)
+Date: Fri, 18 Sep 2026 09:59:38 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Bradley Morgan <brads@mainlining.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Vineet Gupta
+ <vgupta@kernel.org>, Guo Ren <guoren@kernel.org>, Yoshinori Sato
+ <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, Chris Zankel
+ <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann
+ <arnd@arndb.de>, "Paul E . McKenney" <paulmck@kernel.org>, John Paul Adrian
+ Glaubitz <glaubitz@physik.fu-berlin.de>,
+ linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] lib: Add two-byte cmpxchg emulation function
+Message-ID: <20260918095938.6082a31a@pumpkin>
+In-Reply-To: <20260917163830.3748-2-brads@mainlining.org>
+References: <20260917163830.3748-1-brads@mainlining.org>
+	<20260917163830.3748-2-brads@mainlining.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1788351089.git.rrobaina@redhat.com> <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
- <CA+=Fv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4BLWOvDTt92t5Eg@mail.gmail.com>
-In-Reply-To: <CA+=Fv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4BLWOvDTt92t5Eg@mail.gmail.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Thu, 17 Sep 2026 13:47:26 -0300
-X-Gm-Features: AcwNN1UQ-9H3EW5aAPKYI2mYiHxV9kMvBFdM8jP3WAhZbefwH7qcxYHE69PGYDs
-Message-ID: <CAABTaaAUBzp1uaLve2piMhEB1R5po5n5+Sy+U0mbbe70Ak-SUw@mail.gmail.com>
-Subject: Re: [PATCH v2 02/13] alpha: pass pt_regs to audit_syscall_entry()
-To: Magnus Lindholm <linmag7@gmail.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, paul@paul-moore.com, 
-	eparis@redhat.com, sgrubb@redhat.com, oleg@redhat.com, 
-	richard.henderson@linaro.org, mattst88@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 4, 2026 at 2:21=E2=80=AFPM Magnus Lindholm <linmag7@gmail.com> =
-wrote:
->
-> Hi Ricardo,
->
-> On Wed, Sep 2, 2026 at 4:44=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.c=
-om> wrote:
-> >
-> > audit_syscall_entry() now takes a pointer to pt_regs and extracts
-> > the syscall arguments itself via syscall_get_arguments(). Drop the
-> > individual argument registers from the call and pass regs instead.
-> >
-> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> > ---
-> >  arch/alpha/kernel/ptrace.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/arch/alpha/kernel/ptrace.c b/arch/alpha/kernel/ptrace.c
-> > index fc8f6cedbb28..8a39c0473297 100644
-> > --- a/arch/alpha/kernel/ptrace.c
-> > +++ b/arch/alpha/kernel/ptrace.c
-> > @@ -496,8 +496,7 @@ asmlinkage unsigned long syscall_trace_enter(void)
-> >         }
-> >
-> >  #ifdef CONFIG_AUDITSYSCALL
-> > -       audit_syscall_entry(syscall_get_nr(current, regs),
-> > -               regs->r16, regs->r17, regs->r18, regs->r19);
-> > +       audit_syscall_entry(syscall_get_nr(current, regs), regs);
-> >  #endif
-> >         return syscall_get_nr(current, regs);
-> >  }
-> > --
-> > 2.55.0
-> >
-> This doesn't apply on top of my "alpha: enable GENERIC_ENTRY" series
->
-> https://lore.kernel.org/linux-alpha/20260902184058.198679-1-linmag7@gmail=
-.com/T/#t
->
-> That series moves alpha's syscall entry onto the generic entry
-> framework and removes syscall_trace_enter() and its direct
-> audit_syscall_entry() call entirely - verified with git am against
-> GENERIC_ENTRY applied, it fails at exactly this hunk.
-> You don't need a replacement alpha patch, though. Once GENERIC_ENTRY
-> lands, alpha's syscall entry goes through
-> syscall_enter_from_user_mode_randomize_stack(), which already calls
-> syscall_enter_audit() as part of the shared entry helpers
-> (include/linux/entry-common.h). I applied patch 1/13 alone on top of
-> GENERIC_ENTRY and confirmed alpha's entry path already routes through
-> the updated __audit_syscall_entry() - no alpha-specific code needed.
-> So for alpha, you can drop this patch in the next revision rather
-> than rebase it.
->
-> Regards
-> Magnus
->
+On Thu, 17 Sep 2026 16:38:26 +0000
+Bradley Morgan <brads@mainlining.org> wrote:
 
-Hi Magnus,
+> cmpxchg_emu_u8() emulates one-byte cmpxchg() in terms of four-byte
+> cmpxchg() for the architectures lacking native one-byte atomics.
+> The same architectures also lack native two-byte cmpxchg(), where
+> such an operation is not supported and either fails to compile via
+> BUILD_BUG() or fails to link, because the bad pointer sentinels
+> these architectures declare are never defined.
+> 
+> Add cmpxchg_emu_u16(), the two-byte sibling. It reads the enclosing
+> word with READ_ONCE(), splices the two target bytes through a union
+> and loops on cmpxchg() of the full word until the compare succeeds.
+> Like cmpxchg_emu_u8() it is fully ordered.
+> 
+> Unlike cmpxchg_emu_u8() it casts the old and new values to u16
+> internally and returns unsigned long, taking the old and new values
+> as unsigned long, per the suggestion from David Laight. The switch
+> statements in the architecture macros instantiate every size case,
+> so a cmpxchg() on a pointer type checks the two-byte case as well,
+> and a u16 parameter or return would make the macro casts and return
+> conversions warn there. With unsigned long parameters and return the
+> call sites need no narrowing casts, pointer exchanges compile warning
+> free, and the function still compares and returns exactly the 16 bits
+> the caller asked for, which matches the hardware cmpxchg r16
+> behaviour where a 16-bit compare only looks at the low 16 bits of
+> the register.
+> 
+> The Kconfig symbol gating this file is renamed from
+> ARCH_NEED_CMPXCHG_1_EMU to ARCH_NEED_CMPXCHG_1_2_EMU, as it now
+> selects both the one-byte and the two-byte emulation.
+> 
+> Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> Suggested-by: David Laight <david.laight.linux@gmail.com>
+> Signed-off-by: Bradley Morgan <brads@mainlining.org>
+> ---
+...
+> diff --git a/lib/cmpxchg-emu.c b/lib/cmpxchg-emu.c
+> index 27f6f97cb60d..ac1c84383887 100644
+> --- a/lib/cmpxchg-emu.c
+> +++ b/lib/cmpxchg-emu.c
+> @@ -1,10 +1,11 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * Emulated 1-byte cmpxchg operation for architectures lacking direct
+> - * support for this size.  This is implemented in terms of 4-byte cmpxchg
+> - * operations.
+> + * Emulated 1-byte and 2-byte cmpxchg operations for architectures lacking
+> + * direct support for these sizes.  These are implemented in terms of
+> + * 4-byte cmpxchg operations.
+>   *
+> - * Copyright (C) 2024 Paul E. McKenney.
+> + * Copyright (C) 2024 Paul E. McKenney <paulmck@kernel.org>
+> + * Copyright (C) 2026 Bradley Morgan <brads@mainlining.org>
+>   */
+>  
+>  #include <linux/types.h>
+> @@ -40,6 +41,35 @@ uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new)
+>  		instrument_atomic_read_write(p, 1);
+>  		ret = data_race(cmpxchg(p32, old32.w, new32.w)); // Overridden above.
+>  	} while (ret != old32.w);
+> -	return old;
+> +	return (u16)old;
+>  }
+>  EXPORT_SYMBOL_GPL(cmpxchg_emu_u8);
 
-Thanks for reviewing this patch! Ok, I'll drop this patch from the series.
+Where did the (u16) cast come from?
+If you want to mask 'old' to 8 bits it would be more reasonable to change
+the function prototype.
+(Although I can never remember whether the caller or called code is
+responsible for masking the value.)
 
-Thanks!
--Ricardo
+David
 

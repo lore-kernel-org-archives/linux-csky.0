@@ -1,66 +1,66 @@
 Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CD5450409
-	for <linux-csky@vger.kernel.org>; Wed, 23 Sep 2026 09:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D6D414401
+	for <linux-csky@vger.kernel.org>; Wed, 23 Sep 2026 09:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790155724; cv=none; b=eANQJW69DBNh+njou9HU54tjz26OgefIJRgQ4liX4E+Bf5SolB88QGa+PsFDOJRfgpfh51L50logU65a2Bf9YQmUhcKOkElr827SyBjJkJZTuhJBIolGspyC7U6B9Jlehtpe9S7HJxmZS94vz1W+CuVi8xIQKjfYpscl0euSdmo=
+	t=1790155833; cv=none; b=Eah7/T7sfufVaBKwVqi3sEn2j7CGFlnQxSa4PfSLWlWvkS7eSg0VCmdVwqNmFXV+TJMZWzdXpVovh3HWeFOqVrO13xKMKPV2knV/0yvbMIam1fsi2hUVZDS0bf2GSeSoVbkZYFyRDVAFkjUQjFdA9CxzeoJDLmBimUGE2TphPUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790155724; c=relaxed/simple;
-	bh=eKQNdHt+hhAAjn5VJiqGyCUamYddAWI7/Er5YHSBndM=;
+	s=arc-20240116; t=1790155833; c=relaxed/simple;
+	bh=vBPUuNMXa0dgJzwuDSTU7kuQyYIoV4Ak7Pjwd9e1PnY=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W9tUJdZNDMiXk2STwZw8B7RHjJS1M/kcKen0Re48E2VPUwoZPeJUskPXwcUWv84X41VMZ/lEEsc7Z+2g8p6iJ7plv6cZ80jNNOJpwFh3+HVZvMIlnSlVRben6KaQqfy/+LSyoCXaXDHUOvJ6XDhRce3mUBw2WXtJk/QnQI86V3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VK32VceR; arc=none smtp.client-ip=74.125.225.76
+	 MIME-Version:Content-Type; b=Bo90dL8znJTmLoX5H+H3AcauBWsZu1Yjxl5l/L0lZYsgVLGugtOAlq7D7YKC1TxLX58q4cKWzGgjGTXpZ9EnsF2M/1AFL9EllWvUS7aeQy0vnLObNE9l/Q/s2kZ1H5DQ3VDP0gOvlPSaxAwBX7MNUp8chOojHikBx2NCoSJtFmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZo1aBS9; arc=none smtp.client-ip=74.125.225.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VK32VceR"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f63546c3so599981f8f.1
-        for <linux-csky@vger.kernel.org>; Wed, 23 Sep 2026 02:28:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZo1aBS9"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4858bc96fabso613753f8f.3
+        for <linux-csky@vger.kernel.org>; Wed, 23 Sep 2026 02:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790155720; x=1790760520; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790155830; x=1790760630; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Op+1G3Jxi9SdULjib67/1vBJNLUR2DhfwMdslr3CGLI=;
-        b=VK32VceR6fWNd4+HvsPwSwCtgcnAY9SMwCt64LPwFGxbvQmM+d4Fh5ciQJfnDY+adl
-         o0JaduaeSBfU0xFVGltxsIJ8l7kK4qCPjQQgWQQKUpfsPpPew6CVRR5DhBqbA207cz/8
-         WYMZ3p/AyjVTb9I7ilFqG+FD6Ypvij1AOhrCK7kZUcMFy4knCXUuuLvRw79lSlM3+ZuN
-         JfqtG68XoxblIvawKrDcAfHK1Q4q5xZr3uZXLXTTsJhrkZ/WPEI48VBU8e2ZhDSa3TSI
-         qEXcs9MYLe3tGG2Hc+CrQcaAeyL9TbNIBQKPNPtNCWhsACfHcVMT2SJuy+4tT9HHrJfK
-         YmDQ==
+        bh=XpdOD7b7tZjf2YLODbEeqXbESzHRLhCJCCPyiQAoQpI=;
+        b=mZo1aBS9p45hjZPXMYgAS/IwXUHKZYyeBLuhZnxYXk+iTyUzi6lGbXjY/Ue+x7UU1R
+         rO4YpGbpylZLDW4711fn9YqCw7Z0K2KdiUHd5TJvGAtRXjWGapkkkKgidoZfG9f1qUOa
+         TKI5Ug6rcT1ryqpD7HEv/ea7F02wMs6YYo5TuOvml2V4AHktJm2smSKi54jsVWpV6q+5
+         dva+Ajd9TpId7R6x1Zf2ndPth5uWaU4+waRFwSHxKfmpGNDGIj8TOv0KQIrNfp5i6BxZ
+         t25ff0Tms2fy7nPSv8K7fW1cu6nqx9QHSE3BXWUuRPXhxN3hbY8rK042iIb/QGvSvoF+
+         t4Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790155720; x=1790760520;
+        d=1e100.net; s=20260707; t=1790155830; x=1790760630;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Op+1G3Jxi9SdULjib67/1vBJNLUR2DhfwMdslr3CGLI=;
-        b=sgkhAo9IujGg1SX6ZcBsEdTrvpLhxhr7asZLrUdIqnccxA+sjzJuCsK1Y3NVkiNvgR
-         ZMOKO/YRljTnkWfmJUZ/dKSL9ybXciTEf3yazseUcLT+MjZtvtURfwCo5gdNcnZRqT5M
-         N9AsqOKhRMzIp8OS4pDHChgAB2gZXiyRowjP6GS2xz7mIKdYyCSQg9SkokVp+ZfpaxhT
-         oPVZmzvecyraOLbIBv8Kisjw2kAp+af0P85NqIfqGDk5P4+2IgL+DntL1E/VsFE52p03
-         68Be1usb+46flQxNQkqp5ev3OXOVG6ABkVxbHTLnkZUxnUrXI6HV47+HINW+psl9YTPI
-         fHmA==
-X-Forwarded-Encrypted: i=1; AKwUvBxaIl4L4p0+M/Wil/TfiiVaoRBsSKnwCVsR+K8R6x67E99GNXQ/wLFGAio9Fr2HPPb2ffHBczoh7goU@vger.kernel.org
-X-Gm-Message-State: AFuF++n4FZmsKk4jSpcsA1+e4yeURmugooigHb3D9LAKG7aGYCFuraZT
-	Ut56YHD9QDesO9zUzQpr1fcoWXqGT53nFCzNq/iUDLVQo3rFyO9fRthd
-X-Gm-Gg: AYBFou0dFVsqSyKezNCvGYQ6FWlAr7lmeKMXWNqPRJFVrv5f+tr92WOntekGy8edbT0
-	wzaUn1SpOsmnM94Ca++Ik0tFNVeUI3jlL2wyR/NB0lTfZY+MQr7yyLBMVnStvBYyFvgwNmGATvF
-	JcZCxTG0qd/9jGkuHu55kSXzXNI5mmFS/qRKd5zbGNvhkn0dzGW5pS6LQDcnIy+YH8a7C0L6sYi
-	ujuYZKZoNk/GIrzIsTg4SG8pmZ5OwbMQWZ9xsQTCgwVEDgoaj9STCTxCkFISPGeZUMLIzifLxYH
-	stH9uMW5ZnHoqeytKviR79PLuR5ai+d6APDbSNWqTn3dAgRMM4DhhL6ZvKJv4UmSloZ83Egib7C
-	SvMyd66n9NzLyuoq5BEGhsfjjrOB/gcYfIX45ks4nS1htGimqhpFNQ7ysBCftXg8DcvfEjcRZRs
-	yVrsz0k1R2o6vW44kDjMqufuGAb1PgkHEp2o7G2UmDBmUUtb1TUjRa7wuyLJotvVl9qmb49zijK
-	l3MUb4TW46NeTSsI3NKR8VuCDK+G9qFJgdUYDhD9h3qrA==
-X-Received: by 2002:a05:6000:3ce:b0:485:8c16:5ef6 with SMTP id ffacd0b85a97d-488670b342cmr3399764f8f.48.1790155719650;
-        Wed, 23 Sep 2026 02:28:39 -0700 (PDT)
+        bh=XpdOD7b7tZjf2YLODbEeqXbESzHRLhCJCCPyiQAoQpI=;
+        b=ElfpLHuYlLKRQwa/9EDd8nRsuaI/PMAaZjCRHbgat3URa5wlIJPNJFuSwsKZFvtRDn
+         GiSmvDy1T6dlZejCm++2knMeuFkysoKneqmMkfIM2RlfJo1CwzgAb7ob1ar1Auyt5JT+
+         yHtp9L9Qmme9ugkynig7DVefuz9d+Xi8oVCMhTsyIKc6+T89eetE39OsX2uF9ZPWFbDU
+         1Lu9+oePpGiOEIL1FxHcZ6QZ6io23X7bnmZnFeyyEzH3v4wuQfzheNMVc3KX3l5kR+d/
+         Vtz0+eQi5+7dzchefqZ9OI0HWTfy0HOwrCXLg9JijXT2IpfGBKqT7BHY3GGf69ok7ulK
+         By7w==
+X-Forwarded-Encrypted: i=1; AKwUvBylAxLRLURBbL143Ly2hWT5gIQ8mzc61hoFSrv7ikehmnBYbJflZqUwks3rKqxx2w+CjO6mzAjWD8EM@vger.kernel.org
+X-Gm-Message-State: AFuF++n5sAUc6A1DUwHMoUmnO6GFcxTDXQRz61JLcc5ncnIts3QfEO4Z
+	sS3L5g8+yltEpy2BMkgAKmhSyLTfbepcyZBywIt1oVmtKYdvUvAIwbkB
+X-Gm-Gg: AYBFou3gmGFJA1DtBRvjtX4jgS2Xode+Icc09xd1bo2v4898rwDAdOB3sD/3feDXYRa
+	CTklj35fKeHV1p0M9HNiDO5u/BDudcJk8I+sw2SAj6BnMvrHyHoBc6IPrdsGnHjgXrHWrj2r0mg
+	mv0pKpaA5Ly040G76RycTP/3bJd+hBBqTrigOYnU42eStMv0EfsvAH+a0m3ixT0LZmjydXqUieQ
+	h6VTgBPWg+QCowqehXsast29B1/8kG7hJqIOMhrDu43qvdNnv227p/gsRgKoc/VBKv6qZY5FxEj
+	qan6nZJ9UmUTG57JS2zb6ycf567ZwN3K+XH2lO2q2X+Vp/PAAHFjb65+QzahhvoyKS2g2wEc8Vt
+	hp7d053C14tSepR778g5SIlN1u88kwK2/PZlQr06EOm8O9a3GW6ffuL0ZW61S3yuBMV+CsnA10N
+	oKbkVQwk18BEqRICkbHuKosUBj+cvVJHgy2C7pu+BDX+3RuVwCvQD6mvsEe7fldt8wMU1IyXtyK
+	IoQ4BqnmCw88lHMRSDHxSDPxTOQEl6ZgnurZwDnjDbVLht+ywkDu27K
+X-Received: by 2002:a05:6000:22c4:b0:487:35c:6e6b with SMTP id ffacd0b85a97d-4886704aa19mr3430312f8f.12.1790155829433;
+        Wed, 23 Sep 2026 02:30:29 -0700 (PDT)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c500sm5584975f8f.19.2026.09.23.02.28.38
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488684863d9sm5350009f8f.12.2026.09.23.02.30.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 02:28:39 -0700 (PDT)
-Date: Wed, 23 Sep 2026 10:28:37 +0100
+        Wed, 23 Sep 2026 02:30:28 -0700 (PDT)
+Date: Wed, 23 Sep 2026 10:30:27 +0100
 From: David Laight <david.laight.linux@gmail.com>
 To: Bradley Morgan <brads@mainlining.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>, Vineet Gupta
@@ -71,11 +71,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Vineet Gupta
  Glaubitz <glaubitz@physik.fu-berlin.de>,
  linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
  linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] sh: Emulate two-byte cmpxchg
-Message-ID: <20260923102837.2b46d772@pumpkin>
-In-Reply-To: <20260922173354.14404-4-brads@mainlining.org>
+Subject: Re: [PATCH 2/5] ARC: Emulate two-byte cmpxchg
+Message-ID: <20260923103027.22bd9ef4@pumpkin>
+In-Reply-To: <20260922173354.14404-3-brads@mainlining.org>
 References: <20260922173354.14404-1-brads@mainlining.org>
-	<20260922173354.14404-4-brads@mainlining.org>
+	<20260922173354.14404-3-brads@mainlining.org>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -86,60 +86,85 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 22 Sep 2026 17:33:52 +0000
+On Tue, 22 Sep 2026 17:33:51 +0000
 Bradley Morgan <brads@mainlining.org> wrote:
 
-You missed v4 from the subject line of all the patches.
-
-> SH has no byte or halfword atomic memory operations, so the __cmpxchg()
-> switch routes case 1 through cmpxchg_emu_u8() and lets case 2 fall
-> through to __cmpxchg_called_with_bad_pointer(), which is declared but
-> never defined, so a two-byte cmpxchg() fails at link time. Route case
+> ARC has no two-byte atomic compare and swap, so the arch_cmpxchg_relaxed()
+> macro switch lets case 2 fall through to BUILD_BUG() via default. Route case
 > 2 through the new cmpxchg_emu_u16(), which takes the old and new
-> values as unsigned long, so the (unsigned long) casts move off the
-> call and into _old_ and _new_ declarations that type check the old
-> and new arguments against *ptr through (unsigned long)(0 ? *ptr : _o_),
-> the idiom David Laight suggested, so cmpxchg(&p, 4, 5) no longer
-> compiles silently.
+> values as unsigned long and narrows them itself, so the (uintptr_t)
+> casts on _o_ and _n_ are no longer needed and the case 2 call passes
+> them straight.
 > 
-> Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Signed-off-by: Bradley Morgan <brads@mainlining.org>
-> ---
->  arch/sh/include/asm/cmpxchg.h | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/sh/include/asm/cmpxchg.h b/arch/sh/include/asm/cmpxchg.h
-> index 1e5dc5ccf7bf..b87f59107b4e 100644
-> --- a/arch/sh/include/asm/cmpxchg.h
-> +++ b/arch/sh/include/asm/cmpxchg.h
-> @@ -59,6 +59,8 @@ static inline unsigned long __cmpxchg(volatile void * ptr, unsigned long old,
->  	switch (size) {
->  	case 1:
->  		return cmpxchg_emu_u8(ptr, old, new);
-> +	case 2:
-> +		return cmpxchg_emu_u16(ptr, old, new);
->  	case 4:
->  		return __cmpxchg_u32(ptr, old, new);
->  	}
-> @@ -70,8 +72,10 @@ static inline unsigned long __cmpxchg(volatile void * ptr, unsigned long old,
->    ({									 \
->       __typeof__(*(ptr)) _o_ = (o);					 \
->       __typeof__(*(ptr)) _n_ = (n);					 \
-> -     (__typeof__(*(ptr))) __cmpxchg((ptr), (unsigned long)_o_,		 \
-> -				    (unsigned long)_n_, sizeof(*(ptr))); \
-> +     unsigned long _old_ = (unsigned long)(0 ? *ptr : _o_);	 \
-> +     unsigned long _new_ = (unsigned long)(0 ? *ptr : _n_);	 \
-> +     (__typeof__(*(ptr))) __cmpxchg((ptr), _old_,				 \
-> +				    _new_, sizeof(*(ptr)));	 \
+> The switch also now tests sizeof(*(_p_)) instead of sizeof((_p_)),
+> which switched on the pointer and made the size 1 and size 2 cases
+> dead code, routing every sub-word cmpxchg() through the 32-bit
+> llock/scond pair and comparing whole words against sub-word values,
+> so the compare almost never succeeded.
 
-Minor niggle if you have to do these again...
-That line doesn't look long enough to need splitting.
-More generally if you add 'unsigned long _rval_' and put a final cast
-at the bottom the the #define the code will probably look neater.
+Hmmm... that looks like it warrants a 'Fixes' tag.
+Clearly no one uses 'arc'.
 
 David
 
->    })
->  
->  #include <asm-generic/cmpxchg-local.h>
+> The old and new values are
+> now declared as unsigned long through (unsigned long)(0 ? *(_p_) :
+> (old)), the idiom David Laight suggested, which type checks the
+> arguments against the pointee, so cmpxchg(&p, 4, 5) no longer
+> compiles silently.
+> 
+> Signed-off-by: Bradley Morgan <brads@mainlining.org>
+> ---
+>  arch/arc/include/asm/cmpxchg.h | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arc/include/asm/cmpxchg.h b/arch/arc/include/asm/cmpxchg.h
+> index 76f43db0890f..4596edfefa95 100644
+> --- a/arch/arc/include/asm/cmpxchg.h
+> +++ b/arch/arc/include/asm/cmpxchg.h
+> @@ -42,16 +42,19 @@
+>  #define arch_cmpxchg_relaxed(ptr, old, new)				\
+>  ({									\
+>  	__typeof__(ptr) _p_ = (ptr);					\
+> -	__typeof__(*(ptr)) _o_ = (old);					\
+> -	__typeof__(*(ptr)) _n_ = (new);					\
+> +	unsigned long _old_ = (unsigned long)(0 ? *(_p_) : (old));		\
+> +	unsigned long _new_ = (unsigned long)(0 ? *(_p_) : (new));		\
+>  	__typeof__(*(ptr)) _prev_;					\
+>  									\
+> -	switch(sizeof((_p_))) {						\
+> +	switch (sizeof(*(_p_))) {						\
+>  	case 1:								\
+> -		_prev_ = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *__force)_p_, (uintptr_t)_o_, (uintptr_t)_n_);	\
+> +		_prev_ = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *__force)_p_, _old_, _new_);	\
+> +		break;							\
+> +	case 2:								\
+> +		_prev_ = (__typeof__(*(ptr)))cmpxchg_emu_u16((volatile u16 *__force)_p_, _old_, _new_);	\
+>  		break;							\
+>  	case 4:								\
+> -		_prev_ = __cmpxchg(_p_, _o_, _n_);			\
+> +		_prev_ = (__typeof__(*(ptr)))__cmpxchg(_p_, _old_, _new_);			\
+>  		break;							\
+>  	default:							\
+>  		BUILD_BUG();						\
+> @@ -64,8 +67,8 @@
+>  #define arch_cmpxchg(ptr, old, new)				        \
+>  ({									\
+>  	volatile __typeof__(ptr) _p_ = (ptr);				\
+> -	__typeof__(*(ptr)) _o_ = (old);					\
+> -	__typeof__(*(ptr)) _n_ = (new);					\
+> +	unsigned long _old_ = (unsigned long)(0 ? *(_p_) : (old));		\
+> +	unsigned long _new_ = (unsigned long)(0 ? *(_p_) : (new));		\
+>  	__typeof__(*(ptr)) _prev_;					\
+>  	unsigned long __flags;						\
+>  									\
+> @@ -102,7 +105,7 @@
+>  	__typeof__(ptr) _p_ = (ptr);					\
+>  	__typeof__(*(ptr)) _val_ = (val);				\
+>  									\
+> -	switch(sizeof(*(_p_))) {					\
+> +	switch (sizeof(*(_p_))) {					\
+>  	case 4:								\
+>  		_val_ = __arch_xchg(_p_, _val_);			\
+>  		break;							\
 

@@ -1,67 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BEA43A7F7;
-	Thu, 24 Sep 2026 07:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21835367B65
+	for <linux-csky@vger.kernel.org>; Thu, 24 Sep 2026 12:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790236519; cv=none; b=DXy53Rr6WxmDBuU+X0LKaj7FkO5E2C5NXnNp7ZfWIJjxfON+n4SWqxt+ACotPwzycWEN9xHMdeYXNcmIE/IhNJdY2PwOeiT0o+xZ/fRhGLro/LpL7/kauFfBdgr2kMqaPphJxxh++xYPAxLUOfV90j2hgU9330++97DshvqdYFw=
+	t=1790253421; cv=none; b=Os0gVW7JRjzJCdkKdPZLC6Qg1m4TD6THvND9qGzK31K6Ib3PvH2agtZJKcgUQsYp4mVzk0/+hw+Oyn8ZygwvRJwgylcVV1d8JcUUeYtIlfIwCzihc7nOjyvJ6Szf98LJeqJ/vN1gZYWLR17U+ynx3rTqN+KOWTYea4/KVbCKGpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790236519; c=relaxed/simple;
-	bh=VYxls7FiBvVcRqIBhB8fGUpeL9h0feLHxmI2IcdgvgU=;
+	s=arc-20240116; t=1790253421; c=relaxed/simple;
+	bh=CLLX1WGSyy5uutnydf7E+boNfhnOuNdZ5bWoEr7Diic=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EYegqZhZ3c297DEhmKlX1kNPp8L1jcQ00T4whKsvBN1EKYwlMcFMXChu/sxJiw7qREEn4BsvZEjml3Utt3KUNf1CStlTWldJXrxZf97xsqbYSxQDN0j38aBlMZCs8UMZbJ2G9VPfL0nf8GGlajXCQVw3wJmGNbRKpf7wHRstnKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvFYpHpV; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gbfk2id8ud0fcDHKdWXi525wRwtsYneim37ll6LHta1F5CuZfzEy/vLzMuy2+whQBuBM3jIALxV5FFeOP58Sm8v915jgV+NvS2UOoAJckPRH+eEHG8bUR0khZq7iYpVbbUg9zIhN2BD0R7jhEQzrROutHQVtroTDzT99y4kDxmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UhNAzhcN; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvFYpHpV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7BC1F000FF;
-	Thu, 24 Sep 2026 07:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790236512;
-	bh=8XF4GERg8wBeW3ubUb+zC5tRVKKAYGhsksCUCrCMyIE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lvFYpHpVMwPBfEiIuvmYeJUUzULg6cdEWSx4iWYVWk727A5rZV5bpt/5Sjkl2pSTJ
-	 +koGcSegVzDsG20kO8t41OXmh6KWyi8RNfZl2ErJwNIuTh23tjzoeT8Dv37tsGeg79
-	 61gp8tpMx2xIK3zP8kYJIEm2UGPz0MsuiqmNKxY9v5C+ubE70585sEQgHP0rrKt73G
-	 695MVjPFlFxGNvVaOlYp2A83auWFA74egHtR5nruPWwDU0nzqWrYwTTl+K4hgYPEPV
-	 DQ3pwEy3zgSLOIKKJ8W+2SiDFy6P5qvxi1PY+qb9cXOQdaC3iHQ+VtthIr/FlkyQ/I
-	 POZQV/h73LJFA==
-Date: Thu, 24 Sep 2026 08:54:49 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Lance Yang <lance.yang@linux.dev>
-Cc: akpm@linux-foundation.org, david@kernel.org, ziy@nvidia.com, 
-	baolin.wang@linux.alibaba.com, liam@infradead.org, nico.pache@linux.dev, ryan.roberts@arm.com, 
-	dev.jain@arm.com, baohua@kernel.org, usama.arif@linux.dev, kas@kernel.org, 
-	guoren@kernel.org, bcain@kernel.org, geert@linux-m68k.org, dinguyen@kernel.org, 
-	schuster.simon@siemens-energy.com, jonas@southpole.se, stefan.kristiansson@saunalahti.fi, 
-	shorne@gmail.com, dalias@libc.org, glaubitz@physik.fu-berlin.de, pjw@kernel.org, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, linux@armlinux.org.uk, 
-	vgupta@kernel.org, monstr@monstr.eu, chris@zankel.net, jcmvbkbc@gmail.com, 
-	will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com, peterz@infradead.org, 
-	davem@davemloft.net, andreas@gaisler.com, richard.henderson@linaro.org, 
-	mattst88@gmail.com, linmag7@gmail.com, catalin.marinas@arm.com, mark.rutland@arm.com, 
-	chenhuacai@kernel.org, kernel@xen0n.name, tsbogend@alpha.franken.de, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, maddy@linux.ibm.com, mpe@ellerman.id.au, 
-	chleroy@kernel.org, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, 
-	borntraeger@linux.ibm.com, svens@linux.ibm.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, tglx@kernel.org, mingo@redhat.com, 
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	arnd@arndb.de, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, jgg@ziepe.ca, jhubbard@nvidia.com, peterx@redhat.com, 
-	ysato@users.sourceforge.jp, shakeel.butt@linux.dev, corbet@lwn.net, rdunlap@infradead.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-snps-arc@lists.infradead.org, linux-arch@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-alpha@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-s390@vger.kernel.org, linux-um@lists.infradead.org, hughd@google.com, 
-	qi.zheng@linux.dev, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] mm: change the contract for free_pgtables(),
- update docs
-Message-ID: <arTXJXUhjNTWz9Ga@gremlin>
-References: <20260922-rcu-pagetable-freeing-v4-12-fe1ad1f1e303@kernel.org>
- <20260924032625.28555-1-lance.yang@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UhNAzhcN"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912df756so15602675e9.3
+        for <linux-csky@vger.kernel.org>; Thu, 24 Sep 2026 05:36:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790253418; x=1790858218; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=gAR7nTOPxRo/mfR2u3OdcokbjHynlMhWcl3pdNDsUgo=;
+        b=UhNAzhcNXOjaJXClMavP7UWOxdIiJlADvA7MBdnyw5QYrwEEyyqzNKnGzSn8dnp6Mb
+         bxTF0vG7q/55fEl2t5D7obCYWPO5kClnjU0fjEqG8a6Sg17Sm8Y8B7pWCwIW2vX1SDKz
+         bk+9Awm1ZCftwFZjBanLl5YEClbmi4WbJVuzOFVaqaZ7ig7IfoGSM49ZGRrqwEWiEJMK
+         CJt6Sudt5LBWpn5TaGfOWJHhq1Tw1ndQUL15dTzA76UqI3sg2mShlreZwnTw8ayFheNY
+         cz09vl2qNqLWdTAu4X7acbRlu2lj8GgvjPB+jX57HIGaN50k4h5t8Osu2VYBIAvIre1P
+         JOtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790253418; x=1790858218;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gAR7nTOPxRo/mfR2u3OdcokbjHynlMhWcl3pdNDsUgo=;
+        b=GPtRq/5fZ4MQT/hJWV4dqbceMzQY0+MKAbvHdUdhpZebVvHCOy+T0qg7Bt7P/hDOwv
+         80w0D/ly+e92e2KHm7aIMHwAW0/aAYpcK/bTB5vsnegN7mhKHeaShOsQVDIkVBhfFfj0
+         Hma1ertcS3+qHeyx6Fcjhjiu1nr4XyRLNFROlDAMsLFA7AB3Cc/o6c5wBt+bEKVdcKOF
+         Cx30Y+fsc7+ufwaXoho0/ajWBD2K+ZckVjQmUyPMYFQsWtVOLAo7YROuo3fbVpCT8RK+
+         zJNJum48WE+K+GPnXCypDft34xJgJGEGQkGQz3sz6y0oyw570oY6MSsMw0/nXDyeveZv
+         UD/A==
+X-Forwarded-Encrypted: i=1; AKwUvBy0UShlOZU3IdA0fj0SP8nQP7Dwm5GEe7pYvnxSaspyvso6OMg7oXu1T9hJhKevppqvbUu66tokGf2x@vger.kernel.org
+X-Gm-Message-State: AFuF++mTvJPBN5b19TTjF0xWtJsBR/GLTmk2ub2k+Ns/L3k1EkcV5Kmn
+	TeUij3UosVHXYYGV0ssh5XR6Pkh2G4nxbpIir9pFGnItQLBfgxd09dm21h6yWOCc6Q==
+X-Gm-Gg: AYBFou3N0ME3uN7ey7PN/IT+G1Acd228gERuk/VdtY8jNzuyNMv+LiqchetwdnBEGyq
+	ZJzkAUZqE6uL4QzEvp9JUz4RBNuJP6mCTH3PARWl1xl0lLDVdEFyL/aysiXF35wd/NH6pWciaj2
+	90ANuz3mV0BrtQxLfG7hdSGxXit76Q6HToFBb4Xn8D5L0U7GL7evyyYLiDdcRxUVJrXB0eA1amu
+	oVoAvtb2YDULl1OUJH4qan6SKy4hkn4DFo3W8mKzyuK30HZMu25zRevCnUvgWjS/IspIBk+snIz
+	mm5bWtQtegSoDzUMhEXq8AGZSxVYDqstI1u6Iqy3B9UqoQHm2Mo1nIOYlFymfyzEDCryWrrW37L
+	ywCEHfRBjW4/HDDKzuRb1bh9oh2YPV7lJGbfIFzF/Gq/3zI0ONHNp4JdPVKMUoDG5RaapCADqQF
+	nLwaiYV+RLxlB59WlfZWPTBUOf/g9wDMcXppGvsRYrjYuvoY9WDcBMR6TvyO/kBTXmWp4gtEnfs
+	hgEBkp6oO3E/YYXer67qMqEBCHZ75VSCMay403S1Q==
+X-Received: by 2002:a05:600c:3514:b0:49f:ce72:e931 with SMTP id 5b1f17b1804b1-49fe6701e7emr38631215e9.35.1790253412640;
+        Thu, 24 Sep 2026 05:36:52 -0700 (PDT)
+Received: from elver.google.com (17.83.155.104.bc.googleusercontent.com. [104.155.83.17])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe0c4cc01sm56905385e9.3.2026.09.24.05.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 05:36:47 -0700 (PDT)
+Date: Thu, 24 Sep 2026 12:36:40 +0000
+From: Marco Elver <elver@google.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Vlastimil Babka <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Matteo Rizzo <matteorizzo@google.com>,
+	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Suren Baghdasaryan <surenb@google.com>,
+	linux-hardening@vger.kernel.org, Nicolas Schier <nsc@kernel.org>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>,
+	Hao Li <hao.li@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
+	Alexander Potapenko <glider@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
+	Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Subject: Re: csky ICe (was: Re: [PATCH v4 2/3] slab: improve
+ KMALLOC_PARTITION_RANDOM randomness)
+Message-ID: <arUZWKjKr5I5tlOj@elver.google.com>
+References: <20260511200136.3201646-1-elver@google.com>
+ <20260511200136.3201646-2-elver@google.com>
+ <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -70,86 +104,122 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260924032625.28555-1-lance.yang@linux.dev>
+In-Reply-To: <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
+User-Agent: Mutt/2.3.2 (2026-04-26)
 
-On Thu, Sep 24, 2026 at 11:26:25AM +0800, Lance Yang wrote:
->
-> On Tue, Sep 22, 2026 at 04:35:43PM +0100, Lorenzo Stoakes (ARM) wrote:
-> >Now that page tables are freed after an RCU grace period, it is safe for
-> >read-only page table walkers to walk page table ranges that are being
-> >concurrently torn down, provided the mm is kept alive via mmgrab().
-> >
-> >It is however unsafe for writers to do so, as they must obtain an
-> >appropriate lock to do so safely.
-> >
-> >Update the pte_offset_map_lock()'s comment block to reflect this.
-> >
-> >Similarly update the process addresses documentation.
-> >
-> >Acked-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> >Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> >---
-> > Documentation/mm/process_addrs.rst |  6 ++++++
-> > mm/pgtable-generic.c               | 15 +++++++++++----
-> > 2 files changed, 17 insertions(+), 4 deletions(-)
-> >
-> >diff --git a/Documentation/mm/process_addrs.rst b/Documentation/mm/process_addrs.rst
-> >index a7296f251799..b1f4f44d75eb 100644
-> >--- a/Documentation/mm/process_addrs.rst
-> >+++ b/Documentation/mm/process_addrs.rst
-> >@@ -537,6 +537,12 @@ We establish basic locking rules when interacting with page tables:
-> > * When changing a page table entry the page table lock for that page table
-> >   **must** be held, except if you can safely assume nobody can access the page
-> >   tables concurrently (such as on invocation of :c:func:`!free_pgtables`).
-> >+* Page tables may be *walked* under RCU alone, as page tables are freed only
-> >+  after an RCU grace period has elapsed. However, any entry found must be
-> >+  revalidated after the page table lock is taken (such as the
-> >+  :c:func:`!pmd_same` recheck performed by :c:func:`!pte_offset_map_lock`)
-> >+  before it is acted upon. Changing an entry requires the page table
-> >+  lock and one of the locks that excludes teardown (mmap or VMA lock).
->
-> What about rmap walkers? try_to_unmap() clears PTEs under the rmap lock
-> and PTL, without an mmap or VMA lock.
+On Tue, Sep 22, 2026 at 07:58AM -0700, Guenter Roeck wrote:
+> Hi,
+> 
+> On Mon, May 11, 2026 at 10:00:49PM +0200, Marco Elver wrote:
+> > When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
+> > to identify the allocation site. _RET_IP_, however, evaluates to the
+> > caller's parent's instruction pointer rather than the actual allocation
+> > site; this would lead to collisions where a function performs multiple
+> > allocations.
+> > 
+> > With the generalization to kmalloc_token_t, we now generate the token at
+> > the outermost macro, and using _THIS_IP_ would fix this for all cases.
+> > 
+> > Unfortunately, the generic implementation of _THIS_IP_ relies on taking
+> > the address of a local label, which is considered broken by both GCC [1]
+> > and Clang [2] because label addresses are only expected to be used with
+> > computed gotos. While the generic version more or less works today, it
+> > is known to be brittle. For example, Clang -O2 always returns 1 when
+> > this function is inlined:
+> > 
+> >         static inline unsigned long get_ip(void)
+> >         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
+> > 
+> > To provide a reliable unique identifier without breaking architectures
+> > relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
+> > to _THIS_IP_ where architectures provide a safe implementation, and
+> > falls back to a zero-cost static marker where _THIS_IP_ is broken.
+> > 
+> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
+> > Link: https://github.com/llvm/llvm-project/issues/138272 [2]
+> > Signed-off-by: Marco Elver <elver@google.com>
+> 
+> With this patch in the tree, I get ICE erors when trying to build
+> csky:allmodconfig.
+> 
+> Example:
+> 
+> Error log:
+> sound/core/oss/mixer_oss.c: In function 'snd_mixer_oss_proc_write':
+> sound/core/oss/mixer_oss.c:1202:1: error: could not split insn
+>  1202 | }
+>       | ^
+> (insn 183 400 184 (set (reg:SI 0 a0 [orig:307 _55 ] [307])
+>         (xor:SI (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
+>             (const:SI (plus:SI (symbol_ref:SI ("*.LANCHOR0") [flags 0x182])
+>                     (const_int 132 [0x84]))))) "include/linux/slab.h":759:52 288 {cskyv2_xorsi3}
+>      (expr_list:REG_DEAD (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
+>         (nil)))
+> during RTL pass: final
+> sound/core/oss/mixer_oss.c:1202:1: internal compiler error: in final_scan_insn_1, at final.cc:2813
+> 0x779b51e2a1c9 __libc_start_call_main
+> 	../sysdeps/nptl/libc_start_call_main.h:58
+> 0x779b51e2a28a __libc_start_main_impl
+> 	../csu/libc-start.c:360
+> 
+> This happens with lots of files, not just this one. It is seen with all
+> versions of gcc starting with at least v13.x. Reverting this patch fixes
+> the problem. Bisect log is attached for reference.
+> 
+> Any idea what I could do to avoid the problem other than stopping to build
+> csky:allmodconfig ?
 
-That's an abomination but yep will update.
+No idea what gcc is falling over here, but the below patch could be a
+workaround/fix. Does that work better?
 
->
-> Cheers, Lance
->
-> > * Reads from and writes to page table entries must be *appropriately*
-> >   atomic. See the section on atomicity below for details.
-> > * Populating previously empty entries requires that the mmap or VMA locks are
-> >diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-> >index b91b1a98029c..a127e3e8f9b9 100644
-> >--- a/mm/pgtable-generic.c
-> >+++ b/mm/pgtable-generic.c
-> >@@ -385,10 +385,17 @@ pte_t *pte_offset_map_rw_nolock(struct mm_struct *mm, pmd_t *pmd,
-> >  * Note: "RO" / "RW" expresses the intended semantics, not that the *kmap* will
-> >  * be read-only/read-write protected.
-> >  *
-> >- * Note that free_pgtables(), used after unmapping detached vmas, or when
-> >- * exiting the whole mm, does not take page table lock before freeing a page
-> >- * table, and may not use RCU at all: "outsiders" like khugepaged should avoid
-> >- * pte_offset_map() and co once the vma is detached from mm or mm_users is zero.
-> >+ * Note that free_pgtables(), used after unmapping detached vmas or when exiting
-> >+ * the whole mm, does not take a page table lock before freeing a page table.
-> >+ *
-> >+ * As page table freeing itself is RCU-safe, page table readers can safely run
-> >+ * concurrently with page table teardown.
-> >+ *
-> >+ * However, writers CANNOT as, without a lock being held, nothing prevents
-> >+ * concurrent teardown.
-> >+ *
-> >+ * Also note that the PGD itself is freed at mmdrop() time, not under RCU - so
-> >+ * the walker must keep the mm alive either by pinning the mm or the VMA.
-> >  */
-> > pte_t *pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
-> > 			   unsigned long addr, spinlock_t **ptlp)
-> >
-> >--
-> >2.55.0
-> >
-> >
+------ >8 ------
 
---
-Cheers, Lorenzo
+From: Marco Elver <elver@google.com>
+Date: Fri, 8 May 2026 14:51:45 +0200
+Subject: [PATCH] csky: Implement _THIS_IP_ using inline asm
+
+Both GCC [1] and Clang [2] consider the generic version of _THIS_IP_ to
+be broken:
+
+        #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+
+In particular, the address of a label is only expected to be used with a
+computed goto.
+
+While the generic version more or less works today, it is known to be
+brittle and may break with current and future optimizations. For
+example, Clang -O2 always returns 1 when this function is inlined:
+
+        static inline unsigned long get_ip(void)
+        { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
+
+Fix it by overriding _THIS_IP_ in <asm/linkage.h> (which is included by
+<linux/instruction_pointer.h>) using an architecture-specific inline asm
+version. Additionally, avoiding taking the address of a label prevents
+compilers from emitting spurious indirect branch targets (e.g. ENDBR or
+BTI) under control-flow integrity schemes.
+
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
+Link: https://github.com/llvm/llvm-project/issues/138272 [2]
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ arch/csky/include/asm/linkage.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 arch/csky/include/asm/linkage.h
+
+diff --git a/arch/csky/include/asm/linkage.h b/arch/csky/include/asm/linkage.h
+new file mode 100644
+index 000000000000..04afd3583e25
+--- /dev/null
++++ b/arch/csky/include/asm/linkage.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_CSKY_LINKAGE_H
++#define __ASM_CSKY_LINKAGE_H
++
++#define _THIS_IP_ ({ unsigned long __ip; asm volatile("grs %0, ." : "=r" (__ip)); __ip; })
++
++#endif /* __ASM_CSKY_LINKAGE_H */
+-- 
+2.56.0.rc1.315.gc6ed9934b7-goog
+

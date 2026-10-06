@@ -1,50 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33EC49E14B;
-	Tue,  6 Oct 2026 16:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514CC390CBF;
+	Tue,  6 Oct 2026 18:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791303042; cv=none; b=oFfPrX7q8KZ2G6jQbGFfhOX7KA3q9j/1IySwCsLkHJ+lxZ2AcOES9s55+EkE4TjzbpTAxmhzyN6XKQjrSdCifryAhlFPVPa+qOBHMB3oooGFh/Fmv7glastQTSzEQyvXbUkkCHOPG0dc2RPzh8AgiOga7KAixK7dEwP4wZMnOG8=
+	t=1791310604; cv=none; b=aPb6zqeV+Mojgtnk8bYhkOUlamH0IfybPH8f5NdFwQukTRAGFYMKU6Vtms0IwsphUFptEzOJPkxKwKWaN6Z3kTxDFM2fJH2/u6Dg+VF4n7ASYN1PTOQAuduTD9ArIPBss9BxMS9BA/shvjPY5krys6hbeyVG0MNOFgKHQDQgS38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791303042; c=relaxed/simple;
-	bh=rFfIvmCe1uMzcdh7HiJnyXC2h8CwibsjHm3hTC3KYO8=;
+	s=arc-20240116; t=1791310604; c=relaxed/simple;
+	bh=7dyZETvO7O9fu7AHkkVrFM7ya11ERADwV8wWSpdA7q8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZzRVQWgZrZEgDzUUkT0nyD6mDiAfeWqM1WiRQZ880muC3t1tRMpJyVeSKV96cOABzf8AKKZB/cW6JL0QsYlrrZiBqsfXnHh4kAINxQR/79uppR1y5WEE0QpEPxuQioVqe4l4H5mAlmn8gJQhIp1sMgHpiwJsU3P6TX6QyKm4NZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L8mkYQm8; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=NbJaP51zwA4Ls7oHxOkLUMfhOVajWI/Hm7p8vk27rq6UuP+MIjgoIbcJnzcrp2H4x34eZaKy5oAX4WYgvHKYj48+9hcFFT71TaDVzONmaAKrjpjiMujGjZ3f5cwIdcVHt919VfnFd/DYX131ky15C7m7tdeScUzKl8xl12wT14Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nV3+PNfB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L8mkYQm8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1351F0089B;
-	Tue,  6 Oct 2026 16:10:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nV3+PNfB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1941F0089B;
+	Tue,  6 Oct 2026 18:16:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791303040;
-	bh=jBSzgIQiDKIdVOouse9O8m70fhpFq8FSj2RNSA5L8gs=;
+	s=k20260515; t=1791310603;
+	bh=SOZ+aI+KSR1UAkYe0gazlY4BGayfc1zklSYDKuyOR0o=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=L8mkYQm8HadJV+3ESPCmb38t2MS7PpXmG+eqKLh0tBoKyKdGrSKaks+z2LlaL0ySf
-	 JeV6+mgYbYs6DBVjLKqm7YsJpXdasafgurVt4Pqj8c2AqHWwL9/yI60Lljo/+Y34Fe
-	 1/lcnIUOSxTpUCcHmDeXkdIscPi/fKzMX46n7UjSrwEdUMnFl4Iv7eIhrUB/fNIcwI
-	 T/u629DnJw9/gsXD8xcRx+FeBv2KiD/+KC6OdMcJTg5l0M+YCkiiXvSLmWD4jeRHil
-	 BqniKelmHekkQLbOJO+Iwu4eSQMwmiIuzkfErh6TkEw0LFvW89LnhUoQbiD6ovswcD
-	 CNFqgVkH7wfiw==
+	b=nV3+PNfB1rqBHlAapHoj1VOlOJmURxsIifQ5jciLn/K5aUBq+0HV4KdAfazxkutMb
+	 UfJJBeugVtFOIkRGadW14XuzlTQn+QRr5DCe7uV4q6fkzHZoyo0kIbLVcPdqamnvFI
+	 +uWh8NDP5WByahQ7vdbO/FbHbWrME5l2EbpFH4vl+wsC46R8gWp7QNZ4BKGA5IYYd5
+	 nGI9Lz2XoBeIyy5cvq9RtL/9K8g+XzQW65NnCfzf6TL+5P7CdqOa4SsNDdRvSdTLXa
+	 HAE4JyhL2+f+x2jREbzJzlJTvHHQreoLL154QM9z6JyQ12et0cNtEUk3WhbIDsCsM6
+	 hNTgIFrOvE36A==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 1CB85CE3A08; Tue,  6 Oct 2026 09:10:40 -0700 (PDT)
-Date: Tue, 6 Oct 2026 09:10:40 -0700
+	id BD4F7CE3A08; Tue,  6 Oct 2026 11:16:42 -0700 (PDT)
+Date: Tue, 6 Oct 2026 11:16:42 -0700
 From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Bradley Morgan <brads@mainlining.org>
-Cc: kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Bradley Morgan <brads@mainlining.org>, akpm@linux-foundation.org,
 	vgupta@kernel.org, guoren@kernel.org, chris@zankel.net,
-	jcmvbkbc@gmail.com, oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
-	david.laight.linux@gmail.com, glaubitz@physik.fu-berlin.de,
+	jcmvbkbc@gmail.com, arnd@arndb.de, glaubitz@physik.fu-berlin.de,
 	ysato@users.sourceforge.jp, dalias@libc.org,
 	linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] xtensa: Emulate two-byte cmpxchg
-Message-ID: <fde35b55-8916-47fe-a505-ef6db296e4bb@paulmck-laptop>
+Subject: Re: [PATCH v5 0/3] Add two-byte cmpxchg emulation and wire it into
+ the architectures
+Message-ID: <84b6f3c7-e498-4931-97c2-75ea5158b99a@paulmck-laptop>
 Reply-To: paulmck@kernel.org
-References: <20261005120700.383058-4-brads@mainlining.org>
- <202610061704.rvbolgPy-lkp@intel.com>
- <82aad69a-603c-41cd-876d-09772a1a7e6a@paulmck-laptop>
- <543B9D97-52F8-4D12-8118-9698F6908668@mainlining.org>
+References: <20261005120700.383058-1-brads@mainlining.org>
+ <20261005190205.26f17469@pumpkin>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -53,116 +51,77 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <543B9D97-52F8-4D12-8118-9698F6908668@mainlining.org>
+In-Reply-To: <20261005190205.26f17469@pumpkin>
 
-On Tue, Oct 06, 2026 at 04:46:22PM +0100, Bradley Morgan wrote:
-> On 6 October 2026 16:44:13 BST, "Paul E. McKenney" <paulmck@kernel.org>
-> wrote:
-> >On Tue, Oct 06, 2026 at 05:54:53PM +0800, kernel test robot wrote:
-> >> Hi Bradley,
-> >> 
-> >> kernel test robot noticed the following build errors:
-> >> 
-> >> [auto build test ERROR on akpm-mm/mm-everything]
-> >> [also build test ERROR on vgupta-arc/for-curr
-> >jcmvbkbc-xtensa/xtensa-for-next linus/master v7.3-rc6 next-20261005]
-> >> [cannot apply to vgupta-arc/for-next]
-> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> >> And when submitting patch, we suggest to use '--base' as documented in
-> >> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >> 
-> >> url:   
-> >https://github.com/intel-lab-lkp/linux/commits/Bradley-Morgan/ARC-Emulate-two-byte-cmpxchg/20261005-120658
-> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-> >mm-everything
-> >> patch link:   
-> >https://lore.kernel.org/r/20261005120700.383058-4-brads%40mainlining.org
-> >> patch subject: [PATCH v5 3/3] xtensa: Emulate two-byte cmpxchg
-> >> config: xtensa-allyesconfig
-> >(https://download.01.org/0day-ci/archive/20261006/202610061704.rvbolgPy-lkp@intel.com/config)
-> >> compiler: xtensa-linux-gcc (GCC) 16.1.0
-> >> reproduce (this is a W=1 build):
-> >(https://download.01.org/0day-ci/archive/20261006/202610061704.rvbolgPy-lkp@intel.com/reproduce)
-> >> 
-> >> If you fix the issue in a separate patch/commit (i.e. not just a new
-> >version of
-> >> the same patch/commit), kindly add following tags
-> >> | Reported-by: kernel test robot <lkp@intel.com>
-> >> | Closes:
-> >https://lore.kernel.org/oe-kbuild-all/202610061704.rvbolgPy-lkp@intel.com/
-> >> 
-> >> All errors (new ones prefixed by >>):
-> >
-> >These patches need to be applied on top of my -rcu tree's "dev" branch,
-> >which supplies cmpxchg_emu_u16().
-> >
-> >Nevertheless, thank you for your testing efforts!
+On Mon, Oct 05, 2026 at 07:02:05PM +0100, David Laight wrote:
+> On Mon,  5 Oct 2026 12:06:57 +0000
+> Bradley Morgan <brads@mainlining.org> wrote:
 > 
-> Do you reckon they are fine to you? The patches?
+> > This is v5 of the two-byte cmpxchg emulation series, reduced to the
+> > three architectures still missing after Paul McKenney queued the lib
+> > and sh patches, ARC, csky and xtensa.
+> > 
+> > The v4 attempt at these folded in a type checking idiom,
+> > (unsigned long)(0 ? *ptr : old), meant to make cmpxchg(&p, 4, 5) fail
+> > to compile. The kernel test robot and Vineet Gupta showed that idiom
+> > breaks real callers, fs/crypto/hooks.c passes a char * and an
+> > unsigned char * to cmpxchg_release(),
 > 
-> Arch maintainers may be busy unfortunately :(, I've done testing on all
-> the arches, 
+> That ought to be a bug...
 
-I have queued the one that is already acked by the SH maintainer, so we
-get at least something into the upcoming merge window.  I plan to try your
-patches out later today, Pacific Time, and queue them if they are ready.
+Perhaps it is?  Here is the code:
 
-If the architecture maintainers ack them in time, I send a pull request
-for them in the upcoming merge window.  If some of the do not yet have
-acks, I keep those unacked ones for the next merge window.  If they
-are still being ignored at that point, I send the pull request anyway.
-Maybe Linus takes it, maybe not.  If not, I figure things out from that
-point.
+	cmpxchg_release(&inode->i_link, NULL, pstr.name)
 
-Hey, it is a lot faster than some other communities that I am involved
-with, where the timeframes are years and even decades rather than
-mere weeks and months.  ;-)
+And inode is a struct inode, of which ->i_link is char*.  For its part,
+pstr is a struct fscrypt_str, of which ->name is unsigned char *.
+
+But this is either a 4-byte or 8-byte cmpxchg_release(), depending on
+CONFIG_64BIT, which is orthogonal to this patch series, which provides
+2-byte emulation.
+
+Therefore, I see no reason to hold up these cmpxchg_emu_u16() patches.
+
+But please let me know if I am missing something.
 
 							Thanx, Paul
 
-> >>    In file included from arch/xtensa/include/asm/atomic.h:19,
-> >>                     from include/linux/atomic.h:7,
-> >>                     from include/asm-generic/bitops/atomic.h:5,
-> >>                     from arch/xtensa/include/asm/bitops.h:192,
-> >>                     from include/linux/bitops.h:67,
-> >>                     from include/linux/log2.h:12,
-> >>                     from kernel/bounds.c:14:
-> >>    arch/xtensa/include/asm/cmpxchg.h: In function '__cmpxchg':
-> >> >> arch/xtensa/include/asm/cmpxchg.h:79:25: error: implicit declaration
-> >of function 'cmpxchg_emu_u16'; did you mean 'cmpxchg_emu_u8'?
-> >[-Wimplicit-function-declaration]
-> >>       79 |         case 2:  return cmpxchg_emu_u16(ptr, old, new);
-> >>          |                         ^~~~~~~~~~~~~~~
-> >>          |                         cmpxchg_emu_u8
-> >>    make[3]: *** [scripts/Makefile.build:185: kernel/bounds.s] Error 1
-> >>    make[3]: Target 'prepare' not remade because of errors.
-> >>    make[2]: *** [Makefile:1405: prepare0] Error 2
-> >>    make[2]: Target 'prepare' not remade because of errors.
-> >>    make[1]: *** [Makefile:248: __sub-make] Error 2
-> >>    make[1]: Target 'prepare' not remade because of errors.
-> >>    make: *** [Makefile:248: __sub-make] Error 2
-> >>    make: Target 'prepare' not remade because of errors.
-> >> 
-> >> 
-> >> vim +79 arch/xtensa/include/asm/cmpxchg.h
-> >> 
-> >>     73	
-> >>     74	static __inline__ unsigned long
-> >>     75	__cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
-> >>     76	{
-> >>     77		switch (size) {
-> >>     78		case 1:  return cmpxchg_emu_u8(ptr, old, new);
-> >>   > 79		case 2:  return cmpxchg_emu_u16(ptr, old, new);
-> >>     80		case 4:  return __cmpxchg_u32(ptr, old, new);
-> >>     81		default: __cmpxchg_called_with_bad_pointer();
-> >>     82			 return old;
-> >>     83		}
-> >>     84	}
-> >>     85	
-> >> 
-> >> --
-> >> 0-DAY CI Kernel Test Service
-> >> https://github.com/intel/lkp-tests/wiki
+> David
 > 
-> --- Thanks!
-> "I'm not a very positive person" - Linus torvalds
+> > and the conditional expression
+> > then has incompatible pointer types, which is a hard error on gcc 14
+> > and newer. So this version only adds the case 2 dispatch, the
+> > declarations the architectures already have are kept as is.
+> > 
+> > The ARC sizeof bug that v4 fixed along the way is in mainline
+> > separately through Vineet's f050c3e61d2a ("ARC: arch_cmpxchg_relaxed
+> > to use size of pointed type not pointer"), so the ARC patch here is
+> > only the case 2 wiring on top of that.
+> > 
+> > On the why, RCU previously used single-byte cmpxchg(), which is what
+> > motivated cmpxchg_emu_u8() in the first place, and Paul has now
+> > queued cmpxchg_emu_u16(). Unused new code is frowned upon, so wiring
+> > it into the architectures that need it is the missing half, and
+> > there are existing workarounds for the missing two-byte cmpxchg() in
+> > the tree, _Q_PENDING_BITS for one, that can make use of it.
+> > 
+> > Per Paul's suggestion each patch is standalone and can go in
+> > independently, they only depend on the lib patch already queued.
+> > Each one was build tested with the real cross toolchain, ARC with
+> > arc-linux-gnu-gcc and csky and xtensa with the gcc 16.2 crosstool
+> > builds Vineet pointed at, W=1, with the macro instantiated on
+> > u8, u16, u32 and pointer types, confirming the new dispatch is
+> > reached and no new warnings appear. The pointer instantiation
+> > covers the fs/crypto/hooks.c case that broke v4.
+> > 
+> > Bradley Morgan (3):
+> >   ARC: Emulate two-byte cmpxchg
+> >   csky: Emulate two-byte cmpxchg
+> >   xtensa: Emulate two-byte cmpxchg
+> > 
+> >  arch/arc/include/asm/cmpxchg.h    | 3 +++
+> >  arch/csky/include/asm/cmpxchg.h   | 9 +++++++++
+> >  arch/xtensa/include/asm/cmpxchg.h | 1 +
+> >  3 files changed, 13 insertions(+)
+> > 
+> 

@@ -1,51 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D28039DBCF;
-	Wed,  7 Oct 2026 15:56:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0083CAE95;
+	Wed,  7 Oct 2026 20:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791388608; cv=none; b=t1UDgtKW4iJyOCQmxkxam9/JnkGZLIR4YclNfZYAF6LhvvxUZOAWLcCxV/OxM8VPcu80BLDdaVhzRnnCxL4ynCi9PFPXaaBIuP/Zfm2lanx3YpiBDM5Om8J1r/Xgwk5Gwi6N3OMGkBsMpRKm+bWFJdPBsyZikV3H1lLno5gc++o=
+	t=1791405363; cv=none; b=KYkgnteNm37jclT9tcHBWVB8qr5PcAMTDzM6vV7NbtxpAA8yW9RnyZnIObNoDbLJoAnI6V7qR3FGSd6/mC0yYQyZTKSWqDVnn0CTY/uywZvZr1ZQg2gJuzd77gerohxWdl0uLsXL1GZzE66/OcNlUpCYH1ngpD8bHa9V9XIWI6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791388608; c=relaxed/simple;
-	bh=uyFcj9ADReEAVtSUyJRkd5dhtq4VdKpC1KFH2ysUxJ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r86AgOJGIph4op10SDNOgOYh1xpoReHhWhzxLlp6Svo0m/Jy/b0gbUrYmS/VVBwjNfcva6Vkrc+gDn0Q1o0hauPBH6ZeKPurH3c2+Sw2zhQHaNhrCoJ6L+7K5/PProQhUM25pjNGbWevimS3yrgcMVdLJUHpN3X0aX5U8mdaASU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MVVGJXCQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791405363; c=relaxed/simple;
+	bh=0HDVK8JOyehFNAsoX6u18sKHFbbR/SD8q5EZY9h9XbU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QSlhb7kXpsp8Nd/VkrcWksPkYp/etjp3NQ0EM3QiHIMZUXHBRZKx8wjyXPvhfXBlce95NgNPhiSqEutKXd+N2Ko7UHLO+ncekHpV+dnWclWoFETF6VTnBGcpep1J/3bwPAZqvefgp6LxjcRKlbvF8WEUs5/M/OLFNbW2j1Eakok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+d/K0iJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MVVGJXCQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CE91F000FF;
-	Wed,  7 Oct 2026 15:56:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+d/K0iJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2261B1F000FF;
+	Wed,  7 Oct 2026 20:36:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791388607;
-	bh=yMhRXbcaDeB4n2+mH5Jk5sbZU+IqnTVA1slEIulptiU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=MVVGJXCQWWbY9TfcSpCe7rr88tctc9aZgvrOvRTdvunYHodclahwQdfCooID67JEs
-	 gHnlYWr4Kyzg8SMgTn8+DSyIcCibBPS0MGjG5sttwOCg038edkQh1ouIvfgrj73P3F
-	 /mI96/EDR+Tu+ZbwYBlNH8MXltrAaHPPp9PEBv23odVUzHxC71IQ+9Pjnl1zwVz2hi
-	 liHGcNdZ5GGQ3zVav9ABzBmf84qaGQDzAlCT2vzoN8kWnyuR0O3TAv8sRhRSfzUylW
-	 rbylcb7H8kQWvEco+ck2W/N2zYDGvuhtvHIsX1hAQOLos01O3EVgNFO/VoU5sH+UCF
-	 SEspg0zFpN+2w==
+	s=k20260515; t=1791405362;
+	bh=s2dr5ZtYxDvsJVmv19YUiGWV6zK4NMpNX2VkLiAlLUM=;
+	h=Date:From:To:Cc:Subject:Reply-To;
+	b=O+d/K0iJTokxmwTEPDNJiuOLU9sPsSxEA318JmC+Im3Uf7yyiy0vuK8f4nKkcWcWD
+	 xBEJCJsje+nyjvM1sbmNt/0/hgldaLaJ3U3hHFFzQSAnkRMQ6qtSk1pmKSr/8ELRWx
+	 mFdw7cu/Gi5Qrr6KpNsC1mXMFiW9nAUciUGnpuuPYeSCW/dnpwZu5lA0gF5FWl29eP
+	 nLVZwWBH9Dm0YGPvDOloVX/uhBgfcDgAryF4hqSdFZy1IFHEsT2GkknUMOUEaEdHXA
+	 N9NRVgybo7IByqFEj+EIeTsfHB984Jp16zzHvkc7VdraclLWZS0jfQfARnPSN/2WLY
+	 L6aBRdPbOyM5g==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id D045ACE0D79; Wed,  7 Oct 2026 08:56:46 -0700 (PDT)
-Date: Wed, 7 Oct 2026 08:56:46 -0700
+	id ADEA5CE0D79; Wed,  7 Oct 2026 13:36:01 -0700 (PDT)
+Date: Wed, 7 Oct 2026 13:36:01 -0700
 From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Vineet Gupta <vgupta@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Bradley Morgan <brads@mainlining.org>, akpm@linux-foundation.org,
-	guoren@kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
-	oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
-	david.laight.linux@gmail.com, glaubitz@physik.fu-berlin.de,
-	ysato@users.sourceforge.jp, dalias@libc.org,
+To: linux-kernel@vger.kernel.org
+Cc: Bradley Morgan <brads@mainlining.org>, Vineet Gupta <vgupta@kernel.org>,
+	Guo Ren <guoren@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	David Laight <david.laight.linux@gmail.com>,
 	linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] xtensa: Emulate two-byte cmpxchg
-Message-ID: <5937c722-ccc7-4f03-b4a6-bf357f2f3757@paulmck-laptop>
+	linux-sh@vger.kernel.org, kernel-team@meta.com
+Subject: [PATCH 0/5] Provide two-byte cmpxchg() emulation
+Message-ID: <7f398d4a-7fae-4382-9cc4-8627e8aa912b@paulmck-laptop>
 Reply-To: paulmck@kernel.org
-References: <20261005120700.383058-4-brads@mainlining.org>
- <202610061704.rvbolgPy-lkp@intel.com>
- <82aad69a-603c-41cd-876d-09772a1a7e6a@paulmck-laptop>
- <a8bc1396-fa38-4648-89c4-ac528fc1888b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -54,29 +53,41 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a8bc1396-fa38-4648-89c4-ac528fc1888b@kernel.org>
 
-On Wed, Oct 07, 2026 at 10:24:28AM +0200, Vineet Gupta wrote:
-> On 10/6/26 17:44, Paul E. McKenney wrote:
-> > These patches need to be applied on top of my -rcu tree's "dev" branch,
-> > which supplies cmpxchg_emu_u16().
-> > 
-> > Nevertheless, thank you for your testing efforts!
-> 
-> Sorry I don't have your tree is my git remotes. can u point me to the msg id
-> of the series which was applied so i can fetch it and apply.
-> At this point I can't ACK/Nack the patch since w/o the pre-req it just fails
-> to build locally exactly as the kernel robot found.
+Hello!
 
-I will resend the full series later today, Pacific Time.  In the meantime,
-these commits in my -rcu tree [1] on the "dev" branch in "git log" order:
+This series provides emulation of two-byte cmpxchg().  Note that this
+does not (yet) allow free use of atomic operations on two-byte operands
+in core code because there are still a few supported systems that do not
+have two-byte store instructions.  However, this emulation does permit use
+of wide range of two-byte atomic operations, so is worth putting forward.
 
-a29bf4d6dc4f3 xtensa: Emulate two-byte cmpxchg
-10d67fa61f9f4 csky: Emulate two-byte cmpxchg
-1decb1d05ef2e ARC: Emulate two-byte cmpxchg
-887685c52e44c sh: Emulate two-byte cmpxchg
-109f733202e32 lib: Add two-byte cmpxchg emulation function
+This series is being reposted on request in order to ease testing efforts.
 
-							Thanx, Paul
+The individual patches are as follows:
 
-[1]  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+1.	Add two-byte cmpxchg emulation function, courtesy of Bradley
+	Morgan.
+
+2.	sh: Emulate two-byte cmpxchg, courtesy of Bradley Morgan.
+
+3.	ARC: Emulate two-byte cmpxchg, courtesy of Bradley Morgan.
+
+4.	csky: Emulate two-byte cmpxchg, courtesy of Bradley Morgan.
+
+5.	xtensa: Emulate two-byte cmpxchg, courtesy of Bradley Morgan.
+
+#1 and #2 have the acks required to go into the upcoming v7.4 merge
+window.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ arch/arc/include/asm/cmpxchg.h    |    3 +++
+ arch/csky/include/asm/cmpxchg.h   |    9 +++++++++
+ arch/sh/include/asm/cmpxchg.h     |    2 ++
+ arch/xtensa/include/asm/cmpxchg.h |    1 +
+ include/linux/cmpxchg-emu.h       |    4 +++-
+ lib/cmpxchg-emu.c                 |   38 ++++++++++++++++++++++++++++++++++----
+ 6 files changed, 52 insertions(+), 5 deletions(-)

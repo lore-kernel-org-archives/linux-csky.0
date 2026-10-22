@@ -1,91 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792670376;
-	b=db957gM4oy38i5fe07O8lstzDiVi0n4PFAORQ3McC9Ubokwtw9bo3Ci8h6NSakuxjyn+
-	 IcxRiaFfY3/eKyE1le8AvX8Q77N5QjAr8/Axg8nm+Kvu36RSBY9lhyrFYwNNprbvD3yhQ
-	 JMY1QqrivokXFASLeTGZ0YoIXf5Mtz7v2orF4B8OAtBGXFRL6zHFdxMTJeO4Ue/muDDaJ
-	 e1+bfBEvoGHU/cOBhhyTGH2tDGHfAyQwGpEs+ig6SIaqFTOH+9qb7zmvhnnW+HmHH51Qn
-	 sP5C4Je42irMLrl/wt3ZDb6XyklX8WzS4Ovln6lC1XnLp9KgxMekQDllrUFm082nTDw==
+	t=1792679071;
+	b=RQBlRaSbTYSS84pBmWzvnhyqXq6SK3T6gissfIDc0TZguCV7xzjInskY6uLMeT5eTJYI
+	 OIHlmabFAdw7PJckhwmE0/1N8TFkf31hfOYo/VcK+v8qkScjzgibhsTGhUrySYDc1VNQK
+	 y0ihQqbL07un1RFovjWk6ukcf1gSW+FRir7yJfg9t/mop7cz9G/voFvKdWfwo6BwcxUw2
+	 BhA9w93u58cYh3yq1VKvodFWniQNlEhM5bXj/nu54fVzTIj5z4fSJFu/OG7O3O01wBO7B
+	 bNZjyzqv9WWrID1XIAFMAbt0OK2MAxp3pF9cnELGOcG7Ur5IIm1FP/hszbwigaaW+tQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792670376;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=XINGVnXS/59fmZDTv/3fLoxUfeQVR9Y3Vo1ejBBatBE=;
-	b=CSQeV2iMAnd3XguzEkbJDEf1Jf+WUQNK5IAhtGgHo2WAJR/HHCADUzngT+f430SZbX+1
-	 Zav0GFFM2WMxkANjmcAZjcfCj+RqOv46chktMwaqKOoDgzgHE2LFjNwzXL6ikXkSYjbES
-	 cnS9eH3Qf0Ch+7zEdtosIP9zwS+JmoLtFkYo9b96KwauSmtjMAGuz9GOt4Qa7ZsSW9tUt
-	 xv+JKqJ5rReMUljEzeADZpKyfgUqINS73ANCd4QmoTAgdfamkcfymvaCa5u9tFoAFUSiH
-	 vWzeNJjqUMd8dAReuMZV4klfJ3n4Vz445ZQJ4rwwLq65iLmltwk88R++AmnlhObnQOw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792679071;
+	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=ijcqFl4YNaIiVHZ0kMDDzDit0eQZX1zIOl9C/1G18QI=;
+	b=irDu32suvnN4EXemnSeM0fzNA54HhnRBhTrwrhIQqKToK+rucxxhGIr5ZUiLm89pGgjM
+	 z3owYGQ7IadeYjDcbhsvShoi3IoSBot/igVtcA8fEd2ZIZfNuEe7gwYTETAvhoBx1IKw8
+	 7dt3vhUevadbXTLXYhFpx4E1JuJaJK7rZyXAhRTWPMqwGSCIEnY+kmgqC57oWoMtmpXLU
+	 kMaTuE9FvRw3cD3ZPko3CTowybRrkqelPdI7jA0X2Wx3PqH9qhjoin3enchjmSJJI++Or
+	 4qgFxN8DMkRLTkrstxCG/l0RjZMa6YRYhKCQlcgROy1cDmLFs7ovFI7VNDVMVQe09Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=H8MV5mHe;
-	arc=none smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=tGPqmIoU;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=lrzd8ZGd;
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B570606A31F
-	for <linux-csky@vger.kernel.org>; Thu, 22 Oct 2026 11:59:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B570606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0402F606A31A;
+	Thu, 22 Oct 2026 14:24:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0402F606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=H8MV5mHe
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8a264b6a06bso178344b3a.3
-        for <linux-csky@vger.kernel.org>; Thu, 22 Oct 2026 04:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792670375; x=1793275175; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XINGVnXS/59fmZDTv/3fLoxUfeQVR9Y3Vo1ejBBatBE=;
-        b=H8MV5mHePY61sZTF1PItFLG8m+SDaYKHDRqB1gr5Vk0h4SfvTU4pYNyiZPg0K1UtGX
-         sOlN/iywGbBkOgN8XVRD/VqYX2zs3GMNNE9jX7GPoIc4s3VAqly7omE37kAtT8YZMn/z
-         jRnpFa/jLmT3sHPgV/+BE0TthFw3r/rnYFCjb3NJAqfGC6Ls0HIJM6wM9pKJnMI7lS4L
-         spW10lbuM/JoZQFK7Cq3leTxmQbymKQVyg+lfXJqQmWUejs1IsMgzhfQv90o4KmQRbTp
-         DhL04C/PhxI3aS8HZZrrw4YXzhJ+G6t6vYVGV2KbRqoUNyQ1IICC5+534NwP/Gkfbpba
-         alyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792670375; x=1793275175;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XINGVnXS/59fmZDTv/3fLoxUfeQVR9Y3Vo1ejBBatBE=;
-        b=NVZomPZclGVQdeMlJSrLNIavFZ8I0nCGkrjPyGtwt8Vs0cBisEYhsBvmBtqdUS3Eg9
-         taYw08scncY9rYLIugrlG5t5pNICadu7OVX9b5KOOf8OSAoTNrq5dg34JeYmDzxFehYy
-         Lob7SQhLpeVfB1qkJV6x13aZPf9jJnOTm84Wq/kC38qp7nas+jMSl6YXmvceEJ1OBcjE
-         7+oR7ZSP0xdcyXYK4vKFHDQOk3nGFe3NP+Slt4ySQ3QfyTHESpgB2tw2+R33hCAz/J3Z
-         /cLMtFE+v1wWW+MXI/wflntDjEaXC9eMkVs+C7QaiAJM7rGQmzkosH/os6BSDISI5leG
-         BZ/Q==
-X-Gm-Message-State: AFq9FYL5/0OX57IlpxvOf2VCu6SwReLvlfclOtvtUHN74oQ3kRmJ1BvM
-	j+VxUw7obLcc9M76z+6tGKUhlgJmzPrfKEyqxWrP5gLRp+8tmC9V938P
-X-Gm-Gg: AYBFou2c6+EH9JA3mSjgs9sLnUZCtQg0eJKH/sY+clLBRPg3eL14w5ZlHb3b1IEtcAb
-	oA9tp8rWyQQoHpPRhMP6H7u3aAjTmOiRKObSUFGZ+FRo9oYtU4tIKO8oicLoVOS9QraM3RMd8gh
-	jsM9r4vCAHhq0gm8U1EnbJKaqz0jeKY6EfDjZRSeuCSEcDiZ02dNKa+T8ioW8Nds95/CcSGiKWo
-	YZCgA7n5stAi7YRvd7syoAKZcDBBI1FYjC2OPdHMxLaz6HFmX0rV2aAN27S3w5jb3Cvc6AVHJKL
-	ir+5YhCmNP8++A3Z2sqMC6p38A470RXsSS1Ngvz1Z81oYKfZJiv5oAtIYh0a1B+DyO1y+6r4Gn2
-	2S/EpSiBnThS+M9cKsO4T5TF38cbZG+ezfH7PiPZTIZcPapf+9A/SvgtA8B/XNUn5bLqyO/FBAZ
-	9+TQiOEGS3ERPkheDCYo2XivkgqywM1iFCwSR2ya51M4QCMrCYJxpQ1G+EFJ6Qi3AT2ZUMM7/pQ
-	RBLnNXuhLWSmNSuz5htVyipUwS28fGwRkrwVh96yZNXhpLQC8PwhVA2Q9sc
-X-Received: by 2002:a05:6a21:48b:b0:3dd:a195:fa25 with SMTP id adf61e73a8af0-3e287eea3a3mr3590304637.74.1792670374907;
-        Thu, 22 Oct 2026 04:59:34 -0700 (PDT)
-Received: from arm-a100.. ([140.112.28.118])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a0894b49d1sm2035007b3a.12.2026.10.22.04.59.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 04:59:34 -0700 (PDT)
-From: Tzu-Ching Yang <shingekinocore@gmail.com>
-To: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Arnd Bergmann <arnd@arndb.de>,
+	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=tGPqmIoU;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=lrzd8ZGd
+Date: Thu, 22 Oct 2026 16:24:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1792679067;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ijcqFl4YNaIiVHZ0kMDDzDit0eQZX1zIOl9C/1G18QI=;
+	b=tGPqmIoU7flznKuVvSgOzo2yd+DVKg7D73Wllg9sFRm9CC/iaoJaE55c3a0xpncefiwTWe
+	D0DcbKw7j7YI7N9iAD68KUbumDWDB4zuYjNIkgHfr2v+H6DCtaJTi+ZtcPVrTjX8s8nNNi
+	XYrPBSHr+CwiWmUAbayRxd1rMqP3P1fTDl5O65hszJdwi1iKQ6myUH0U2igUoTF8eZn+8r
+	G1OdblBxDgssdpqEoIOChx+/YLJ7ntbq+IsNh3ReV+JtcimJTFUP2numV2/sYLdIC+zwnD
+	aAZ46jrqFXnXLMoMGXtXmyYgRF8JauAVkMkAXxtjJDC2ZDnhWCO79rWsa0e06A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1792679067;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ijcqFl4YNaIiVHZ0kMDDzDit0eQZX1zIOl9C/1G18QI=;
+	b=lrzd8ZGdzEWmJjZ9aZOFY32BVENA3ocTIaS/QQU0/Sv8YYe+ynbKZ/LG3OiCiXRqC6uBBI
+	wYJIr0JLNWZ7aTBw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, Kees Cook <kees@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	linux-riscv@lists.infradead.org,
+	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
+	x86@kernel.org, Mark Rutland <mark.rutland@arm.com>,
+	Jinjie Ruan <ruanjinjie@huawei.com>,
+	Andy Lutomirski <luto@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Guo Ren <guoren@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Helge Deller <deller@gmx.de>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Richard Weinberger <richard@nod.at>,
+	Chris Zankel <chris@zankel.net>,
+	linux-arm-kernel@lists.infradead.org, linux-alpha@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>, Brian Cain <bcain@kernel.org>,
+	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	linux-snps-arc@lists.infradead.org, linux-hexagon@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, sparclinux@vger.kernel.org,
 	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] csky: bitops: Use the compiler builtin for __fls()
-Date: Thu, 22 Oct 2026 19:59:22 +0800
-Message-Id: <20261022115922.1210342-1-shingekinocore@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	Michal =?utf-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [patch 16/18] x86/entry: Get rid of the sys_ni_syscall()
+ indirection
+Message-ID: <20261022142425.3Wx-RrU5@linutronix.de>
+References: <20260707181957.433213175@kernel.org>
+ <20260707190254.493733289@kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -95,84 +110,127 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-csky+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260707190254.493733289@kernel.org>
 
-The csky __fls() is a C wrapper, fls(x) - 1, around the ff1 asm
-volatile in fls(), so the compiler can neither fold it for a constant
-argument nor merge repeated calls. GCC implements __builtin_clzl()
-with the same ff1 instruction for CK807, CK810 and CK860; CK610
-(abiv1) cannot be built with upstream GCC.
+On 2026-07-07 21:07:01 [+0200], Thomas Gleixner wrote:
+> Invoking sys_ni_syscall() from a code path, which already knows that the
+> syscall number is invalid just to assign -ENOSYS to regs->ax is a pointle=
+ss
+> exercise. It's even redundant as the low level entry code already has set
+> regs->ax to -ENOSYS on entry.
+>=20
+> Remove the extra conditionals and the function calls.
 
-Use the asm-generic builtin __fls() instead. ffs(), __ffs() and fls()
-keep their asm: GCC has no ctz pattern for csky, so builtin ffs() and
-__ffs() would become calls to __ffssi2() and __ctzsi2(), and a builtin
-fls() needs a test for zero that ff1 makes unnecessary by returning 32
-for 0.
+Since this patch, tools/testing/selftests/x86/syscall_numbering_64
+throws in this:
+|[RUN]   Running tests under ptrace: modifying the default return
+|[RUN]       Checking system calls with msb =3D 0 (0x0)
+|[RUN]           Checking some common syscalls as 64 bit
+|[OK]                x64 syscall 0:0 returned 0 as expected
+|[OK]                x64 syscall 0:1 returned 0 as expected
+|[RUN]           Checking some 64-bit only syscalls as 64 bit
+|[OK]                x64 syscall 0:19 returned 0 as expected
+|[OK]                x64 syscall 0:20 returned 0 as expected
+|[RUN]           Checking out of range system calls
+|[FAIL]                  x32 syscall 0:-64 returned -9999, but it should ha=
+ve returned -ENOSYS
+=E2=80=A6
+|[FAIL]                  x32 syscall 0:-2 returned -9999, but it should hav=
+e returned -ENOSYS
+|[FAIL]              x32 syscalls 0:-64..-2 had 63 failure
+|[OK]                x32 syscall 0:-1 returned MODIFIED_BY_PTRACE as expect=
+ed
+|[FAIL]                  x64 syscall 0:1073741760 returned -9999, but it sh=
+ould have returned -ENOSYS
+=E2=80=A6
+|[FAIL]                  x64 syscall 0:1073741823 returned -9999, but it sh=
+ould have returned -ENOSYS
+|[FAIL]              x64 syscalls 0:1073741760..1073741823 had 64 failure
+|[FAIL]                  x64 syscall 0:-64 returned -9999, but it should ha=
+ve returned -ENOSYS
+=E2=80=A6
+|[FAIL]                  x64 syscall 0:547 returned -9999, but it should ha=
+ve returned -ENOSYS
+|[FAIL]              x64 syscalls 0:512..547 had 36 failure
+|[RUN]           Checking some common syscalls as x32
+|[OK]                x32 syscall 0:0 returned 0 as expected
+=E2=80=A6
+|[RUN]           Checking out of range system calls
+|[FAIL]                  x32 syscall 1:-64 returned -9999, but it should ha=
+ve returned -ENOSYS
+|[FAIL]              x32 syscalls 1:-64..-2 had 63 failure
+|[OK]                x32 syscall 1:-1 returned MODIFIED_BY_PTRACE as expect=
+ed
+|[FAIL]                  x64 syscall 1:1073741760 returned -9999, but it sh=
+ould have returned -ENOSYS
+=E2=80=A6
 
-__fls() now returns unsigned int instead of unsigned long, like the
-asm-generic version; both are 32 bits wide on csky. __fls(0) remains
-undefined.
+and so on=E2=80=A6 The test has
 
-With GCC 9 to 16, the text of every defconfig-based vmlinux tested
-shrinks by 128 to 320 bytes.
+| #define MODIFIED_BY_PTRACE      -9999
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/all/affe7da1-41aa-4710-bee0-5e3c2b8a8dfc@app.fastmail.com/
-Signed-off-by: Tzu-Ching Yang <shingekinocore@gmail.com>
----
-In a test function, __fls(x) takes 4 instructions (return included)
-before and after with each GCC and CPU tested, at -O2 and -Os; with a
-constant argument, it now folds.
+and the ptracer modifies the return code. However not always. Not sure
+if this was indeed a pointless exercise or not.
 
-CK610 needs an abiv1 GCC; the only one I could find is the vendor's 6.3,
-older than the 8.1 minimum and without a clz pattern for abiv1. There,
-__fls() would become a call to __clzsi2(), which lib/clz_ctz.c
-implements with the fls() asm, so it would still work; a builtin fls()
-would make __clzsi2() call itself.
+The test could be updated via the hunk below in case the new behaviour
+is what is expected. hpa made the extension to the test in commit
+795e2a023b808 ("selftests/x86/syscall: Add tests under ptrace to
+syscall_numbering_64").
 
-Testing: 35 defconfig-based kernels for CK807, CK810 and CK860, some
-with KUnit or SMP, built before and after with W=1 by kernel.org GCC 9.5
-to 16.2 (GCC 8 has no csky port, and GCC 9 to 11 reject -mcpu=ck860): no
-new warnings and no calls to __ctzsi2(), __clzsi2() or __ffssi2().
-allmodconfig with GCC 12 and 16 compiles the same objects with the same
-warnings, but does not reach a vmlinux because of GCC internal compiler
-errors, before and after. Under XuanTie's qemu-cskyv2 user mode, the old
-and new helpers return the same values for every defined 32-bit input,
-built with the kernel's flags by each GCC for each CPU at -O2 and -Os.
-On qemu-system-cskyv2 -M virt, the ffs and bitops KUnit tests pass
-before and after; test_bitmap passes with GCC 12 to 16 and has the same
-one failure with GCC 9 to 11 in both, from a test bug fixed in
-linux-next. No csky hardware was available.
-
-Against the linux-next branch of c-sky/csky-linux.git (abb81e5ce7d9);
-also applies to next-20261021 and to bitmap-for-next. Full build and
-test data on request.
-
- arch/csky/include/asm/bitops.h | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
-
-diff --git a/arch/csky/include/asm/bitops.h b/arch/csky/include/asm/bitops.h
-index 80d67eee6e86..118fb0df5267 100644
---- a/arch/csky/include/asm/bitops.h
-+++ b/arch/csky/include/asm/bitops.h
-@@ -49,14 +49,7 @@ static __always_inline __attribute_const__ int fls(unsigned int x)
- 	return (32 - x);
+diff --git a/tools/testing/selftests/x86/syscall_numbering.c b/tools/testin=
+g/selftests/x86/syscall_numbering.c
+index ca0eca7b9dced..1435394fba022 100644
+--- a/tools/testing/selftests/x86/syscall_numbering.c
++++ b/tools/testing/selftests/x86/syscall_numbering.c
+@@ -250,6 +250,7 @@ static bool test_x32(void)
+ static void test_syscalls_common(int msb)
+ {
+ 	enum ptrace_pass pass =3D sh->ptrace_pass;
++	int expected_ret =3D -ENOSYS;
+=20
+ 	run("Checking some common syscalls as 64 bit\n");
+ 	check_zero(msb, SYS_READ);
+@@ -260,18 +261,22 @@ static void test_syscalls_common(int msb)
+ 	check_zero(msb, X64_WRITEV);
+=20
+ 	run("Checking out of range system calls\n");
+-	check_for(msb, -64, -2, -ENOSYS);
+ 	if (pass >=3D PTP_FUZZRET)
+-		check_for(msb, -1, -1, MODIFIED_BY_PTRACE);
+-	else
+-		check_for(msb, -1, -1, -ENOSYS);
+-	check_for(msb, X32_BIT-64, X32_BIT-1, -ENOSYS);
+-	check_for(msb, -64-X32_BIT, -1-X32_BIT, -ENOSYS);
+-	check_for(msb, INT_MAX-64, INT_MAX-1, -ENOSYS);
++		expected_ret =3D MODIFIED_BY_PTRACE;
++	check_for(msb, -64, -2, expected_ret);
++	check_for(msb, -1, -1, expected_ret);
++	check_for(msb, X32_BIT-64, X32_BIT-1, expected_ret);
++	check_for(msb, -64-X32_BIT, -1-X32_BIT, expected_ret);
++	check_for(msb, INT_MAX-64, INT_MAX-1, expected_ret);
  }
- 
--/*
-- * asm-generic/bitops/__fls.h
-- */
--static __always_inline __attribute_const__ unsigned long __fls(unsigned long x)
--{
--	return fls(x) - 1;
--}
--
-+#include <asm-generic/bitops/builtin-__fls.h>
- #include <asm-generic/bitops/ffz.h>
- #include <asm-generic/bitops/fls64.h>
- 
+=20
+ static void test_syscalls_with_x32(int msb)
+ {
++	enum ptrace_pass pass =3D sh->ptrace_pass;
++	int expected_ret =3D -ENOSYS;
++
++	if (pass >=3D PTP_FUZZRET)
++		expected_ret =3D MODIFIED_BY_PTRACE;
+ 	/*
+ 	 * Syscalls 512-547 are "x32" syscalls.  They are
+ 	 * intended to be called with the x32 (0x40000000) bit
+@@ -279,7 +284,7 @@ static void test_syscalls_with_x32(int msb)
+ 	 * nonsense and should not work.
+ 	 */
+ 	run("Checking x32 syscalls as 64 bit\n");
+-	check_for(msb, 512, 547, -ENOSYS);
++	check_for(msb, 512, 547, expected_ret);
+=20
+ 	run("Checking some common syscalls as x32\n");
+ 	check_zero(msb, SYS_READ   | X32_BIT);
 
-base-commit: abb81e5ce7d995baa41556b8125fa59e28ba3be8
--- 
-2.34.1
-
+Sebastian

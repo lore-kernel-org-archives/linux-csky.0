@@ -1,102 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792762818;
-	b=IxfyoiofYocD74fQOtCLqP82TNbU63LhcIHJl8V0ozcPnAlME4ARZmJdSsvRLt8eO1lH
-	 cmxbhDG1xUUZZkS2yAeYKePkx46WeZpLI+uXwGMrqzjq9/oHsiCovyTToaJdeFpkvsqe1
-	 SNnHcc4TLe773EY9C9WqN9RWTxqHIUIymY1awXryJbnf1suyVlrYFcvwRX+9NZFpjKQb6
-	 o8FuyANXSxE7DOMJFLZpIQQgSciuuDNEFgWOhPVViIogda4CGJaZGkLgcOnFDGu9TZzpN
-	 6wIH+PvlcgoSbAgLiUmPA4RVGN6MgqPQSHOpKO+YkWPGvfLJL2Nq9Yx5CWJ21/7hOwg==
+	t=1792764507;
+	b=p+iza+ofWZMDu7umWOAkBz1+2jp/0OK725iT1KmydbZhfCQgAC4JkAQ8KHcQLN45Zr3j
+	 jO3bZcNn3FGXoa9bvEY+uOcIW8Nd5pbve/Slmu4TAPXwYpeEivhXO8LLFuYPqcP9kPJRk
+	 7nyBh3nTnkDkxsxANaYLATSmdcmgcjN2RY/OetjQq5+aYtFWzGFHMjCGW1zKzPA9mq4Yj
+	 y8RUKScRfx8tKL+aaroDWmL9eIFsba5H7dSdBpm+gkehfCDuBlY/5C5oFjyjS88aPuvsu
+	 rJE+cC/iI6QhQBq0Y/ONCjbnCqfKzI0NelIhhoUGtBxZIotsd4Gln+aPWYu56z2S2iQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792762818;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=JSne534GRKySd/hPuhXIpMo4L1wNZz0o43yKbATYUSM=;
-	b=UuZ8ZZRHDNwlMgjC7zzj4fg6VdMwrmDGGA6zv8JI2UHo/Cko79qd1GVu9evyXMgoed//
-	 LGtNZT61xJJ0rtEMu9OC9J7bW4zJIaj0imtQn0fqKAmZd10+wMjwLnUVnOPJQqZniaRkR
-	 bdYqLMEoCo7ofeWsGP7QFcHWq2oezYK8oV20az+Fks1APndJVaBflDVs5OFsDO6S9n+yS
-	 29UBurtm5K8a3qWSQwWvSxvbmV19pcJue2EfvK3HCOzS9zIIsSBVLrDL9FKy8dPUvOeIC
-	 0W4zaqHhoKjx8xAUlKwiyENKyLEW8HsTxd5ON2AZSH/E/Mwk9FsoJeFkI1l6tmkm1Qg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792764507;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Tv8jBDwPfWPUczVVh5JF7DB2eeI41qRyApK4ect9U6E=;
+	b=alynxW+3/a5WKuivBpvx7Ep2Jz8oKz6FSxD79goaSX9fXOlfp1N8XUi64lAz6ZC/Ria+
+	 GYl5G04ecC22JvUnR93XFjbWKGpzK3XNvLkxgK3dJFGnyfVT4WS3gfEvmTXie0OrJ9Uc2
+	 i5ZZRQFHn+4/gk/rkaTcMn1dakPpWoH4XGG1bWM8h4spZA9x32qpAmHyN3DYHfC6jcKVN
+	 d8NOI37IsHers/mmY+GTobNXj5O9Xg0wC5PSMkAc9mOyVdkL/AaSmJFRU9j8AYZGfu9hT
+	 FT4yPhJ2IVnlLNlS6KpxfjwGvtcoCKyS56NodeGdzRpg3sH3CU0pAXd6g9G3zS/zC0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MsxhMa+8;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BavTgEbc;
+	arc=none smtp.remote-ip=209.85.210.177
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4386606A31F;
-	Fri, 23 Oct 2026 13:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74770606A31D
+	for <linux-csky@vger.kernel.org>; Fri, 23 Oct 2026 14:08:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74770606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MsxhMa+8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA9E21F01825;
-	Fri, 23 Oct 2026 13:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792762817;
-	bh=JSne534GRKySd/hPuhXIpMo4L1wNZz0o43yKbATYUSM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MsxhMa+8RyiwJgrd29IwYvMrh1cHDsIzj8ShYsSP8l3MGgb0rGCLCUvRTv9kIxkte
-	 t0VZKOUDGbmY6X4T3Gw7XtuUlrbLQGSBSRtT6ZMxixd1345kiDmZsRdQw7kjtVNwhX
-	 yVbf1NZHIaJc+XOjIrrRoMJoY5ZgjxbvwdTadswH0wxvmeq8QB3Wt1/eZLhikw2cTA
-	 a4/kqD8BG6/dlzLTUoTX8d7Y9YqGUyp6Uqr631ey4In10G1wo1cW7k33IEWmejIFHk
-	 TOrqQvWrfH3PSsVDJzFucUAbvMtcO8eK/CiO0FoaiTl0NATRKo3vw3g+XN+zdK7puQ
-	 Ev7oA1CQstKaQ==
-Date: Fri, 23 Oct 2026 15:40:15 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Srikar Dronamraju <srikar@linux.ibm.com>
-Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Kees Cook <kees@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
-	mrigendrachaubey <mrigendra.chaubey@gmail.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Pengjie Zhang <zhangpengjie2@huawei.com>,
-	Thierry Reding <treding@nvidia.com>, Xi Ruoyao <xry111@xry111.site>,
-	"Rafael J. Wysocki (Intel)" <rafael@kernel.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Rong Bao <rong.bao@csmantle.top>, Hui Wang <hui.wang@canonical.com>,
-	Thorsten Blum <thorsten.blum@linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH] sched/hotplug: Remove unused idle_task_exit
-Message-ID: <attjv8zOftf9Hlqe@localhost.localdomain>
-References: <20261016095711.1364609-1-srikar@linux.ibm.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BavTgEbc
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8a089dfee18so1114683b3a.1
+        for <linux-csky@vger.kernel.org>; Fri, 23 Oct 2026 07:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792764507; x=1793369307; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Tv8jBDwPfWPUczVVh5JF7DB2eeI41qRyApK4ect9U6E=;
+        b=BavTgEbcw5Ftd4vmcFPPbbrH36zuOVeC+iDr8FEDLdCuhuOeRGtlO0oXKg4liq59Cr
+         WTfSaNh3D3Fo5dAdwLjUp1PkBkqphJCETgzA0NBYTZ/IVVVZz1pHtH3UkiqJqwnlzWi5
+         gTjVLp/iGkpWJArOs3jp0phr5FM5FyoqbwflJgWgljFKVRxseeDNNGFgOpRw7NB9xn9w
+         BHUSyri8TRWcEn2+Z+gH7hIRhfZBCDr82hpRWxl7v6kx/2FG84Pb6HhjGsPkBydZtg3z
+         EiRPVoJDkFD01jj/UimXzWCJrVEKAPVdLODLOe4jRoe/JQqcdeMPfCbMgCbOfwfe/n42
+         z6TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792764507; x=1793369307;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Tv8jBDwPfWPUczVVh5JF7DB2eeI41qRyApK4ect9U6E=;
+        b=zPXzXgeY1DMlWG9ZsvOF1QovukVrRvPtFfGvjayX3cuzpbS3rD17WWNslHFo4805Dc
+         gwW6jc/uiOwEepmfrD7pwqhvCuVzdBm5ba3jaW6SJt/yo/TgbzWQUX4W/qpOirvxrhCS
+         1DpNtTXz0LATU6XXEY5wgJPCfsIMBxQ/CqtEDVdrjYeiD4NWZS6awHmw9ojZupkkzg7C
+         d4oAe38fAeW+wBi2YDc3oTvOXrgvzSq6ANIw5ykHbmuRdDSGP3DBWrYOtzXKScOLrqje
+         Ki46RCYmcJkrkln8mWBypMNExzFj+Yo5oAuQSoWYZ6sbkm4EZp2svrSg0WxnCsH969Ii
+         PDMA==
+X-Gm-Message-State: AFq9FYIWpzrHmqfBY4hNAhAXH8qXg0ZzTwgMrOMSlQhZHY8TCSjqqBfe
+	10P5X2YJZzhpOlf/FHoV1Z39kOieRdfRXoe3I2Zqs5V80GktBTxwyJfN
+X-Gm-Gg: AYBFou1sHgFHMWpqfJ2jo69EIVbmnFYHQ4RBEoCUwZUJpyo0EyptgYEmKaAsGIdjESQ
+	oDQbgdWxozvg9GMRxcgfune1f3lkDog/W2SxWh/nAvtzlPWGBraagQwiuGOdHQSCd8mHPkhj73p
+	Ooe9NwIAKMsyLElgoqyFFu0ATnwkQyc8NrMqGWrRNV7Lzr4fy+odzR81ju+moIsgzMJfVsP3Eku
+	RN01NmzAWewLgCuEFvaTLbW9BilIzC/JLqJwGiB7wt/uq4dLy4v7EZRlszqSmZqbMrRDz3SG3Ph
+	RqKVIpcnikQ/zr/bLw3KN1cJc851r/Yc79ixSfWBIFsWC6cOPc8ARBORDqEehxXvKJWTZZ+quRV
+	jn1oJkypehzZjb7PSgyofZNu4AWkTqjhZbepIZ7tsTuC5xixNmiS09YRQ2j9Gnf7bh70yUHslMY
+	5BDl+Le5x7s8k5/6jC0E5HNfLGgwXwkuJaZb6sSijPne5rBPP6bZarWhuGnwDN4wIHGx4aHA3xG
+	qUc0sIST9iPO1Nk3zhLauIVeNG2h7N9V1jiAuLC8Xlr37CLZKynOFjadM86
+X-Received: by 2002:a05:6300:86:b0:3de:3f4d:f2bd with SMTP id adf61e73a8af0-3e359a4186fmr1313009637.6.1792764506480;
+        Fri, 23 Oct 2026 07:08:26 -0700 (PDT)
+Received: from arm-a100.. ([140.112.28.118])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a338ef8352sm6443b3a.28.2026.10.23.07.08.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Oct 2026 07:08:25 -0700 (PDT)
+From: Tzu-Ching Yang <shingekinocore@gmail.com>
+To: Yury Norov <ynorov@nvidia.com>,
+	Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] csky: bitops: Use the compiler builtin for __fls()
+Date: Fri, 23 Oct 2026 22:08:06 +0800
+Message-Id: <20261023140806.1367050-1-shingekinocore@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <atpm00m6KYhXo6Wi@yury>
+References: <20261022115922.1210342-1-shingekinocore@gmail.com> <atpm00m6KYhXo6Wi@yury>
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -106,26 +100,36 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-csky+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261016095711.1364609-1-srikar@linux.ibm.com>
 
-Le Fri, Oct 16, 2026 at 03:26:40PM +0530, Srikar Dronamraju a écrit :
-> Commit 21641bd9a7a7 ("lazy tlb: fix hotplug exit race with
-> MMU_LAZY_TLB_SHOOTDOWN") moved the handling previously performed by
-> idle_task_exit() into the scheduler CPU hotplug path using
-> sched_force_init_mm().
-> 
-> As a result, idle_task_exit() is now an empty stub and the remaining
-> architecture call sites have no effect.
-> 
-> Remove the calls to idle_task_exit() and the now unused stub.
-> 
-> Signed-off-by: Srikar Dronamraju <srikar@linux.ibm.com>
+On Thu, Oct 22, 2026 at 03:41:07PM -0400, Yury Norov wrote:
+> So I didn't understand if you have an access to the hardware or not. I
+> don't know the story behind using the non-generic version of ffl(),
+> but it may be for performance reasons. Can you / someone else please
+> run the lib/find_bit_benchmark.c on real hardware before we move this?
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+No, I have no csky hardware; all run-time tests were under XuanTie's
+QEMU.
 
--- 
-Frederic Weisbecker
-SUSE Labs
+The ff1 asm is in fls(), which the patch keeps. __fls() has been a C
+wrapper around it, fls(x) - 1, since the 2018 port (735ee005c371), with
+no reason recorded. The builtin compiles to the same ff1: 4
+instructions before and after with every GCC 9 to 16 and CPU tested,
+so __fls() itself is neither faster nor slower. The gain is elsewhere:
+the builtin folds constant arguments and merges repeated calls, which
+saves 128 to 320 bytes of text. It is the csky part of the conversions
+Arnd suggested in the ffs()/fls() thread (the Link: in the patch).
+
+In lib/find_bit_benchmark.c only find_last_bit() reaches __fls(); the
+other six tests use the unchanged __ffs() asm. _find_last_bit() is 27
+instructions with one ff1 before and after with GCC 10 to 16 (28 -> 27
+with GCC 9), and under QEMU with -icount it executes the same number of
+instructions per call before and after with GCC 12 and 16, one fewer
+with GCC 9. QEMU has no pipeline model, so a real core could still
+differ.
+
+Guo Ren, or anyone with a CK8xx board: could you run the benchmark
+(CONFIG_FIND_BIT_BENCHMARK=y) before and after? I'm happy to wait.
+
+Thanks,
+Tzu-Ching

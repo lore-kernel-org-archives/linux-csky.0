@@ -1,58 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792980257;
-	b=pFeSy/w7LnAYoRr5ZDhs5xygBVgMZ3gHoLuJ+ToFj14WkCC8c1N6uiQahszZKU6PC4O3
-	 adsJftOfGvT3p+O9gkRanbJdFm6WcZqsqViJyFheGQUoyMxO+Yopv44s7IzDxybeQOFRy
-	 GzCAZ2qBfopwBD1DYcoJ2Tt6cKOv7JHZv7WSxJcCtxpiOMaHkQo7HzIBED0Xy9MFAPc86
-	 bRUby3aYPQvS+vZMody5FnqaU/vjYO9d9xGDUjkgLDaSOavhxWZO+Xz8K5N/ptURxQIzF
-	 wrSpS1rPyJMC7Rii7SVF90MLLjr7egQ5+bBMBhkMvkeCjUNqNNUJrgr8iqjFeger1wA==
+	t=1793082210;
+	b=AsqBxRm681cunzI8gKyuUrJYIEwJ2B5hBAv6F44dfitV3vSzcBehN/7NmuDSMvvK8qGI
+	 ZtHwSLA3fcTQpGaN3xo/O7mQyhPG76kO1u3GXOuVI+frgO+TNkdj2EpL95SM0fjZbra7P
+	 hks9zUnVAPJ3fbl9/eK8z6OLQDCtYCR9QKnr7vUl5URg0sQH79Wss8kL792UuXxoMZXiD
+	 zDN/m6t/hWEvfEzpgMbM5dST9g5XfXkM37z1cNlSeUbFyCT3xr1T3sGuxGa8FIKTH02II
+	 QgIDoPUoKjr8FVoBwLWh5mYCJ97NJg1guRVIgCkoRb/6Hed8AU8vs8+VMVJOT19HcXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792980257;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=zkV0DSYY1q2xiz5WJX/niGx/d7Lw7ICLtD+7Nzqc/EE=;
-	b=o7rukYrEsaLpVjX2dIpgo5ey9uz+RKTU5g7oUkXNVBXuZu0hRR8L+9eBPr8ECXuW1jOa
-	 o04sKAHXlVAi73TiRhngB4V62v4Ub9iKgBuCZRouTj9aAAxEcJzkn1ikTjp9cLinRqsgA
-	 4+IWFxOonmFRSGb4/WKLxU9i5APuxR0ubw1N/SQlMUNWXhzGnrbTyYklydkCKLuKG4TC+
-	 /fBbKKMumDUFqENGh+29vypU9NKAmUWYH0CWzTeLjE0g5g0LTY8YO2PFuWDytsYvxA7MU
-	 TzvqMME8/TIHVwDU77xTsnBq4rrUJwvdKrxJ580HFMMLu1VgXfm7XNlU+bk32R3xTUQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793082210;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=guyukti375rN/eihk6UHSsluUVJELWfWYCk6u2XF+eA=;
+	b=ey+VZRQ/pGqPQCT/l621qGrYz6zBFUMmA9BdxJmk/GmrAhJdvVbm4qQX/fCs/6YxpVW2
+	 Q0ADbMGPJeYpSiOu23dI9fI/lU6YMXKZN+6t5nIeRwp6QtAAdvTkIuGRhratlHoKmx0uj
+	 Yb0Y4agjOjRhpZNyLo9HHk6ataePMvBGCZMLMbahfT5m0maELie1xaPAsEbM0FJVlfBnX
+	 pV6MrZzWOzUmCKSK3R2GXwHJVeUxcX0WSjEuBHOggW+3Ez+tLEC4HN68PRfv8vwQjyGwf
+	 ycZsUTO2G8tMQFmcc7mqmH3wLABmfr9dPyLFAsAfDLaHzUNUPYkH1jpqTOmI4ybUe+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="A4/DwLqj";
-	arc=none smtp.remote-ip=113.46.200.217
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TkO+X1UL;
+	arc=none smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3707D606A31E;
-	Mon, 26 Oct 2026 02:04:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3707D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC38606A31B
+	for <linux-csky@vger.kernel.org>; Tue, 27 Oct 2026 06:23:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FC38606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=A4/DwLqj
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=zkV0DSYY1q2xiz5WJX/niGx/d7Lw7ICLtD+7Nzqc/EE=;
-	b=A4/DwLqj9bOFxt5jV1aHRDIbIvOm+m2aGeOnwHabNmmuXnOs+Peabb0o1Z/UV2H6NIOnZJZp0
-	uXbSQ9bcLJqQ0YRCDlMkBLaeUL+Wopvmw/TrIt2Ji3woo7Dc27yvo9Z2//TZk/IpOQQwsvXJ81I
-	STqRtfEiiseBYGD+s3ZMQe0=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jCcP40pfSzcb3C;
-	Mon, 26 Oct 2026 10:03:52 +0800 (CST)
-Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 993D340575;
-	Mon, 26 Oct 2026 10:04:01 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemk200008.china.huawei.com
- (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 26 Oct
- 2026 10:03:59 +0800
-Message-ID: <02118069-9360-4055-bc61-2ee2dd3486c9@huawei.com>
-Date: Mon, 26 Oct 2026 10:03:58 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TkO+X1UL
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e940d5d2beso14377235ad.0
+        for <linux-csky@vger.kernel.org>; Mon, 26 Oct 2026 23:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793082210; x=1793687010; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=guyukti375rN/eihk6UHSsluUVJELWfWYCk6u2XF+eA=;
+        b=TkO+X1ULDp0O7whIbwZsbdg7I5KrAYsg+syGcfRkP0AqvTyaawKMXTBWAPX9XyCg1X
+         UceIuc1WmhjQgxO8573QS+H1Rmi4Aw8++o7/eTfeW4TeSWSKd95vS/Y5+1IEpDafBAcm
+         ghM16oe+e9LGfbty4VbwHmNSr2n1bPN3qY90y54OO3ApUS++NH1+5qb4d1pZnK9LwmG4
+         ogEpPx3uifjYUT/7GjBY8OOCXWOFH/wgfMxICAgKweWinCJOIRNU813YpyIsxvzW0Wkv
+         OlGopdQ94ZDS5TpELP2gxTk0R2DuDJPulivXAVM6yn940klNLoHX4K49u25JqVRddh/Z
+         Tycg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793082210; x=1793687010;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=guyukti375rN/eihk6UHSsluUVJELWfWYCk6u2XF+eA=;
+        b=lqR3oRbaRZSMxiuleVrhzO+CTHHtDXl+CBFeD34JJZ7YP6zOBckeeV1WzJbJV9ljQD
+         qlgoH0tzLuMv36QSmVbP7DZfQ12tJRCppQr+Xahn9sv7JgghRjVEUou8WuRib/hmnL0E
+         qXcxzCyTRD4/Li4hqB+KRz/BcEpMH1jBmOueSQ6onWktq1JENjGRNEJdjC9hofIGy0Fg
+         hTfrKIgxizoXOQUdAlaP4j8rn8meN+39UIMBOLulQ4QITmiFJu0ZXsWTehT3gpr6mZ6I
+         p04q2td9jPpxoxkR1OCoezTrUuTXIJUFzvPYcyu6jAK+tRnwUkGPndsnIUMp/vxh8Et8
+         edww==
+X-Gm-Message-State: AFq9FYKMrpP9jhLj0SQeIIqRkGTkG5sGLWl+/pPPfZdSUV4tc4ori+Qe
+	Coglm86kLzu7lJ6jn2EQOaQAf3mrBzOCl+4BYQIr8bJn6bZNrpuEM3rD
+X-Gm-Gg: AYBFou3ASfCxlEdI8ll/0LzTWocFyVbX3jv7xLvSFOEIvzVtEReLBxL8PdHtGjm2oI6
+	zf+Z2fOXRC3ZjXIu8h9L4LwmB1gnyu1CTpFRQsHZHLZu8dz2ifam/m35lIF7CY3mgNPG+BPMrzK
+	mw88ywPjodzIQRG+e5u6mhRkiX1L4dLJ5HEkNYLWahGCKI7xCzneLkbGV0WAV/e17+G51POsVlr
+	JhwPko9ywMVmvzn35yPGyF1D3XWO2iYnP+X+BfAidDLsqYaJY5v0OicqSzddxKQ3PJeuRo/wryj
+	YjfdEsCGy7JcNImCJKaafan0N0Y9LGSZ4oK8H0iB4s0cBnUvoqjDJ7ONBAeGl7j2w9eIBqMJCWs
+	8Jgodeost87xv3sPIUaLxckF4hRj9vMsOig+ySzGnz8skIJ02EcwjfD5nkwnzzo5O/L7ouWXJsk
+	uv0jIbqmGhcdLzcnrtLGr0jQ3AC3rPWr0Cp9Rn/oLQ2UophzJ8RpsQjtCEUMherfN770hVgjeO1
+	MINnXAcxmaVRlMID2eer5c6whwnMttRl9k/W4gp/EPbxhuEvz6Qhd7YvHU6wZhKl3Mp0tArnrTt
+	Emouig==
+X-Received: by 2002:a17:903:1acc:b0:2e9:7dda:bfce with SMTP id d9443c01a7336-2ea9c968527mr61960135ad.74.1793082209412;
+        Mon, 26 Oct 2026 23:23:29 -0700 (PDT)
+Received: from arm-a100.. ([140.112.28.118])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6ce5912sm4083925ad.71.2026.10.26.23.23.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 23:23:28 -0700 (PDT)
+From: Tzu-Ching Yang <shingekinocore@gmail.com>
+To: Yury Norov <ynorov@nvidia.com>,
+	Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] csky: bitops: Use the compiler builtin for __fls()
+Date: Tue, 27 Oct 2026 14:23:19 +0800
+Message-Id: <20261027062319.1700461-1-shingekinocore@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <atuBH6-LHueXYbFy@yury>
+References: <20261022115922.1210342-1-shingekinocore@gmail.com> <atpm00m6KYhXo6Wi@yury> <20261023140806.1367050-1-shingekinocore@gmail.com> <atuBH6-LHueXYbFy@yury>
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -62,380 +101,99 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-csky+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] sched/hotplug: Remove unused idle_task_exit
-To: Srikar Dronamraju <srikar@linux.ibm.com>, Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo
- Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
-	<kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Florian
- Fainelli <florian.fainelli@broadcom.com>, Broadcom internal kernel review
- list <bcm-kernel-feedback-list@broadcom.com>, Jiaxun Yang
-	<jiaxun.yang@flygoat.com>, "James E.J. Bottomley"
-	<James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, Scott
- Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, Michael
- Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Paul Walmsley
-	<pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens
-	<hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
-	<agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato
-	<ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, John Paul Adrian
- Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller"
-	<davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner
-	<tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max
- Filippov <jcmvbkbc@gmail.com>
-CC: LKML <linux-kernel@vger.kernel.org>, Srikar Dronamraju
-	<srikar@linux.vnet.ibm.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Kees Cook <kees@kernel.org>, mrigendrachaubey <mrigendra.chaubey@gmail.com>,
-	Marc Zyngier <maz@kernel.org>, Pengjie Zhang <zhangpengjie2@huawei.com>,
-	Thierry Reding <treding@nvidia.com>, Xi Ruoyao <xry111@xry111.site>, "Rafael
- J. Wysocki (Intel)" <rafael@kernel.org>, Tiezhu Yang
-	<yangtiezhu@loongson.cn>, Rong Bao <rong.bao@csmantle.top>, Hui Wang
-	<hui.wang@canonical.com>, Frederic Weisbecker <frederic@kernel.org>, Thorsten
- Blum <thorsten.blum@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-mips@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-	<linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>
-References: <20261016095711.1364609-1-srikar@linux.ibm.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20261016095711.1364609-1-srikar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemk200008.china.huawei.com (7.202.194.74)
 
+On Fri, Oct 23, 2026 at 11:45:35AM -0400, Yury Norov wrote:
+> While waiting happy, can you print the bloat-o-meter results, and a
+> couple listings of the code generation, including compile- and runtime
+> cases.
 
+scripts/bloat-o-meter -t on csky defconfig (CK807) vmlinux, GCC 16.2:
 
-在 2026/10/16 17:56, Srikar Dronamraju 写道:
-> Commit 21641bd9a7a7 ("lazy tlb: fix hotplug exit race with
-> MMU_LAZY_TLB_SHOOTDOWN") moved the handling previously performed by
-> idle_task_exit() into the scheduler CPU hotplug path using
-> sched_force_init_mm().
-> 
-> As a result, idle_task_exit() is now an empty stub and the remaining
-> architecture call sites have no effect.
+add/remove: 0/0 grow/shrink: 0/3 up/down: 0/-196 (-196)
+Function                                     old     new   delta
+fib6_add                                    1634    1630      -4
+build_sched_domains                         3948    3916     -32
+skb_try_coalesce                            1766    1606    -160
+Total: Before=4621444, After=4621248, chg -0.00%
 
-Reviewed-by: Jinjie Ruan <ruanjinjie@huawei.com>
+The same with GCC 12.5:
 
-> 
-> Remove the calls to idle_task_exit() and the now unused stub.
-> 
-> Signed-off-by: Srikar Dronamraju <srikar@linux.ibm.com>
-> ---
->  arch/arm/kernel/smp.c                        | 2 --
->  arch/arm64/kernel/smp.c                      | 2 --
->  arch/csky/kernel/smp.c                       | 2 --
->  arch/loongarch/kernel/smp.c                  | 2 --
->  arch/mips/cavium-octeon/smp.c                | 1 -
->  arch/mips/kernel/smp-bmips.c                 | 1 -
->  arch/mips/kernel/smp-cps.c                   | 1 -
->  arch/mips/loongson64/smp.c                   | 1 -
->  arch/parisc/kernel/process.c                 | 2 --
->  arch/powerpc/platforms/85xx/smp.c            | 2 --
->  arch/powerpc/platforms/powermac/smp.c        | 2 --
->  arch/powerpc/platforms/powernv/smp.c         | 1 -
->  arch/powerpc/platforms/pseries/hotplug-cpu.c | 2 --
->  arch/powerpc/platforms/pseries/pmem.c        | 1 -
->  arch/riscv/kernel/cpu-hotplug.c              | 2 --
->  arch/s390/kernel/smp.c                       | 1 -
->  arch/sh/kernel/smp.c                         | 1 -
->  arch/sparc/kernel/smp_64.c                   | 2 --
->  arch/x86/kernel/smpboot.c                    | 2 --
->  arch/xtensa/kernel/smp.c                     | 1 -
->  include/linux/sched/hotplug.h                | 2 --
->  21 files changed, 33 deletions(-)
-> 
-> diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
-> index b5fb4697bc3f..bbfbbe728b7a 100644
-> --- a/arch/arm/kernel/smp.c
-> +++ b/arch/arm/kernel/smp.c
-> @@ -319,8 +319,6 @@ void __noreturn arch_cpu_idle_dead(void)
->  {
->  	unsigned int cpu = smp_processor_id();
->  
-> -	idle_task_exit();
-> -
->  	local_irq_disable();
->  
->  	/*
-> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> index a61dc3016a11..afb5aa65d737 100644
-> --- a/arch/arm64/kernel/smp.c
-> +++ b/arch/arm64/kernel/smp.c
-> @@ -370,8 +370,6 @@ void __noreturn cpu_die(void)
->  	unsigned int cpu = smp_processor_id();
->  	const struct cpu_operations *ops = get_cpu_ops(cpu);
->  
-> -	idle_task_exit();
-> -
->  	local_daif_mask();
->  
->  	/* Tell cpuhp_bp_sync_dead() that this CPU is now safe to dispose of */
-> diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
-> index 92dbbf3e0205..e6333ccc335a 100644
-> --- a/arch/csky/kernel/smp.c
-> +++ b/arch/csky/kernel/smp.c
-> @@ -294,8 +294,6 @@ void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
->  
->  void __noreturn arch_cpu_idle_dead(void)
->  {
-> -	idle_task_exit();
-> -
->  	cpuhp_ap_report_dead();
->  
->  	while (!secondary_stack)
-> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> index 11f54837f56c..6b21af1c25e0 100644
-> --- a/arch/loongarch/kernel/smp.c
-> +++ b/arch/loongarch/kernel/smp.c
-> @@ -478,7 +478,6 @@ static void __noreturn idle_play_dead(void)
->  	register uint64_t addr;
->  	register void (*init_fn)(void);
->  
-> -	idle_task_exit();
->  	local_irq_enable();
->  	set_csr_ecfg(ECFGF_IPI);
->  	__this_cpu_write(cpu_state, CPU_DEAD);
-> @@ -503,7 +502,6 @@ static void __noreturn poll_play_dead(void)
->  	register uint64_t addr;
->  	register void (*init_fn)(void);
->  
-> -	idle_task_exit();
->  	__this_cpu_write(cpu_state, CPU_DEAD);
->  
->  	__smp_mb();
-> diff --git a/arch/mips/cavium-octeon/smp.c b/arch/mips/cavium-octeon/smp.c
-> index 054e331b3202..0e557e76d616 100644
-> --- a/arch/mips/cavium-octeon/smp.c
-> +++ b/arch/mips/cavium-octeon/smp.c
-> @@ -344,7 +344,6 @@ void play_dead(void)
->  {
->  	int cpu = cpu_number_map(cvmx_get_core_num());
->  
-> -	idle_task_exit();
->  	cpuhp_ap_report_dead();
->  	octeon_processor_boot = 0xff;
->  	per_cpu(cpu_state, cpu) = CPU_DEAD;
-> diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-> index 35b8d810833c..e4a523b7c988 100644
-> --- a/arch/mips/kernel/smp-bmips.c
-> +++ b/arch/mips/kernel/smp-bmips.c
-> @@ -391,7 +391,6 @@ static void bmips_cpu_die(unsigned int cpu)
->  
->  void __ref play_dead(void)
->  {
-> -	idle_task_exit();
->  	cpuhp_ap_report_dead();
->  
->  	/* flush data cache */
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index b01ebaace48e..51e68a42bcc8 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -804,7 +804,6 @@ void play_dead(void)
->  	unsigned int cpu;
->  
->  	local_irq_disable();
-> -	idle_task_exit();
->  	cpu = smp_processor_id();
->  	cpu_death = CPU_DEATH_POWER;
->  
-> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-> index e584299d0fde..73eca9c44b04 100644
-> --- a/arch/mips/loongson64/smp.c
-> +++ b/arch/mips/loongson64/smp.c
-> @@ -766,7 +766,6 @@ void play_dead(void)
->  	unsigned int cpu = smp_processor_id();
->  	void (*play_dead_at_ckseg1)(int *);
->  
-> -	idle_task_exit();
->  	cpuhp_ap_report_dead();
->  
->  	prid_imp = read_c0_prid() & PRID_IMP_MASK;
-> diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
-> index 703644e5bfc4..8606ecde4c30 100644
-> --- a/arch/parisc/kernel/process.c
-> +++ b/arch/parisc/kernel/process.c
-> @@ -164,8 +164,6 @@ EXPORT_SYMBOL(running_on_qemu);
->  void __noreturn arch_cpu_idle_dead(void)
->  {
->  #ifdef CONFIG_HOTPLUG_CPU
-> -	idle_task_exit();
-> -
->  	local_irq_disable();
->  
->  	/* Tell the core that this CPU is now safe to dispose of. */
-> diff --git a/arch/powerpc/platforms/85xx/smp.c b/arch/powerpc/platforms/85xx/smp.c
-> index 32fa5fb557c0..9dc81e4226f0 100644
-> --- a/arch/powerpc/platforms/85xx/smp.c
-> +++ b/arch/powerpc/platforms/85xx/smp.c
-> @@ -121,8 +121,6 @@ static void smp_85xx_cpu_offline_self(void)
->  	/* mask all irqs to prevent cpu wakeup */
->  	qoriq_pm_ops->irq_mask(cpu);
->  
-> -	idle_task_exit();
-> -
->  	mtspr(SPRN_TCR, 0);
->  	mtspr(SPRN_TSR, mfspr(SPRN_TSR));
->  
-> diff --git a/arch/powerpc/platforms/powermac/smp.c b/arch/powerpc/platforms/powermac/smp.c
-> index 88e92af8acf9..f8e674cfcdd7 100644
-> --- a/arch/powerpc/platforms/powermac/smp.c
-> +++ b/arch/powerpc/platforms/powermac/smp.c
-> @@ -925,7 +925,6 @@ static void pmac_cpu_offline_self(void)
->  	int cpu = smp_processor_id();
->  
->  	local_irq_disable();
-> -	idle_task_exit();
->  	pr_debug("CPU%d offline\n", cpu);
->  	generic_set_cpu_dead(cpu);
->  	smp_wmb();
-> @@ -940,7 +939,6 @@ static void pmac_cpu_offline_self(void)
->  	int cpu = smp_processor_id();
->  
->  	local_irq_disable();
-> -	idle_task_exit();
->  
->  	/*
->  	 * turn off as much as possible, we'll be
-> diff --git a/arch/powerpc/platforms/powernv/smp.c b/arch/powerpc/platforms/powernv/smp.c
-> index b1201dbafcaf..9a480c924020 100644
-> --- a/arch/powerpc/platforms/powernv/smp.c
-> +++ b/arch/powerpc/platforms/powernv/smp.c
-> @@ -172,7 +172,6 @@ static void pnv_cpu_offline_self(void)
->  
->  	/* Standard hot unplug procedure */
->  
-> -	idle_task_exit();
->  	cpu = smp_processor_id();
->  	DBG("CPU%d offline\n", cpu);
->  	generic_set_cpu_dead(cpu);
-> diff --git a/arch/powerpc/platforms/pseries/hotplug-cpu.c b/arch/powerpc/platforms/pseries/hotplug-cpu.c
-> index bc6926dbf148..1ade9a811157 100644
-> --- a/arch/powerpc/platforms/pseries/hotplug-cpu.c
-> +++ b/arch/powerpc/platforms/pseries/hotplug-cpu.c
-> @@ -19,7 +19,6 @@
->  #include <linux/kernel.h>
->  #include <linux/interrupt.h>
->  #include <linux/delay.h>
-> -#include <linux/sched.h>	/* for idle_task_exit */
->  #include <linux/sched/hotplug.h>
->  #include <linux/cpu.h>
->  #include <linux/of.h>
-> @@ -64,7 +63,6 @@ static void pseries_cpu_offline_self(void)
->  	unsigned int hwcpu = hard_smp_processor_id();
->  
->  	local_irq_disable();
-> -	idle_task_exit();
->  	if (xive_enabled())
->  		xive_teardown_cpu();
->  	else
-> diff --git a/arch/powerpc/platforms/pseries/pmem.c b/arch/powerpc/platforms/pseries/pmem.c
-> index 0f1d45f32e4a..af48dfebb640 100644
-> --- a/arch/powerpc/platforms/pseries/pmem.c
-> +++ b/arch/powerpc/platforms/pseries/pmem.c
-> @@ -9,7 +9,6 @@
->  #include <linux/kernel.h>
->  #include <linux/interrupt.h>
->  #include <linux/delay.h>
-> -#include <linux/sched.h>	/* for idle_task_exit */
->  #include <linux/sched/hotplug.h>
->  #include <linux/cpu.h>
->  #include <linux/of.h>
-> diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
-> index 0bc56d8381b6..348043122593 100644
-> --- a/arch/riscv/kernel/cpu-hotplug.c
-> +++ b/arch/riscv/kernel/cpu-hotplug.c
-> @@ -66,8 +66,6 @@ void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
->   */
->  void __noreturn arch_cpu_idle_dead(void)
->  {
-> -	idle_task_exit();
-> -
->  	cpuhp_ap_report_dead();
->  
->  	cpu_ops->cpu_stop();
-> diff --git a/arch/s390/kernel/smp.c b/arch/s390/kernel/smp.c
-> index 32499cad86f0..dd1d40ec5440 100644
-> --- a/arch/s390/kernel/smp.c
-> +++ b/arch/s390/kernel/smp.c
-> @@ -918,7 +918,6 @@ void __cpu_die(unsigned int cpu)
->  
->  void __noreturn cpu_die(void)
->  {
-> -	idle_task_exit();
->  	pcpu_sigp_retry(this_cpu_ptr(&pcpu_devices), SIGP_STOP, 0);
->  	for (;;) ;
->  }
-> diff --git a/arch/sh/kernel/smp.c b/arch/sh/kernel/smp.c
-> index 108d808767fa..afd57bdce04e 100644
-> --- a/arch/sh/kernel/smp.c
-> +++ b/arch/sh/kernel/smp.c
-> @@ -108,7 +108,6 @@ int native_cpu_disable(unsigned int cpu)
->  
->  void play_dead_common(void)
->  {
-> -	idle_task_exit();
->  	irq_ctx_exit(raw_smp_processor_id());
->  	mb();
->  
-> diff --git a/arch/sparc/kernel/smp_64.c b/arch/sparc/kernel/smp_64.c
-> index 371460e34484..e98b5ddebc9e 100644
-> --- a/arch/sparc/kernel/smp_64.c
-> +++ b/arch/sparc/kernel/smp_64.c
-> @@ -1290,8 +1290,6 @@ void cpu_play_dead(void)
->  	int cpu = smp_processor_id();
->  	unsigned long pstate;
->  
-> -	idle_task_exit();
-> -
->  	if (tlb_type == hypervisor) {
->  		struct trap_per_cpu *tb = &trap_block[cpu];
->  
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index ba01a9e919b7..dcbaf3f27862 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1407,8 +1407,6 @@ int native_cpu_disable(void)
->  
->  void play_dead_common(void)
->  {
-> -	idle_task_exit();
-> -
->  	cpuhp_ap_report_dead();
->  
->  	local_irq_disable();
-> diff --git a/arch/xtensa/kernel/smp.c b/arch/xtensa/kernel/smp.c
-> index e4c25d0c2158..094e1da933a6 100644
-> --- a/arch/xtensa/kernel/smp.c
-> +++ b/arch/xtensa/kernel/smp.c
-> @@ -336,7 +336,6 @@ void __noreturn arch_cpu_idle_dead(void)
->   */
->  void __ref cpu_die(void)
->  {
-> -	idle_task_exit();
->  	local_irq_disable();
->  	__asm__ __volatile__(
->  			"	movi	a2, cpu_restart\n"
-> diff --git a/include/linux/sched/hotplug.h b/include/linux/sched/hotplug.h
-> index 17e04859b9a4..18fa3e63123e 100644
-> --- a/include/linux/sched/hotplug.h
-> +++ b/include/linux/sched/hotplug.h
-> @@ -18,6 +18,4 @@ extern int sched_cpu_dying(unsigned int cpu);
->  # define sched_cpu_dying	NULL
->  #endif
->  
-> -static inline void idle_task_exit(void) {}
-> -
->  #endif /* _LINUX_SCHED_HOTPLUG_H */
+add/remove: 0/0 grow/shrink: 7/6 up/down: 94/-330 (-236)
+Function                                     old     new   delta
+__netdev_alloc_skb                           304     338     +34
+skb_ts_finish                                 34      54     +20
+skb_copy_bits                                608     628     +20
+skb_release_data                             354     362      +8
+kfree_skb_list_reason                        280     286      +6
+fib6_add                                    1632    1636      +4
+ipv6_get_saddr_eval                          424     426      +2
+_find_last_bit                                86      84      -2
+build_sched_domains                         4292    4280     -12
+skb_store_bits                               622     606     -16
+skb_abort_seq_read                            54      34     -20
+__build_skb                                  116      72     -44
+skb_try_coalesce                            1560    1324    -236
+Total: Before=4333762, After=4333526, chg -0.01%
 
--- 
-Best regards,
-Jinjie
+In both builds only skb_try_coalesce and build_sched_domains change
+in instruction count (GCC 16: 524 -> 466 and 1240 -> 1228; GCC 12:
+476 -> 413 and 1333 -> 1327). The other lines are not new code. Most
+are literal-pool words (the constants that lrw loads) and their
+2-byte alignment that moved into or out of a function's range:
+__build_skb has 24 instructions and 11 pool words before, 24 and 0
+after. fib6_add, ipv6_get_saddr_eval and _find_last_bit each call
+__fls() once at run time; they keep their instruction count, and one
+instruction changes between its 16- and 32-bit encoding (fib6_add
+also gains 2 bytes of pool alignment).
 
+Over the 35 defconfig-based builds (CK807, CK810, CK860, some with
+KUnit or SMP, GCC 9 to 16) the bloat-o-meter total is between -118
+and -318 bytes in every one. The 128 to 320 bytes in the changelog
+are the .text change, which also counts the padding between
+functions.
+
+Listings: a standalone file with the old and the new helpers from
+arch/csky/include/asm/bitops.h, built by GCC 16.2 with the kernel's
+flags, -O2 and -mcpu=ck807, plus -fno-ipa-icf so that GCC keeps the
+old and the new copies apart; objdump -d with the addresses dropped.
+The constant listing is the same with GCC 9 to 16.
+
+Run-time argument: 4 instructions before and after with GCC 9 to 16;
+with GCC 11 to 16 both are this sequence:
+
+	unsigned long f(unsigned long x) { return __fls(x); }
+
+	ff1     r0, r0
+	movi    r3, 31
+	subu    r0, r3, r0
+	rts
+
+(GCC 9 and 10 put the movi first for the builtin; GCC 9 also writes
+the asm version as ff1/nor/addi.)
+
+Constant argument. PP_DMA_INDEX_SHIFT in include/linux/mm.h is
+1 + __fls(PP_SIGNATURE - POISON_POINTER_DELTA), which is
+1 + __fls(0x40):
+
+	unsigned int f(void) { return 1 + __fls(0x40); }
+
+	before:
+	movi    r3, 64
+	ff1     r3, r3
+	movi    r0, 32
+	subu    r0, r3
+	rts
+
+	after:
+	movi    r0, 7
+	rts
+
+This is where skb_try_coalesce shrinks: netmem_is_pp(), inlined into
+it through skb_pp_frag_ref(), uses that shift, and the function goes
+from 12 ff1 to 2 with GCC 12 and 16. The 2 that stay are
+__ffs(PAGE_OFFSET) from the same macros; __ffs() keeps its asm
+(brev; ff1). build_sched_domains also has one ff1 fewer.
+
+Thanks,
+Tzu-Ching

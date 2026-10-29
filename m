@@ -1,97 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793245626;
-	b=E+U47BU3cNqCR78gV21oaZxOeigd7zV6ciJTk1M+3hsyMVGwxGu1zl/IvZ/NTB8k7e72
-	 wQKrq0Ngw+F8q8hxRwdn5oBs1+NLIfCfjMVlTcXYvImJ6ks+egE4ae/W+bPsG/xcsjwL3
-	 S9ibJx8u+Q572ptBLfv4ZJGwWHoTlndcZ3cnhqAYP5SgUBCOStQM21pxHWFi4LAcYHuaj
-	 LeiLEPqCUTj2W0TtS6MWyd5Hw7krM/Pe+qKOMPT3rJZNuOMZHygeFhCYyApBA7QFED+q/
-	 LnXU9KJZuvJCqlTupsiCxSv/jkhl4/u/JaAL4zpJpJ9cEmBR364jn3VFu+0U39bt5qA==
+	t=1793305591;
+	b=GWl75yLGexkXCu8lg4NS80BUMZ8QodRThDI+IiI6z1n4YIYOtel0PGh4NtexKctmEqEB
+	 KHN7s6QqXUFB0w3T7vJ46i3++etBZkE12ZqiNKBd191PTEBEgRDKqMZeXHIUJU9fqgVkS
+	 0OjIrazn1O/8ESQP6/NgWdGvzeaRCsHfbaGw8mSsx7pxks3eNqcnIQOwpb6pE01Us/aNi
+	 jqOgxRtZ9qnBZHPHwcDbE7eaWPPR1cNxYXqgzmQyKLhaE3aE6oOjPS92LTi5xHGeVQt06
+	 HbzAOR1zWMOMo9eUD4AGIj0qM8bzFg1sMQgEKVr8SKxD411H/SINwhY4rWa6f1uBByw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793245626;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793305591;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=h8kq6Pl9NTWK4dw0Rh3Cdb4b4qd62zLH0TTeqwKDwHY=;
-	b=kIlUT/0SGZSDGdmgPABjrjqi7OSkdZq87dXuGHz+aTdFu7bQyVmBfD7K6DRbtViH3skh
-	 yrRnpagF8lOm61XX/3gLwQhh1ELOE3U7T2FlUGiU1qTcz2WKuhJjMKsCUzIYFuLLRXIKX
-	 sEiVtXvXWBWhtoTu6kWPT/lnTvyYXka64xdo9fLEJ04lbsx+EO+frrwSPcqQ8xV2yMevx
-	 KDh3inCejR04af1r0Dh8ePoAv3yqRIoyTVu3mNYL0+LDJLtvLgYrcx8L00pE926YwJCSQ
-	 q/Nd5YBX4pKIgyqaogcghZzfDn30e3KhVMe9HHJX/gXXM+f+TOPSIH/d9B8eGtYuAzQ==
+	bh=em+eDkKHMBqO7CuYUMqXJnhqq7+NpV32/QiONBtUPj4=;
+	b=E8cbo/MyyzyPnatK8jrSBgw2HUORTmEjxLeERrKNDv+cm4Xwf5EadY0w+lCq8BW+w2hL
+	 piOSiChbqpd7TIMC/dxD1VwgvnS5OEbfUxbZq5EmGbPrTRdKEGPpdy4Zjzj/hIVxc8cNk
+	 xhsFywD5l7FBwwuaAbeNBMnOgjlufpiDWsWksfH7RUUFsxc0F6xKftReMkVfd8Ui5lMqX
+	 PkWdDjxc7nLJrq7GwGTcblzjQisCE0OVEyK3qGKMzp47ZORwmTiI51RGjTC2o4ZKl/Rse
+	 Ch3C5XK7pz/6InnBtOjBXBGREg0CoLDJCPLElJtRfuToChnow8wlRszV7daJWm9EKNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Rdevqk10;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=oYLN09+E;
+	arc=none smtp.remote-ip=198.137.202.133
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C655606A31D
-	for <linux-csky@vger.kernel.org>; Thu, 29 Oct 2026 03:47:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C655606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D72606A31E;
+	Thu, 29 Oct 2026 20:26:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1D72606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Rdevqk10
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e977109392so9889675ad.0
-        for <linux-csky@vger.kernel.org>; Wed, 28 Oct 2026 20:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793245625; x=1793850425; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=h8kq6Pl9NTWK4dw0Rh3Cdb4b4qd62zLH0TTeqwKDwHY=;
-        b=Rdevqk101cr+v9xciAZsil4BqLgOOYPJCQQU9UwUBlzdc78kr+WTAffXPya3G+p+Ra
-         +dIw97dMpGxDRnaRgGttsVtThIKggdWJFJhkU0PfGEUEBSEE7JMoXNpZoU/uGn6AAkMQ
-         RgAFeU/1qrGEav+3t+wxhuVVlRniLqpBA1Kg7nMLIpwYnZpMlYTwTqPDCshZKGmQ5LA0
-         I/S1nZLdYhgeTsDCqR5qP/gixcwfhmB86L8hG9bqty+Clp136EgDpmYfDoMqcAmPwALF
-         qmGNMpbeks1sSR+QQIyrPP18qTE3uF5X14cRzD6ZWMnkWS/WGvF6pqeughyFfalIFudR
-         lVXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793245625; x=1793850425;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=h8kq6Pl9NTWK4dw0Rh3Cdb4b4qd62zLH0TTeqwKDwHY=;
-        b=Yo3BTKEKYhOhrjp0pd5P9llTrswAbMJoMECT0elxCQ07DT7AAylCOysQoWnHpEPlMS
-         LQtJJlp5QvLHDvDHXLg9SpKofil9zHTz2QypYRo4Yn5mTh+v/VJY8FSa2Aqf6Xw/cCZL
-         Wo0afHnU+T61iDZ5Uxg+sWQCUd81tSQ5blOr4CQR/qaMSv6jbf1XxkiYavlJvxcuiBcC
-         BptxchpV4zt4H92kpaNTNQW2MHicagWnKNY8JpHQNdZLrbuqs+Jp5jzsZ7QyQn6sgEFe
-         C5G9l5LFVJhNCxRvat7l2n6ucXVbbMoa0/YokWQMex+9gvmveK4Uwt84Zzx6wIovQ856
-         04Iw==
-X-Gm-Message-State: AFq9FYJwXP4wMVtxCz270Gtj8JtfezclEgPZOlgQb1AUsz6CHHf+eqdA
-	6fUFf6chcS85Cz4pSfNsBxVgueHordojVZh6g+N0A2ZAGMNfAGBeSCFO
-X-Gm-Gg: AYBFou1maJc1+lG/ZlCZffEzx3iAz/eoZDFW2bLzc2c6+vyp8i2pqcGgET+H6smitKn
-	iDBXe5llhaHL2cG92/JaOyYcTNaFgLntzAPYz3UPKxkWTmOra1SZs5x0eu9lEdk8B4g+uDj3doM
-	tenuwgG5K96Uss8yBGhmW+5RsHrJRN3o+uY3HgzzHojI0+u9IrH+QuH4uPWgcBXanPQ2zgEvMsJ
-	ze3P9TbgIv6Uq45sVhPTzxR2zKL27eqZgFvmod+zwxJdTSctVGWOqQ+dUD67aymzNrJJ/IaIYsM
-	S0meDGFFwopZ+axuQfMM6rbqYbuAyFTW1Sf1j1dcveNVi3hI5TqbAGYGZsmCoEdK+b7Hjsm34e8
-	8hHcfQjyy3potjPmwQkvSkSwaa07XCEoA0u1HKItfkvBN6TF1GpAYpQjemZhKU1Ws0zJZWsyexl
-	4+fmuSglBzZT2lKlyjj87XOiYNwx9Mx8ig9m0vWj8MRGB/uaAxTPO1seJvW7n8SLxE1MyvoSViH
-	ZIaRekCSlWYNi8tiK2JTU9edQWhqM9omkDUfgy94+yty6HAswKZ9zzUDrLRrrpSH+KrWPsgqzB/
-	a1yhRYLI0MzOjNdJGsbrXDWFPom02I//ADvcmg5DMuGOhlqr5UPRc7k=
-X-Received: by 2002:a17:903:144f:b0:2ea:4c42:573c with SMTP id d9443c01a7336-2eb0054f6aemr38499215ad.51.1793245625415;
-        Wed, 28 Oct 2026 20:47:05 -0700 (PDT)
-Received: from arm-a100.. ([140.112.28.118])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6b76df7sm28619815ad.14.2026.10.28.20.47.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 20:47:04 -0700 (PDT)
-From: Tzu-Ching Yang <shingekinocore@gmail.com>
-To: Yury Norov <ynorov@nvidia.com>,
-	Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] csky: bitops: Use the compiler builtin for __fls()
-Date: Thu, 29 Oct 2026 11:46:58 +0800
-Message-Id: <20261029034658.3137810-1-shingekinocore@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <auIQ2RI89C374je2@yury>
-References: <20261022115922.1210342-1-shingekinocore@gmail.com> <atpm00m6KYhXo6Wi@yury> <20261023140806.1367050-1-shingekinocore@gmail.com> <atuBH6-LHueXYbFy@yury> <20261027062319.1700461-1-shingekinocore@gmail.com> <auIQ2RI89C374je2@yury>
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=oYLN09+E
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=em+eDkKHMBqO7CuYUMqXJnhqq7+NpV32/QiONBtUPj4=; b=oYLN09+EIi0gXFi0rg4lUcGxew
+	RmejWKFv1DjhPLkWFokX0R+pO55DEzWt9BGsVO188Hg6FxCpqgE12mTmL2pelwsag96pH5KFb9QhL
+	2AQOWE303MzDuzT1tSYBVxtwDnBxGMepOyYaCARqYpSzDAxFXidYztnF66rZBPiPXTj6wJMUOak0b
+	/mJRqIvPoF7KCzy4lfoTpglXIJVYYx+W8AQXUAi1d7xlw9QqarpunBSGhewHrUvJWzJHzVKQ19/ll
+	243OdeevW4b1Eve8Fuln5ajYLy/LOBT1nFSxUse2cn5cZ18avr2N3q76kdtEdhqRmkJC1XK9Get+X
+	8SeaSB/w==;
+Received: from [50.53.43.113] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xMWhi-0000000AJot-2HDL;
+	Thu, 29 Oct 2026 20:26:30 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: patches@lists.linux.dev
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Guo Ren <guoren@kernel.org>,
+	linux-csky@vger.kernel.org
+Subject: [PATCH 3/4] csky: kernel/process: add missing prototype
+Date: Thu, 29 Oct 2026 13:26:23 -0700
+Message-ID: <20261029202624.2685097-4-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261029202624.2685097-1-rdunlap@infradead.org>
+References: <20261029202624.2685097-1-rdunlap@infradead.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -103,27 +69,26 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 28, 2026 at 11:12:45AM -0400, Yury Norov wrote:
-> I wonder why the older GCC works better... Can you make sure its the
-> same kernel version and the config?
+Include <linux/cpu.h> to provide a function prototype that was missing:
 
-Same tree and config: both tables compare csky/linux-next at
-abb81e5ce7d9 before and after the patch, with csky defconfig (CK807),
-built with kernel.org GCC 12.5 for one table and GCC 16.2 for the other.
-The .config files are identical except for the toolchain-derived symbols
-(CONFIG_CC_VERSION_TEXT, CONFIG_GCC_VERSION, CONFIG_AS_VERSION,
-CONFIG_LD_VERSION and CONFIG_CC_HAS_*).
+arch/csky/kernel/process.c:90:6: warning: no previous prototype for 'arch_cpu_idle' [-Wmissing-prototypes]
+   90 | void arch_cpu_idle(void)
 
-The Before totals differ because GCC 16 emits more code than GCC 12 for
-this config, with or without the patch. __fls() itself compiles to the
-same 4 instructions (8 bytes) with GCC 9 to 16, before and after.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+---
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
 
-> Anyways the numbers show that the switch to the generic implementation
-> is worth to try. I've added the numbers to the commit message and
-> pushed in bitmap-for-next for testing.
-> 
-> Conditionally on the (so far, missing) csky engineers feedback.
+ arch/csky/kernel/process.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for picking it up.
-
-Tzu-Ching
+--- linext-2026-1007.orig/arch/csky/kernel/process.c
++++ linext-2026-1007/arch/csky/kernel/process.c
+@@ -5,6 +5,7 @@
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/sched/debug.h>
++#include <linux/cpu.h>
+ #include <linux/delay.h>
+ #include <linux/kallsyms.h>
+ #include <linux/uaccess.h>

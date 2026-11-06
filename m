@@ -1,56 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793916629;
-	b=4oUDtc9fWltIAynzWmuDAVr5wNVZHC0BHw0B4tgvlm0Gdbod+b8KWe7UJCtEmBnykNMc
-	 p9ZGv8mH3BqC/3Ryxdfp7GNi1ugZZ4ywrViPkYMdG87Sv9LnXd1GbtVyOuhKOACWiGG9G
-	 pskWgtspH0EClmPJ9QPY+yr+OQDfmqiU6g0vrl+ehv4AtJGm36ix1I51RWtP3NnTPCy18
-	 qOp3UaFnmYb5CBXrrgJ13Lzem1Ou9JdQrfMJey+D1Ut7NO07a6aC9MQe8Qsrrj/8EpOwv
-	 cAT/+ua+Bah4HLNZjwdnFLdIYGWJdgHoC+TrpvquKbTQij8dk6vVZFEWqeJ1JKC+HOw==
+	t=1793946300;
+	b=obGx5ttUr+LzH7+QuFx7yKm7JVhwXe9weUji781+V0CSlDKq3uOQ/9Jz4IWx1NOjog9y
+	 HsFf4dGcbwBCOq1GEu0oDqTU3uklupapqtozAdYySYJzS2siNraoPwd0VaPmpXWxmn4K1
+	 s8oe3y5wnIQ8GX9IXkcGW/JbsN944S0QoTwpeiRgYsyOJGiNaH0kmIDRflH63s28QRtzf
+	 8Rv1IQI80Cz0jFWRrlkxrs0uoMVm1FGtJxWMzO666g4UZ4tluKiVCAIBxp+xJKIlXPpoE
+	 TViHteHmIVyNs/gBAu4g+hdWKN/YXP2/6YfSTFY5zry/xkorqwFk6z0NJb9FX3+t1sw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793916629;
-	h=DMARC-Filter:DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:
-	 Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
-	 Content-Type:Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-Get-Message-Sender-Via:
-	 X-Authenticated-Sender:X-Source:X-Source-Args:X-Source-Dir;
-	bh=HymqT1psSDHqwLJnChBoGIGtIwPt2A2soh1k3njgmDo=;
-	b=rpf/dQZ6ErNbAtirUmOIP/2gXYmKzOE6drFUPH1i9YSqk5jeA7wkb9JvqbPhfwj7SmJH
-	 NDlzrcjtsaO/oxf+9zmiPyfbTDEDvD1zRmMCuY8evUmN5u9nXL8pAk9G0IeBw9Rfog7Lw
-	 TDmi5ul78l36HCj9PY+lrkvVQvqM9L4JMtyptj7byn8weWKjiZeM/6vBa+KLQWdjIYzqY
-	 17AA/P6zbbehOAqkUzzXGP+qLXilKJ74mS7ZQCKM0dIX6CxqREjS0luVbXwk1Slv5rU2z
-	 yMuSKpUdVgEdqZmlM1vzpczQQWDYGxI6tm6zWBB3dZt5loRcgvLRZ+MVtcagfS1zr4g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793946300;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=5enhWdhIl/MgTPhFKTcfC8/saw2N4Zy++fA3QwojwsE=;
+	b=fQUmG3QAi1sxjE2rrvT6qzVeDvT2VO4yHyrCXtei7gv9cTmsdPnf6cNmLEw972BVw2Na
+	 MhfE0kTy01/pgWex/+xxx6d1tOSyyWg7XqIznl5J5syj23h6vB8zI/liJsna5nic8v2Bq
+	 4TsweEEHKym2YchGcBQZt+J7dfznmh+2rtJKLmCSq9HSzTTjQmoffCJ0LFaceReHQ5N43
+	 /Iq81vG+ZSPX9qR8rXGRXB3DULPB0QtRhZm0EK4SsveyGgzpMBor8bh1NnoHlvvtvVvSA
+	 w+Oajy0BbLbRqLiPe4bkJcoEatsj540F1NWC5284rEy7RF8QYH0vMk235Z3wE2H7VNw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.cyber.gouv.fr;
-	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
-	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=MKQUUEnN;
-	arc=none smtp.remote-ip=51.159.188.251
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BePDgzGu;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB66F606A31B
-	for <linux-csky@vger.kernel.org>; Thu,  5 Nov 2026 22:10:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CB66F606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C738C606A32D
+	for <linux-csky@vger.kernel.org>; Fri,  6 Nov 2026 06:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=MKQUUEnN
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:
-	Reply-To:Sender:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=HymqT1psSDHqwLJnChBoGIGtIwPt2A2soh1k3njgmDo=; b=MKQUUEnNHJgY1tqkS6/I8SQsFq
-	d23S6+OCTd3CxWwCNA+r8bxGo2TghmYs7fyd7up+EBNv4EO/PycS+xaiW+bFlRbJVwqR21lL+Bzmx
-	S16nGbVVFc2rBZ7oorb9D42U7u624LNzkHwc76n1vpvztTml3R2kk/8lB3ss1WLBrTmKn6LRjfPnz
-	LWp9zETzFjsUu+L6BCmVF1GSTjZg+D3i6MYfbVwtvQNcH7mVSYRClepOgXnkWYtJGsa4vNPywjNwO
-	O65IXfCMlFvrkd01Hl+dsnyFdekc/OFxJ/4tfGZaxvrqUCFR6WYrGLbYCrWoXk3aPeB0NZYzbOmaX
-	Cz040wGg==;
-Received: from [::1] (port=36314 helo=pf-012.whm.fr-par.scw.cloud)
-	by pf-012.whm.fr-par.scw.cloud with esmtpa (Exim 4.100.1)
-	(envelope-from <jeremy.jean@oss.cyber.gouv.fr>)
-	id 1xP5fB-0000000CzfS-19qV;
-	Thu, 05 Nov 2026 23:10:26 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BePDgzGu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA981F008A6
+	for <linux-csky@vger.kernel.org>; Fri,  6 Nov 2026 06:24:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793946299;
+	bh=5enhWdhIl/MgTPhFKTcfC8/saw2N4Zy++fA3QwojwsE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=BePDgzGuUht9kJ8Wj5OzX0+Nke0USjqiu+KTZPt9h8N+oXzBWiyPD2SbBOVyizgTr
+	 BmbFvT0Oi6hdsv9DKI3i95FoIudtBrP+3evVnaSaZeu51AU+VgSnYYskH8vfxIjM0s
+	 VLPvpmgptdBwW+kQbkJ/ck92TFlHLb3J5sDTvdDppwApjH8QOfPzsZFVO2uNs06Jhv
+	 zeZ7Gi1nr/MbNLkgUCihb+SyHlAEaKaVc3VjjSqqU0Wi0rBdRA9tId2VC65l9Oyioi
+	 zY3JXYlqIySA1GBvtAxXmpKDSdiDj7m8GQjKCLOHtYLs5TY5vCfRqHaPRDCq/IVxz0
+	 DFn1JZrKlEcUQ==
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-4922523d1afso147891f8f.0
+        for <linux-csky@vger.kernel.org>; Thu, 05 Nov 2026 22:24:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErGOVVmzFEQ0an2r/YuY6a+OGBh4GdCCNbh4NNMCUT2NuetF9Rjn2epBC2mzIY38wC4l0R3NNPiHXW9Y@vger.kernel.org
+X-Gm-Message-State: APuU4Z8l9WS3zR4LsYvmTljolIBnYGck954vliocyXF9IC8DILcKropG
+	abXu/G+77JyLLL7+CR7TJuVUSTKVIx3vVVoA+QSCdtqyeCK900Aji4ugbMvkth1jOdR7Nnp5wqM
+	1ajfELNLADa/Raf27Wfdv0uTN0++K++I=
+X-Received: by 2002:a05:6000:4a06:b0:48d:f034:7fcd with SMTP id
+ ffacd0b85a97d-49278a136fbmr3201746f8f.51.1793946298013; Thu, 05 Nov 2026
+ 22:24:58 -0800 (PST)
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -60,154 +59,51 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-csky+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Thu, 05 Nov 2026 23:10:26 +0100
-From: =?UTF-8?Q?J=C3=A9r=C3=A9my_Jean?= <jeremy.jean@oss.cyber.gouv.fr>
-To: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org
-Subject: Re: [PATCH] csky: ptrace: reload syscall handler after trace entry
-In-Reply-To: <CAJF2gTTRw6tD4dMSvLQwWnEyHNo5pUjxLa7iiDADZtRzTgoERQ@mail.gmail.com>
-References: <20260921194036.4157985-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <CAJF2gTTRw6tD4dMSvLQwWnEyHNo5pUjxLa7iiDADZtRzTgoERQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.6.20
-Message-ID: <25e38ed23152466a816842cae33195e0@oss.cyber.gouv.fr>
-X-Sender: jeremy.jean@oss.cyber.gouv.fr
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+References: <20261029202624.2685097-1-rdunlap@infradead.org> <20261029202624.2685097-5-rdunlap@infradead.org>
+In-Reply-To: <20261029202624.2685097-5-rdunlap@infradead.org>
+From: Guo Ren <guoren@kernel.org>
+Date: Fri, 6 Nov 2026 14:24:45 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ_OP9mDS-cR+hyGfKPWG8fm4=sNFD8Tqx563YusNE7mQ@mail.gmail.com>
+X-Gm-Features: AclHuK-pqlKlsbGKcVWXGwPpboaBVUs7kbsV02O8Yfve_qJtRr0DTGLvw3Nd9fM
+Message-ID: <CAJF2gTQ_OP9mDS-cR+hyGfKPWG8fm4=sNFD8Tqx563YusNE7mQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] csky: mm/tcm: add missing prototypes
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: patches@lists.linux.dev, linux-csky@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-11-05 02:06, Guo Ren wrote:
-> On Tue, Sep 22, 2026 at 3:43 AM Jérémy Jean
-> <Jeremy.Jean@oss.cyber.gouv.fr> wrote:
->> 
->> csky_systemcall looks up the syscall handler before entering the 
->> traced
->> syscall path. Ptrace can then change the saved syscall number in 
->> pt_regs,
->> and seccomp examines that rewritten number in syscall_trace_enter(), 
->> but
->> the assembly still jumps through the stale pre-trace handler pointer.
->> 
->> If a tracer changes the saved number from denied syscall A to allowed
->> syscall B before seccomp runs, the seccomp check sees B in pt_regs and
->> permits it. The later jsr syscallid still calls A because syscallid
->> already contains A's function pointer.
->> 
->> Reload the post-trace saved syscall number, repeat the bounds and 
->> table
->> checks, and resolve the handler again before dispatch.
->> 
->> Fixes: e95a4f8cb985 ("csky: Add SECCOMP_FILTER supported")
->> Assisted-by: Codex:gpt-5
->> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
->> ---
->>  arch/csky/kernel/entry.S | 17 +++++++++++++++++
->>  1 file changed, 17 insertions(+)
->> 
->> diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
->> index 3261f46f2244..193ee3eb832c 100644
->> --- a/arch/csky/kernel/entry.S
->> +++ b/arch/csky/kernel/entry.S
->> @@ -87,6 +87,23 @@ csky_syscall_trace:
->>         jbsr    syscall_trace_enter
->>         cmpnei  a0, 0
->>         bt      1f
->> +       /*
->> +        * Ptrace can change the saved syscall number before seccomp 
->> sees it.
-> How does Ptrace modify the saved syscall number?
+On Fri, Oct 30, 2026 at 4:26=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+> Include <asm/tcm.h> to provide function prototypes that were missing:
+>
+> arch/csky/mm/tcm.c:109:7: warning: no previous prototype for 'tcm_alloc' =
+[-Wmissing-prototypes]
+>   109 | void *tcm_alloc(size_t len)
+> arch/csky/mm/tcm.c:124:6: warning: no previous prototype for 'tcm_free' [=
+-Wmissing-prototypes]
+>   124 | void tcm_free(void *addr, size_t len)
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> ---
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: linux-csky@vger.kernel.org
+>
+>  arch/csky/mm/tcm.c |    1 +
+>  1 file changed, 1 insertion(+)
+>
+> --- linext-2026-1007.orig/arch/csky/mm/tcm.c
+> +++ linext-2026-1007/arch/csky/mm/tcm.c
+> @@ -2,6 +2,7 @@
+>
+>  #include <linux/highmem.h>
+>  #include <linux/genalloc.h>
+> +#include <asm/tcm.h>
+>  #include <asm/tlbflush.h>
+>  #include <asm/fixmap.h>
+>
+Thanks, I will queue this patch.
 
-It can change the value using PTRACE_SETREGSET.
-I'm not sure what you mean otherwise?
-
->> +        * Resolve the handler again so dispatch follows the number in 
->> pt_regs.
-> Resolving the handler again smells like a duplicate; how do other 
-> arches do it?
-> 
->> +        */
->> +#if defined(__CSKYABIV2__)
->> +       ldw     syscallid, (sp, PT_REGS3)
->> +#else
->> +       ldw     syscallid, (sp, PT_REGS9)
->> +#endif
->> +       lrw     r9, __NR_syscalls
->> +       cmphs   syscallid, r9
->> +       bt      1f
->> +       lrw     r9, sys_call_table
->> +       ixw     r9, syscallid
->> +       ldw     syscallid, (r9)
-> Em... Load handler from sys_call_table again...
-> Could we prevent the previous load or prohibit ptrace here?
-
-Indeed, it does not look so good.
-Here is an attempt to move the lookup below the
-_TIF_SYSCALL_WORK branch, which hopefully solves the problem.
-That version still fixes the issue with my reproducer.
-What do you think? I can send a v2 with this diff instead.
-
-
-diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-index 3261f46f22442..8e79ceda9456a 100644
---- a/arch/csky/kernel/entry.S
-+++ b/arch/csky/kernel/entry.S
-@@ -56,12 +56,6 @@ ENTRY(csky_systemcall)
-         cmphs   syscallid, r9           /* Check nr of syscall */
-         bt      ret_from_exception
-
--       lrw     r9, sys_call_table
--       ixw     r9, syscallid
--       ldw     syscallid, (r9)
--       cmpnei  syscallid, 0
--       bf      ret_from_exception
--
-         mov     r9, sp
-         bmaski  r10, THREAD_SHIFT
-         andn    r9, r10
-@@ -70,6 +64,13 @@ ENTRY(csky_systemcall)
-         and     r10, r9
-         cmpnei  r10, 0
-         bt      csky_syscall_trace
-+
-+       lrw     r9, sys_call_table
-+       ixw     r9, syscallid
-+       ldw     syscallid, (r9)
-+       cmpnei  syscallid, 0
-+       bf      ret_from_exception
-+
-  #if defined(__CSKYABIV2__)
-         subi    sp, 8
-         stw     r5, (sp, 0x4)
-@@ -87,6 +88,19 @@ csky_syscall_trace:
-         jbsr    syscall_trace_enter
-         cmpnei  a0, 0
-         bt      1f
-+#if defined(__CSKYABIV2__)
-+       ldw     syscallid, (sp, PT_REGS3)
-+#else
-+       ldw     syscallid, (sp, PT_REGS9)
-+#endif
-+       lrw     r9, __NR_syscalls
-+       cmphs   syscallid, r9
-+       bt      1f
-+       lrw     r9, sys_call_table
-+       ixw     r9, syscallid
-+       ldw     syscallid, (r9)
-+       cmpnei  syscallid, 0
-+       bf      1f
-         /* Prepare args before do system call */
-         ldw     a0, (sp, LSAVE_A0)
-         ldw     a1, (sp, LSAVE_A1)
-
-
-Regards,
-Jérémy
+--=20
+Best Regards
+ Guo Ren

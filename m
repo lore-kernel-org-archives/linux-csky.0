@@ -1,64 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794279143;
-	b=kqOzqeobk8CwsGqpuM2Rs3ZJzmET5q7vs3QMwf/MekY0grD00H0yg8sALayzw5BbGizx
-	 xYl7qrHhkk67Z/QS2Bg7O3EaYHuA5jj/Xt9RJKkqiNAH93LaDnvI5PRXTBWujT7n3EDOv
-	 bL+V02FDYxXMiTKC9TaEl2D+SRkIvzgRxJFZaRhEvlr+QWPPv1moP/ZKbi9TNpYScA/DR
-	 MKAujShT3vHlK3v+SGp6TCTNWLyPkHCLBHkt22p+oNIEGLbKbQl9zk9vUbfu3erRVwaJx
-	 F8ajHRrj0LR2mEfMaOgcLsjTpTx/h+RXQNTSFiBOkqYRW0qISfuzfoCZpStNR5674tg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794279143;
-	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
-	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Mailer;
-	bh=/BigNl2VaL7rLRFpYi5hoO1tJBWhV6OR4KSa4Cct7es=;
-	b=u31se/+TlveuNU01hLAB2mPva0xCoehtpulC1qmZvTNdHcEPDuUNkYxq8bf/Y6owON3t
-	 4wMC+EtLjUjHlIdDI8MTYEoFUVKpcjLpWdZWRugH3xplAl1ITEuczTuEG5dRE4j1k06qh
-	 +qhIjbJU+YYuOCPzBHXNHirLqsBXuHVI3uuRu9xIGInQWRGRZqpVq7Q3AQt6eBkjioTeb
-	 648avc/Ju7SCgwosxSl1/+dTS+WIHUq7+lwAlH+LNwTg8+Xn6LUxPEgpAF2Xo+0EE12gA
-	 whGA/maab8mcvrS5eJ4CcDmOq1QtrRGDCulPXkF3ZjEP/fY3jGJo0nJnt9GBTGoAtuA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TJpLugyq;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.195.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794486979;
+	b=hcFEBN1EdNciixHqBQNNg6u2HR8xEPq+WZ1F8MyNdJ+jktKN/TTrayo2cIXnwRpO4yMf
+	 lloe+HwmWHjmzXPdTWRMPUqALRANKYlsMAwQ7Ddisy1jMhEQ7FY1jnLGD65jR5iZg5nz7
+	 sZ5PIUuZb54pbNJ+ez8D083ZxJTzkJZ5VCXXCITn1HEUkNkhSQ82Fb8IO9q0NRyrD80M+
+	 3uNh6RtimYch3KbWiIWCCuAeZKJ1k8ZTeKAZUCkVKFQLd1Jn6RkBsseF8Y7nJIuPa/c+F
+	 mtEqVhuQduN7okLStJkFYFc7E9muzk+vBYRzJieXtqKtglOVgxxq8G0KzO3XLLTeSTA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794486979;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
+	 Received:Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type:
+	 X-EOPAttributedMessage:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=abwTEDO/j8WW6DWAk8A89voBr+H7EQ60jzRlPkMPKgI=;
+	b=pKsFiBp+8MSEVhK0HBL+OioBFV6aE8TFNwgwwtHZINj3ocmnjGX99KjYRhOYqyodN7VP
+	 Mt7FZsrXjvS97hC1oUTDKLqiriiH7h86EpDtCg5tha3QcAYLAEL7nRivIrFEEDeNbeEhr
+	 H4z2kemqe3Tfr+7EDmL0/exxmKiSf4s6iF7v8FQX7s7j0vVKdlvXFtBGCQH8kiMYa3TL7
+	 Nhx1D/ZbJx1PPn5dljvhxvD0N5nkC/u37ivqp8kWhfbLQXmz/Y86BID8mpyGErBmJP4C0
+	 A9dkNwBsNz9mIr9A9gqapa7G0mJL0ZKnODkzq146tROFkDYE7vJwVJzG9rXcztAvpCg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=amd.com;
+	spf=fail smtp.mailfrom=amd.com;
+	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=rauRzTEb;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.195.41
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012041.outbound.protection.outlook.com [40.93.195.41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B1B606A335;
-	Tue, 10 Nov 2026 02:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D98B606A31C
+	for <linux-csky@vger.kernel.org>; Thu, 12 Nov 2026 12:36:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D98B606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TJpLugyq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAF21F008A5;
-	Tue, 10 Nov 2026 02:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794279142;
-	bh=/BigNl2VaL7rLRFpYi5hoO1tJBWhV6OR4KSa4Cct7es=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=TJpLugyqYyxeMgKLUGB+H96hePV0GSh/2Rbr1BFcoWE5f3cWlnQ6LSUxvXsVQg8Qr
-	 8ZResATyzXsxTssItZD/nyaJcSp8lWwF1xjaFsEDZOwPwa2yRSp7E7txAa6RRJT7kW
-	 Pnl0oFCiMy083W2Byvp/CZbjAkcLnwvPuZCHwOKWiu9rVKS/7Tj3DulPWMH7e09tKa
-	 hAh5A6dkJO4t0wDM+6Jq5v6SM4UikmO8blGVDozrImcts3gPQQItExgtuWNhRe3GuE
-	 MV0bEXYQLx44Eld4mqeFa6s6SCeW0pA4GjT0HdhWg8GtUMS+adutZWq0bfDq+ADlnf
-	 zaf8GIrM0Ae/g==
-From: Namhyung Kim <namhyung@kernel.org>
-To: Conor Dooley <conor@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- James Clark <james.clark@linaro.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, "GUO Ren (XuanTie)" <guoren@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org, 
- Chen Pei <cp0613@linux.alibaba.com>
-In-Reply-To: <20261105-csky_c930_pmu-v3-1-3f33e6b3d259@kernel.org>
-References: <20261105-csky_c930_pmu-v3-1-3f33e6b3d259@kernel.org>
-Subject: Re: [PATCH v3] perf vendor events riscv: Add C-SKY C930 JSON file
-Message-Id: <179427914192.13444.10026998542210349507.b4-ty@kernel.org>
-Date: Mon, 09 Nov 2026 18:52:21 -0800
+	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=rauRzTEb
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SLON6wXONL5rMUtmbMsMoDTLLd3+NqJQpmGbm9pEiUKpjBwhuPayR9evpen25W4TnALLv8nzIlk4rYqmQH0mYqudmah9yD9ZpBaQnUTkZKA3qri3EwazYQ1DF8BAhAUKI4A/7tWgYahQqEv29kkfw0kTizfj5CQ22nTeBzNXywADgLpZ6kQByGs7HMV14XOvtMFUmnEvxQNktiGdlykdnQUh7fP00hmgqpQ7ZTly+R5VgklIcW/vHOwKmFdufNmLw44IwEiGwQAC1qMK4fZAim+tna9st2TnDBWsThpw57rOXKGKOCtNKVKbLAECcT9RjM+aPJchyQDyIIXLQlkSeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=abwTEDO/j8WW6DWAk8A89voBr+H7EQ60jzRlPkMPKgI=;
+ b=kzALukR8wBCmphjIYlZEzdNo+PWjilavj/bIvZFWUgkuVNL6F1XSNRUqfQeLobRDLoSRFXJ+l/p3uctAXUprgsgSu5u7uLLkOhT4SPy4ICfeR435ILlh1fqN+Qrf86GhxmAH3BcHJDcRVWTb06md/ncWAUgmKGUQovs8o4qyH3XBeqUK/vOpnVj2zXH/eAAQ8Zfobaq/tyYxRq+bw38pMpCJnF8mLLuM+GhcwVP+3xyEOJ3Jo74jFzKi3Q7Z1EqJG4fi5eOd9iJ0e3C6EDDjicFi+5Vkum6c3dcL7exR0mIE0Sb4tCKMWS0pLRv6NnmZKFUxVRSvd5tBOL0ku16ouA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=abwTEDO/j8WW6DWAk8A89voBr+H7EQ60jzRlPkMPKgI=;
+ b=rauRzTEb1pgeglMCWj1ba0aboviMh9g8cSmcxr08U3/lLQSWzTyBf9vAShxRtpfDMjAna1CytGXqI/oJH2X0GONAfJanjLtVJ7r5hRggwPm+NIM8f/jqSvZBqGa59ncY+AzVhVLHd8271ANCqtjyDaZzvMTywqcmZ/lWMXzCTos=
+Received: from PH7PR03CA0017.namprd03.prod.outlook.com (2603:10b6:510:339::32)
+ by SA3PR12MB8022.namprd12.prod.outlook.com (2603:10b6:806:307::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.9; Thu, 12 Nov
+ 2026 12:36:13 +0000
+Received: from PH3PEPF00059619.namprd05.prod.outlook.com
+ (2603:10b6:510:339:cafe::79) by PH7PR03CA0017.outlook.office365.com
+ (2603:10b6:510:339::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.9 via Frontend Transport; Thu, 12
+ Nov 2026 12:36:13 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ PH3PEPF00059619.mail.protection.outlook.com (10.167.243.23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.615.4 via Frontend Transport; Thu, 12 Nov 2026 12:36:12 +0000
+Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.53; Thu, 12 Nov
+ 2026 06:36:12 -0600
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb10.amd.com
+ (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.53; Thu, 12 Nov
+ 2026 06:36:11 -0600
+Received: from amd-B550M-DS3H.amd.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.53 via Frontend
+ Transport; Thu, 12 Nov 2026 06:36:09 -0600
+From: Syed Saba Kareem <syed.sabakareem@amd.com>
+To: <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC: <Vijendar.Mukunda@amd.com>, <anson.tsao@amd.com>,
+	<Sunil-kumar.Dommati@amd.com>, <mario.limonciello@amd.com>, Syed Saba Kareem
+	<Syed.SabaKareem@amd.com>, Guo Ren <guoren@kernel.org>, "open list:C-SKY
+ ARCHITECTURE:Keyword:csky" <linux-csky@vger.kernel.org>
+Subject: [PATCH v4 0/6] ASoC: amd: acp: ACP7.F SoundWire configs and SOF function topology support
+Date: Thu, 12 Nov 2026 18:05:35 +0530
+Message-ID: <20261112123603.2891858-1-syed.sabakareem@amd.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -68,25 +113,120 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-csky+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH3PEPF00059619:EE_|SA3PR12MB8022:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2caf170-5818-48c1-e1f1-08df40b9894c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700016|23010399003|376014|1800799024|18002099003|6133799003|261009223027099003|10067099003|11063799006|56012099006|261028144727099003|261026140227099003|261102123227099003|261022075727099003|261026121527099003|261021121427099003|261022105027099003|261021123027099003;
+X-Microsoft-Antispam-Message-Info:
+	ZWQEAYA4knB2OGLDqshQI7hwY/ZiV7rfupptOu3HQkpytGiVB0Z5Qr2OcVpxhdXad0rUr1wiDAS8THbl3g7BBSqXakAc0jCJFkQ4P53YWeEk+lJ3Y3c8wY08LLTtfqvk3CuQCc3YUjGhwzKcVKDYesWOksnNycm3ubb2oBqJRT9gFvl+2hwrioaqaFLnk7IafmcaE48YiG4NzAkPV2gJBJ8EA/rvxWF/bszAVch55fD9xs4KgNxSkWmVo4eew0fh8vm0IVZhg7ovlwd30ITpaXAKcesQcfytR+3AiCGRIhPHv1V6Dc4f4b6HFajsxSDagBcmgkKGA+jo0gjvfQfqYNQJUVb7GR8635KpGhavPxW9RcU/b4Lgy5nFcpk+ZzLmmultpyIqb+fK8Z+KgzuevNsQGcJOY1lE6S3NHN3rD6xIWTmhe5fmZDBz+qPie+imvBPix0FnGclNtMTbxOfE5MhTgMKYQUsIsu0+Zx1eGZQuMqm2oD9q8eWL7y6qugUWRAz4djUC0p6hXobRSQZkfT6NTjx+FOVvRRssgGYE0Y+K6nAUnKXxKvVJeZ/f2sanHbHMqVKRQtZVxhMA+u/BMoSyU/5cOdPE906xo173bPYpGtPH7kCkwMUjpz1Lf0KOuc2lp2GsAzRkXvvBpijpfCqSoV29lJBOxA1IUCYhE9DsblCkfd6LlpxfjDvwFtQzjVX+UDHaSFHg2xFDYCJwZg==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700016)(23010399003)(376014)(1800799024)(18002099003)(6133799003)(261009223027099003)(10067099003)(11063799006)(56012099006)(261028144727099003)(261026140227099003)(261102123227099003)(261022075727099003)(261026121527099003)(261021121427099003)(261022105027099003)(261021123027099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	8MBsOwzkIFgk3r+v/O4YnLBZ2lGShza5BkIHKucIkItM0eytdbDzOl1wRhUzC8SVXaNJsuiPDXkKWRivlGq/C3UsDSxk8PiENr5jNYzOCTZGe9YyPSecXsAFcQ6VO09PfA7gMlFGlkjYvgTE1z0+b9dylbgFDNQ+clnqwRRnYbLKvaQu4h0ozitVR8dtY91QxCfIvlh8PEiMkzkqrNfF0BUhOsTeYino5bc3p9XyDxJ7eLVVHnDkT8FlvLXIsl6a/1Y9+qXKEFurMucBYhDPQugdj6/VLxK8aJwDCySVwdUMt9Ka+5OprSLV7as5KjJ8A4doaRJUbkZ0asvIj5f4Mef/yPFSiveYpWB4SjbOkssRTxJKk61VgCH6BNRVuWHfbWIv3moCRcggRLXJKP89R3qL4QpTY6V9gJ/ucO83s2QFRFWoeA5cl/4CkvNc7xjV
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2026 12:36:12.5895
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2caf170-5818-48c1-e1f1-08df40b9894c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	PH3PEPF00059619.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8022
 
-On Thu, 05 Nov 2026 06:31:20 +0000, GUO Ren (XuanTie) wrote:
+From: Syed Saba Kareem <Syed.SabaKareem@amd.com>
 
-> Add PMU event descriptions for the C-SKY C930 core so perf can list and
-> select its hardware events by name instead of requiring raw event codes.
-> The events cover core counters, branch prediction, instruction fetch,
-> integer execution, load/store operations, vector and floating-point
-> execution, caches and TLBs.
-> 
-> Add a mapfile.csv entry matching mvendorid 0x5b7 and marchid
-> 0x8000000009201600, allowing any mimpid, to select the C930 event table.
-> 
-> [...]
+This series adds the Cirrus SoundWire machine configurations for ACP7.F
+and reworks the SOF function-topology handling so it can be shared
+between the Intel and AMD ACP drivers.
 
-Applied to perf-tools-next, thanks!
+Patches 1-2 add the ACP7.F Cirrus SoundWire machine descriptors
+(endpoint, adr_device and link_adr tables and the machine entries) and
+the Dell speaker-amp DMI quirks.
 
-Best regards,
-Namhyung
+Patches 3-6 move the common SOF function-topology helpers out of the
+Intel code into soc-acpi, add AMD ACP support for them, always append
+the DAI type to the SoundWire DAI link names, and finally enable
+function topologies for the ACP7.B and ACP7.F SoundWire machines.
+
+Changes in v4:
+ - Add a public SND_SOC_ACPI_SOF_PLATFORM_NAME_MAX constant in
+   soc-acpi.h as the single authoritative platform-name buffer size and
+   use it for the Intel and AMD callers, replacing the per-driver
+   SOF_INTEL_PLATFORM_NAME_MAX / SOF_AMD_PLATFORM_NAME_MAX defines.
+ - Make snd_soc_acpi_sof_get_platform_name() take a struct device
+   pointer instead of a struct snd_soc_card pointer, consistent with its
+   companion snd_soc_acpi_sof_get_tplg_filename().
+ - Type the tplg_dev parameter of snd_soc_acpi_sof_get_tplg_filename()
+   as enum snd_soc_acpi_tplg_device_id instead of a plain int, now that
+   it is a public API.
+ - Select SND_SOC_ACPI unconditionally in the AMD match Kconfig as well
+   (matching the Intel match) so the shared SOF helpers are always
+   built and there are no undefined references on non-ACPI configs.
+ - Drop the now-unused linux/firmware.h include from the Intel
+   sof-function-topology-lib.c.
+ - In amd_sof_sdw_get_tplg_files(), honour best_effort when
+   get_sdw_link_num() fails on a recognised SoundWire link: skip the
+   link instead of aborting the whole probe, consistent with the
+   handling of unrecognised links.
+ - Expand the patch 3, 4 and 5 commit messages to document the sscanf
+   field widening (the old "sof-%3s" field silently truncated longer
+   platform names), the platform-name buffer sizing, the CONFIG_ACPI
+   guarding of the ACPI-only matching helpers, and why appending the
+   DAI type does not regress the monolithic-topology platforms
+   (ACP6.3/ACP7.0) given the partial topology/DAI-link name matching.
+
+Changes in v3:
+ - Select SND_SOC_ACPI unconditionally in the Intel match Kconfig so the
+   topology helpers moved into soc-acpi link on non-ACPI builds (fixes a
+   kernel test robot modpost error on csky).
+
+Changes in v2:
+ - Drop the unused acp7x_cs35l63x4_l0u0246 link_adr array in patch 1
+   (reported by the kernel test robot).
+ - Add "ASoC: amd: acp: always append the DAI type to SoundWire DAI
+   link names" (patch 5).
+ - Move the AMD function-topology helpers into their own
+   amd-sof-function-topology-lib.{c,h} instead of reusing the Intel
+   file name.
+
+Siva Subramanian Ravi Saravanan (4):
+  ASoC: soc-acpi: move common SOF topology helpers
+  ASoC: amd: acp: add SOF function topology support
+  ASoC: amd: acp: always append the DAI type to SoundWire DAI link names
+  ASoC: amd: acp: enable function topologies for ACP7.B and ACP7.F
+    SoundWire
+
+Syed Saba Kareem (2):
+  ASoC: amd: acp: add Cirrus SoundWire configs for ACP7.F
+  ASoC: amd: acp: add SoundWire speaker quirks for Dell platforms
+
+ include/sound/soc-acpi.h                      |  34 ++
+ include/sound/soc-topology.h                  |  10 +
+ sound/soc/amd/acp/Kconfig                     |   2 +-
+ sound/soc/amd/acp/Makefile                    |   3 +-
+ sound/soc/amd/acp/acp-sdw-sof-mach.c          |  51 ++
+ sound/soc/amd/acp/amd-acp7x-acpi-match.c      | 452 ++++++++++++++++++
+ .../amd/acp/amd-sof-function-topology-lib.c   | 140 ++++++
+ .../amd/acp/amd-sof-function-topology-lib.h   |  19 +
+ sound/soc/intel/Kconfig                       |   2 +-
+ .../intel/common/sof-function-topology-lib.c  | 129 ++---
+ sound/soc/soc-acpi.c                          |  55 +++
+ sound/soc/soc-topology.c                      |  16 +
+ 12 files changed, 808 insertions(+), 105 deletions(-)
+ create mode 100644 sound/soc/amd/acp/amd-sof-function-topology-lib.c
+ create mode 100644 sound/soc/amd/acp/amd-sof-function-topology-lib.h
+
+
+base-commit: 87eda92d89790d56ddce1af560815a04d70e3a43
+-- 
+2.43.0
 

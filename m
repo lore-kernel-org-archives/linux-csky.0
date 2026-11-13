@@ -1,57 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794592832;
-	b=bT6xpf26T0nMm1JVEd8HlgtTzEhaHJe48kqtANEcYnrARNmXaQ7l1gIGlsuA8zD4k3IU
-	 JreMe1HBo//hlplf1st87HXnp//bKQ1p1M9BalIx+jaidMxFmABMJauO7U+3KrSeNqyTa
-	 09wiBDY7pxH09TUN9BhrCISe68B7q+Ynl3/JmMjCi1NcrC8jGoVWOL0DSSE5vZ+P0W1/w
-	 2GBC8XEBVe8Fd8VhguXXpnUxqc/+8LSjDZIEtEoffaX6fSWLRz+umTMNy/G3Habqdvs4F
-	 dYfbt6dIrWWoJmu5vxsBx+NtzqEqRcFcXy+ToV1AC1WlYJO7JHKevDNPq0hVwaBXOVw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794592832;
-	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
-	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=9FGtgapqf+t9EUsMhhF0AQk1EeXyjV2Us13KHEtxoOc=;
-	b=nTdNOjNvgI/AconOqELoYfUFuz7SPXT9BqjEs7FbsxFCrV3XgEtyubchQAeSINu60Zam
-	 lZDSCmkuAyI7B1fLSd8WYzvCuy6NeYxcA2tFGlakz2DiPbCJJiUafMIWvv/XG0l5H0wNn
-	 5eSYWEeaLsknAL1MCBvOHjvkYiDvF++C9xAhd6d4nw+97sQ2P4u0+oLmgsx1+xgN7qmSc
-	 e08vd0ru0lhlgOtZ3UciHgUfUbaLniiTzdQ9vcMebhKTw9hOur1EUoN3vbbnr73R9YdlM
-	 h6dO4B8BRtrTqCAK4CAxVVN55MfzsTbBSK1BN0pCdNSm/BfYjWWu4ECyo5asE1KVUyg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PkM16QOu;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794609214;
+	b=SFgrQN8DknnmdLxHPdghslYeaPHne7dEhb2Oip0zZE7K+8ZTT030rF8+eOEk2ZuYR54I
+	 j01C7iLSRnHta9J3HZR7jEOuvNHIePmZq4bfQy1PDn9xViXwPYQwQOiFMD5v3b/ZOibt3
+	 DN7QTLMYwtKNXhkN1+t6hFuAsxFzWY+gF9wJAn3aIZdz/l7XFMOf9TRuFF7NYdHjpj7Lu
+	 hOjqgukh5SIoWNWK15f+LKkQtfTEqtw+NMZ4gxxCS9lGd5RtOmu5UHDbxoJoH0MmVmEwK
+	 5dgfcHglpg4TC5cdHTiFB0+vYqSozFOpgPQllAmVwFmPfLW7xudGLuKG+jr+D8DALqw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794609214;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=HyiTVbeXPQu8fkPfhfD3gHjXLJEZSVzM7qOeO91NGRg=;
+	b=ko5hGJ61DsjZ77irB5L/IeGWmi6m6wus3oYCu4Dh6lWouwMl/PaxzRzKg7TbjEUy77fc
+	 ZrnKqMnTiUOQktp/Zxmf1hI4XmF6/LUPRqzHXw8EcrDi/ulG4W/7x8eTmKa/n/SY+czhK
+	 MrKIS7g6KOM3qgwOG0vta+613riN3M/TcBt7KT3vnzG/R2DuLkiktjRVPhk+L++T67aQE
+	 xfY2EKdkLIlMbSixuC9q59IgmgjnEqGOEiglCrkcfC0HMhTwvgr90HIICmsVreA2OUoEv
+	 l8SYPesk69K0jGIGxvdpLSijN7hk2x/zCBeUZyvZfNzQsQSNpaq8WYnT+AqmAIl6iLQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UtZMtRuy;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF956606B342
-	for <linux-csky@vger.kernel.org>; Fri, 13 Nov 2026 18:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5262C606A883;
+	Fri, 13 Nov 2026 22:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PkM16QOu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 091DB1F0089E;
-	Fri, 13 Nov 2026 18:00:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UtZMtRuy
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794609213;
+	b=rx6seLmVjtfP07fRicajwW4gcx5wTTRbDzYT/2gEVSZRGbyPFLYvc4JlMdzz9wPMVm1a
+	 o4Wuma0RFECZuk23+K6yj7gf8Gz4WLeCKlH9CFfJRe/GPpNr7vJAr2eg1TMTpEDUpRwtP
+	 Za15H9KpVjHzMgQf/1l1/k7d+3haLKmyom/SUlFVrTA2UVxDndp5dK0N95zUePAVTdB/S
+	 V1VBxMJkp8/OknttbjsfI6FY2z2RxQXnPDWU95byeomE+1lRfskkZn5dAWF4SYPIJ77Zg
+	 0Vx41wCqd0Q+oY5pTh1jUq4nKJ6Q2NJDfYwYRZyIFRbk9Opx9y7y/aqdldWRRIir2Mw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794609213;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=HyiTVbeXPQu8fkPfhfD3gHjXLJEZSVzM7qOeO91NGRg=;
+	b=VWI/WkEdcF2Xlv6G3k41B0/FezxAS/CfJTmpL2XNORrf1xYrtNvDP1vaZnlCf1iqvuKY
+	 scjDd2YAE39vLXSGev5jkdeMhGTU7sQvOTxr6OgIFyJV+vO4L5PBb7s2Ly8ozZVSDcYlO
+	 otUPDdpbO8cuphtgIPD9st5EG0kcXb3XghlZ6Mc0FpjXYjXMzOFS69zUeCsL+yFZHpvo2
+	 mes6Lea+P/yUQT5WV4GlpqlTenXCVCLSQArjsIoo+Bf1J67BEdQUMhug6NZwxixaHzrhu
+	 IIgylUwAxaEqud62qoLY5JfYgGpECXS3FlMHizW6NqYEQwSDENqmBfSs2Z+SFxiCReQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 314461F000C4;
+	Fri, 13 Nov 2026 22:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794592832;
-	bh=9FGtgapqf+t9EUsMhhF0AQk1EeXyjV2Us13KHEtxoOc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=PkM16QOucH8gQY81GJ+cVa3AYvJGLSFc5I7y/3vq+iWIIR7g9P4Vc3LX80cTEYEhv
-	 uYofe+IMGzlCkxzO1X4ceXRsFtdpNhdEHg/UffLXi0aZvSWpLIhLkE4uSKHF1C0aUA
-	 d3EOHgNUwE0VAPqn6iayQyWTFo7CW/cGWD73y00O2ovdTvAT+CcOGI+8HQXv57czG1
-	 RKdH7mG92hjsxKK2AMEAEW2kfqmXRT8lLvKG2yN86MJmzAKAr8GRnGkZGz2TbGaZm2
-	 hdEQ/MD712cYOaiwAdmLTu8cvo0jH1MMbJ0lvqHrSrdoGqitwl2T+Kpp3skl4Wh9Jn
-	 xJMumkP4q4zOA==
-From: Mark Brown <broonie@kernel.org>
-To: alsa-devel@alsa-project.org, Syed Saba Kareem <syed.sabakareem@amd.com>
-Cc: Vijendar.Mukunda@amd.com, anson.tsao@amd.com, 
- Sunil-kumar.Dommati@amd.com, mario.limonciello@amd.com, 
- Syed Saba Kareem <Syed.SabaKareem@amd.com>, Guo Ren <guoren@kernel.org>, 
- "open list:C-SKY ARCHITECTURE:Keyword:csky" <linux-csky@vger.kernel.org>
-In-Reply-To: <20261112123603.2891858-1-syed.sabakareem@amd.com>
-References: <20261112123603.2891858-1-syed.sabakareem@amd.com>
-Subject: Re: [PATCH v4 0/6] ASoC: amd: acp: ACP7.F SoundWire configs and
- SOF function topology support
-Message-Id: <179458523228.68977.1942336202187968930.b4-ty@b4>
-Date: Fri, 13 Nov 2026 15:53:52 +0000
+	s=k20260515; t=1794609213;
+	bh=HyiTVbeXPQu8fkPfhfD3gHjXLJEZSVzM7qOeO91NGRg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=UtZMtRuy2RreIXnt6Vk6e1sTpBtQ42hqFvY/BLiBEfGCx4AjqmVAkYmV1ALjqjy9F
+	 VGgIrQa6TV9iILRc4ZtrjGqseyIhml3nkASLmeYP36fJvdWR9LL9EBW+VzRgV3yO3x
+	 jq2yE/dyD/YyOHwxa4uhfZ4X1693xNj+zD3+JrYHaY1Fm8ztHfdJ8/60mc6XnXjYCu
+	 K0aeGfZZd7k9Qbb2illPSJSUWJ5vfFBIl6K07SLfMHdo1VKv17IiphIZoIWI+kxZK3
+	 8UlXv/aS3/U+0yePxo51ddZFjPOJPCuM4iGO8axqUf3gSXu9ph6wYw8O7tc5eDeV7I
+	 wK9bQSwv3aBVA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 9E3E349B58;
+	Fri, 13 Nov 2026 22:33:32 +0000 (UTC)
+From: Han Gao via B4 Relay <devnull+gaohan.iscas.ac.cn@kernel.org>
+Date: Sat, 14 Nov 2026 06:33:27 +0800
+Subject: [PATCH 01/19] riscv: sunxi: describe the wider Allwinner SoC
+ family
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -62,63 +84,79 @@ List-Owner: <mailto:linux-csky+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261114-v861-v1-1-eb71ec3ee523@iscas.ac.cn>
+References: <20261114-v861-v1-0-eb71ec3ee523@iscas.ac.cn>
+In-Reply-To: <20261114-v861-v1-0-eb71ec3ee523@iscas.ac.cn>
+To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Guo Ren <guoren@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Radu Rendec <radu@rendec.net>, 
+ Samuel Holland <samuel.holland@sifive.com>, 
+ Daniel Lezcano <daniel.lezcano@kernel.org>, 
+ Anup Patel <anup@brainfault.org>, Han Gao <gaohan@iscas.ac.cn>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, 
+ Jerome Brunet <jbrunet+clk@baylibre.com>, Chen-Yu Tsai <wens@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Maxime Ripard <mripard@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+ Andre Przywara <andre.przywara@arm.com>
+Cc: Han Gao <rabenda.cn@gmail.com>, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@sifive.com>, Conor Dooley <conor@kernel.org>, 
+ devicetree@vger.kernel.org, linux-csky@vger.kernel.org, 
+ linux-sunxi@lists.linux.dev, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ linux-gpio@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794609209; l=987;
+ i=gaohan@iscas.ac.cn; s=20261021; h=from:subject:message-id;
+ bh=iIMXHW4ncH9rYCfV6gqeS1VFiDJbleuDtC++QacYRuM=;
+ b=1qagKD3rCKA24HqW1EY7WOksbBJolj6tNk+/fSKplFvFfQFmuICjc/3HRPonNK6YXjTtHCQMd
+ k+l2SiI9Az4DbHj5RDb1WJdE+MlgzAKOR89f9hwcRwjPTczallY0Cjt
+X-Developer-Key: i=gaohan@iscas.ac.cn; a=ed25519;
+ pk=J8WHEK3filS86QaCaIHDGafqhxKyQ4K7+vFgRirTIiY=
+X-Endpoint-Received: by B4 Relay for gaohan@iscas.ac.cn/20261021 with
+ auth_id=1262
+X-Original-From: Han Gao <gaohan@iscas.ac.cn>
+Reply-To: gaohan@iscas.ac.cn
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2050; i=broonie@kernel.org;
- h=from:subject:message-id; bh=42qJZ2zd1/OG95s/m3tsoY0R2LgbY3r0DTBCQNhCNzQ=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLK+B9iuPftPxMXO9HOk9YuujsyjW6bm7f5dwPpq0/M2/
- 72TLIzDOkpZGMS4GGTFFFnisrhf1pe8XsN3cGEbzBxWJpAhDFycAjCRhe8YGfpdBU6pLdU4/3lp
- xFGrd/0fasUjVG6fnXRLLmPB8s/rH9xn+M3mXJMUlsB9t+f9LukFK9QkVhy2srJSPqH35V608qv
- iSB4A
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Thu, 12 Nov 2026 18:05:35 +0530, Syed Saba Kareem wrote:
-> ASoC: amd: acp: ACP7.F SoundWire configs and SOF function topology support
-> 
-> From: Syed Saba Kareem <Syed.SabaKareem@amd.com>
-> 
-> This series adds the Cirrus SoundWire machine configurations for ACP7.F
-> and reworks the SOF function-topology handling so it can be shared
-> between the Intel and AMD ACP drivers.
-> 
-> [...]
+From: Han Gao <gaohan@iscas.ac.cn>
 
-Applied to
+ARCH_SUNXI is about to cover the V861 as well. Update its prompt and
+help text instead of adding another option.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-7.5
+Signed-off-by: Han Gao <gaohan@iscas.ac.cn>
+---
+ arch/riscv/Kconfig.socs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks!
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index cecbce0c4983..4cf3b24467e8 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -61,13 +61,13 @@ config SOC_STARFIVE
+ 	  This enables support for StarFive SoC platform hardware.
+ 
+ config ARCH_SUNXI
+-	bool "Allwinner sun20i SoCs"
++	bool "Allwinner SoCs"
+ 	depends on MMU
+ 	select ERRATA_THEAD
+ 	select SUN4I_TIMER
+ 	help
+-	  This enables support for Allwinner sun20i platform hardware,
+-	  including boards based on the D1 and D1s SoCs.
++	  This enables support for Allwinner SoC platform hardware,
++	  including boards based on the D1, D1s and V861 SoCs.
+ 
+ config ARCH_TENSTORRENT
+ 	bool "Tenstorrent SoCs"
 
-[1/6] ASoC: amd: acp: add Cirrus SoundWire configs for ACP7.F
-      https://git.kernel.org/broonie/sound/c/0fad8a0a8aec
-[2/6] ASoC: amd: acp: add SoundWire speaker quirks for Dell platforms
-      https://git.kernel.org/broonie/sound/c/72b048630d14
-[3/6] ASoC: soc-acpi: move common SOF topology helpers
-      https://git.kernel.org/broonie/sound/c/e23ffd79d900
-[4/6] ASoC: amd: acp: add SOF function topology support
-      https://git.kernel.org/broonie/sound/c/50bb13ee80fb
-[5/6] ASoC: amd: acp: always append the DAI type to SoundWire DAI link names
-      https://git.kernel.org/broonie/sound/c/e8e52a9a8257
-[6/6] ASoC: amd: acp: enable function topologies for ACP7.B and ACP7.F SoundWire
-      https://git.kernel.org/broonie/sound/c/2732ae983737
+-- 
+2.55.0
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 

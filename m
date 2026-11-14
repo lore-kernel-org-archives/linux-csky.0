@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794661003;
-	b=HAsxodevKntvZdqcG+AZt1bJQqNrMDrRu7v8HdiE/I4gfof3vFe+rvq4P0t9396qVEvW
-	 qS6cn6EOKe0vCpHGF/AEj/pt0v/67ntYKJ0x1AvQZ17fx9HqpcuyiV4LxLj/Du0CU/Pli
-	 BDWf+waNwMhrrll7pSdon7IYJK61kff9I5uuyVs2PrU+i17KtGmv2Aue9P91Bb/ndNy6m
-	 mZmAwa6eAUQuzXGRkhWbMcNmvNy6Ap1VGsaG82avn4m5DbpEoduY4gn8EYzvdNIAiAKke
-	 jdhr0g9YV+PN8CSjTeo0CSckLU+g8EbvhShsc3LYJej1xfP2CAC1npTQdZPrZY2r0vQ==
+	t=1794661654;
+	b=fvxNVQpM6OtnnuNsm4y/i2bC4z8S18h93aRXsveI6ctinNumRO7KcfsRgqeLkHgAZzpD
+	 mVjN5qh4ov8KpeZhUxPqu2ySJyWuUSHIHkIcwHBqqFZHck12ip6Zs7otkIHKfu+C1VVve
+	 3Ksbqz93C7ypYqLBwEfpAzDUjViSo+/9Eh1TMVWfWniAkJPLEwN+Kl+qStOlqj6gEGSVr
+	 z2vFPRkcURg6iX3/2FSGX3zuimAY4WagVgHKW6dwAyOG1Kb7/q84IdtS6BeLTty3t42kt
+	 64Y7cmAqCGz4AVrxvqvcT6hP0o17ttLcEk09XH89uNXBWTPxbhMexE+/1TYa2R9e1Dg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794661003;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794661654;
 	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
 	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
 	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=CzDnQhxA2IGwG1S+MSyz5T4mghlVNlgfIGD03W+DjPU=;
-	b=AHlEDlZmFzn5v7DFyveh0aaF0JPyk4Q7SceLi6M+lEgOeFJ9MtA85Q7WYvi40IMxCGnR
-	 l3+Vex4p1rOFO8MbEoEnxnzEB7VVZzlUER5Q6/n/Bvo6cL2g60/LlgdifEDI3pHWuwU31
-	 4/fp3EdhJKNWKBqsMQyiBENUTXEuN3ui+FyLc2UO6ehq7v6JHKKGMaONxQwRrR+qSSL+G
-	 fNcukmyCaMLxvQXmBx9hP1rRzOUZZPE3ejteXK6ZRCyb8ZCk/PU3gN8N1gOqCUt+dhYt+
-	 tDJ3C9eY4xsOszsX+S7ccc3pyfeKTSopk/P8f0iQdjiq2hilBvWSbuC9/5o/d8v1zgQ==
+	bh=O67Sld1N23xdXCx6gIqCXwUsjQS8tlDbGqdMHZU/fNY=;
+	b=zAmTzevY26uShmSQ+taugjHDxBeALpy9/Dn8BKUY3y9WqvFdrPNCgvnos1QbbLi+fDTG
+	 HH+HNfbqHGg+pBK8Gifm2i+fIgrZaErhCLiYTJsG2NUMvAngGnGeuBD5GPs3e0led2zcr
+	 h3JffzSgZ2E59bAf6AmT60PnBhOj5rFIYu5ou5PIRBSXv2CfM0Lv4oWeyICtUs1FjRxft
+	 elp28ItGIxaJT/FQ2M9u8LgJGqPo7n9gqzQYa20VjN0Sy6KXSRvqXxNswbcgwrws7OPif
+	 3oew5i0w9bnRAZEagGS5vDVOVcvrD1UmOd/SOMgWEhN91FnGCUtsPzrS9ty/t+j9iLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RdO3Kv90;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iAquH30K;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D77606A329
-	for <linux-csky@vger.kernel.org>; Sat, 14 Nov 2026 12:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82EF5606D2BD
+	for <linux-csky@vger.kernel.org>; Sat, 14 Nov 2026 13:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RdO3Kv90
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7CC1F000CE
-	for <linux-csky@vger.kernel.org>; Sat, 14 Nov 2026 12:56:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iAquH30K
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DEF31F0092C
+	for <linux-csky@vger.kernel.org>; Sat, 14 Nov 2026 13:07:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794661003;
-	bh=CzDnQhxA2IGwG1S+MSyz5T4mghlVNlgfIGD03W+DjPU=;
+	s=k20260515; t=1794661654;
+	bh=O67Sld1N23xdXCx6gIqCXwUsjQS8tlDbGqdMHZU/fNY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=RdO3Kv90z56OxC2Mum/pVVxoCJ0GuuJdKlGU7yYQJRke20FgwpEj+W748Vp6QPjUr
-	 Wd4LCOVX1UiBXzmxMxABGqTYbVV4jdueM9hoyYrxVEM0h7I0M3MCoo6dflSNjgq9pZ
-	 wavchHG1HPsP6J8cJen+2c0KDhZMQ87PD78h06x/SWleCZ0AVhktojtUKWuPlaDEte
-	 5tlCnkfYA3PwzYC6fje6dD7A93GWV+srski1PUYta0UlPCG/zlnkivP0/do4FV4FeT
-	 EEbKIrXKgSsahJV81DXIk3q/IzR9JxgXW5mZcMb6ZY9PlJgLjnuxDNUmDYPIfxkeHJ
-	 O82buXWPzGNUA==
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4b7252a32c8so25903445e9.0
-        for <linux-csky@vger.kernel.org>; Sat, 14 Nov 2026 04:56:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErGrnx5CUStmF4kFHSi9g/vxVKs9pZ4d/761LdmrPTHrVWLsRD2+weNLuSga1F2qwPKKrjh/uGANuyco@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Vjm3Y7Ff2u9jN5dsoLbrPGl22OY23mB8bcdFWq/5sTS5MhlD0
-	NHLi31zIF+DTEt3K+IIHam1BcsNd1DTjP9oFWBPeLlqsQF0JAyHXLlfZA5nEWZpH7j1GAbF9NBm
-	dpCcyTcznEQRSA+Xm+u5nPr2qQirTL84=
-X-Received: by 2002:a05:600c:8b05:b0:4a4:4d57:8462 with SMTP id
- 5b1f17b1804b1-4bb55a99ed0mr112169185e9.24.1794661001252; Sat, 14 Nov 2026
- 04:56:41 -0800 (PST)
+	b=iAquH30Khmvacvb33iblyujUgHVesD/yt9CYr5SmFcp1ApKO7T+J37/AyKkyTaSv/
+	 EsWGut9q7KWd2gVEyBu/nITBODZA6MEasZBNx0yJah9iOvv4l2nbwnsrsyIklDiQir
+	 vnJynlk0O1pmrm7PPFcunHu4Gq+bdPIoQO27xkEZwUlpTj5PAYVzwUf7vDdSUjZ2tn
+	 pi647oQyFJF/9n5Oi3H2MjRredHD7BHUm5xS5M2h6NjsyuRzK4q3SlYuiPx3dSdoYf
+	 XzKGmiMpZXUPQQCApGxPkLf1MaAmTU9qLoLldT34MGOwd3AerJ6SvgJ51qV1vY5qb9
+	 XKyABiarnAsdw==
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4910b863b84so1694860f8f.0
+        for <linux-csky@vger.kernel.org>; Sat, 14 Nov 2026 05:07:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErGBuzQHS5TyFceR/F1DuYZUg651aO6PJXFILEAFIt/4oSfTB+/xFVj1AF5TPaQkCkFy8FLpEiL4KitD@vger.kernel.org
+X-Gm-Message-State: APuU4Z++Eoz/SQKMgClF/2zIWLOBtfOKGCWT45E+gp1+4JMHfnqPjfGG
+	6ffv5BOM9Z4/CoRgIbySEnJxlZQb3rez4lhygfod5et+UQBhcYVP+S8GJiYg122u+1/1IrMuYow
+	jrLABYJAPEKAU/+ccKFjwhMtOoUJDBvY=
+X-Received: by 2002:a05:6000:4202:b0:493:72f7:1d5b with SMTP id
+ ffacd0b85a97d-49b03217678mr21427286f8f.29.1794661652676; Sat, 14 Nov 2026
+ 05:07:32 -0800 (PST)
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Post: <mailto:linux-csky@vger.kernel.org>
@@ -59,14 +59,15 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-csky+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261114-v861-v1-0-eb71ec3ee523@iscas.ac.cn> <20261114-v861-v1-2-eb71ec3ee523@iscas.ac.cn>
-In-Reply-To: <20261114-v861-v1-2-eb71ec3ee523@iscas.ac.cn>
+References: <20261114-v861-v1-0-eb71ec3ee523@iscas.ac.cn> <20261114-v861-v1-3-eb71ec3ee523@iscas.ac.cn>
+In-Reply-To: <20261114-v861-v1-3-eb71ec3ee523@iscas.ac.cn>
 From: Guo Ren <guoren@kernel.org>
-Date: Sat, 14 Nov 2026 20:56:29 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSHBu3qVmqQDfmn4wfy2uGY-bGN3xKxqpO=ULVfoXD3-g@mail.gmail.com>
-X-Gm-Features: AclHuK87BF-AIKO2shVxwQUjV8SpcPDdYGTchA_sgB49NmXU0PUHvZ5gp9vekk0
-Message-ID: <CAJF2gTSHBu3qVmqQDfmn4wfy2uGY-bGN3xKxqpO=ULVfoXD3-g@mail.gmail.com>
-Subject: Re: [PATCH 02/19] dt-bindings: riscv: cpus: add the XuanTie C907
+Date: Sat, 14 Nov 2026 21:07:19 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSCtecm6LsuEy_s2rS0hAFzjN61FPRkhdPXg9Vh+xqNpw@mail.gmail.com>
+X-Gm-Features: AclHuK9gMmE7_2DKOWkhqnjhaQpkVZ3vMJCR5skQAuEE5nkS6qc3opH65-HdPes
+Message-ID: <CAJF2gTSCtecm6LsuEy_s2rS0hAFzjN61FPRkhdPXg9Vh+xqNpw@mail.gmail.com>
+Subject: Re: [PATCH 03/19] dt-bindings: interrupt-controller: add the
+ Allwinner V861 PLIC
 To: gaohan@iscas.ac.cn
 Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Rob Herring <robh@kernel.org>, 
@@ -93,33 +94,40 @@ On Sat, Nov 14, 2026 at 6:33=E2=80=AFAM Han Gao via B4 Relay
 >
 > From: Han Gao <gaohan@iscas.ac.cn>
 >
-> Add the XuanTie C907, used in the Allwinner V861.
->
-> XuanTie is a brand of C-SKY Microsystems [1], whose JEP106 ID 0x5b7 [2]
-> is what the C907 reports in mvendorid, so use the csky prefix rather
-> than thead.
->
-> [1] https://www.xrvm.com/declaration
-> [2] https://www.jedec.org/standards-documents/docs/jep-106ab
+> The V861 uses the XuanTie C900 PLIC implementation, like the D1. Add an
+> SoC-specific compatible with "thead,c900-plic" as the fallback.
+It's allwinner,sun252i-v861-plic in the patch; please correct the commit lo=
+g.
+
 >
 > Signed-off-by: Han Gao <gaohan@iscas.ac.cn>
 > ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 1 +
+>  .../devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml     =
+ | 1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Document=
-ation/devicetree/bindings/riscv/cpus.yaml
-> index 0da219ae6769..bdb119ab8ee0 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -48,6 +48,7 @@ properties:
->                - amd,mbv64
->                - andestech,ax45mp
->                - canaan,k210
-> +              - csky,c907
-LGTM!
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifiv=
+e,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/=
+sifive,plic-1.0.0.yaml
+> index cde4bb691897..6178fea9bbdc 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
+1.0.0.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
+1.0.0.yaml
+> @@ -72,6 +72,7 @@ properties:
+>        - items:
+>            - enum:
+>                - allwinner,sun20i-d1-plic
+> +              - allwinner,sun252i-v861-plic
+>                - canaan,k230-plic
+>                - sophgo,cv1800b-plic
+>                - sophgo,cv1812h-plic
+>
+> --
+> 2.55.0
+>
+>
 
-Reviewed-by: GUO Ren (XuanTie) <guoren@kernel.org>
 
 --=20
 Best Regards
